@@ -65,7 +65,9 @@ I thought this wouldn't be too difficult. _I was wrong._
 
 My first attempt was to make one action that performs all these steps and I started that here: <https://github.com/myobie/deploy-now>. I found a javascript module named `now-client` (which the `now` program itself uses internally) and it exposes [a `createDeployment` function][create deployment function] so it seemed like it was going to be easy.
 
-**The biggest problem I had creating a GitHub Action is there is no local runner I know of to test the workflow on my computer.**
+**The biggest problem I had creating a GitHub Action is there is no local runner I know of to test the workflow on my computer.** Sure, there is a [small test example][], but it leaves **a lot** to be desired.
+
+[small test example]: https://github.com/actions/javascript-action/blob/c4da6cbeb333147c98df489667fb8849e97d7dd3/index.test.js#L19
 
 It's also super undocumented: like how are arguments passed into your action? It turns out any "inputs" are passed in as ENV vars that begin with `INPUT_` like `INPUT_TOKEN` would be passed in for a step that has `with:` followed by `token: abc`. 
 
