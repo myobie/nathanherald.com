@@ -283,4 +283,6 @@ I can open a PR, preview my changes, and when I merge the PR the production webs
 
 [serverless functions]: https://zeit.co/docs/v2/serverless-functions/introduction/
 
-[hugo][] is still my favorite way to build websites. It's super fast and the way it organizes content is _alright_.
+[hugo][] is still my favorite way to build websites. It's super fast and the way it organizes content is _alright_. I love making websites and hugo mostly gets out of my way.
+
+While I spent way too much time on this setup, I now feel more confident to make changes, preview the change, and merge to deploy.
