@@ -271,7 +271,7 @@ At this point I felt _good at making actions_ and I'm not sure if that is a good
 
 ## Putting it all together
 
-As you can see in [my website's repo][repo], the [full yaml workflow][workflow] has some tricks to differentiate between production and staging.
+The [full yaml workflow][workflow] in [my website's repo][repo] has some tricks to differentiate between production and staging.
 
 [workflow]: https://github.com/myobie/nathanherald.com/blob/9f7b8e22b1876ab775d4c1e6e67b059121f60b35/.github/workflows/deploy.yml
 
