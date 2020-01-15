@@ -26,6 +26,10 @@ body {
   max-height: 50000em;
 }
 
+strong {
+  font-weight: 600;
+}
+
 body.animated {
   transition: color 1s, background-color 1s;
 }
@@ -74,7 +78,7 @@ h1 {
 
 h2 {
   font-style: normal;
-  font-weight: 400;
+  font-weight: 600;
   font-size: 210%;
   line-height: 1.2;
   margin: 0 0 0.5em;
@@ -82,7 +86,7 @@ h2 {
 
 h3 {
   font-style: normal;
-  font-weight: 800;
+  font-weight: 600;
   font-size: 180%;
   line-height: 1.2;
   margin: 1em 0 0;
@@ -90,7 +94,7 @@ h3 {
 
 h4 {
   font-style: normal;
-  font-weight: 800;
+  font-weight: 600;
   font-size: 150%;
   line-height: 1.2;
   margin: 1em 0 0;
