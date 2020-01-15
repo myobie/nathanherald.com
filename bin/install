@@ -1,0 +1,36 @@
+#!/bin/bash
+
+set -e
+
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  bin/setup
+  yarn install --ignore-scripts
+
+  export AWS_ACCESS_KEY=$(cat infra/variables.tfvars.local | grep -m 1 aws_access_key | awk '{ v=$3; gsub(/"/, "", v); print v }')
+  export AWS_SECRET_KEY=$(cat infra/variables.tfvars.local | grep -m 1 aws_secret_key | awk '{ v=$3; gsub(/"/, "", v); print v }')
+else
+  root_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
+  version=$(<${root_dir}/MINIMUM_HUGO_VERSION)
+  url="https://github.com/gohugoio/hugo/releases/download/v${version}/hugo_extended_${version}_Linux-64bit.tar.gz"
+
+  mkdir -p vendor
+  cd vendor &&
+    curl -s -L -O "$url" &&
+    tar -xzf "hugo_extended_${version}_Linux-64bit.tar.gz" &&
+    cd -
+
+  yum -y install epel-release
+  yum -y --enablerepo epel-testing install s3cmd
+fi
+
+if [[ ! -f static/fonts/webfont.zip ]]; then
+  s3cmd get \
+    --access_key="${AWS_ACCESS_KEY}" \
+    --secret_key="${AWS_SECRET_KEY}" \
+    s3://nathanheraldcom-font-bucket/webfont.zip \
+    static/fonts/webfont.zip
+
+  cd static/fonts &&
+    unzip webfont.zip &&
+    cd -
+fi

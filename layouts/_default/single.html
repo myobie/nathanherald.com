@@ -1,0 +1,72 @@
+{{ define "head" }}
+  {{ partial "feed-link.html" (site.GetPage .Section) }}
+{{ end }}
+
+{{ define "header" }}
+  <header class="section-header">
+    <div class="section-nav">
+      <h1 class="home-link">
+        <a data-nospan href="/" class="never-underline"><abbr title="Hello">👋</abbr></a>
+        <a href="/">I&rsquo;m Nathan</a>
+      </h1>
+      <nav>
+        <p>
+          {{ partial "read-more.html" (site.GetPage .Section) }}
+        </p>
+      </nav>
+    </div>
+  </header>
+{{ end }}
+
+{{ define "main" }}
+  <main class="single">
+    <article>
+      <header>
+        <h1>
+          {{ $page := . }}
+          {{ with .Params.externalUrl }}
+            <a href="{{ . }}">{{ $page.Title }}</a>&nbsp;<a href="{{ . }}" class="never-underline"><abbr title="link">🔗</abbr></a>
+          {{ else }}
+            {{ .Title }}
+          {{ end }}
+        </h1>
+        {{ with .Description }}
+          <h2>{{ . }}</h2>
+        {{ end }}
+      </header>
+
+      <div class="content">
+        {{ .Content }}
+      </div>
+
+      <footer>
+        {{ with .Params.externalUrl }}
+          <p>
+            <a href="{{ . }}">Check it out →</a>
+          </p>
+        {{ end }}
+        <p>
+          {{ with .Params.externalUrl }}
+            Linked
+          {{ else }}
+            Published
+          {{ end }}
+          <time datetime="{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}">
+            {{ .Date.Format "2 Jan, 2006" }}
+          </time>
+          {{ with .Params.mediumUrl }}
+            onto
+            <a href="{{ . }}">Medium</a>
+          {{ end }}
+          {{ with .Params.svbtleUrl }}
+            onto
+            <a href="{{ . }}">Svbtle</a>
+          {{ end }}
+          {{ with .Params.externalUrl }}
+            <a href="{{ . }}" class="never-underline"><abbr title="link">🔗</abbr></a>
+					{{ end }}
+        </p>
+      </footer>
+    </article>
+  </main>
+{{ end }}

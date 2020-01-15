@@ -1,0 +1,68 @@
+#!/usr/bin/env ruby
+
+require 'pathname'
+
+version_file = Pathname.new(__FILE__).dirname.join("../MINIMUM_HUGO_VERSION")
+MINIMUM_HUGO_VERSION = Gem::Version.new(File.read(version_file))
+
+$force = ARGV.include?("-f")
+
+version =
+  `brew ls --versions hugo`.
+    chomp.
+    split(" ").
+    tap { |arr| arr.delete("hugo") }.
+    map { |s| Gem::Version.new(s) }.
+    max
+
+if version.nil?
+  system "brew install hugo"
+elsif version < MINIMUM_HUGO_VERSION
+  system "brew upgrade hugo"
+elsif $force
+  system "brew upgrade hugo"
+end
+
+`which forward`
+
+if $force or not $?.success?
+  system "gem install forward"
+end
+
+`which npm`
+
+if $force or not $?.success?
+  system "brew install node"
+end
+
+`which now`
+
+if $force or not $?.success?
+  system "npm i -g now"
+end
+
+`which yarn`
+
+if $force or not $?.success?
+  system "npm i -g yarn"
+end
+
+`which terraform`
+
+if $force or not $?.success?
+  system "brew install terraform"
+end
+
+`which git-crypt`
+
+if $force or not $?.success?
+  system "brew install git-crypt"
+end
+
+`which s3cmd`
+
+if $force or not $?.success?
+  system "brew install s3cmd"
+end
+
+puts "Done."

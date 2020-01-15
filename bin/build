@@ -1,0 +1,15 @@
+#!/bin/bash
+
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  exec hugo
+else
+  vendor="$(cd "$(dirname $0)/.." && pwd)/vendor"
+
+  if [[ -n "${PREVIEW_URL}" ]]; then
+    echo "Building for ${PREVIEW_URL}"
+    exec $vendor/hugo -b "${PREVIEW_URL}"
+  else
+    echo "Building for default url"
+    exec $vendor/hugo
+  fi
+fi

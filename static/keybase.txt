@@ -1,0 +1,82 @@
+==================================================================
+https://keybase.io/myobie
+--------------------------------------------------------------------
+
+I hereby claim:
+
+  * I am an admin of http://nathanherald.com
+  * I am myobie (https://keybase.io/myobie) on keybase.
+  * I have a public key with fingerprint 69D2 E49C B648 2AF7 165D  6DC7 0C2B ADEB 54D2 48F1
+
+To claim this, I am signing this object:
+
+{
+    "body": {
+        "client": {
+            "name": "keybase.io node.js client",
+            "version": "0.3.2"
+        },
+        "key": {
+            "fingerprint": "69d2e49cb6482af7165d6dc70c2badeb54d248f1",
+            "host": "keybase.io",
+            "key_id": "0C2BADEB54D248F1",
+            "uid": "11ce3b50aaa07b0b454974b162937100",
+            "username": "myobie"
+        },
+        "merkle_root": {
+            "ctime": 1399469769,
+            "hash": "99c3e0098b3d08ce339740dfee5a34a3a683141315cb7cb3a31c105fb430675b9a7008bf2631355e26df6d0a21d1f6e5d3614c9f500e284b22b19df666aa96d4",
+            "seqno": 5417
+        },
+        "service": {
+            "hostname": "nathanherald.com",
+            "protocol": "http:"
+        },
+        "type": "web_service_binding",
+        "version": 1
+    },
+    "ctime": 1399469840,
+    "expire_in": 157680000,
+    "prev": "81f111d3067439350082eafe035581573daf31ed6672c7feb23ebed2206c253a",
+    "seqno": 3,
+    "tag": "signature"
+}
+
+with the aforementioned key, yielding the PGP signature:
+
+-----BEGIN PGP MESSAGE-----
+Version: GnuPG v1
+
+owFVkn1MVWUcx+/lCjOthJFOSweekU27wnnO+7klJi8Zm2gEZS/E7XnOeY73XO89
+B+69XLgSlIxQRqATHJlzbGggCahJLisWZuRLNonJdENyEzcgrmFXWxM1OofRyvPX
+c/Z8ft/f7/M8z+4nbJYo6+N/XKiP+9TeYf1pHFly3XxsGYF0OUQ4ygjJo2ItYK40
+6MWEg9iKQwj6cbKqJ2q6jJPd/sRZxk4Esc+v6ppBkcl0MkWU203cLFZUbQv2FfpU
+M4vgRJnCjCghjhEoqPCAY2VOlnhSohCUMWIZmWIEBRiRLt0feKQrMZPpVGWzSzqV
+ti4jM41lMgz+ZZMvntkAQMI0YkkIIckjEjEsI/IMAhwl0jwgSRP0Y9+skjekIxWb
+03qxb6sHO326PqMsBVQTALQoMpzIc6IxD/S7jBJRlGhMkqKAaJkUjGa0kU/KCsYs
+pBlIQ06gAQNowEqIlxANaSABklUQQ5MczyIR8iQpIIXiaECzLKY4WeFkElJABgqH
+WZnmACOJCkuSmBIYRFEIiAbCcRCKnMwYAn5cpOmEg2UAX27++YKqhM2pzSObNdNg
+wAU1F/ZBj5ws6V6jrNCnB3RJ9xi7rkCg0GFqB0KFJl2CkbNzNsiJVE02Lu3/twoM
+9NEjERjSTuDSQtWHnapJsDwnkMZn9sFBI1MACgBANq0ZWqQNH4HCUMGkYS0YOC1D
+hQZY5jiekngFI4rGCMsURXISxdLwP1HamBNuMSL96hbDq9hn3FhN1NI5FmuUJSY6
+yny2lnmPxf77li0TsZZDdc9/r7lzr0f3Jnzx88EUT+uSY9Hu+ZPZ/Mn+B38+SK8f
+GK3x285Hpgt6zvyKVl97O715ylnWvGr7ZOfyZbvCe9dcbm1ck1r90QiOJ+oaNnzS
+/W77GzFWKdJ9+h71NXDe8/6wsdsdQst3klrDc2s7TpyWjoQ1/v65XeFU5+pXDkSe
+7MsYcKyYk5nvOctcAYfyVlZMa17riZyEmKrDk4v37KyvylrSNhS50jjaOHayyVbt
+rup9WJ8wOH/KSu7p4fUWKXPBHXGkKPhe0lJhx6DluDf76nF7261SzvO5f0fn5nPb
+yq9tqhRKXo+tWPZO/66CqY+libM3jkTiLtY2MddvvhVS1iPbaHxxVk5Jf50n79vc
+qbxXq7/LaGvq6yrtnftiUmN47KmBDvaZvXH3Flu72hWcevQX+OaCvtpvsv7yZtm+
+ch8cjel5GLkBhw87GoI/OrLjbFTKrbsl/Xe7Wnsm2s6oddi5zVXq623Z0/xwsOHa
+pd/HetJe6zuxYW5+7Afv3785lFuTsnDhhytb5+2DI5Xtw/uCqe79RUPp++YGJkLJ
+d8IvTNp7cnozrqri9mMlJRs/WzvEFJzfFN3x9/Guq/ZTsGKs33JmelFMxYXEL8eJ
+ivDRSwciq7pz+KEVtbd/y98/vj6pclHL7vPtL12+LZ0bWzQcD9Xq9ovNp9IuP122
+LtCS8exm+z8=
+=W8Oc
+-----END PGP MESSAGE-----
+
+And finally, I am proving ownership of this host by posting or
+appending to this document.
+
+View my publicly-auditable identity here: https://keybase.io/myobie
+
+==================================================================

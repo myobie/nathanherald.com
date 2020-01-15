@@ -1,0 +1,16 @@
+/* the humans responsible & colophon */
+/* humanstxt.org */
+
+/* TEAM */
+  Me (Nathan Herald)
+  Site: http://nathanherald.com
+  Twitter: @myobie
+  Location: Berlin, Germany
+
+/* THANKS */
+  Names (& URL):
+  - hugo <https://gohugo.io/>
+  - zeit <https://zeit.co/>
+
+/* SITE */
+  Standards: HTML, CSS, Javascript

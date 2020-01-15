@@ -1,0 +1,28 @@
+baseUrl = "https://nathanherald.com"
+languageCode = "en-us"
+title = "I‘m Nathan Herald"
+
+pygmentsUseClasses = true
+pygmentsCodeFences = true
+
+disableKinds = [
+ "taxonomy",
+ "taxonomyTerm"
+]
+
+[params]
+  homepagePostsCount = 3
+  mainSections = ["writing"]
+
+[author]
+  name = "Nathan"
+  email = "me@nathanherald.com"
+
+[outputs]
+  home = ["HTML"]
+  page = ["HTML"]
+  section = ["HTML", "RSS"]
+
+[outputFormats]
+  [outputFormats.RSS]
+    baseName = "rss"

@@ -1,0 +1,10 @@
+{{ $number := or (site.Params.homepagePostsCount) 1 }}
+<nav class="latest-posts listing">
+  <ol>
+    {{ range first $number (where site.RegularPages "Section" "in" site.Params.mainSections) }}
+      <li>
+        <a class="title" href="{{ .Permalink }}">{{ .Title }}</a>{{with .Params.externalUrl }}&nbsp;<a href="{{ . }}" class="never-underline"><abbr title="link">🔗</abbr></a>{{ end }}
+      </li>
+    {{ end }}
+  </ol>
+</nav>

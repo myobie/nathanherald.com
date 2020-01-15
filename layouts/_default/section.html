@@ -1,0 +1,63 @@
+{{ define "head" }}
+  {{ partial "feed-link.html" . }}
+{{ end }}
+
+{{ define "header" }}
+  <header class="section-header">
+    <div class="section-nav">
+      <h1 class="home-link">
+        <a data-nospan href="/" class="never-underline"><abbr title="Hello">👋</abbr></a>
+        <a href="/">I&rsquo;m Nathan</a>
+      </h1>
+      <p>
+        My writing, in reverse chronological order.
+      </p>
+    </div>
+  </header>
+{{ end }}
+
+{{ define "main" }}
+  <main class="section">
+    <header>
+      <h1>{{ .Title }}</h1>
+      {{ with .Description }}
+        <h2>{{ . }}</h2>
+      {{ end }}
+    </header>
+
+    {{ with .Content }}
+      <div class="content">
+        {{ . }}
+      </div>
+    {{ end }}
+
+    <div class="listing">
+      <ol class="month-list">
+        {{ range (where site.RegularPages "Section" "==" .Section).GroupByDate "January 2006" }}
+          <li>
+            <h3>{{ .Key }}</h3>
+            <ol class="article-list">
+              {{ range .Pages.ByDate.Reverse }}
+                <li>
+                  <p class="permalink">
+                    <a href="{{ .Permalink }}">{{ .Title }}</a>
+                    <span class="meta">
+                      {{- with .Params.externalUrl }}
+                      <a href="{{ . }}" class="never-underline"><abbr title="link">🔗</abbr></a>
+                      {{- else }}
+                      –
+                      <time datetime="{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}">
+                        {{ .Date.Format "2 Jan, 2006" }}
+                      </time>
+                      {{- end }}
+                    </span>
+                  </p>
+                </li>
+              {{ end }}
+            </ol>
+          </li>
+        {{ end }}
+      </ol>
+    </div>
+  </main>
+{{ end }}

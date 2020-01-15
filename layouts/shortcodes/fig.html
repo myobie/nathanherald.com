@@ -1,0 +1,46 @@
+{{- $original := .Page.Resources.GetMatch (printf "*%s*" (.Get "src")) -}}
+
+{{- if findRE ".*@2x*." $original.Name -}}
+{{- .Scratch.Set "image" ($original.Fit "2400x2400 q40") -}}
+{{- else if findRE ".*@3x*." $original.Name -}}
+{{- .Scratch.Set "image" ($original.Fit "3600x3600 q40") -}}
+{{- else -}}
+{{- .Scratch.Set "image" ($original.Fit "1200x1200 q55") -}}
+{{- end -}}
+
+{{- $image := .Scratch.Get "image" -}}
+
+{{- if findRE ".*@2x*." $original.Name -}}
+{{- .Scratch.Set "width" (div $image.Width 2) -}}
+{{- .Scratch.Set "height" (div $image.Height 2) -}}
+{{- else if findRE ".*@3x*." $original.Name -}}
+{{- .Scratch.Set "width" (div $image.Width 3) -}}
+{{- .Scratch.Set "height" (div $image.Height 3) -}}
+{{- else -}}
+{{- .Scratch.Set "width" $image.Width -}}
+{{- .Scratch.Set "height" $image.Height -}}
+{{- end -}}
+
+{{- $width := .Scratch.Get "width" -}}
+{{- $height := .Scratch.Get "height" -}}
+
+<figure>
+  {{- with .Get "link"}}
+  <a href="{{ . }}">
+  {{- end}}
+  <img
+    {{- with .Get "alt"}}
+    alt="{{ . }}"
+    {{- end}}
+    width="{{ $width }}"
+    height="{{ $height }}"
+    src="{{ $image.Permalink }}">
+  {{- with .Get "link"}}
+  </a>
+  {{- end}}
+  {{- with .Inner }}
+  <figcaption>
+    {{ . | markdownify }}
+  </figcaption>
+  {{- end }}
+</figure>

@@ -1,0 +1,3 @@
+#!/bin/bash
+
+exec terraform import -var-file="variables.tfvars.local" $@

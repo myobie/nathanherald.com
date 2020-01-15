@@ -1,0 +1,7 @@
+{{ define "head" }}
+  {{ partial "feed-link.html" (site.GetPage "section" "writing") }}
+{{ end }}
+
+{{ define "main" }}
+  {{ .Content }}
+{{ end }}

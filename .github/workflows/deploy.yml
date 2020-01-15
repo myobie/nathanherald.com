@@ -1,0 +1,84 @@
+name: deploy
+on:
+  push:
+
+jobs:
+  deploy-prod:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - id: meta
+        uses: shareup/output-git-metadata-action@master
+      - id: deployment
+        uses: shareup/create-deployment-action@master
+        with:
+          ref: ${{ steps.meta.outputs.sha }}
+      - name: set deployment status to in_progress
+        uses: shareup/create-deployment-status-action@master
+        with:
+          deployment_id: ${{ steps.deployment.outputs.id }}
+          state: in_progress
+      - id: now
+        uses: shareup/now-action@master
+        with:
+          token: ${{ secrets.zeit_token }}
+          prod: true
+          force: true
+      - name: set deployment status to success
+        uses: shareup/create-deployment-status-action@master
+        with:
+          deployment_id: ${{ steps.deployment.outputs.id }}
+          state: success
+          environment_url: https://nathanherald.com
+          log_url: ${{ steps.now.outputs.deployment_url }}/_logs
+      - name: comment about the successful deployment
+        uses: shareup/create-comment-action@master
+        with:
+          sha: ${{ steps.meta.outputs.sha }}
+          body: ✌️ Deployed to production at https://nathanherald.com
+
+  deploy:
+    runs-on: ubuntu-latest
+    if: github.ref != 'refs/heads/master'
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - id: meta
+        uses: shareup/output-git-metadata-action@master
+      - id: deployment
+        uses: shareup/create-deployment-action@master
+        with:
+          ref: ${{ steps.meta.outputs.sha }}
+      - name: set deployment status to in_progress
+        uses: shareup/create-deployment-status-action@master
+        with:
+          deployment_id: ${{ steps.deployment.outputs.id }}
+          state: in_progress
+      - id: now
+        uses: shareup/now-action@master
+        with:
+          token: ${{ secrets.zeit_token }}
+          force: true
+          build_env: |
+            PREVIEW_URL=https://nathanheraldcom-github-${{ steps.meta.outputs.branch }}.myobie.now.sh
+      - uses: shareup/now-alias-assign-action@master
+        with:
+          token: ${{ secrets.zeit_token }}
+          deployment: ${{ steps.now.outputs.deployment_url }}
+          alias: https://nathanheraldcom-github-${{ steps.meta.outputs.branch }}.myobie.now.sh
+      - name: set deployment status to success
+        uses: shareup/create-deployment-status-action@master
+        with:
+          deployment_id: ${{ steps.deployment.outputs.id }}
+          state: success
+          environment_url: https://nathanheraldcom-github-${{ steps.meta.outputs.branch }}.myobie.now.sh
+          log_url: ${{ steps.now.outputs.deployment_url }}/_logs
+      - name: comment about the success with the preview url
+        uses: shareup/create-comment-action@master
+        with:
+          sha: ${{ steps.meta.outputs.sha }}
+          body: |
+            ✌️ Deployed to https://nathanheraldcom-github-${{ steps.meta.outputs.branch }}.myobie.now.sh
+            🥳🤓🎈⭐️
