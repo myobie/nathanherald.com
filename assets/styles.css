@@ -155,6 +155,7 @@ pre {
   padding: 0 0.8em;
   border-left: 1px solid var(--line-color);
   transition: border-left-color 1s;
+  overflow-x: scroll;
 }
 
 .never-underline {
