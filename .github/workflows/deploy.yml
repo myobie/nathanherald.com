@@ -15,6 +15,7 @@ jobs:
         uses: shareup/create-deployment-action@master
         with:
           ref: ${{ steps.meta.outputs.sha }}
+          environment: production
       - name: set deployment status to in_progress
         uses: shareup/create-deployment-status-action@master
         with:
