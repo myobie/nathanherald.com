@@ -15,7 +15,7 @@ I'm starting a new work journey, founding a new thing named [Shareup][shareup] w
 
 [a colleague]: https://anthonydrendel.com
 
-I also want to use the exact same setup for [this here website](https://nathanherald.com) and so I've been using my website as a test area to figure out how best to work with [hugo][], [now][], and [actions][]. After struggling at this for a week, I've gotten it working and I wanted to document what I've learned so I remember and maybe it's helpful to you too.
+I also want to use the exact same setup for [this here website](https://nathanherald.com) and so I've been using my website as a test area to figure out how best to work with [hugo][], [now][], and [actions][]. After struggling at this for a week, I've gotten it working and I wanted to document what I've learned so I remember (and maybe it's helpful to you too).
 
 You can see the complete source for everything over on GitHub at [github.com/myobie/nathanherald.com][repo].
 
@@ -28,7 +28,7 @@ You can see the complete source for everything over on GitHub at [github.com/myo
 
 * I def recommend [hugo][] for building static websites
 * I def recommend [now][] for hosting static websites
-* I think [GitHub Actions][actions] are great and promising, but they are confusing and not well documented
+* I think [GitHub Actions][actions] are great and promising, but they are confusing and not always fully documented
 * I spend way too much time making concessions so I can use [this font][font]
 
 This post is pretty long, so here are links to the different sections:
@@ -48,7 +48,7 @@ I've been making websites with [hugo][] for a while now so I can quickly setup a
 
 ## Using [now][]
 
-[zeit's now][now] is a fantastic way to host a static website. Getting started with [now][] is almost too easy, one simply runs `now` in the terminal and it creates a project, deploys, and even copies the resulting URL to your clipboard. It's almost too easy: I've accidentally created a new project a couple times by renaming a directory and zeit deciding "this is a new website" instead of "this is the same website in a new folder." 
+[zeit's now][now] is a fantastic way to host a static website. Getting started with [now][] is super easy, one simply runs `now` in the terminal and it creates a project, deploys, and even copies the resulting URL to your clipboard. It's almost too easy: I've accidentally created a new project a couple times by renaming a directory and zeit deciding "this is a new website" instead of "this is the same website in a new folder." 
 
 ## Hosting the font somewhere else
 
@@ -62,7 +62,10 @@ I decided to zip up the fonts and put them in an S3 bucket. Then, when now is bu
 
 Also, I learned a valuable lesson a while back: **never create AWS resources using the UI.** Creating through the UI means it's easy to forget how or what is setup. 
 
-Instead, **I use [terraform][] for everything I need.** There is a pretty big upfront cost because I can never remember how exactly to create the terraform files. _I do create users in the UI because if one uses terraform then it's easy to accidentally store their secret key in a `.tfstate` file or something similar and I don't want to risk it._ I created a user with zero permissions.
+Instead, **I use [terraform][] for everything I need.** There is a pretty big upfront cost because I can never remember how exactly to create the terraform files.
+
+> _I do create users in the UI because if one uses terraform then it's easy to accidentally store their secret key in a `.tfstate` file or something similar and I don't want to risk it._
+> I created a user with zero permissions.
 
 I put some terraform [in a directory named infra][infra] which creates a bucket and gives it a policy where one user can only read from it. Then I [added some code to use `s3cmd`][get font] to retrieve and unzip the font during the install step.
 
@@ -104,11 +107,11 @@ My first attempt was to make one action that performs all these steps and I star
 
 [deploy-now]: https://github.com/myobie/deploy-now
 
-**The biggest problem I had creating a GitHub Action is there is no local runner I know of to test the workflow on my computer.** Sure, there is a [small test example][], but it leaves **a lot** to be desired.
+**The biggest problem I had creating a GitHub Action is there is no local dev environment I know of to test the workflow on my computer.** Sure, there is a [small test example][], but it leaves **a lot** to be desired.
 
 [small test example]: https://github.com/actions/javascript-action/blob/c4da6cbeb333147c98df489667fb8849e97d7dd3/index.test.js#L19
 
-It's also super undocumented: like how are arguments passed into your action? It turns out any "inputs" are passed in as ENV vars that begin with `INPUT_` like `INPUT_TOKEN` would be passed in for a step that has `with:` followed by `token: abc`. 
+It's also sometimes lacking documentation: like how are arguments passed into your action? It turns out any "inputs" are passed in as ENV vars that begin with `INPUT_` like `INPUT_TOKEN` would be passed in for a step that has `with:` followed by `token: abc`. 
 
 The [javascript toolkit reads in these variables for you][core input], so I decided that I was going to write everything in javascript because there might be other undocumented things I don't know about that [the toolkit][] is magically taking care of.
 
@@ -143,7 +146,7 @@ When GitHub triggers an Action it provides [a bunch of information][action conte
 
 So, I made [output-git-metadata-action][] which does exactly that: it "outputs" some git metadata, including the current branch name.
 
-**Note:** one has to give the "step" an `id:` in the yaml to be able to reference it later as `${{ steps.id.outputs.output_name }}`. A step can have both an `id` and a `name`; `name` is optional.
+> **Note:** one has to give the "step" an `id:` in the yaml to be able to reference it later as `${{ steps.id.outputs.output_name }}`. A step can have both an `id` and a `name`; `name` is optional.
 
 [output-git-metadata-action]: https://github.com/shareup/output-git-metadata-action
 
@@ -171,7 +174,7 @@ jobs:
   alt="Screenshot of the GitHub Actions bot timeline entry for a deployment"
   src="github-actions-bot-timeline@2x.png" />}}
 
-I assume when I create a deployment through the API it does emit some `deploy` event that no one is paying attention to. Seems wasteful. It would probably make more sense to separate the concept of "creating the deployment record" and "triggering the `deploy` event." `</rant>`
+I assume when I create a deployment through the API it does emit some `deploy` event that no one is paying attention to. Seems wasteful. It would probably make more sense to separate the concept of "creating the deployment record" and "triggering the `deploy` event." It's also very possible (likely) that I just don't understand what I'm doing. `</rant>`
 
 [deployments api]: https://developer.github.com/v3/repos/deployments/
 
@@ -179,7 +182,7 @@ I made [create-deployment-action][] to do what it says: create a deployment. It 
 
 [create-deployment-action]: https://github.com/shareup/create-deployment-action
 
-And it doesn't need one to generate a token or anything: GitHub already provides a default token to every action which has read/write access to the current repository so I just use that inside the action code. I honestly don't know where this is documented or how I found it, I think I might have found it while reading through the source of the [checkout action][].
+And it **doesn't need one to generate a token** or anything: GitHub already provides a default token to every action which has read/write access to the current repository so I just use that inside the action code. I honestly don't know where this is documented or how I found it, I think I might have found it while reading through the source of the [checkout action][].
 
 [checkout action]: https://github.com/actions/checkout/blob/db41740e12847bb616a339b75eb9414e711417df/action.yml#L18
 
