@@ -39,6 +39,13 @@ body.animated {
 
 main {
   margin: 3em;
+
+  /* really wrap long things please */
+  overflow-wrap: break-word;
+  word-break: break-all;
+
+  /* I'm OK if you know how to hyphenate */
+  hyphens: auto;
 }
 
 a {
@@ -197,6 +204,9 @@ pre {
   border-left: 1px solid var(--line-color);
   transition: border-left-color 1s;
   overflow-x: scroll;
+
+  overflow-wrap: normal;
+  word-break: normal;
 }
 
 .never-underline {
