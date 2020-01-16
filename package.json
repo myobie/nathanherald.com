@@ -5,11 +5,9 @@
   "scripts": {
     "build": "bin/build",
     "clear": "rm -rf public/*",
-    "dev": "hugo serve -p $PORT",
-    "dev-forward": "hugo serve -b https://nathanherald-myobie.fwd.wf --bind 0.0.0.0 --appendPort=false",
-    "forward": "forward 0.0.0.0:1313 nathanherald",
+    "dev": "hugo server -p $PORT --baseUrl=http://nathanherald.localhost/ --appendPort=false",
     "install": "bin/install",
-    "render-config": "bin/render-config.js",
+    "now": "now dev --listen 8080",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -22,10 +20,5 @@
     "url": "https://github.com/myobie/nathanherald.com/issues"
   },
   "homepage": "https://github.com/myobie/nathanherald.com#readme",
-  "dependencies": {
-    "@now/node": "^1.1.2",
-    "@zeit/fetch": "^5.1.1",
-    "mustache": "^3.1.0",
-    "node-fetch": "^2.6.0"
-  }
+  "dependencies": {}
 }

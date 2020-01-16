@@ -9,8 +9,7 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
   export AWS_ACCESS_KEY=$(cat infra/variables.tfvars.local | grep -m 1 aws_access_key | awk '{ v=$3; gsub(/"/, "", v); print v }')
   export AWS_SECRET_KEY=$(cat infra/variables.tfvars.local | grep -m 1 aws_secret_key | awk '{ v=$3; gsub(/"/, "", v); print v }')
 else
-  root_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
-  version=$(<${root_dir}/MINIMUM_HUGO_VERSION)
+  version=$(<$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/MINIMUM_HUGO_VERSION)
   url="https://github.com/gohugoio/hugo/releases/download/v${version}/hugo_extended_${version}_Linux-64bit.tar.gz"
 
   mkdir -p vendor

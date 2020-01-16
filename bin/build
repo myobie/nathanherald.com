@@ -3,7 +3,7 @@
 if [[ "$OSTYPE" == "darwin"* ]]; then
   exec hugo
 else
-  vendor="$(cd "$(dirname $0)/.." && pwd)/vendor"
+  vendor="$(cd "$(dirname ${BASH_SOURCE[0]})/.." && pwd)/vendor"
 
   if [[ -n "${PREVIEW_URL}" ]]; then
     echo "Building for ${PREVIEW_URL}"

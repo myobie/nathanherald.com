@@ -24,6 +24,23 @@ function colorize () {
 
 colorize()
 
+// Add clickable links to headings with IDs
+
+function linkHeadings () {
+  document.querySelectorAll('h2[id], h3[id], h4[id], h5[id], h6[id]').forEach(heading => {
+    const anchor = document.createElement('a')
+
+    anchor.innerText = '#'
+    anchor.classList.add('permalink')
+    anchor.setAttribute('href', `#${heading.id}`)
+    anchor.setAttribute('title', 'Permalink')
+
+    heading.append(anchor)
+  })
+}
+
+linkHeadings()
+
 // I apparently care a great deal about these underlines…
 
 var okNodeNames = [
