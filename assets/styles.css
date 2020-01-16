@@ -193,6 +193,7 @@ blockquote {
 code {
   font-family: var(--monospace-font);
   font-size: 1em;
+  word-break: break-all;
 }
 
 pre {
