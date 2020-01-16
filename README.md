@@ -22,5 +22,6 @@ $ git-crypt unlock
 ### Development server
 
 ```sh
-$ now dev
+$ yarn now
+# visit http://nathanherald.localhost
 ```
