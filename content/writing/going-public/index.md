@@ -17,20 +17,36 @@ I'm starting a new work journey, founding a new thing named [Shareup][shareup] w
 
 I also want to use the exact same setup for [this here website](https://nathanherald.com) and so I've been using my website as a test area to figure out how best to work with [hugo][], [now][], and [actions][]. After struggling at this for a week, I've gotten it working and I wanted to document what I've learned so I remember and maybe it's helpful to you too.
 
-You can see the complete source for everything over on GitHub at <https://github.com/myobie/nathanherald.com>.
+You can see the complete source for everything over on GitHub at [github.com/myobie/nathanherald.com][repo].
 
 [shareup]: https://shareup.app
 [hugo]: https://gohugo.io
 [now]: https://zeit.co/now
 [actions]: https://github.com/features/actions
 
-## hugo
+## TL;DR
+
+* I def recommend [hugo][] for building static websites
+* I def recommend [now][] for hosting static websites
+* I think [GitHub Actions][actions] are great and promising, but they are confusing and not well documented
+* I spend way too much time making concessions so I can use [this font][font]
+
+This post is pretty long, so here are links to the different sections:
+
+* [Using hugo](#using-hugo)
+* [Using now](#using-now)
+* [Hosting the font somewhere else](#hosting-the-font-somewhere-else)
+* [Generating predictable preview URLs](#generating-predictable-preview-urls)
+* [Building a workflow with GitHub Actions](#building-a-workflow-with-github-actions)
+* [Putting it all together](#putting-it-all-together)
+
+## Using hugo
 
 I've been making websites with [hugo][] for a while now so I can quickly setup and [configure][] a new hugo website pretty quickly. **The feature of hugo I like the most is its speed.** It's important to me that assembling my website is super quick. I also like that it's a single binary which means I don't have to figure out how to "install" anything.
 
 [configure]: https://github.com/myobie/nathanherald.com/blob/9f7b8e22b1876ab775d4c1e6e67b059121f60b35/config.toml
 
-## now
+## Using [now][]
 
 [zeit's now][now] is a fantastic way to host a static website. Getting started with [now][] is almost too easy, one simply runs `now` in the terminal and it creates a project, deploys, and even copies the resulting URL to your clipboard. It's almost too easy: I've accidentally created a new project a couple times by renaming a directory and zeit deciding "this is a new website" instead of "this is the same website in a new folder." 
 
@@ -42,18 +58,20 @@ I have a strange and specific requirement for my website because of my [font][]:
 
 ### Putting the font on S3
 
-I decided to zip up the fonts and put them in an S3 bucket. Then, when now is building the website, it can retrieve them using [s3cmd][]. I learned a valuable lesson a while back: **never create AWS resources using the UI.** Creating through the UI means it's easy to forget how or what is setup. 
+I decided to zip up the fonts and put them in an S3 bucket. Then, when now is building the website, it can retrieve them using [s3cmd][]. 
 
-Instead, I use [terraform][] for everything I need. There is a pretty big upfront cost because I can never remember how exactly to create the terraform files. _I do create users in the UI because if one uses terraform then it's easy to accidentally store their secret key in a `.tfstate` file or something similar and I don't want to risk it._ I created a user with zero permissions.
+Also, I learned a valuable lesson a while back: **never create AWS resources using the UI.** Creating through the UI means it's easy to forget how or what is setup. 
 
-I got it setup [in a directory named infra][infra] to create a bucket and give it a policy where one user can only read from it. Then I [added some code to use `s3cmd`][get font] to retrieve and unzip the font during the install step.
+Instead, **I use [terraform][] for everything I need.** There is a pretty big upfront cost because I can never remember how exactly to create the terraform files. _I do create users in the UI because if one uses terraform then it's easy to accidentally store their secret key in a `.tfstate` file or something similar and I don't want to risk it._ I created a user with zero permissions.
+
+I put some terraform [in a directory named infra][infra] which creates a bucket and gives it a policy where one user can only read from it. Then I [added some code to use `s3cmd`][get font] to retrieve and unzip the font during the install step.
 
 [s3cmd]: https://s3tools.org/s3cmd
 [terraform]: https://www.terraform.io
 [infra]: https://github.com/myobie/nathanherald.com/tree/9f7b8e22b1876ab775d4c1e6e67b059121f60b35/infra
 [get font]: https://github.com/myobie/nathanherald.com/blob/9f7b8e22b1876ab775d4c1e6e67b059121f60b35/bin/install#L26-L36
 
-## Preview URLs
+## Generating predictable preview URLs
 
 When I'm writing a new blog post ([like this one][this-pr]) I want to be able to see a "preview version" in my browser so I can make sure all the images look right, the font is working, etc, so I deploy a "preview site" for every [pull request][] I make. 
 
@@ -80,7 +98,11 @@ You can see my final [deploy.yml][] workflow in the repo.
 
 [deploy.yml]: https://github.com/myobie/nathanherald.com/blob/d1ceec83d68a835b2aa423141a4214a5877f9292/.github/workflows/deploy.yml#L1
 
-My first attempt was to make one action that performs all these steps and I started that here: <https://github.com/myobie/deploy-now>. I found a javascript module named `now-client` (which the `now` program itself uses internally) and it exposes [a `createDeployment` function][create deployment function] so it seemed like it was going to be easy.
+### Build one action to perform all the steps (which didn't work out)
+
+My first attempt was to make one action that performs all these steps and I started that here: [github.com/myobie/deploy-now][deploy-now]. I found a javascript module named `now-client` (which the `now` program itself uses internally) and it exposes [a `createDeployment` function][create deployment function] so it seemed like it was going to be easy.
+
+[deploy-now]: https://github.com/myobie/deploy-now
 
 **The biggest problem I had creating a GitHub Action is there is no local runner I know of to test the workflow on my computer.** Sure, there is a [small test example][], but it leaves **a lot** to be desired.
 
@@ -94,7 +116,7 @@ The [javascript toolkit reads in these variables for you][core input], so I deci
 [core input]: https://github.com/actions/toolkit/blob/e69833ed16500afaa7d137a9cf6da76fb8fb54da/packages/core/src/core.ts#L69
 [the toolkit]: https://github.com/actions/toolkit
 
-### ncc
+#### Using ncc to package everything into one file
 
 After deciding to use javascript I ran into my first roadblock: GitHub Actions doesn't install your npm dependencies before running your code. Instead we are expected to pre-compile our javascript into one, dependency-free `.js` file before pushing. **This is super surprising.** The tool recommended to package up one's javascript is [`ncc`][ncc] (which is apparently a play on acronyms with `gcc`).
 
@@ -105,13 +127,15 @@ After deciding to use javascript I ran into my first roadblock: GitHub Actions d
 [typescript]: https://www.typescriptlang.org
 [pre commit hook]: https://github.com/myobie/deploy-now/blob/master/pre-commit.sample
 
-## Only having one action ended up not working out
+### Separating the steps out into individual actions
 
-The `now-client` ended up not working the same as just running `now` (for example: rewrites in the `now.json` file weren't sent to zeit) and without being able to easily and quickly test changes locally, having a single big action ended up being too frustrating. I decided to make smaller, focused actions where each one was small enough that I could more easily understand it and less easily break it. I've ended up with a little [suite of actions][].
+The `now-client` ended up not working the same as just running `now` (for example: rewrites in the `now.json` file weren't sent to zeit) and without being able to easily and quickly test changes locally, **having a single big action ended up being too frustrating.** 
+
+I decided to make smaller, focused actions where each one was small enough that I could more easily understand it and less easily break it. I've ended up with a little [suite of actions][].
 
 [suite of actions]: https://github.com/shareup?utf8=%E2%9C%93&q=-action&type=&language=#org-repositories
 
-## Getting the name of the current branch
+### Getting the name of the current branch
 
 When GitHub triggers an Action it provides [a bunch of information][action context], but none of that information reliably includes just the branch name. I want my preview site to include the branch name in its URL (so each branch has it's own preview URL) so I wanted a way to find out just the branch name and have it set as an "output" so I could interpolate it later into the arguments to other actions.
 
@@ -139,7 +163,7 @@ jobs:
           BRANCH: ${{ steps.meta.outputs.branch }}
 ```
 
-## Creating the GitHub deployment
+### Creating the GitHub deployment
 
 [Deployments][deployments api] in the GitHub API are very confusing to me. The documentation says "will trigger a `deploy` event" but I am already doing the deployment, I just want the deployments UI of a pull request to light up and show what happened, like this:
 
@@ -159,7 +183,15 @@ And it doesn't need one to generate a token or anything: GitHub already provides
 
 [checkout action]: https://github.com/actions/checkout/blob/db41740e12847bb616a339b75eb9414e711417df/action.yml#L18
 
-## Updating the status of the GitHub deployment
+#### `octokit`
+
+I found [`@octokit/rest`][rest] confusing (and it not always having all it's types for typescript working perfectly) and switched to [`@octokit/request`][request] which I hadn't really seen mentioned in any official docs. The request library is much simpler, has better `typescript` types (since it's written in typescript), and one can simply copy the documentation line like `POST /repos/:owner/:repo/issues/:number/labels` [straight from the GitHub API docs][labels docs]. 
+
+[rest]: https://github.com/octokit/rest.js
+[request]: https://github.com/octokit/request.js
+[labels docs]: https://developer.github.com/v3/issues/labels/#add-labels-to-an-issue
+
+### Updating the status of the GitHub deployment
 
 Creating a deployment is kinda meaningless and empty on its own: one has to "create a deployment status" to mark it as "in progress" or "success" or [something else][states].
 
@@ -200,7 +232,7 @@ jobs:
 
 I like these super small and granular steps.
 
-## Deploying with `now`
+### Deploying with `now`
 
 When I want to deploy with `now` locally I just run `now`. I wanted to make an action that does the same. There is a tool in the toolkit named [exec][] to run processes and I could use a `Dockerfile` to make sure `now` is pre-installed.
 
@@ -237,7 +269,7 @@ One has to set a secret on their repo to [a token from zeit][tokens] so it can u
 
 [tokens]: https://zeit.co/account/tokens
 
-### Force deploy
+#### Force deploy
 
 now tries to be smart and doesn't regenerate a website if it doesn't see any changes, instead it will attempt to re-use a previous build. This caused me issues when deploying to production because it would re-use a build I had created for a preview website and then all my fonts stopped working because it expected the wrong URL. 😞
 
@@ -247,7 +279,7 @@ _Honestly, I've done a lot of work for this font…_
 
 [force true]: https://github.com/myobie/nathanherald.com/blob/d1ceec83d68a835b2aa423141a4214a5877f9292/.github/workflows/deploy.yml#L63
 
-## Assigning an alias to a now deployment
+### Assigning an alias to a now deployment
 
 Running `now` will create a new "deployment" and give it an autogenerated URL, which isn't enough for me: I was to use my custom `PREVIEW_URL`. now allows one to point a domain at a deployment and calls those "aliases."
 
@@ -281,7 +313,7 @@ jobs:
 
 Aliases should end with `${your-now-username}.now.sh`.
 
-## Posting a comment
+### Posting a comment
 
 The last thing I wanted to do was to post a comment after a deployment with the URL so I could easily click it to see the preview website. 
 
@@ -302,14 +334,14 @@ The [full yaml workflow][workflow] in [my website's repo][repo] has some tricks 
 
 I can open a PR, preview my changes, and when I merge the PR the production website is deployed. A list of all the actions I created in the past week are:
 
-* <https://github.com/shareup/output-git-metadata-action>
-* <https://github.com/shareup/create-deployment-action>
-* <https://github.com/shareup/create-deployment-status-action>
-* <https://github.com/shareup/now-action>
-* <https://github.com/shareup/now-alias-assign-action>
-* <https://github.com/shareup/create-comment-action>
+* [shareup/output-git-metadata-action](https://github.com/shareup/output-git-metadata-action)
+* [shareup/create-deployment-action](https://github.com/shareup/create-deployment-action)
+* [shareup/create-deployment-status-action](https://github.com/shareup/create-deployment-status-action)
+* [shareup/now-action](https://github.com/shareup/now-action)
+* [shareup/now-alias-assign-action](https://github.com/shareup/now-alias-assign-action)
+* [shareup/create-comment-action](https://github.com/shareup/create-comment-action)
 
-[GitHub Actions][actions] is very powerful, but also super mysterious. Since I cannot execute workflows on my computer the feedback loop of pushing, waiting, checking the logs is way too slow. It's still amazing and I am super happy now that it works, but getting there was way too difficult. I haven't submitted these actions to "the marketplace" yet because I have to make an icon and a few other things to submit.
+[GitHub Actions][actions] are very powerful, but also super mysterious. Since I cannot execute workflows on my computer the feedback loop of pushing, waiting, checking the logs is way too slow. It's still amazing and I am super happy now that it works, but getting there was way too difficult. I haven't submitted these actions to "the marketplace" yet because I have to make an icon and a few other things to submit.
 
 [now][] is great. I really like it. It's super simple and I will be using it more and more for static website hosting as well as [serverless functions][].
 
