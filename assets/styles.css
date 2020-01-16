@@ -110,6 +110,47 @@ header h1 {
   margin-top: 0;
 }
 
+/* permalink stuff */
+
+h2, h3, h4, h5, h6 {
+  position: relative;
+}
+
+h2 > a.permalink,
+h3 > a.permalink,
+h4 > a.permalink,
+h5 > a.permalink,
+h6 > a.permalink {
+  text-decoration: none;
+  padding-left: 10px;
+}
+
+@media (hover: hover) and (min-width: 460px) {
+  h2 > a.permalink,
+  h3 > a.permalink,
+  h4 > a.permalink,
+  h5 > a.permalink,
+  h6 > a.permalink {
+    display: none;
+    position: absolute;
+    bottom: 0;
+    right: calc(100%);
+    padding-right: 10px;
+    padding-left: 0;
+    text-decoration: none;
+  }
+
+  h2:hover > a.permalink,
+  h3:hover > a.permalink,
+  h4:hover > a.permalink,
+  h5:hover > a.permalink,
+  h6:hover > a.permalink {
+    display: block;
+  }
+}
+
+/* end of permalink stuff */
+
 #fin h1 {
   margin-bottom: 3em;
 }
