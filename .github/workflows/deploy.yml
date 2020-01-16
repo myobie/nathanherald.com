@@ -37,7 +37,7 @@ jobs:
         uses: shareup/create-comment-action@master
         with:
           sha: ${{ steps.meta.outputs.sha }}
-          body: ✌️ Deployed to production at https://nathanherald.com
+          body: 🚀 Deployed to production at https://nathanherald.com
 
   deploy:
     runs-on: ubuntu-latest
@@ -80,5 +80,4 @@ jobs:
         with:
           sha: ${{ steps.meta.outputs.sha }}
           body: |
-            ✌️ Deployed to https://nathanheraldcom-github-${{ steps.meta.outputs.branch }}.myobie.now.sh
-            🥳🤓🎈⭐️
+            ✌️ Deployed to https://nathanheraldcom-github-${{ steps.meta.outputs.branch }}.myobie.now.sh 🎈⭐️
