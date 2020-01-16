@@ -42,7 +42,6 @@ main {
 
   /* really wrap long things please */
   overflow-wrap: break-word;
-  word-break: break-all;
 
   /* I'm OK if you know how to hyphenate */
   hyphens: auto;
@@ -206,7 +205,6 @@ pre {
   overflow-x: scroll;
 
   overflow-wrap: normal;
-  word-break: normal;
 }
 
 .never-underline {
