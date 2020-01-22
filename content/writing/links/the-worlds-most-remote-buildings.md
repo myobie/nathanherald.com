@@ -1,5 +1,5 @@
 +++
-title = "The World's Most Remote Buildings on YouTube 📺"
+title = "The world's most remote buildings on YouTube 📺"
 date = "2019-12-23T08:55:12+01:00"
 externalUrl = "https://m.youtube.com/watch?v=wGS53t8ZbO8&feature=share"
 +++
