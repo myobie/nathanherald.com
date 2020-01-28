@@ -24,6 +24,13 @@ function colorize () {
 
 colorize()
 
+window.addEventListener('load', e => {
+  setTimeout(() => {
+    document.body.classList.add('animated')
+    setInterval(colorize, 25000)
+  }, 200)
+})
+
 // Add clickable links to headings with IDs
 
 function linkHeadings () {
@@ -40,55 +47,3 @@ function linkHeadings () {
 }
 
 linkHeadings()
-
-// I apparently care a great deal about these underlines…
-
-var okNodeNames = [
-  '#text',
-  'ABBR',
-  'B',
-  'BR',
-  'CITE',
-  'CODE',
-  'DEL',
-  'EM',
-  'I',
-  'IMG',
-  'INS',
-  'LABEL',
-  'PICTURE',
-  'Q',
-  'S',
-  'SAMP',
-  'STRONG',
-  'SUB',
-  'SUP',
-  'SVG',
-  'TIME',
-  'U',
-  'VAR',
-  'WBR'
-]
-
-function okToWrapNodes (nodes) {
-  return Array.from(nodes).every(node => {
-    return okNodeNames.indexOf(node.nodeName) !== -1
-  })
-}
-
-document.querySelectorAll('a').forEach(anchor => {
-  if (anchor.hasAttribute('data-nospan')) { return }
-
-  if (okToWrapNodes(anchor.childNodes)) {
-    var span = document.createElement('span')
-    span.append.apply(span, anchor.childNodes)
-    anchor.append(span)
-  }
-})
-
-window.addEventListener('load', e => {
-  setTimeout(() => {
-    document.body.classList.add('animated')
-    setInterval(colorize, 25000)
-  }, 200)
-})
