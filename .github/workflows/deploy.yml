@@ -78,9 +78,6 @@ jobs:
           force: true
           build_env: |
             PREVIEW_URL=https://nathanheraldcom-github-${{ steps.meta.outputs.branch }}.myobie.now.sh
-      - name: blow up
-        run: |
-          exit 1 # lech mich
       - uses: shareup/now-alias-assign-action@master
         with:
           token: ${{ secrets.zeit_token }}
