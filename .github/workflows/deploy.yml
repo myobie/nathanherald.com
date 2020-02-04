@@ -39,6 +39,20 @@ jobs:
         with:
           sha: ${{ steps.meta.outputs.sha }}
           body: 🚀 Deployed to production at https://nathanherald.com
+      - if: failure()
+        name: set deployment status to failed
+        uses: shareup/create-deployment-status-action@master
+        with:
+          deployment_id: ${{ steps.deployment.outputs.id }}
+          state: failure
+          environment_url: https://nathanherald.com
+          log_url: ${{ steps.now.outputs.deployment_url }}/_logs
+      - if: failure()
+        name: comment about the failed deployment
+        uses: shareup/create-comment-action@master
+        with:
+          sha: ${{ steps.meta.outputs.sha }}
+          body: 🔥 Deploy failed!
 
   deploy:
     runs-on: ubuntu-latest
@@ -82,3 +96,17 @@ jobs:
           sha: ${{ steps.meta.outputs.sha }}
           body: |
             ✌️ Deployed to https://nathanheraldcom-github-${{ steps.meta.outputs.branch }}.myobie.now.sh 🎈⭐️
+      - if: failure()
+        name: set deployment status to failed
+        uses: shareup/create-deployment-status-action@master
+        with:
+          deployment_id: ${{ steps.deployment.outputs.id }}
+          state: failure
+          environment_url: https://nathanheraldcom-github-${{ steps.meta.outputs.branch }}.myobie.now.sh
+          log_url: ${{ steps.now.outputs.deployment_url }}/_logs
+      - if: failure()
+        name: comment about the failed deployment
+        uses: shareup/create-comment-action@master
+        with:
+          sha: ${{ steps.meta.outputs.sha }}
+          body: 🔥 Deploy failed!
