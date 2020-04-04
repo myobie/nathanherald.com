@@ -226,7 +226,7 @@ export async function main () {
 }
 ```
 
-Refresh and the console should output the answers. You will also notice that the wasm is being loaded and instantiated over and over each time. We can cached the results of `load`:
+Refresh and the console should output the answers. You will also notice that the wasm is being loaded and instantiated over and over each time. We can cache the results of `load`:
 
 ```js
 const cachedInstance = load()
@@ -241,5 +241,5 @@ This means that loading will start as soon as the `add.js` module is imported th
 
 ## Standard library
 
-To do more than add we will need a stdlib with things like `malloc`, `free`, etc. Communicating `string`s between wasm and javascript involved the javascript using an exported `malloc` to write the string bytes into the wasm's memory and passing the memory address as a pointer to the wasm function 😱
+To do more than add we will need a stdlib with things like `malloc`, `free`, etc. Communicating `string`s between wasm and javascript involves the javascript using an exported `malloc` to write the string bytes into the wasm's memory and passing the memory address as a pointer to the wasm function 😱
 
