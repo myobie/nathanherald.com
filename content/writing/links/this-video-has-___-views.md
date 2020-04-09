@@ -1,6 +1,7 @@
 +++
 title = "This Video Has ___ Views"
 date = "2020-04-09T14:11:13+02:00"
+externalURL = "https://www.youtube.com/watch?v=BxV14h0kFs0&feature=emb_title"
 +++
 
 {{<raw>}}
