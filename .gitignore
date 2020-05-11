@@ -6,3 +6,4 @@ vendor/*
 resources/*
 
 .now
+.vercel
