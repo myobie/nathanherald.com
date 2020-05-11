@@ -1,6 +1,6 @@
 +++
 title = "Your metrics might be lying to you – an example from Wunderlist"
-date = ""
+date = "2020-05-11T14:48:33+02:00"
 +++
 
 We all love to see “increased engagement” from customers using the products we create, but it’s not always as clear as it might seem if the increase is positive or negative. It’s sometimes dangerous to have the singular goal to “increase usage of this feature” instead of “help customers get more done.” And even then, when we our goal is 100% focused on helping the customer be a better human, we can sometimes misread the metrics we are collecting.
