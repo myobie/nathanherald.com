@@ -42,22 +42,16 @@ unless (File.readlink("/etc/resolver") rescue nil)
   system "sudo ln -s /usr/local/etc/resolver /etc"
 end
 
-`which forward`
-
-if $force or not $?.success?
-  system "gem install forward"
-end
-
 `which npm`
 
 if $force or not $?.success?
   system "brew install node"
 end
 
-`which now`
+`which vercel`
 
 if $force or not $?.success?
-  system "npm i -g now"
+  system "npm i -g vercel"
 end
 
 `which yarn`
