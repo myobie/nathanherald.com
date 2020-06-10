@@ -7,7 +7,7 @@
     "clear": "rm -rf public/*",
     "dev": "hugo server -p $PORT --baseUrl=http://nathanherald.localhost/ --appendPort=false",
     "install": "bin/install",
-    "now": "now dev --listen 8080",
+    "now": "vercel dev --listen 8080",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
