@@ -4,6 +4,7 @@ public/*
 node_modules/*
 vendor/*
 resources/*
+static/fonts/*
 
 .now
 .vercel
