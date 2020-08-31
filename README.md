@@ -22,6 +22,6 @@ $ bin/install
 ### Development server
 
 ```sh
-$ yarn now
-# visit http://nathanherald.localhost
+$ yarn vercel
+# visit http://localhost:8080
 ```

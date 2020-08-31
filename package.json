@@ -5,10 +5,9 @@
   "scripts": {
     "build": "bin/build",
     "clear": "rm -rf public/*",
-    "dev": "hugo server -p $PORT --baseUrl=http://nathanherald.localhost/ --appendPort=false",
+    "dev": "hugo server -p $PORT",
     "install": "bin/install",
-    "now": "vercel dev --listen 8080",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "vercel": "vercel dev --listen 8080"
   },
   "repository": {
     "type": "git",

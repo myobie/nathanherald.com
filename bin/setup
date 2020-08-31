@@ -23,25 +23,6 @@ elsif $force
   system "brew upgrade hugo"
 end
 
-`which launchdns`
-
-if $force or not $?.success?
-  system "brew install launchdns"
-  system "brew services restart launchdns"
-end
-
-`which launch_socket_server`
-
-if $force or not $?.success?
-  system "brew install launch_socket_server"
-  system "brew services restart launch_socket_server"
-end
-
-unless (File.readlink("/etc/resolver") rescue nil)
-  puts "We need to link /etc/resolver to the directory installed by homebrew and that requires sudo, so be prepared..."
-  system "sudo ln -s /usr/local/etc/resolver /etc"
-end
-
 `which npm`
 
 if $force or not $?.success?
