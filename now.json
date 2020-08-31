@@ -1,9 +1,4 @@
 {
-  "name": "nathanherald.com",
-  "github": {
-    "enabled": false,
-    "autoAlias": false
-  },
   "build": {
     "env": {
       "AWS_ACCESS_KEY": "@nathanheraldcom-aws-access-key",
