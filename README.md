@@ -15,8 +15,8 @@ I use the book weight for normal text, the bold weight for, uh, bold, and the bl
 ## Local setup
 
 ```sh
-$ bin/install
 $ git-crypt unlock
+$ bin/install
 ```
 
 ### Development server
