@@ -5,11 +5,11 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
 else
   vendor="$(cd "$(dirname ${BASH_SOURCE[0]})/.." && pwd)/vendor"
 
-  if [[ -n "${PREVIEW_URL}" ]]; then
-    echo "Building for ${PREVIEW_URL}"
+  if [[ -n "${VERCEL_URL}" ]]; then
+    echo "Building for ${VERCEL_URL}"
     exec $vendor/hugo -b "${PREVIEW_URL}"
   else
-    echo "Building for default url"
+    echo "Building for the default url"
     exec $vendor/hugo
   fi
 fi
