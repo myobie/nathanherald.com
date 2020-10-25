@@ -1,10 +1,10 @@
-# nathanherald.com
+# [nathanherald.com](https://nathanherald.com)
 
-I'm using [Zeit's Now](https://zeit.co/myobie/nathanherald.com), [hugo](https://gohugo.io/), and [GitHub Actions](/.github/workflows/deploy.yml).
+I'm using [Netlify](https://app.netlify.com/sites/flamboyant-northcutt-4eefaf/overview) and [hugo](https://gohugo.io/).
 
 ## Flow
 
-Every new post should be a pull-request, will deploy a preview website to now, and merging will deploy the production site.
+Every new post should be a pull-request, will deploy a preview website to netlify, and merging will deploy the production site.
 
 ## The font
 
@@ -22,6 +22,6 @@ $ bin/install
 ### Development server
 
 ```sh
-$ yarn vercel
+$ yarn dev
 # visit http://localhost:8080
 ```

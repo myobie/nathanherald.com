@@ -29,12 +29,6 @@ if $force or not $?.success?
   system "brew install node"
 end
 
-`which vercel`
-
-if $force or not $?.success?
-  system "npm i -g vercel"
-end
-
 `which yarn`
 
 if $force or not $?.success?
