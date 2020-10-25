@@ -5,9 +5,8 @@
   "scripts": {
     "build": "bin/build",
     "clear": "rm -rf public/*",
-    "dev": "hugo server -p $PORT",
-    "install": "bin/install",
-    "vercel": "vercel dev --listen 8080"
+    "dev": "hugo server -p 8080",
+    "install": "bin/install"
   },
   "repository": {
     "type": "git",
