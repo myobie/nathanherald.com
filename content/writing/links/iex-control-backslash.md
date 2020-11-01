@@ -1,5 +1,5 @@
 +++
-title = "TIL one can exit iex with ⌃\\ (control backslash)"
+title = "TIL one can exit iex with ⌃\\"
 date = "2020-11-01T22:00:27+01:00"
 externalUrl = "https://hexdocs.pm/iex/IEx.html#module-exiting-the-shell"
 +++
