@@ -16,4 +16,4 @@ cchars: discard = ^O; dsusp = ^Y; eof = ^D; eol = <undef>;
 
 Control + backslash is right there, labelled as "quit" meaning it will send `SIGQUIT` to the foreground process. Super handy.
 
-[prev]: https://nathanherald.com/writing/links/iex-control-backslash/
+[prev]: /writing/links/iex-control-backslash/
