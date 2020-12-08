@@ -12,7 +12,15 @@ Here is an example:
 
 ```sh
 $ ELIXIR_CLI_DRY_RUN=1 iex
-erl -pa /usr/local/Cellar/elixir/1.11.2/bin/../lib/eex/ebin /usr/local/Cellar/elixir/1.11.2/bin/../lib/elixir/ebin /usr/local/Cellar/elixir/1.11.2/bin/../lib/ex_unit/ebin /usr/local/Cellar/elixir/1.11.2/bin/../lib/iex/ebin /usr/local/Cellar/elixir/1.11.2/bin/../lib/logger/ebin /usr/local/Cellar/elixir/1.11.2/bin/../lib/mix/ebin -noshell -user Elixir.IEx.CLI -extra --no-halt +iex
+erl -pa /usr/local/Cellar/elixir/1.11.2/bin/../lib/eex/ebin \
+		/usr/local/Cellar/elixir/1.11.2/bin/../lib/elixir/ebin \
+		/usr/local/Cellar/elixir/1.11.2/bin/../lib/ex_unit/ebin \
+		/usr/local/Cellar/elixir/1.11.2/bin/../lib/iex/ebin \
+		/usr/local/Cellar/elixir/1.11.2/bin/../lib/logger/ebin \
+		/usr/local/Cellar/elixir/1.11.2/bin/../lib/mix/ebin \
+	-noshell \
+	-user Elixir.IEx.CLI \
+	-extra --no-halt +iex
 ```
 
 You can see a lot of interesting info here:
