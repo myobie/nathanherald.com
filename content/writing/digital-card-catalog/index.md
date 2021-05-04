@@ -3,7 +3,7 @@ title = "Collaboration through software: digital paper and card catalogs"
 date = "2021-05-04T08:22:42+02:00"
 +++
 
-TK: #
+[TK]: #
 
 _A lot of the links are not wired up yet. Just FYI and TK._
 
