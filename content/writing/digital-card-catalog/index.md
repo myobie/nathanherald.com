@@ -99,6 +99,8 @@ Sometimes, in physical libraries, there are cards in the catalog which reference
 
 ## Quick summary
 
-So that’s what I wanted to write about: when I design or build distributed software to help people work together, I almost always think about _digital paper_ organized in a _digital card catalog._ I prefer software to be _extremely immediate_ and it to be clear _what is shared?_ and what is not. This is how we are approaching building [Shareup][TK] and drives a lot of our conversation about how it will work.
+So that’s what I wanted to write about: when I design or build distributed software to help people work together, I almost always think about _digital paper_ organized in a _digital card catalog._ I prefer software to be _extremely immediate_ and it to be clear _what is shared?_ and what is not.
+
+I was inspired to write this down because of all the conversations we’ve been having recently while building [Shareup.][TK] This is how we are approaching building our new product and drives a lot of our conversation about how it will work.
 
 I’m curious though, how do you think about collaborative distributed software? How do you think through the rules or _physics_ of the system?
