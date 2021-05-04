@@ -11,7 +11,7 @@ _A lot of the links are not wired up yet. Just FYI and TK._
 
 Over the past couple decades, while working on different distributed software and systems, I’ve been able to refine my thoughts about how to categorize and talk about collaborating through software. Also, I enjoy reading about software history and the many HCI research papers one can find about collaboration, like: [AR video conferencing][TK], [Telehealth][TK], and task specific things like [Story planning][TK]. 
 
-[Xerox PARC][TK], from way back when, are responsible for so many different technologies: [Ethernet][TK], [“video links”][TK] and [distributed software][ethernet software] (called “ethernet software” at the time) to help people work with [“digital paper.”][TK] This concept of digital paper really resonates with me most and my experience building software.
+[Xerox PARC][TK], from way back when, are responsible for so many different technologies: [Ethernet][TK], [“video links”][TK] and [distributed software][ethernet software] (called “ethernet software” at the time) to help people work with [“digital paper.”][TK] This concept of digital paper really resonates with me most in my experience building software.
 
 [ethernet software]: https://www.researchgate.net/publication/2688342_Personal_Distributed_Computing_The_Alto_and_Ethernet_Software
 
@@ -79,9 +79,11 @@ For a “digital deck of cards” system: the card is like a little shared docum
 
 Sometimes we need a shared way to organize lots of cards which is what I call the “digital card catalog” system: not only is the card a shared digital document, the way the cards are organized is also shared. This is analogous to the [card catalogs found in libraries][TK].
 
-_Aside: a long time ago I learned from a few designers that if one wants inspiration for how to design information or software for people then always look at maps and libraries. They are ways to structure and organize lots of information, they are designed to be heavily used, and they try to work for a large number of people with as little required training as possible._
+_Aside: a long time ago I learned from a few designers that if one wants inspiration for how to design information or software for people then always look at maps and libraries. They are ways to structure and organize lots of information, they are designed to be heavily used, and they try to work for a large number of people with as little required training as possible. Also, [be aware that there are systemic biases inside libraries and the libarary science field][libraries] that are important to know about and not replicate._
 
-While a “deck of cards” is a nice and easy analogy, almost all types of software that I have designed and built have become larger “card catalog” systems.
+[libraries]: https://www.library.wisc.edu/gwslibrarian/bibliographies/disrupting-whiteness-in-libraries/
+
+While a “deck of cards” is a nice and easy analogy, almost all types of software that I have helped design or helped build have become larger “card catalog” systems.
 
 [Wunderlist][TK] was one: each task was like a little shared document. Any change you make to task is visible to every member of the shared list. And the list itself is the “catalog.” We all see the same tasks in the list at all times.
 
@@ -91,9 +93,9 @@ People prefer consistent rules or “physics.” [TK link to study or something?
 
 One can also look to libraries for how to “announce updates” since it is really impossible for a human to keep track of all the “new cards” in a busy catalog. There are “new releases” or “librarian picks” which try to help guide a person to relevant topics and places. There are many methods to search, filter, and arrange the cards to make it easier to find a specific one.
 
-One could make “topic drawers” which include only the cards relevant to that topic. There is no reason why the same card cannot be present in more than one drawer if it were relevant to many topics. This would make sense and be welcomed by library visitors. A card could helpfully indicate which other topic drawers it could be found in.
+One could make “topic drawers” which include only the cards relevant to that topic. There is no reason why the same card cannot be present in more than one drawer if it were relevant to many topics. A card could helpfully indicate which other topic drawers it could be found in. This would make sense and be welcomed by library visitors.
 
-Sometimes, in physical libraries, there are cards in the catalog which reference books over at other libraries: a [union card catalog.][TK] It’s possible to have a system to not just work with information inside your group or organization, but also with others which could be a huge win. 🙌
+Sometimes, in physical libraries, there are cards in the catalog which reference books over at other libraries: a [union card catalog.][TK] Digitally, it’s possible to have a system to not just work with information inside your group or organization, but also with other groups and organizations which could be a huge win. 🙌
 
 ## Quick summary
 
