@@ -9,7 +9,7 @@ _A lot of the links are not wired up yet. Just FYI and TK._
 
 - - -
 
-Recently, as we work on completing our proof-of-concept version of [Shareup][], we’ve often been talking about different ways we can best help people work together through our software. I’ve never taken the time to write down how I think about collaborative software, so in this post I’ll detail how I think about it. These concepts are how Adam, Anthony, and I are approaching building our new product and drive a lot of our conversations about how it will work.
+Recently, as we work on completing our proof-of-concept version of [Shareup][], we’ve often been talking about different ways we can best help people work together through our software. I’ve never taken the time to write down how I think about collaborative software, so in this post I’ll attempt to. These concepts are how Adam, Anthony, and I are approaching building our new product and drive a lot of our conversations about how it will work.
 
 [Shareup]: https://shareup.app
 
