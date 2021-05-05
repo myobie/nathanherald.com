@@ -15,7 +15,7 @@ Recently, as we work on completing our proof-of-concept version of [Shareup][], 
 
 Over the past couple decades, while working on different distributed software and systems, I’ve been able to refine my thoughts about how to categorize and talk about collaborating through software. Also, I enjoy reading about software history and the many HCI research papers one can find about collaboration, like: [AR video conferencing][TK], [Telehealth][TK], and task specific things like [Story planning][TK].
 
-[Xerox PARC][TK], from way back when, are responsible for so many different technologies: [Ethernet][TK], [“video links”][TK] and [distributed software][ethernet software] (called “ethernet software” at the time) to help people work with [“digital paper.”][TK] This concept of digital paper really resonates with me most in my experience building software and has impacted how I think about designing a space for collaboration.
+[Xerox PARC][TK], from way back when, are responsible for so many different technologies: [Ethernet][TK], [“video links”][TK] and [distributed software][ethernet software] (called “ethernet software” at the time) to help people work with [“digital paper.”][TK] This concept of **digital paper** really resonates with me most in my experience building software and has impacted how I think about designing a space for collaboration.
 
 [ethernet software]: https://www.researchgate.net/publication/2688342_Personal_Distributed_Computing_The_Alto_and_Ethernet_Software
 
