@@ -9,9 +9,13 @@ _A lot of the links are not wired up yet. Just FYI and TK._
 
 - - -
 
-Over the past couple decades, while working on different distributed software and systems, I’ve been able to refine my thoughts about how to categorize and talk about collaborating through software. Also, I enjoy reading about software history and the many HCI research papers one can find about collaboration, like: [AR video conferencing][TK], [Telehealth][TK], and task specific things like [Story planning][TK]. 
+Recently, as we work on completing our proof-of-concept version of [Shareup][], we’ve been often talking about different ways we can best help people work together through our software. I’ve never taken the time to write down how I think about collaborative software, so in this post I’ll detail how I think about it. These concepts are how Adam, Anthony, and I are approaching building our new product and drive a lot of our conversations about how it will work.
 
-[Xerox PARC][TK], from way back when, are responsible for so many different technologies: [Ethernet][TK], [“video links”][TK] and [distributed software][ethernet software] (called “ethernet software” at the time) to help people work with [“digital paper.”][TK] This concept of digital paper really resonates with me most in my experience building software.
+[Shareup]: https://shareup.app
+
+Over the past couple decades, while working on different distributed software and systems, I’ve been able to refine my thoughts about how to categorize and talk about collaborating through software. Also, I enjoy reading about software history and the many HCI research papers one can find about collaboration, like: [AR video conferencing][TK], [Telehealth][TK], and task specific things like [Story planning][TK].
+
+[Xerox PARC][TK], from way back when, are responsible for so many different technologies: [Ethernet][TK], [“video links”][TK] and [distributed software][ethernet software] (called “ethernet software” at the time) to help people work with [“digital paper.”][TK] This concept of digital paper really resonates with me most in my experience building software and has impacted how I think about designing a space for collaboration.
 
 [ethernet software]: https://www.researchgate.net/publication/2688342_Personal_Distributed_Computing_The_Alto_and_Ethernet_Software
 
@@ -100,7 +104,5 @@ Sometimes, in physical libraries, there are cards in the catalog which reference
 ## Quick summary
 
 So that’s what I wanted to write about: when I design or build distributed software to help people work together, I almost always think about _digital paper_ organized in a _digital card catalog._ I prefer software to be _extremely immediate_ and it to be clear _what is shared?_ and what is not.
-
-I was inspired to write this down because of all the conversations we’ve been having recently while building [Shareup.][TK] This is how we are approaching building our new product and drives a lot of our conversation about how it will work.
 
 I’m curious though, how do you think about collaborative distributed software? How do you think through the rules or _physics_ of the system?
