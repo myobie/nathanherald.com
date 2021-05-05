@@ -63,7 +63,7 @@ By making it less clear if everything is fully shared, **it adds stress** for us
 
 Using Apple’s Messages can also be confusing: if I delete a message, then does it delete it for the other person? _(No, it doesn’t.)_
 
-I prefer software that is immediate: I would almost always rather use chat over email. But I also prefer software that is visible: I don’t like to be confused about who can see what. But digital paper solutions are not enough on their own.
+I prefer software that is immediate: I would almost always rather use chat over email. But I also prefer software that is visible: I don’t like to be confused about who can see what.
 
 ## Digital paper isn’t enough
 
