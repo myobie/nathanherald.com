@@ -24,7 +24,13 @@ Over the past couple decades, while working on different distributed software an
 
 I like to always start thinking about a piece of software or a system as a group of people sitting around a table with a sheet of paper and some markers. Everyone can clearly see each other, can easily see when someone is writing or drawing, and it’s not possible to make a mark that cannot be seen by everyone else. Also, everything is spatially arranged: when I make a mark to the left of yours, you also see that it’s to the left of the mark you previously made.
 
-[Miro][https://miro.com], [Figma][https://www.figma.com] (and now [FigJam][https://www.figma.com/figjam/]), [Google Docs][https://www.google.com/docs/about/], and [Craft][https://www.craft.do] pages are examples of “digital paper.” _(I also sometimes call them “digital whiteboards.”)_ They work like a magic, digitally replicated piece of paper that everyone can see and write on together. Everything is spatially arranged, we can see each other’s “fingers” (cursors), and all changes are immediately visible to everyone.
+[Miro][], [Figma][] (and now [FigJam][]), [Google Docs][], and [Craft][] pages are examples of “digital paper.” _(I also sometimes call them “digital whiteboards.”)_ They work like a magic, digitally replicated piece of paper that everyone can see and write on together. Everything is spatially arranged, we can see each other’s “fingers” (cursors), and all changes are immediately visible to everyone.
+
+[Miro]: https://miro.com
+[Figma]: https://www.figma.com
+[FigJam]: https://www.figma.com/figjam/
+[Google Docs]: https://www.google.com/docs/about/
+[Craft]: https://www.craft.do
 
 Digital whiteboards are the easiest collaborative software to talk about because they are both extremely immediate and give everyone 100% visibility. I cannot insert a circle into a Figma doc that you cannot see. The rules or “physics” of the software can be talked through very quickly and everyone “gets it.” 
 
@@ -114,7 +120,7 @@ One could make “topic drawers” which include only the cards relevant to that
 
 Sometimes, in physical libraries, there are cards in the catalog which reference books over at other libraries: a [union card catalog.][] Digitally, it’s possible to have a system to not just work with information inside your group or organization, but also with other groups and organizations which could be a huge win. 🙌
 
-[union card catalog]: https://en.wikipedia.org/wiki/Union_catalog
+[union card catalog.]: https://en.wikipedia.org/wiki/Union_catalog
 
 ## Quick summary
 
