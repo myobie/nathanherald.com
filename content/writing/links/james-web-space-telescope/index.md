@@ -16,7 +16,7 @@ It’s a pretty stressful situation. First, the launch had to go well (which it 
 
 It’s so exciting to see a what we can do if we work together, if we put our money toward a goal, and if we stick with something even if it is difficult and takes a long time. 
 
-## Videos
+### Videos
 
 Watch this awesomely cringe video that explains a lot and is just very enjoyable to watch:
 
@@ -30,7 +30,7 @@ Or the best, short video I’ve found is this one:
 <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/Gx4uq83GSrE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 {{</raw>}}
 
-## Some things take time
+### Some things take time
 
 I have this poster hanging in my home:
 
