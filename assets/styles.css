@@ -32,7 +32,6 @@ body {
 img, input[type="image"], video, embed, iframe, marquee, object, table {
   aspect-ratio: attr(width) / attr(height);
   max-width: 100%;
-  height: auto;
 }
 
 strong {
