@@ -1,6 +1,6 @@
 +++
 title = "Where Is Webb?"
-date = "2022-01-03T11:05:50+01:00"
+date = "2022-01-03T11:05:50Z"
 externalUrl = "https://webb.nasa.gov/content/webbLaunch/whereIsWebb.html"
 +++
 

@@ -1,6 +1,6 @@
 +++
 title = "The James Webb Space Telescope"
-date = "2022-01-01T11:33:19+01:00"
+date = "2022-01-01T11:33:19Z"
 externalUrl = "https://www.youtube.com/watch?v=lrY04VPDg8I"
 +++
 

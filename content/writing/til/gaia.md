@@ -1,6 +1,6 @@
 +++
 title = "TIL about Gaia"
-date = "2022-01-07T22:30:57+01:00"
+date = "2022-01-07T22:30:57Z"
 externalUrl = "https://en.wikipedia.org/wiki/Gaia_%28spacecraft%29"
 +++
 
