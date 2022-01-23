@@ -44,12 +44,11 @@
                     <span class="meta">
                       {{- with .Params.externalUrl }}
                       <a href="{{ . }}" class="never-underline"><abbr title="link">🔗</abbr></a>
-                      {{- else }}
+                      {{- end }}
                       –
                       <time datetime="{{ .Date.Format "2006-01-02T15:04:05Z" }}">
                         {{ .Date.Format "2 Jan, 2006" }}
                       </time>
-                      {{- end }}
                     </span>
                   </p>
                 </li>
