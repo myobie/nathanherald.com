@@ -4,7 +4,7 @@ date = "2022-01-03T11:05:50Z"
 externalUrl = "https://webb.nasa.gov/content/webbLaunch/whereIsWebb.html"
 +++
 
-{{<figure
+{{<fig
   src="webbsite.png"
   alt="Screenshot of the Where Is Webb site"
   href="https://webb.nasa.gov/content/webbLaunch/whereIsWebb.html"
