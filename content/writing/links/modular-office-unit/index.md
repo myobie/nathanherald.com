@@ -1,5 +1,5 @@
 +++
-title = "Gessato Modular Office Unit"
+title = "Modular Office Unit"
 date = "2023-01-04T13:56:35+01:00"
 externalUrl = "https://www.gessato.com/modular-office-unit/"
 +++
