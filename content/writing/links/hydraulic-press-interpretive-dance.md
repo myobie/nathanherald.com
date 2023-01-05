@@ -10,4 +10,7 @@ I love these videos where [Smac McCreanor][] imitates the viral hydraulic press 
 <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/zuIYjTc6lJE" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 {{</raw>}}
 
+_Via [Kottke][]._
+
 [Smac McCreanor]: https://smacmccreanor.com
+[Kottke]: https://kottke.org/23/01/hydraulic-press-interpretive-dances
