@@ -11,9 +11,7 @@ I changed from “Basic Latin Accents” to “Extended Latin Accents” and now
 
 {{<fig
   src="screenshot@2x.png"
-  alt="Screenshot of the typography.com dashboard, showing the change from Basic Latin Accents to Extended Latin Accents">}}
-Working Copy showing the files in the git repository for this website
-{{</fig>}}
+  alt="Screenshot of the typography.com dashboard, showing the change from Basic Latin Accents to Extended Latin Accents" />}}
 
 > Side note: I am not sure if this “Cloud.typography” service is really being maintained. The dashboard UI has never changed, and appears really tiny on any modern computer screen. They don’t really link to the service from their navigation at all anymore, I had to google the service to find the url to its page. They do link to it during checkout, but it makes we wonder if maybe it’s being deemphasized.
 > 
