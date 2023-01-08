@@ -1,5 +1,5 @@
 +++
-title = "Had to update Whitney – the font here”
+title = "Had to update Whitney – the font here"
 date = "2023-01-08T11:28:25+01:00"
 +++
 
