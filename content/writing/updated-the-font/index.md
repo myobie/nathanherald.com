@@ -10,9 +10,7 @@ However, with [the last post I made][last], the artist’s name had a character 
 I changed from “Basic Latin Accents” to “Extended Latin Accents” and now the ć shows up.
 
 {{<raw>}}
-<p>
 <img src="screenshot@2x.png" alt="Screenshot of the typography.com dashboard, showing the change from Basic Latin Accents to Extended Latin Accents" width="600">
-</p>
 {{</raw>}}
 
 > Side note: I am not sure if this “Cloud.typography” service is really being maintained. The dashboard UI has never changed, and appears really tiny on any modern computer screen. They don’t really link to the service from their navigation at all anymore, I had to google the service to find the url to its page. They do link to it during checkout, but it makes we wonder if maybe it’s being deemphasized.
