@@ -9,14 +9,12 @@ However, with [the last post I made][last], the artist’s name had a character 
 
 I changed from “Basic Latin Accents” to “Extended Latin Accents” and now the ć shows up.
 
-{{<fig
-  src="screenshot@2x.png"
-  alt="Screenshot of the typography.com dashboard, showing the change from Basic Latin Accents to Extended Latin Accents">}}
-Working Copy showing the files in the git repository for this website
-{{</fig>}}
+{{<raw>}}
+<img src="screenshot@2x.png" alt="Screenshot of the typography.com dashboard, showing the change from Basic Latin Accents to Extended Latin Accents" width="600">
+{{</raw>}}
 
 > Side note: I am not sure if this “Cloud.typography” service is really being maintained. The dashboard UI has never changed, and appears really tiny on any modern computer screen. They don’t really link to the service from their navigation at all anymore, I had to google the service to find the url to its page. They do link to it during checkout, but it makes we wonder if maybe it’s being deemphasized.
-> 
+>
 > Either way, this is the only way I can use Whitney here, so it’s worth the trouble I guess. 😞 Maybe I should buy the [Digital Type Capsule](https://www.typography.com/fonts/digital-type-capsule/overview), download them for offline use as woff files, and use those instead? 
 
 What’s the lesson? Just use the entire font file, don’t try to be cute and slim it down. You never know when you might want to use a character which the font supports, but with your version doesn’t include.
