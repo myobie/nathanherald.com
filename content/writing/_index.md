@@ -1,3 +1,3 @@
 +++
-title = "Archive of my writing and links to other places"
+title = "Archive of all the posts on this site"
 +++
