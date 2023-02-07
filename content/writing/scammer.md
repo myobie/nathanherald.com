@@ -13,16 +13,17 @@ That’s a tough email for me to receive, because I don’t ever claim to have d
 
 [I took the link down][gh], because I don’t want anyone to be upset because of a dumb link I posted. It’s just a link.
 
-I’ve tried to understand what the problem was: on my site here I have a mixture of things I’ve written along with links to other places on the web that I think are cool. I post links to movie trailers, books, cool objects, etc. Similar to [daringfireball.net][] or [swiss-miss.com][]. I think I originally found [the very cool Gessato Modular Space link on swissmiss][sm] and ended up re-posting it to my site. 
+I’ve tried to understand what the problem was: on my site here I have a mixture of things I’ve written along with links to other places on the web that I think are cool. I post links to movie trailers, books, cool objects, [music][], etc. Similar to [daringfireball.net][] or [swiss-miss.com][]. I think I originally found [the very cool Gessato Modular Space link on swissmiss][sm] and ended up re-posting it to my site. 
 
-Is my site confusing? Is it unclear that I am a real person, and I just post links to things I think are cool? I mean the domain is my name…
+Is my site confusing? Does he think I’m claiming I made [a Japanese pop album in 1982][music], before I was born? Is it unclear that I am a real person, and I just post links to things I think are cool? 
 
-I guess not everyone knows that “links” means links to other places… maybe I should go and add “to other places” or “I promise I am not claiming I made this it’s just a link” to every link?
+I guess not everyone knows that “links” means links to other places, so maybe I should go and add “to other places” or “I promise I am not claiming I made this it’s just a link” to every link?
 
-In the moment, I feel more wary of posting any more links at all here. I’m sure I’ll get over it by the end of today.
+In the moment, I feel more wary of posting any more links at all here. I’m sure I’ll get over it by the end of today. Maybe I should post more often so it’s clear I am a real person…
 
 Super weird email to get tho, for sure… I gotta shake it off and get back to work.
 
+[music]: https://deploy-preview-52--flamboyant-northcutt-4eefaf.netlify.app/writing/links/takako-mamiya-love-trip/
 [gh]: https://github.com/myobie/nathanherald.com/commit/e2ed2d216f663d895c4967beb05859b1958b58fa
 [daringfireball.net]: https://daringfireball.net
 [swiss-miss.com]: https://swiss-miss.com
