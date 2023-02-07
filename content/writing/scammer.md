@@ -23,7 +23,7 @@ In the moment, I feel more wary of posting any more links at all here. I’m sur
 
 Super weird email to get tho, for sure… I gotta shake it off and get back to work.
 
-[music]: https://deploy-preview-52--flamboyant-northcutt-4eefaf.netlify.app/writing/links/takako-mamiya-love-trip/
+[music]: https://nathanherald.com/writing/links/takako-mamiya-love-trip/
 [gh]: https://github.com/myobie/nathanherald.com/commit/e2ed2d216f663d895c4967beb05859b1958b58fa
 [daringfireball.net]: https://daringfireball.net
 [swiss-miss.com]: https://swiss-miss.com
