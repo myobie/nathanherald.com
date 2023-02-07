@@ -17,7 +17,9 @@ I’ve tried to understand what the problem was: on my site here I have a mixtur
 
 Is my site confusing? Is it unclear that I am a real person, and I just post links to things I think are cool? I mean the domain is my name…
 
-In the moment, I feel more wary of posting any more links at all here. I’m sure I’ll get over it by the end of today. 
+I guess not everyone knows that “links” means links to other places… maybe I should go and add “to other places” or “I promise I am not claiming I made this it’s just a link” to every link?
+
+In the moment, I feel more wary of posting any more links at all here. I’m sure I’ll get over it by the end of today.
 
 Super weird email to get tho, for sure… I gotta shake it off and get back to work.
 
