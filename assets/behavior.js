@@ -6,15 +6,15 @@ function shouldChangeColor () {
   }
 }
 function sorter () { return 0.5 - Math.random() }
-var styles = ['blaze', 'blood', 'puce']
+const styles = ['blaze', 'blood', 'puce']
 
 function colorize () {
   if (shouldChangeColor()) {
-    var newStyle = styles.sort(sorter)[0]
+    const newStyle = styles.sort(sorter)[0]
 
     document.body.classList.remove('default')
 
-    for (var style of styles) {
+    for (const style of styles) {
       document.body.classList.remove(style)
     }
 
@@ -24,26 +24,9 @@ function colorize () {
 
 colorize()
 
-window.addEventListener('load', e => {
+self.addEventListener('load', _e => {
   setTimeout(() => {
     document.body.classList.add('animated')
     setInterval(colorize, 25000)
   }, 200)
 })
-
-// Add clickable links to headings with IDs
-
-function linkHeadings () {
-  document.querySelectorAll('h2[id], h3[id], h4[id], h5[id], h6[id]').forEach(heading => {
-    const anchor = document.createElement('a')
-
-    anchor.innerText = '#'
-    anchor.classList.add('permalink')
-    anchor.setAttribute('href', `#${heading.id}`)
-    anchor.setAttribute('title', 'Permalink')
-
-    heading.append(anchor)
-  })
-}
-
-linkHeadings()

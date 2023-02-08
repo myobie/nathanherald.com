@@ -25,9 +25,12 @@
         <h1>
           {{ $page := . }}
           {{ with .Params.externalUrl }}
-            <a href="{{ . }}">{{ $page.Title }}</a>&nbsp;<a href="{{ . }}" class="never-underline"><abbr title="link">🔗</abbr></a>
+            <a href="{{ . }}">{{ $page.Title }}</a>
+            {{ $url := urls.Parse . }}
+            <p class="annotation">🔗 a link post linking to {{ $url.Host }}</a>
           {{ else }}
             {{ .Title }}
+            <p class="annotation">⭐️ a blog post</a>
           {{ end }}
         </h1>
         {{ with .Description }}
@@ -47,9 +50,9 @@
         {{ end }}
         <p>
           {{ with .Params.externalUrl }}
-            Linked
+            Linked to on
           {{ else }}
-            Published
+            Posted on
           {{ end }}
           <time datetime="{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}">
             {{ .Date.Format "2 Jan, 2006" }}

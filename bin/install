@@ -14,7 +14,7 @@ else
 
   mkdir -p vendor
   cd vendor &&
-    curl -s -L -O "$url" &&
+    curl -L -O "$url" &&
     tar -xzf "hugo_extended_${version}_Linux-64bit.tar.gz" &&
     cd -
 
