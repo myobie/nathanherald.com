@@ -112,46 +112,10 @@ header h1 {
   margin-top: 0;
 }
 
-/* permalink stuff */
-
-h2, h3, h4, h5, h6 {
-  position: relative;
+header h1 .annotation {
+  margin-top: 0.5em;
+  font-size: 50%;
 }
-
-h2 > a.permalink,
-h3 > a.permalink,
-h4 > a.permalink,
-h5 > a.permalink,
-h6 > a.permalink {
-  text-decoration: none;
-  padding-left: 10px;
-}
-
-@media (hover: hover) and (min-width: 460px) {
-  h2 > a.permalink,
-  h3 > a.permalink,
-  h4 > a.permalink,
-  h5 > a.permalink,
-  h6 > a.permalink {
-    display: none;
-    position: absolute;
-    bottom: 0;
-    right: 100%;
-    padding-right: 10px;
-    padding-left: 0;
-    text-decoration: none;
-  }
-
-  h2:hover > a.permalink,
-  h3:hover > a.permalink,
-  h4:hover > a.permalink,
-  h5:hover > a.permalink,
-  h6:hover > a.permalink {
-    display: block;
-  }
-}
-
-/* end of permalink stuff */
 
 #fin h1 {
   margin-bottom: 3em;
@@ -218,19 +182,50 @@ pre {
   list-style-type: none;
 }
 
+.listing ol li {
+  margin: 0 0 1em;
+}
+
+.listing dl {
+  margin: 0 0 1em;
+  max-width: 40em;
+}
+
+.listing dl > div {
+  display: flex;
+  gap: 1em;
+  margin-bottom: 1em;
+}
+
+.listing dl dt {
+  flex: 0;
+}
+
+.listing dl dd {
+  flex: 1;
+  margin: 0;
+}
+
+.listing .permalink, .listing .host {
+  margin: 0;
+}
+
+.listing .host {
+  font-size: 80%;
+  opacity: 0.8;
+  font-style: italic;
+}
+
+.latest-posts {
+  padding: 0 1.5em;
+}
+
 .latest-posts li {
   margin: 0 0 0.7em;
 }
 
 .latest-posts li:first-of-type a {
   font-weight: var(--font-weight-bold);
-}
-
-.latest-posts a.title::before {
-  position: relative;
-  display: inline-block;
-  content: "➡️";
-  margin-right: 8px;
 }
 
 .section-header {

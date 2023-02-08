@@ -3,7 +3,21 @@
   <ol>
     {{ range first $number (where site.RegularPages "Section" "in" site.Params.mainSections) }}
       <li>
-        <a class="title" href="{{ .Permalink }}">{{ .Title }}</a>{{with .Params.externalUrl }}&nbsp;<a href="{{ . }}" class="never-underline"><abbr title="link">🔗</abbr></a>{{ end }}
+        {{- with .Params.externalUrl }}
+          <abbr title="link post">🔗</abbr>
+        {{- else }}
+          <abbr title="blog post">⭐️</abbr>
+        {{- end }}
+
+        <a class="title" href="{{ .Permalink }}">{{ .Title }}</a>
+
+        {{- with .Params.externalUrl }}
+          {{ $url := urls.Parse . }}
+          <p class="host">
+            Links to
+            <a href="{{ . }}" class="never-underline">{{ $url.Host }}</a>
+          </p>
+        {{- end }}
       </li>
     {{ end }}
   </ol>

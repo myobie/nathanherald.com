@@ -11,8 +11,8 @@
       </h1>
       <p>
         Here are all the posts on this site, in reverse chronological order.
-        Some are things I&rsquo;ve written, some are just links to cool stuff
-        on the web. 🫡
+        Some are &ldquo;blog&nbsp;posts&rdquo; I&rsquo;ve written and some are
+        &ldquo;link&nbsp;posts&rdquo; which link to other sites on the web. 🫡
       </p>
     </div>
   </header>
@@ -34,6 +34,21 @@
     {{ end }}
 
     <div class="listing">
+      <dl class="legend">
+        <div>
+          <dt>⭐️</dt>
+          <dd>means &ldquo;blog post&rdquo; I&rsquo;ve written</dd>
+        </div>
+        <div>
+          <dt>🔗</dt>
+          <dd>
+            means &ldquo;link post&rdquo; linking to another site on the web,
+            <i>that I&rsquo;m not affiliated with,</i> which is cool and you should
+            check out
+          </dd>
+        </div>
+      </dl>
+
       <ol class="month-list">
         {{ range (where site.RegularPages "Section" "==" .Section).GroupByDate "January 2006" }}
           <li>
@@ -42,17 +57,28 @@
               {{ range .Pages.ByDate.Reverse }}
                 <li>
                   <p class="permalink">
+                    {{- with .Params.externalUrl }}
+                      <abbr title="link post">🔗</abbr>
+                    {{- else }}
+                      <abbr title="blog post">⭐️</abbr>
+                    {{- end }}
+
                     <a href="{{ .Permalink }}">{{ .Title }}</a>
+
                     <span class="meta">
-                      {{- with .Params.externalUrl }}
-                      <a href="{{ . }}" class="never-underline"><abbr title="link">🔗</abbr></a>
-                      {{- end }}
                       –
                       <time datetime="{{ .Date.Format "2006-01-02T15:04:05Z" }}">
                         {{ .Date.Format "2 Jan, 2006" }}
                       </time>
                     </span>
                   </p>
+                  {{- with .Params.externalUrl }}
+                    {{ $url := urls.Parse . }}
+                    <p class="host">
+                      Links to
+                      <a href="{{ . }}" class="never-underline">{{ $url.Host }}</a>
+                    </p>
+                  {{- end }}
                 </li>
               {{ end }}
             </ol>
