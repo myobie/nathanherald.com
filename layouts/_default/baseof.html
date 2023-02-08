@@ -36,6 +36,7 @@
     {{- else -}}
       {{- $behavior := $behavior | minify | fingerprint -}}
       <script async src="{{ $behavior.Permalink }}" integrity="{{ $behavior.Data.Integrity }}"></script>
+      <script defer data-domain="nathanherald.com" src="https://stats.myobie.wtf/script.js"></script>
     {{- end}}
   </body>
 </html>
