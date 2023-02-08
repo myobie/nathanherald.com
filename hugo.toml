@@ -12,7 +12,7 @@ disableKinds = [
 
 [params]
   homepagePostsCount = 3
-  mainSections = ["writing"]
+  mainSections = ["posts"]
 
 [author]
   name = "Nathan"
