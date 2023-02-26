@@ -11,7 +11,7 @@ disableKinds = [
 ]
 
 [params]
-  homepagePostsCount = 3
+  homepagePostsCount = 5
   mainSections = ["posts"]
 
 [author]
