@@ -10,7 +10,7 @@ externalUrl = "https://lmets.carbonmade.com/cargobox"
   href="https://lmets.carbonmade.com/cargobox"
   />}}
 
-I love this absolute unit of a van! ❤️
+I love this absolute unit of a truck! ❤️
 
 It’s so cute, and it’s a great idea to try out different designs of electric cars for different purposes. At low speeds, the vehicle doesn’t need to focus as much on aerodynamics, and can prioritize the cargo space.
 
