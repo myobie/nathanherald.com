@@ -17,3 +17,7 @@ command = "hugo --gc --minify --buildDrafts --buildFuture --baseURL $DEPLOY_PRIM
 
 [context.branch-deploy.environment]
 HUGO_VERSION = "0.110.0"
+
+[[redirects]]
+from = "/writing/rss.xml"
+to = "/posts/rss.xml"
