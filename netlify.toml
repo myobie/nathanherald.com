@@ -21,3 +21,11 @@ HUGO_VERSION = "0.110.0"
 [[redirects]]
 from = "/writing/rss.xml"
 to = "/posts/rss.xml"
+
+[[redirects]]
+from = "/writing/"
+to = "/posts/"
+
+[[redirects]]
+from = "/writing"
+to = "/posts"
