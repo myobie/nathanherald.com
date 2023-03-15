@@ -19,7 +19,7 @@ This feels like a slight-of-hand magic trick which I can’t figure out. It does
 
 When large multimodal models can ace any exam, when they can offer very good advice for most problems a person might face, **the definition of expertise will need to change.**
 
-Would you want to hire a human who got a B throughout their university time and is a “expert”, or would you want to hire a human who didn’t go to university and has a large model sidekick to guide them? Who would really be the expert? Even if the “traditional expert” also had a large model sidekick to help them, how much more of an expert are they really?
+Would you want to hire a human who got a B throughout their university time and is a “expert”, or would you want to hire a human who didn’t go to university and has a large model sidekick to guide them? Who would really be the expert? Even if the “traditional expert” also had a large model sidekick to help them, how much more of an expert are they really? Will the delta be that large?
 
 Expertise might end up being not that important. Instead, it feels like what will be important will be things which are: _[manual][].[^1]_
 
