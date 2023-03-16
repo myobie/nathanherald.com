@@ -9,7 +9,7 @@ This paper about sharing web content is a good read. They created a browser exte
 > the user mediates recommendations not for themselves, but on behalf of someone they know…
 > FeedMe’s users act as gatekeepers for someone else…
 
-One of their conculions realy resonated with me:
+One of their conclusions really resonated with me:
 
 > Link Sharing Is Burdensome When It Is a Repetitive Firehose
 
