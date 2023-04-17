@@ -44,8 +44,9 @@
 
       <footer>
         {{ with .Params.externalUrl }}
+          {{ $url := urls.Parse . }}
           <p>
-            <a href="{{ . }}">Check it out over on their site →</a>
+            <a href="{{ . }}">Check it out over on {{ $url.Host }} →</a>
           </p>
         {{ end }}
         <p>
