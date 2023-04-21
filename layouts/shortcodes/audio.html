@@ -1,0 +1,7 @@
+{{- $original := .Page.Resources.GetMatch (printf "*%s*" (.Get "src")) -}}
+
+<audio controls src="{{ $original.Permalink }}">
+  {{- with .Inner }}
+    {{ . | markdownify }}
+  {{- end }}
+</audio>
