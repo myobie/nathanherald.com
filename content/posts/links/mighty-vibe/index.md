@@ -5,7 +5,7 @@ externalUrl = "https://www.mightyaudio.co.uk/products/mighty-vibe"
 +++
 
 {{<fig
-  src="image@2x.jpg"
+  src="image@2x.png"
   alt="Photo of the Mighty Vibe"
   href="https://www.mightyaudio.co.uk/products/mighty-vibe"
   />}}
