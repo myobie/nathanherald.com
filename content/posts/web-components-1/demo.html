@@ -14,12 +14,12 @@
   </head>
   <body>
     <image-grid>
-      <image-cell src="./one.jpg"   width="1000" height="838"></image-cell>
-      <image-cell src="./two.jpg"   width="751"  height="1000"></image-cell>
-      <image-cell src="./three.jpg" width="1000" height="751"></image-cell>
-      <image-cell src="./four.jpg"  width="662"  height="1000"></image-cell>
-      <image-cell src="./five.jpg"  width="1000" height="662"></image-cell>
-      <image-cell src="./six.jpg"   width="1000" height="662"></image-cell>
+      <image-cell src="./one.jpg"   width="1000" height="838"  alt="Photo of a building on a sunny day"></image-cell>
+      <image-cell src="./two.jpg"   width="751"  height="1000" alt="Photo of a building on a street on a sunny day"></image-cell>
+      <image-cell src="./three.jpg" width="1000" height="751"  alt="Photo of a building on a street on a sunny day"></image-cell>
+      <image-cell src="./four.jpg"  width="662"  height="1000" alt="Photo through a hexagonal window into a tea room on a sunny day"></image-cell>
+      <image-cell src="./five.jpg"  width="1000" height="662"  alt="Photo of a lot of differently colored tulips"></image-cell>
+      <image-cell src="./six.jpg"   width="1000" height="662"  alt="Photo of a street with two motorcycle riders just starting out, making a left turn"></image-cell>
     </image-grid>
 
     <!-- lib code below -->
@@ -97,6 +97,7 @@
 
         updateTemplate() {
           const img = this.shadowRoot.querySelector('img')
+          img.alt = this.alt
           img.src = this.src
           img.width = this.width
           img.height = this.height
@@ -106,16 +107,20 @@
           pName.innerText = nameParts.at(-1)
         }
 
+        get alt() {
+          return this.getAttribute('alt')
+        }
+
+        get height() {
+          return this.getAttribute('height')
+        }
+
         get src() {
           return this.getAttribute('src')
         }
 
         get width() {
           return this.getAttribute('width')
-        }
-
-        get height() {
-          return this.getAttribute('height')
         }
       })
     </script>
