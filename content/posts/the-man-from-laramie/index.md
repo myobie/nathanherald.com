@@ -3,7 +3,7 @@ title = "The Man from Laramie"
 date = "2023-05-08T22:38:47+02:00"
 +++
 
-This past weekend I watched _The Man rom Laramie_ in the [Criterion Channel’s _Anthony Mann Directs James Stewart_][CC] collection. This was the fifth and final film Mann directed with Stewart as the star, and it was a great watch.
+This past weekend I watched _The Man from Laramie_ in the [Criterion Channel’s _Anthony Mann Directs James Stewart_][CC] collection. This was the fifth and final film Mann directed with Stewart as the star, and it was a great watch.
 
 Even with all their problems, I still love a good Western. I grew up watching them and they still captivate me. Especially one that has something interesting to say – and that’s what surprised me the most about this movie: it’s politics seem pretty progressive for 1955.
 
@@ -17,7 +17,7 @@ Yet, he didn’t blame nor was looking for the Native Americans, he was instead 
 This is currently being debated back home in the US: can gun manufactures be held liable for how their weapons are used? Now manufacture vs. dealer is different, sure, but it really seemed so “current” when watching this film.
 {{</details>}}
 
-_Also, this movie appeared to be “trying it’s best” for 1955 and not fall into every trope or harmful portrayal… but still it’s a Western from 1955 and will present indigenous peoples in disparaging ways._
+_Also, this movie appeared to be “trying it’s best” for 1955 and not fall into every trope or harmful portrayal… but still it’s a Western from 1955 and does briefly present indigenous peoples in disparaging ways._
 
 It has [100% on the tomato meter][tomato], and it deserves a high score for sure. Stewart’s performance was captivating, and at times gut wrenching. I recommend giving it a watch. And I plan to watch the other four films in [the collection][CC].
 
