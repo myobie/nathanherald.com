@@ -172,6 +172,15 @@ pre {
   overflow-wrap: normal;
 }
 
+details {
+  margin: 0 0 2em;
+  padding: 0 0 0 1em;
+}
+
+details summary {
+  margin-left: -1em;
+}
+
 .never-underline {
   text-decoration: none;
 }
