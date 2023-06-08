@@ -1,6 +1,6 @@
 +++
 title = "Today – Q"
-date = "2023-03-21T10:45:30+01:00"
+date = "2023-06-07T10:31:14+02:00"
 externalURL = "https://music.apple.com/us/album/today/1650519297?i=1650519307"
 +++
 
