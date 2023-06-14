@@ -3,6 +3,10 @@
   <head lang="{{ site.LanguageCode }}">
     <meta charset="UTF-8">
     <title>{{ site.Title }}{{ with .Title }} → {{ . }}{{ end }}</title>
+    <script>
+      if ((new URL(window.location.href)).host === 'myobie.com') { window.location.assign('https://nathanherald.com') }
+    </script>
+    <link rel="canonical" href="{{ .Permalink }}">
     <link rel="stylesheet" type="text/css" href="https://cloud.typography.com/6836312/761366/css/fonts.css">
     {{- $baseStyles := resources.Get "styles.css" -}}
     {{- $syntaxLight := resources.Get "syntax-light.css" -}}
