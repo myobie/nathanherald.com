@@ -9,3 +9,5 @@ externalURL = "https://www.youtube.com/watch?v=bMCiAKNUpTY"
 {{</raw>}}
 
 This has been such a nice thing to have on while working today 😊
+
+Found via [swiss miss](https://www.swiss-miss.com/2023/07/olafur-arnalds-live-from-hafursey.html).
