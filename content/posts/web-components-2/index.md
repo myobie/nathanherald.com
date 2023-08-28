@@ -63,7 +63,7 @@ _I do want to try to “server render” the grid and then hydrate it in the bro
 
 I’ve added a `shuffle()` to the database query so I can emulate sorting and filtering. One of the things I wanted to solve was how to easily handle sorting with these custom elements. It turns out the secret is the `<slot></slot>` element. 
 
-> [`@keithamus` tipped me off to this over on Mastodon][mastodon] _(sheesh, bak on May 7, it certainly took me a while to act on his advice 😂)_.
+> [`@keithamus` tipped me off to this over on Mastodon][mastodon] _(sheesh, back on May 7, it certainly took me a while to act on his advice 😂)_.
 
 A [slot is assignable][assign], with something like: `slot.assign(...nodes)`
 
