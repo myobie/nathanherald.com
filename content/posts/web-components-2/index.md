@@ -1,5 +1,5 @@
 +++
-title = "Learning about Web Components: Part 2"
+title = "Learning about Web Components: Part 2 – Data access and UI updates"
 date = "2023-08-27T13:02:22+02:00"
 +++
 

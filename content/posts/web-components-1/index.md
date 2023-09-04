@@ -1,5 +1,5 @@
 +++
-title = "Learning about Web Components: Part 1"
+title = "Learning about Web Components: Part 1 – Getting Started"
 date = "2023-05-06T15:35:45+02:00"
 +++
 
