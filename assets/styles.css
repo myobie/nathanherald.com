@@ -172,6 +172,10 @@ pre {
   overflow-wrap: normal;
 }
 
+video {
+  margin: 2em 0 2em;
+}
+
 details {
   margin: 0 0 2em;
   padding: 0 0 0 1em;
