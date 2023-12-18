@@ -13,4 +13,4 @@ const promise = new Promise((res, rej) => {
 })
 ```
 
-I’ve been using [deno’s standard library’s deferred](https://deno.land/std@0.189.0/async/deferred.ts?source=) for a while, and I’ll be happy to swift to `Promise.withResolvers()` soon 💪
+I’ve been using [deno’s standard library’s deferred](https://deno.land/std@0.189.0/async/deferred.ts?source=) for a while, and I’ll be happy to switch to `Promise.withResolvers()` soon 💪
