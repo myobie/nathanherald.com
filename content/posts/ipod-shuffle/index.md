@@ -50,26 +50,26 @@ Here are the important steps in text:
     6. `qxldod > w10 > amd64`, “Next”
     7. “Load driver” one last time, “Browse”
     8. `viostor > w10 > amd64`, “Next”
-		9. Now the Drive shows up and can be chosen to install Windows onto it, but you can’t proceed with “Next” yet…
-		10. Use the CD icon to change back to the Windows 10 ISO
-		11. Click “Refresh”
-		12. Now you can click “Next”, and now it will take a very long time… until it asks you to provide a username
+	9. Now the Drive shows up and can be chosen to install Windows onto it, but you can’t proceed with “Next” yet…
+	10. Use the CD icon to change back to the Windows 10 ISO
+	11. Click “Refresh”
+	12. Now you can click “Next”, and now it will take a very long time… until it asks you to provide a username
 11. Provide a username, leave the password blank, “Next”, and it boots into Windows 🎉
 12. Use the CD icon to change to the Guest Tools ISO
-		1. Open the CD in the Explorer
-		2. Run the spice guest tools application on the CD
-		3. Eject the CD once it’s done
+	1. Open the CD in the Explorer
+	2. Run the spice guest tools application on the CD
+	3. Eject the CD once it’s done
 13. Shutdown Windows
-		* If the screen is black for a long time, the VM doesn’t know that windows has quit so you can just power it off yourself (it’s like having a real, old computer…)
+	* If the screen is black for a long time, the VM doesn’t know that windows has quit so you can just power it off yourself (it’s like having a real, old computer…)
 14. Click the icon to edit the VM’s options
 15. Add a Network where the Disk stuff is
-		* Make sure it’s a `virtio-net-pci` one
+	* Make sure it’s a `virtio-net-pci` one
 16. Change the Display graphics to `virtio-gpu-cpi`
-		* Don’t choose Retina, it will be sloooooow
+	* Don’t choose Retina, it will be sloooooow
 17. Now download and install an old iTunes version that still works
-		* Download and install iTunes from this page: <https://support.apple.com/en-us/106372>
-		* Don’t download iTunes from the Microsoft Store it can’t deal with iPods
-		* You’ll need to restart Windows after installing it
+	* Download and install iTunes from this page: <https://support.apple.com/en-us/106372>
+	* Don’t download iTunes from the Microsoft Store it can’t deal with iPods
+	* You’ll need to restart Windows after installing it
 18. Plug in your iPod and UTM will try to grab the USB device from macOS, you’ll need to say “OK” or “Allow” twice for it to work. The iPod will now show up in Windows.
 19. iTunes should now be able to restore it just fine, it might be slow though
 20. Choose to use it as a disk in iTunes and apply that change
