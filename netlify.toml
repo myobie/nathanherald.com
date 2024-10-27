@@ -3,20 +3,20 @@ publish = "public"
 command = "hugo --gc --minify -e production"
 
 [context.production.environment]
-HUGO_VERSION = "0.110.0"
+HUGO_VERSION = "0.136.5"
 HUGO_ENV = "production"
 
 [context.deploy-preview]
 command = "hugo --gc --minify --buildDrafts --buildFuture --baseURL $DEPLOY_PRIME_URL"
 
 [context.deploy-preview.environment]
-HUGO_VERSION = "0.110.0"
+HUGO_VERSION = "0.136.5"
 
 [context.branch-deploy]
 command = "hugo --gc --minify --buildDrafts --buildFuture --baseURL $DEPLOY_PRIME_URL"
 
 [context.branch-deploy.environment]
-HUGO_VERSION = "0.110.0"
+HUGO_VERSION = "0.136.5"
 
 [[redirects]]
 from = "/writing/rss.xml"
