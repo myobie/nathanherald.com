@@ -6,8 +6,7 @@ pygmentsUseClasses = true
 pygmentsCodeFences = true
 
 disableKinds = [
- "taxonomy",
- "taxonomyTerm"
+ "taxonomy"
 ]
 
 [params]

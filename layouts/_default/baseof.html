@@ -12,7 +12,7 @@
     {{- $syntaxLight := resources.Get "syntax-light.css" -}}
     {{- $syntaxDark := resources.Get "syntax-dark.css" -}}
     {{- $styles := slice $baseStyles $syntaxLight $syntaxDark | resources.Concat "combined.css" -}}
-    {{if site.IsServer -}}
+    {{if hugo.IsServer -}}
       <link rel="stylesheet" type="text/css" href="{{ $styles.Permalink }}" integrity="{{ $styles.Data.Integrity }}">
     {{- else -}}
       {{- $styles := $styles | minify | fingerprint -}}
@@ -36,7 +36,7 @@
     {{ block "main" . }}{{ end }}
     {{ block "footer" . }}{{ end }}
     {{ $behavior := resources.Get "behavior.js" }}
-    {{if site.IsServer -}}
+    {{if hugo.IsServer -}}
       <script async src="{{ $behavior.Permalink }}" integrity="{{ $behavior.Data.Integrity }}"></script>
     {{- else -}}
       {{- $behavior := $behavior | minify | fingerprint -}}

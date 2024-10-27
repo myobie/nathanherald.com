@@ -9,4 +9,4 @@ Only 50,000$ with _Complimentary shipping_ 😆
 {{<fig
   src="image.jpg"
   alt="Photo of the Omega Sports Apple Computer Sneakers"
-  link="https://www.sothebys.com/en/buy/pdp/fashion/sneaker/lifestyle/_Omega-Sports-Apple-Computer-Sneakers-or-Size-10.5">}}
+  link="https://www.sothebys.com/en/buy/pdp/fashion/sneaker/lifestyle/_Omega-Sports-Apple-Computer-Sneakers-or-Size-10.5" />}}
