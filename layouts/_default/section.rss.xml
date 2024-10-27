@@ -8,11 +8,11 @@
     {{- with site.LanguageCode }}
     <language>{{.}}</language>
     {{- end }}
-    {{- with site.Author.email }}
-    <managingEditor>{{.}}{{ with site.Author.name }} ({{.}}){{ end }}</managingEditor>
+    {{- with .Site.Params.Author.email }}
+    <managingEditor>{{.}}{{ with .Site.Params.Author.name }} ({{.}}){{ end }}</managingEditor>
     {{ end -}}
-    {{- with site.Author.email }}
-    <webMaster>{{.}}{{ with site.Author.name }} ({{.}}){{ end }}</webMaster>
+    {{- with .Site.Params.Author.email }}
+    <webMaster>{{.}}{{ with .Site.Params.Author.name }} ({{.}}){{ end }}</webMaster>
     {{- end }}
     {{- with site.Copyright }}
     <copyright>{{.}}</copyright>
