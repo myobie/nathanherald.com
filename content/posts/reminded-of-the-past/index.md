@@ -5,7 +5,7 @@ date = "2024-10-27T20:35:57+01:00"
 
 In Berlin I am confronted with reminders of the city’s every single day. Every time I walk outside I see a memorial or reminder of dreadful things, it’s normal, these reminders are ever present.
 
-Earlier this year I was walking around, admiring some wonderful murals, when I learned about something I didn’t know before.
+Earlier this year I was walking around, admiring some wonderful murals…
 
 {{<row-of-photos>}}
 
@@ -23,7 +23,7 @@ Earlier this year I was walking around, admiring some wonderful murals, when I l
 
 {{</row-of-photos>}}
 
-One of these buildings had an informational sign. I took a photo of the sign, but this copy on Wikimedia is more clear than my photo:
+…when I learned about something I didn’t know before. One of these buildings had an informational sign about it. I took a photo of the sign, but this copy on Wikimedia is more clear than my photo:
 
 {{<fig
   alt="Historical sign about the Gutschow-Keller"
