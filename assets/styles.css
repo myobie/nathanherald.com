@@ -154,6 +154,15 @@ blockquote {
   transition: border-left-color 1s;
 }
 
+hr {
+  margin: 2em;
+  padding: 0 1em;
+  height: 0px;
+  border: none;
+  border-bottom: 1px solid var(--line-color);
+  transition: border-bottom-color 1s;
+}
+
 code {
   font-family: var(--monospace-font);
   font-size: 1em;
