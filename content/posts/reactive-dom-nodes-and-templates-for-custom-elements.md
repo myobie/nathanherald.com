@@ -76,7 +76,7 @@ function reactiveTextNode(signal) {
 
 And that’s it. Now we have a `Text` node that can be inserted anywhere in the DOM + it will update anytime it’s signal is updated 💪
 
-Try this in your browser for a full example:
+Try this in your browser console for a full example:
 
 ```js
 // paste this on it's own line by itself or else safari will complain
@@ -200,7 +200,7 @@ And this now is a complete app. I’ll embed the codepen right here so you can t
 
 What I like about it is it shows how you can very quickly _hydrate_ server-side generated markup using their custom element subclass.
 
-I, personally, am not a fan of putting things like _bindings_ or _handlers_ in the html directly. In my journey I’ve arrived at the above _reactive text node_ primitive from which I can build up fairly complex web apps. And DOM elements already bubble up their events, so if I can’t to handle a click I’ll create a custom element like I showed above to listen for and handle it. I prefer that style.
+I, personally, am not a fan of putting things like _bindings_ or _handlers_ in the html directly. In my journey I’ve arrived at the above _reactive text node_ primitive from which I can build up fairly complex web apps. And DOM elements already bubble up their events, so if I want to handle a click I’ll create a custom element like I showed above to listen for and handle it. I prefer that style.
 
 And this is why the web is great: the tools we have in the browser are incredibly flexible, there isn’t a right way to use them.
 
