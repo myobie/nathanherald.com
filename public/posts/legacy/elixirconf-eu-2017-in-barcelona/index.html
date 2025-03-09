@@ -1,432 +1,965 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
   <head lang="en-us">
+    <meta content="HTML Tidy for HTML5 for Apple macOS version 5.8.0" name="generator">
     <meta charset="UTF-8">
-    <title>I‘m Nathan Herald → ElixirConf EU 2017 in Barcelona</title>
+    <title>
+      I‘m Nathan Herald → ElixirConf EU 2017 in Barcelona
+    </title>
     <script>
       if ((new URL(window.location.href)).host === 'myobie.com') { window.location.assign('https://nathanherald.com') }
     </script>
-    <link rel="canonical" href="https://nathanherald.com/posts/legacy/elixirconf-eu-2017-in-barcelona/">
-    <link rel="stylesheet" type="text/css" href="https://cloud.typography.com/6836312/761366/css/fonts.css"><link rel="stylesheet" type="text/css" href="/styles.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="generator" content="Hugo 0.136.5">
-    <meta name="title" content="I‘m Nathan Herald  → ElixirConf EU 2017 in Barcelona">
-    <meta name="description" content="A distillation of my conference talk.">
-    <meta property="og:title" content="ElixirConf EU 2017 in Barcelona">
-    <meta property="og:type" content="website">
-    <meta property="og:description" content="A distillation of my conference talk.">
-    <meta property="og:url" content="https://nathanherald.com/posts/legacy/elixirconf-eu-2017-in-barcelona/">
-    <meta property="og:image" content="/og.png">
-    <meta property="og:site_name" content="I‘m Nathan Herald">
-    
-  
-
-<link rel="alternate" type="application/rss+xml" href="/rss.xml" title="Feed of all the posts on nathanherald.com">
-
-
+    <link href="https://nathanherald.com/posts/legacy/elixirconf-eu-2017-in-barcelona/" rel=
+    "canonical">
+    <link href="https://cloud.typography.com/6836312/761366/css/fonts.css" rel="stylesheet" type=
+    "text/css">
+    <link href="/styles.css" rel="stylesheet" type="text/css">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="Hugo 0.136.5" name="generator">
+    <meta content="I‘m Nathan Herald → ElixirConf EU 2017 in Barcelona" name="title">
+    <meta content="A distillation of my conference talk." name="description">
+    <meta content="ElixirConf EU 2017 in Barcelona" property="og:title">
+    <meta content="website" property="og:type">
+    <meta content="A distillation of my conference talk." property="og:description">
+    <meta content="https://nathanherald.com/posts/legacy/elixirconf-eu-2017-in-barcelona/"
+    property="og:url">
+    <meta content="/og.png" property="og:image">
+    <meta content="I‘m Nathan Herald" property="og:site_name">
+    <link href="/rss.xml" rel="alternate" title="Feed of all the posts on nathanherald.com" type=
+    "application/rss+xml">
   </head>
   <body class="default">
-    
-  <header class="section-header">
-    <div class="section-nav">
-      <h1 class="home-link">
-        <a data-nospan href="/" class="never-underline"><abbr title="Hello">👋</abbr></a>
-        <a href="/">I&rsquo;m Nathan</a>
-      </h1>
-      <nav>
-        <p>
-          Find more in the <a href="https://nathanherald.com/posts/">archive of all the posts on this site</a>
-or <a href="https://nathanherald.com/posts/rss.xml">subscribe with RSS</a>.
-
-        </p>
-      </nav>
-    </div>
-  </header>
-
-    
-  <main class="single">
-    <article>
-      <header>
-        <h1>
-          
-          
-            ElixirConf EU 2017 in Barcelona
-            <p class="annotation">⭐️ a blog post</a>
-          
+    <header class="section-header">
+      <div class="section-nav">
+        <h1 class="home-link">
+          <a class="never-underline" data-nospan="" href="/"><abbr title="Hello">👋</abbr></a>
+          <a href="/">I’m Nathan</a>
         </h1>
-        
-          <h2>A distillation of my conference talk.</h2>
-        
-      </header>
-
-      <div class="content">
-        <p>Hello.</p>
-<p>I design distributed applications from UI to data storage as a career. I started out as a graphic designer, got into programming, and now that has spiraled out of control.</p>
-<p>Aside: I built my own presentation software using <a href="https://choo.io">choo</a> and phoenix. If you want to have a lot more anxiety than necessary, then build your own presentation software. As an example: I don’t have speaker notes because I didn’t have time to implement that feature.</p>
-<figure>
-  <img
-    alt="Screenshot of the presenter view for the presentation software I made for myself"
-    width="639"
-    height="435"
-    src="https://nathanherald.com/posts/legacy/elixirconf-eu-2017-in-barcelona/1-3Ibv-qH5Vo9-Fm8sjGC30A_hu7680339945200642797.png">
-  <figcaption>
-    This is what the presentation software looks like for me.
-  </figcaption>
-</figure>
-
-<h3 id="distributed-applications-arehard">Distributed applications are hard</h3>
-<p>One has to deal with network partitions, concurrency, locking and/or linearization, stale data, etc. Here is a painting that represents how I feel about distributed systems: they are great fun and I feel dead.</p>
-<figure>
-  <img
-    alt="Painting of a skeleton surfing"
-    width="800"
-    height="800"
-    src="https://nathanherald.com/posts/legacy/elixirconf-eu-2017-in-barcelona/1-aqjDRpRjbuT3rcWb1K1Pew_hu1380437794767337624.jpeg">
-  <figcaption>
-    By Ted Parker — <a href="http://ted-parker.com/portfolio/surfs-dead/"><em>http://ted-parker.com/portfolio/surfs-dead/</em></a>
-  </figcaption>
-</figure>
-
-<h4 id="network-latency">Network latency</h4>
-<p>Network latency can cause stale reads from consistent systems. A server’s response for one request can arrive much later than expected, possibly after one or more other responses that were sent after it. This happens all the time. 😱</p>
-<figure>
-  <img
-    alt="Illustration of network request ordering"
-    width="800"
-    height="450"
-    src="https://nathanherald.com/posts/legacy/elixirconf-eu-2017-in-barcelona/1-S40jbGVy9x1Cnxq4csEXuA_hu13262106131644868555.png">
-  <figcaption>
-    Networks can cause everything to be out of order, no matter which is sent first.
-  </figcaption>
-</figure>
-
-<h4 id="scaling-ishard">Scaling is hard</h4>
-<p>One has to deal with load balancing, parallelism, databases, AUTOVACUUM &amp; VACUUM… Even after all these years managing databases is still hard.</p>
-<h3 id="why-build-a-distributed-system-in-the-firstplace">Why build a distributed system in the first place?</h3>
-<p>Small systems are super fun. I’ve really enjoying building systems for 100 or 1000 users in the past. But to support “billions” of users one has to get good at horizontal scaling, offline support, and dealing with bad networks. This means one must build a distributed system. 💔</p>
-<h3 id="granularity">Granularity</h3>
-<p>I recently watched <a href="https://youtu.be/bo5WL5IQAd0">a talk</a> by <a href="https://en.wikipedia.org/wiki/Joe_Armstrong_%28programming%29">Joe Armstrong</a> where he talks about the best ways to build concurrent software. His primary anaolgy is that: if your CPUs or VMs are like buckets or containers and you design your system components like large stones or bowling balls, then you end up with a lot of empty space in the containers. If you instead designed your components like small grains of sand, then you can really fill up each container to the brim with little wasted space.</p>
-<p>This really had an impact on me: <strong>granular = scalable.</strong> 💝</p>
-<h3 id="a-crazyidea">A crazy idea</h3>
-<p>For a while I and some collegues have had this crazy idea: what if every user had their own database, maybe as a simple file stored on S3?</p>
-<p>Having a central database in a system makes a lot of things easier; however, a central database is hard to scale. What if we took this idea of granularity and really went with it?</p>
-<h4 id="first-we-must-talk-abouttime">First, we must talk about “time”</h4>
-<p>Human time cannot be trusted in a distributed system. Instead, we have to invent our own measurement for when our system “moves foward.” <em>Any working distributed system is an implementation of how that organization has understood time.</em></p>
-<p><strong>Most systems I’ve worked with have used a central database to control time.</strong> We use transactions to linearize updates to the important parts of our system. This means all our components can be relatively stateless and provide no guaruntees about how time works: we just let the database decide. If we remove the central database, then we need to have another way to control time.</p>
-<h4 id="actors">Actors</h4>
-<p>When building Wunderlist’s real-time backend we used actors to wrap each websocket connection. They are a great abstraction to contain state and linearize access to that state.</p>
-<figure>
-  <img
-    alt="Photo of a girl with a fire extinguisher"
-    width="1024"
-    height="837"
-    src="https://nathanherald.com/posts/legacy/elixirconf-eu-2017-in-barcelona/1-5HvA-QDfOWgDYSHmewejFA_hu17972822538574113958.jpeg">
-  <figcaption>
-    Acting like a Firefighter <a href="https://flic.kr/p/dnt7vz">https://flic.kr/p/dnt7vz</a>
-  </figcaption>
-</figure>
-
-<h4 id="elixir-processes">Elixir processes</h4>
-<p>Processess are also a great way to linearize access to state. <strong>What if every user had their own process?</strong></p>
-<p>Elixir processes are addressable, even across machines, by a <code>pid</code>. To trust a process as the authority for the state of a user we need to know there will only ever be one process for that user. <em>If we were to accidentally have two “myobie” processes, then we have a split brain.</em></p>
-<h4 id="global"><strong>:global</strong></h4>
-<p>Erlang ships with a <code>:global</code> process registry which is shared across all connected nodes. However, we cannot rely on it to be constistent. You may be thinking <em>are you sure?</em></p>
-<blockquote>
-<p>If any name clashes are discovered, function Resolve is called.<br>
-<!-- raw HTML omitted --><a href="http://erlang.org/doc/man/global.html"><em>http://erlang.org/doc/man/global.html</em></a><!-- raw HTML omitted --></p>
-</blockquote>
-<p>There are three words that jump out at me from that quote: clashes, discovered, and Resolve. It’s reasonable to assume that if it weren’t possible to have duplicates, then there would be no need to have a Resolve function.</p>
-<p>😐</p>
-<h4 id="pg2"><strong>:pg2</strong></h4>
-<p>A popular erlang library is “process groups 2.” This library does not attempt to provide a consistent view of the cluster’s processes. <em>Are you sure?</em></p>
-<blockquote>
-<p>pg2 replicates all name lookup information in a way that doesn’t require consistency …<br>
-<!-- raw HTML omitted --><a href="http://erlang.org/pipermail/erlang-questions/2012-June/067220.html"><em>http://erlang.org/pipermail/erlang-questions/2012-June/067220.html</em></a><!-- raw HTML omitted --></p>
-</blockquote>
-<p>This could be very useful for different types of applications where doing something twice wouldn’t hurt (like <a href="https://github.com/phoenixframework/phoenix_pubsub/blob/master/lib/phoenix/pubsub/pg2.ex">phoenix pubsub</a>), but for my use case I really need to <strong>know</strong> there are zero or one of something at all times.</p>
-<p>😐</p>
-<h4 id="grpoc">:grpoc</h4>
-<p>Same. <em>Are you sure?</em></p>
-<blockquote>
-<p>While gproc has been tested very thoroughly … its reliance on gen_leader is problematic.<br>
-<!-- raw HTML omitted --><a href="https://christophermeiklejohn.com/erlang/2013/06/05/erlang-gproc-failure-semantics.html"><em>https://christophermeiklejohn.com/erlang/2013/06/05/erlang-gproc-failure-semantics.html</em></a><!-- raw HTML omitted --></p>
-</blockquote>
-<p>Are there problems with <code>gen_leader</code>? I don’t know. I’ve read multiple articles saying something negative about <code>gen_leader</code>, but I’ve never understood why. I intend to use <code>gen_leader</code> sometime in a project and try to get more familiar with it. I don’t want to jump into that today.</p>
-<p>😐</p>
-<h4 id="elixirregistry">Elixir.Registry</h4>
-<p>Elixir ships with a <code>Registry</code> as of version 1.4. We are saved!</p>
-<p>This registry is local to a single VM and it is consistent. It’s backed by ETS so it’s super fast. It’s <em>easy</em> to be consistent on one machine. 😏</p>
-<p>What happens if that one VM stops? Our entire registry disappears and we cannot get any work done until it comes back. 😐 This could be fine if we didn’t mind the downtime, but I kinda do mind.</p>
-<p>How do we make 100% certain we never accidentally boot two vms? It may sound like an easy problem, but I’ll tell you it’s not. At Wunderlist we have an email related thing that we can only run one of, but I know we’ve accidentally run two before.</p>
-<p>☹</p>
-<h4 id="zookeeper">Zookeeper</h4>
-<p>What are we to do? <strong>Let’s outsource the problem to someone else.</strong></p>
-<p>Zookeper is consistent, pretty available, and partition tolerant. And, more importantly, <strong>it includes recipes</strong>. Yes, it has instructions for common use cases including in it’s official documentation!</p>
-<p>➡️ <a href="https://zookeeper.apache.org/doc/current/recipes.html" title="https://zookeeper.apache.org/doc/current/recipes.html"><strong>ZooKeeper Recipes and Solutions</strong> </a></p>
-<p>And one recipe is super interesting: <strong>distributed locks.</strong> 🔑</p>
-<figure>
-  <img
-    alt="Photo of DJ Khalid"
-    width="740"
-    height="690"
-    src="https://nathanherald.com/posts/legacy/elixirconf-eu-2017-in-barcelona/1-ZdZGgshjhJcdEGlx4P8l6Q_hu6090087899466700549.png">
-  <figcaption>
-    “Distributed locks are a major key.” [<em>https://www.flickr.com/photos/88009602@N05/8696887207</em>](<a href="https://www.flickr.com/photos/">https://www.flickr.com/photos/</a>
-  </figcaption>
-</figure>
-
-<p>Zookeeper is a battle tested system for getting time under control. We can know if one thing happens before another. That is really helpful.</p>
-<h4 id="highlander">Highlander</h4>
-<figure>
-  <img
-    alt="Photo of the main character from the TV show Highlander"
-    width="530"
-    height="784"
-    src="https://nathanherald.com/posts/legacy/elixirconf-eu-2017-in-barcelona/1-VRS7aSZ-QPVkWUE7hzrcLg_hu3381166808940348727.png">
-  <figcaption>
-    Duncan MacLeod of the clan MacLeod.
-  </figcaption>
-</figure>
-
-<p>I have created a library named after a 90’s TV show.</p>
-<p><a href="https://github.com/myobie/highlander"><em>https://github.com/myobie/highlander</em></a></p>
-<blockquote>
-<p>There can be only one.</p>
-</blockquote>
-<p>It has a concept of “object” which are simple <code>GenServer</code>s with some extra abilities:</p>
-<ul>
-<li>Objects persist their state to S3 during a state update</li>
-<li>Objects read their state from S3 during <code>init</code></li>
-<li>Objects respond to calls directly from their in-memory state</li>
-<li>Objects teardown after some period of inactivity</li>
-</ul>
-<p>Highlander also includes a process registry which stores it’s information in Zookeper. Every process has a key named after it’s id and it’s value is the node name it’s running on. This means we can lookup where any process is running and send it messages from any node in the cluster.</p>
-<h4 id="genservervia">GenServer :via</h4>
-<p>There is this <code>:via</code> concept with GenServers: they can have a fancy name that is a tuple instead of just an atom.</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-elixir" data-lang="elixir"><span class="line"><span class="cl"><span class="nc">GenServer</span><span class="o">.</span><span class="n">call</span><span class="p">(</span>
-</span></span><span class="line"><span class="cl">  <span class="p">{</span><span class="ss">:via</span><span class="p">,</span> <span class="nc">MyRegistry</span><span class="p">,</span> <span class="p">{</span><span class="ss">:user</span><span class="p">,</span> <span class="n">user_id</span><span class="p">}},</span>
+        <nav>
+          <p>
+            Find more in the <a href="https://nathanherald.com/posts/">archive of all the posts on
+            this site</a> or <a href="https://nathanherald.com/posts/rss.xml">subscribe with
+            RSS</a>.
+          </p>
+        </nav>
+      </div>
+    </header>
+    <main class="single">
+      <article>
+        <header>
+          <h1>
+            ElixirConf EU 2017 in Barcelona
+          </h1>
+          <p class="annotation">
+            ⭐️ a blog post
+          </p>
+          <h2>
+            A distillation of my conference talk.
+          </h2>
+        </header>
+        <div class="content">
+          <p>
+            Hello.
+          </p>
+          <p>
+            I design distributed applications from UI to data storage as a career. I started out as
+            a graphic designer, got into programming, and now that has spiraled out of control.
+          </p>
+          <p>
+            Aside: I built my own presentation software using <a href="https://choo.io">choo</a>
+            and phoenix. If you want to have a lot more anxiety than necessary, then build your own
+            presentation software. As an example: I don’t have speaker notes because I didn’t have
+            time to implement that feature.
+          </p>
+          <figure>
+            <img alt=
+            "Screenshot of the presenter view for the presentation software I made for myself"
+            height="435" src=
+            "https://nathanherald.com/posts/legacy/elixirconf-eu-2017-in-barcelona/1-3Ibv-qH5Vo9-Fm8sjGC30A_hu7680339945200642797.png"
+            width="639">
+            <figcaption>
+              This is what the presentation software looks like for&nbsp;me.
+            </figcaption>
+          </figure>
+          <h3 id="distributed-applications-arehard">
+            Distributed applications are&nbsp;hard
+          </h3>
+          <p>
+            One has to deal with network partitions, concurrency, locking and/or linearization,
+            stale data, etc. Here is a painting that represents how I feel about distributed
+            systems: they are great fun and I feel dead.
+          </p>
+          <figure>
+            <img alt="Painting of a skeleton surfing" height="800" src=
+            "https://nathanherald.com/posts/legacy/elixirconf-eu-2017-in-barcelona/1-aqjDRpRjbuT3rcWb1K1Pew_hu1380437794767337624.jpeg"
+            width="800">
+            <figcaption>
+              By Ted Parker — <a href=
+              "http://ted-parker.com/portfolio/surfs-dead/"><em>http://ted-parker.com/portfolio/surfs-dead/</em></a>
+            </figcaption>
+          </figure>
+          <h4 id="network-latency">
+            Network latency
+          </h4>
+          <p>
+            Network latency can cause stale reads from consistent systems. A server’s response for
+            one request can arrive much later than expected, possibly after one or more other
+            responses that were sent after it. This happens all the time. 😱
+          </p>
+          <figure>
+            <img alt="Illustration of network request ordering" height="450" src=
+            "https://nathanherald.com/posts/legacy/elixirconf-eu-2017-in-barcelona/1-S40jbGVy9x1Cnxq4csEXuA_hu13262106131644868555.png"
+            width="800">
+            <figcaption>
+              Networks can cause everything to be out of order, no matter which is sent&nbsp;first.
+            </figcaption>
+          </figure>
+          <h4 id="scaling-ishard">
+            Scaling is&nbsp;hard
+          </h4>
+          <p>
+            One has to deal with load balancing, parallelism, databases, AUTOVACUUM & VACUUM… Even
+            after all these years managing databases is still hard.
+          </p>
+          <h3 id="why-build-a-distributed-system-in-the-firstplace">
+            Why build a distributed system in the first&nbsp;place?
+          </h3>
+          <p>
+            Small systems are super fun. I’ve really enjoying building systems for 100 or 1000
+            users in the past. But to support “billions” of users one has to get good at horizontal
+            scaling, offline support, and dealing with bad networks. This means one must build a
+            distributed system. 💔
+          </p>
+          <h3 id="granularity">
+            Granularity
+          </h3>
+          <p>
+            I recently watched <a href="https://youtu.be/bo5WL5IQAd0">a talk</a> by <a href=
+            "https://en.wikipedia.org/wiki/Joe_Armstrong_%28programming%29">Joe Armstrong</a> where
+            he talks about the best ways to build concurrent software. His primary anaolgy is that:
+            if your CPUs or VMs are like buckets or containers and you design your system
+            components like large stones or bowling balls, then you end up with a lot of empty
+            space in the containers. If you instead designed your components like small grains of
+            sand, then you can really fill up each container to the brim with little wasted space.
+          </p>
+          <p>
+            This really had an impact on me: <strong>granular = scalable.</strong> 💝
+          </p>
+          <h3 id="a-crazyidea">
+            A crazy&nbsp;idea
+          </h3>
+          <p>
+            For a while I and some collegues have had this crazy idea: what if every user had their
+            own database, maybe as a simple file stored on S3?
+          </p>
+          <p>
+            Having a central database in a system makes a lot of things easier; however, a central
+            database is hard to scale. What if we took this idea of granularity and really went
+            with it?
+          </p>
+          <h4 id="first-we-must-talk-abouttime">
+            First, we must talk about&nbsp;“time”
+          </h4>
+          <p>
+            Human time cannot be trusted in a distributed system. Instead, we have to invent our
+            own measurement for when our system “moves foward.” <em>Any working distributed system
+            is an implementation of how that organization has understood time.</em>
+          </p>
+          <p>
+            <strong>Most systems I’ve worked with have used a central database to control
+            time.</strong> We use transactions to linearize updates to the important parts of our
+            system. This means all our components can be relatively stateless and provide no
+            guaruntees about how time works: we just let the database decide. If we remove the
+            central database, then we need to have another way to control time.
+          </p>
+          <h4 id="actors">
+            Actors
+          </h4>
+          <p>
+            When building Wunderlist’s real-time backend we used actors to wrap each websocket
+            connection. They are a great abstraction to contain state and linearize access to that
+            state.
+          </p>
+          <figure>
+            <img alt="Photo of a girl with a fire extinguisher" height="837" src=
+            "https://nathanherald.com/posts/legacy/elixirconf-eu-2017-in-barcelona/1-5HvA-QDfOWgDYSHmewejFA_hu17972822538574113958.jpeg"
+            width="1024">
+            <figcaption>
+              Acting like a Firefighter <a href=
+              "https://flic.kr/p/dnt7vz">https://flic.kr/p/dnt7vz</a>
+            </figcaption>
+          </figure>
+          <h4 id="elixir-processes">
+            Elixir processes
+          </h4>
+          <p>
+            Processess are also a great way to linearize access to state. <strong>What if every
+            user had their own process?</strong>
+          </p>
+          <p>
+            Elixir processes are addressable, even across machines, by a <code>pid</code>. To trust
+            a process as the authority for the state of a user we need to know there will only ever
+            be one process for that user. <em>If we were to accidentally have two “myobie”
+            processes, then we have a split brain.</em>
+          </p>
+          <h4 id="global">
+            <strong>:global</strong>
+          </h4>
+          <p>
+            Erlang ships with a&nbsp;<code>:global</code> process registry which is shared across
+            all connected nodes. However, we cannot rely on it to be constistent. You may be
+            thinking <em>are you sure?</em>
+          </p>
+          <blockquote>
+            <p>
+              If any name clashes are discovered, function Resolve is called.<br>
+              <!-- raw HTML omitted --><a href=
+              "http://erlang.org/doc/man/global.html"><em>http://erlang.org/doc/man/global.html</em></a>
+              <!-- raw HTML omitted -->
+            </p>
+          </blockquote>
+          <p>
+            There are three words that jump out at me from that quote: clashes, discovered, and
+            Resolve. It’s reasonable to assume that if it weren’t possible to have duplicates, then
+            there would be no need to have a Resolve function.
+          </p>
+          <p>
+            😐
+          </p>
+          <h4 id="pg2">
+            <strong>:pg2</strong>
+          </h4>
+          <p>
+            A popular erlang library is “process groups 2.” This library does not attempt to
+            provide a consistent view of the cluster’s processes. <em>Are you sure?</em>
+          </p>
+          <blockquote>
+            <p>
+              pg2 replicates all name lookup information in a way that doesn’t require
+              consistency&nbsp;…<br>
+              <!-- raw HTML omitted --><a href=
+              "http://erlang.org/pipermail/erlang-questions/2012-June/067220.html"><em>http://erlang.org/pipermail/erlang-questions/2012-June/067220.html</em></a><!-- raw HTML omitted -->
+            </p>
+          </blockquote>
+          <p>
+            This could be very useful for different types of applications where doing something
+            twice wouldn’t hurt (like <a href=
+            "https://github.com/phoenixframework/phoenix_pubsub/blob/master/lib/phoenix/pubsub/pg2.ex">
+            phoenix pubsub</a>), but for my use case I really need to <strong>know</strong> there
+            are zero or one of something at all times.
+          </p>
+          <p>
+            😐
+          </p>
+          <h4 id="grpoc">
+            :grpoc
+          </h4>
+          <p>
+            Same. <em>Are you sure?</em>
+          </p>
+          <blockquote>
+            <p>
+              While gproc has been tested very thoroughly&nbsp;… its reliance on gen_leader is
+              problematic.<br>
+              <!-- raw HTML omitted --><a href=
+              "https://christophermeiklejohn.com/erlang/2013/06/05/erlang-gproc-failure-semantics.html"><em>https://christophermeiklejohn.com/erlang/2013/06/05/erlang-gproc-failure-semantics.html</em></a><!-- raw HTML omitted -->
+            </p>
+          </blockquote>
+          <p>
+            Are there problems with <code>gen_leader</code>? I don’t know. I’ve read multiple
+            articles saying something negative about <code>gen_leader</code>, but I’ve never
+            understood why. I intend to use <code>gen_leader</code> sometime in a project and try
+            to get more familiar with it. I don’t want to jump into that today.
+          </p>
+          <p>
+            😐
+          </p>
+          <h4 id="elixirregistry">
+            Elixir.Registry
+          </h4>
+          <p>
+            Elixir ships with a <code>Registry</code> as of version 1.4. We are saved!
+          </p>
+          <p>
+            This registry is local to a single VM and it is consistent. It’s backed by ETS so it’s
+            super fast. It’s <em>easy</em> to be consistent on one machine. 😏
+          </p>
+          <p>
+            What happens if that one VM stops? Our entire registry disappears and we cannot get any
+            work done until it comes back. 😐 This could be fine if we didn’t mind the downtime, but
+            I kinda do mind.
+          </p>
+          <p>
+            How do we make 100% certain we never accidentally boot two vms? It may sound like an
+            easy problem, but I’ll tell you it’s not. At Wunderlist we have an email related thing
+            that we can only run one of, but I know we’ve accidentally run two before.
+          </p>
+          <p>
+            ☹
+          </p>
+          <h4 id="zookeeper">
+            Zookeeper
+          </h4>
+          <p>
+            What are we to do? <strong>Let’s outsource the problem to someone else.</strong>
+          </p>
+          <p>
+            Zookeper is consistent, pretty available, and partition tolerant. And, more
+            importantly, <strong>it includes recipes</strong>. Yes, it has instructions for common
+            use cases including in it’s official documentation!
+          </p>
+          <p>
+            ➡️ <a href="https://zookeeper.apache.org/doc/current/recipes.html" title=
+            "https://zookeeper.apache.org/doc/current/recipes.html"><strong>ZooKeeper Recipes and
+            Solutions</strong></a>
+          </p>
+          <p>
+            And one recipe is super interesting: <strong>distributed locks.</strong> 🔑
+          </p>
+          <figure>
+            <img alt="Photo of DJ Khalid" height="690" src=
+            "https://nathanherald.com/posts/legacy/elixirconf-eu-2017-in-barcelona/1-ZdZGgshjhJcdEGlx4P8l6Q_hu6090087899466700549.png"
+            width="740">
+            <figcaption>
+              “Distributed locks are a major key.”
+              [<em>https://www.flickr.com/photos/88009602@N05/8696887207</em>](<a href=
+              "https://www.flickr.com/photos/">https://www.flickr.com/photos/</a>
+            </figcaption>
+          </figure>
+          <p>
+            Zookeeper is a battle tested system for getting time under control. We can know if one
+            thing happens before another. That is really helpful.
+          </p>
+          <h4 id="highlander">
+            Highlander
+          </h4>
+          <figure>
+            <img alt="Photo of the main character from the TV show Highlander" height="784" src=
+            "https://nathanherald.com/posts/legacy/elixirconf-eu-2017-in-barcelona/1-VRS7aSZ-QPVkWUE7hzrcLg_hu3381166808940348727.png"
+            width="530">
+            <figcaption>
+              Duncan MacLeod of the clan&nbsp;MacLeod.
+            </figcaption>
+          </figure>
+          <p>
+            I have created a library named after a 90’s TV show.
+          </p>
+          <p>
+            <a href=
+            "https://github.com/myobie/highlander"><em>https://github.com/myobie/highlander</em></a>
+          </p>
+          <blockquote>
+            <p>
+              There can be only one.
+            </p>
+          </blockquote>
+          <p>
+            It has a concept of “object” which are simple <code>GenServer</code>s with some extra
+            abilities:
+          </p>
+          <ul>
+            <li>Objects persist their state to S3 during a state update
+            </li>
+            <li>Objects read their state from S3 during <code>init</code>
+            </li>
+            <li>Objects respond to calls directly from their in-memory state
+            </li>
+            <li>Objects teardown after some period of inactivity
+            </li>
+          </ul>
+          <p>
+            Highlander also includes a process registry which stores it’s information in Zookeper.
+            Every process has a key named after it’s id and it’s value is the node name it’s
+            running on. This means we can lookup where any process is running and send it messages
+            from any node in the cluster.
+          </p>
+          <h4 id="genservervia">
+            GenServer&nbsp;:via
+          </h4>
+          <p>
+            There is this&nbsp;<code>:via</code> concept with GenServers: they can have a fancy
+            name that is a tuple instead of just an atom.
+          </p>
+          <div class="highlight">
+            <pre class="chroma" tabindex="0"><code class="language-elixir" data-lang=
+            "elixir"><span class="line"><span class="cl"><span class=
+            "nc">GenServer</span><span class="o">.</span><span class="n">call</span><span class=
+            "p">(</span>
+</span></span><span class="line"><span class="cl">  <span class="p">{</span><span class=
+"ss">:via</span><span class="p">,</span> <span class="nc">MyRegistry</span><span class=
+"p">,</span> <span class="p">{</span><span class="ss">:user</span><span class=
+"p">,</span> <span class="n">user_id</span><span class="p">}},</span>
 </span></span><span class="line"><span class="cl">  <span class="ss">:do_stuff</span>
 </span></span><span class="line"><span class="cl"><span class="p">)</span>
-</span></span></code></pre></div><p>What does a process registry look like in elixir? It implements four methods:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-elixir" data-lang="elixir"><span class="line"><span class="cl"><span class="kd">defmodule</span> <span class="nc">MyRegistry</span> <span class="k">do</span>
-</span></span><span class="line"><span class="cl">  <span class="kd">def</span> <span class="n">send</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span> <span class="k">do</span>
+</span></span></code></pre>
+          </div>
+          <p>
+            What does a process registry look like in elixir? It implements four methods:
+          </p>
+          <div class="highlight">
+            <pre class="chroma" tabindex="0"><code class="language-elixir" data-lang=
+            "elixir"><span class="line"><span class="cl"><span class=
+            "kd">defmodule</span> <span class="nc">MyRegistry</span> <span class="k">do</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">def</span> <span class=
+"n">send</span><span class="p">(</span><span class="n">name</span><span class=
+"p">,</span> <span class="n">message</span><span class="p">)</span> <span class="k">do</span>
 </span></span><span class="line"><span class="cl">  <span class="k">end</span>
 </span></span><span class="line"><span class="cl">  
-</span></span><span class="line"><span class="cl">  <span class="kd">def</span> <span class="n">whereis_name</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="k">do</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">def</span> <span class=
+"n">whereis_name</span><span class="p">(</span><span class="n">name</span><span class=
+"p">)</span> <span class="k">do</span>
 </span></span><span class="line"><span class="cl">  <span class="k">end</span>
 </span></span><span class="line"><span class="cl">  
-</span></span><span class="line"><span class="cl">  <span class="kd">def</span> <span class="n">register_name</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="k">do</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">def</span> <span class=
+"n">register_name</span><span class="p">(</span><span class="n">name</span><span class=
+"p">)</span> <span class="k">do</span>
 </span></span><span class="line"><span class="cl">  <span class="k">end</span>
 </span></span><span class="line"><span class="cl">  
-</span></span><span class="line"><span class="cl">  <span class="kd">def</span> <span class="n">unregister_name</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="k">do</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">def</span> <span class=
+"n">unregister_name</span><span class="p">(</span><span class="n">name</span><span class=
+"p">)</span> <span class="k">do</span>
 </span></span><span class="line"><span class="cl">  <span class="k">end</span>
 </span></span><span class="line"><span class="cl"><span class="k">end</span>
-</span></span></code></pre></div><p>How do we find a process through zookeeper?</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-elixir" data-lang="elixir"><span class="line"><span class="cl"><span class="kd">defmodule</span> <span class="nc">MyRegistry</span> <span class="k">do</span>
-</span></span><span class="line"><span class="cl">  <span class="kd">def</span> <span class="n">whereis_name</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="k">do</span>
-</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="nc">ZK</span><span class="o">.</span><span class="n">get_node_name</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="k">do</span>
+</span></span></code></pre>
+          </div>
+          <p>
+            How do we find a process through zookeeper?
+          </p>
+          <div class="highlight">
+            <pre class="chroma" tabindex="0"><code class="language-elixir" data-lang=
+            "elixir"><span class="line"><span class="cl"><span class=
+            "kd">defmodule</span> <span class="nc">MyRegistry</span> <span class="k">do</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">def</span> <span class=
+"n">whereis_name</span><span class="p">(</span><span class="n">name</span><span class=
+"p">)</span> <span class="k">do</span>
+</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class=
+"nc">ZK</span><span class="o">.</span><span class="n">get_node_name</span><span class=
+"p">(</span><span class="n">name</span><span class="p">)</span> <span class="k">do</span>
 </span></span><span class="line"><span class="cl">      <span class="c1"># ...</span>
 </span></span><span class="line"><span class="cl">    <span class="k">end</span>
 </span></span><span class="line"><span class="cl">  <span class="k">end</span>
 </span></span><span class="line"><span class="cl"><span class="k">end</span>
-</span></span></code></pre></div><p><em>Simply query zookeeper for the key (node) with the same name as the process. It’s value will be the node name. From there we can construct a pid.</em></p>
-<p>Registering a new process is similar:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-elixir" data-lang="elixir"><span class="line"><span class="cl"><span class="kd">defmodule</span> <span class="nc">MyRegistry</span> <span class="k">do</span>
-</span></span><span class="line"><span class="cl">  <span class="kd">def</span> <span class="n">register_name</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="k">do</span>
-</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="nc">ZK</span><span class="o">.</span><span class="n">create_znode</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="k">do</span>
+</span></span></code></pre>
+          </div>
+          <p>
+            <em>Simply query zookeeper for the key (node) with the same name as the process. It’s
+            value will be the node name. From there we can construct a pid.</em>
+          </p>
+          <p>
+            Registering a new process is similar:
+          </p>
+          <div class="highlight">
+            <pre class="chroma" tabindex="0"><code class="language-elixir" data-lang=
+            "elixir"><span class="line"><span class="cl"><span class=
+            "kd">defmodule</span> <span class="nc">MyRegistry</span> <span class="k">do</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">def</span> <span class=
+"n">register_name</span><span class="p">(</span><span class="n">name</span><span class=
+"p">)</span> <span class="k">do</span>
+</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class=
+"nc">ZK</span><span class="o">.</span><span class="n">create_znode</span><span class=
+"p">(</span><span class="n">name</span><span class="p">)</span> <span class="k">do</span>
 </span></span><span class="line"><span class="cl">      <span class="c1"># ...</span>
 </span></span><span class="line"><span class="cl">    <span class="k">end</span>
 </span></span><span class="line"><span class="cl">  <span class="k">end</span>
 </span></span><span class="line"><span class="cl"><span class="k">end</span>
-</span></span></code></pre></div><p><em>Registering means trying to create a key (node) with the same name as the process.</em></p>
-<p>In my <code>ZK</code> module’s <code>create_znode</code> if we are not the first to create the new key in zookeeper, then it will fail accordingly:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-elixir" data-lang="elixir"><span class="line"><span class="cl"><span class="kd">defmodule</span> <span class="nc">ZK</span> <span class="k">do</span>
-</span></span><span class="line"><span class="cl">  <span class="kd">def</span> <span class="n">create_znode</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="k">do</span>
-</span></span><span class="line"><span class="cl">    <span class="p">{</span><span class="ss">:ok</span><span class="p">,</span> <span class="n">pid</span><span class="p">}</span> <span class="o">=</span> <span class="nc">ZNode</span><span class="o">.</span><span class="n">start_link</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+</span></span></code></pre>
+          </div>
+          <p>
+            <em>Registering means trying to create a key (node) with the same name as the
+            process.</em>
+          </p>
+          <p>
+            In my <code>ZK</code> module’s <code>create_znode</code> if we are not the first to
+            create the new key in zookeeper, then it will fail accordingly:
+          </p>
+          <div class="highlight">
+            <pre class="chroma" tabindex="0"><code class="language-elixir" data-lang=
+            "elixir"><span class="line"><span class="cl"><span class=
+            "kd">defmodule</span> <span class="nc">ZK</span> <span class="k">do</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">def</span> <span class=
+"n">create_znode</span><span class="p">(</span><span class="n">name</span><span class=
+"p">)</span> <span class="k">do</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span><span class=
+"ss">:ok</span><span class="p">,</span> <span class="n">pid</span><span class=
+"p">}</span> <span class="o">=</span> <span class="nc">ZNode</span><span class=
+"o">.</span><span class="n">start_link</span><span class="p">(</span><span class=
+"n">name</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="nc">ZNode</span><span class="o">.</span><span class="n">first?</span><span class="p">(</span><span class="n">pid</span><span class="p">)</span> <span class="k">do</span>
-</span></span><span class="line"><span class="cl">      <span class="p">{</span><span class="ss">:ok</span><span class="p">,</span> <span class="n">pid</span><span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class=
+"nc">ZNode</span><span class="o">.</span><span class="n">first?</span><span class=
+"p">(</span><span class="n">pid</span><span class="p">)</span> <span class="k">do</span>
+</span></span><span class="line"><span class="cl">      <span class="p">{</span><span class=
+"ss">:ok</span><span class="p">,</span> <span class="n">pid</span><span class="p">}</span>
 </span></span><span class="line"><span class="cl">    <span class="k">else</span>
-</span></span><span class="line"><span class="cl">      <span class="ss">:ok</span> <span class="o">=</span> <span class="nc">ZNode</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">pid</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">      <span class="p">{</span><span class="ss">:error</span><span class="p">,</span> <span class="ss">:already_exists</span><span class="p">}</span>
+</span></span><span class="line"><span class="cl">      <span class="ss">:ok</span> <span class=
+"o">=</span> <span class="nc">ZNode</span><span class="o">.</span><span class=
+"n">delete</span><span class="p">(</span><span class="n">pid</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">      <span class="p">{</span><span class=
+"ss">:error</span><span class="p">,</span> <span class="ss">:already_exists</span><span class=
+"p">}</span>
 </span></span><span class="line"><span class="cl">    <span class="k">end</span>
 </span></span><span class="line"><span class="cl">  <span class="k">end</span>
 </span></span><span class="line"><span class="cl"><span class="k">end</span>
-</span></span></code></pre></div><p>How do we know we were first? Zookeeper’s distributed lock recipe shows how to determine that. Here is how it’s implemented in Highlander:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-elixir" data-lang="elixir"><span class="line"><span class="cl"><span class="kd">defmodule</span> <span class="nc">ZNode</span> <span class="k">do</span>
-</span></span><span class="line"><span class="cl">  <span class="kd">def</span> <span class="n">init</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="k">do</span>
-</span></span><span class="line"><span class="cl">    <span class="p">{</span><span class="ss">:ok</span><span class="p">,</span> <span class="n">path</span><span class="p">}</span> <span class="o">=</span> 
-</span></span><span class="line"><span class="cl">      <span class="nc">Zookeeper.Client</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="ss">:zk</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">        <span class="n">prefix</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nc">UUID</span><span class="o">.</span><span class="n">uuid4</span><span class="p">(</span><span class="ss">:hex</span><span class="p">)),</span> 
-</span></span><span class="line"><span class="cl">        <span class="n">to_string</span><span class="p">(</span><span class="nc">Node</span><span class="o">.</span><span class="n">self</span><span class="p">),</span>
-</span></span><span class="line"><span class="cl">        <span class="ss">makepath</span><span class="p">:</span> <span class="no">true</span><span class="p">,</span> 
-</span></span><span class="line"><span class="cl">        <span class="ss">create_mode</span><span class="p">:</span> <span class="ss">:ephemeral_sequential</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">    <span class="p">{</span><span class="ss">:ok</span><span class="p">,</span> <span class="p">%{</span><span class="ss">path</span><span class="p">:</span> <span class="n">path</span><span class="p">,</span> <span class="ss">name</span><span class="p">:</span> <span class="n">name</span><span class="p">}}</span>
+</span></span></code></pre>
+          </div>
+          <p>
+            How do we know we were first? Zookeeper’s distributed lock recipe shows how to
+            determine that. Here is how it’s implemented in Highlander:
+          </p>
+          <div class="highlight">
+            <pre class="chroma" tabindex="0"><code class="language-elixir" data-lang=
+            "elixir"><span class="line"><span class="cl"><span class=
+            "kd">defmodule</span> <span class="nc">ZNode</span> <span class="k">do</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">def</span> <span class=
+"n">init</span><span class="p">(</span><span class="n">name</span><span class=
+"p">)</span> <span class="k">do</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span><span class=
+"ss">:ok</span><span class="p">,</span> <span class="n">path</span><span class=
+"p">}</span> <span class="o">=</span> 
+</span></span><span class="line"><span class="cl">      <span class=
+"nc">Zookeeper.Client</span><span class="o">.</span><span class="n">create</span><span class=
+"p">(</span><span class="ss">:zk</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="n">prefix</span><span class=
+"p">(</span><span class="n">name</span><span class="p">,</span> <span class=
+"nc">UUID</span><span class="o">.</span><span class="n">uuid4</span><span class=
+"p">(</span><span class="ss">:hex</span><span class="p">)),</span> 
+</span></span><span class="line"><span class="cl">        <span class=
+"n">to_string</span><span class="p">(</span><span class="nc">Node</span><span class=
+"o">.</span><span class="n">self</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">        <span class=
+"ss">makepath</span><span class="p">:</span> <span class="no">true</span><span class="p">,</span> 
+</span></span><span class="line"><span class="cl">        <span class=
+"ss">create_mode</span><span class="p">:</span> <span class=
+"ss">:ephemeral_sequential</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span><span class=
+"ss">:ok</span><span class="p">,</span> <span class="p">%{</span><span class=
+"ss">path</span><span class="p">:</span> <span class="n">path</span><span class=
+"p">,</span> <span class="ss">name</span><span class="p">:</span> <span class=
+"n">name</span><span class="p">}}</span>
 </span></span><span class="line"><span class="cl">  <span class="k">end</span>
 </span></span><span class="line"><span class="cl"><span class="k">end</span>
-</span></span></code></pre></div><p><strong>The most important part of this code snippet is</strong> <code>**ephemeral_sequential**</code><strong>.</strong> It is “ephemeral” so it’s temporary and if we drop our connection to zookeeper all the keys we created will be auto-deleted. It’s “sequential” so that zookeeper will append a number to the keyname we provided (the return value of <code>prefix/2</code>).</p>
-<p><strong>Zookeeper keeps time in order.</strong> It’s very good and forming consensus around sequential numbers. So instead of asking everyone in it’s cluster “is this key already taken” it gets agreement on the next number, you create that key, then you look back at all keys that start with the same “prefix” and if you were the lowest number then you must have been first.</p>
-<p>Because of the “ephemeral” flag, we need to make sure that if we drop our zookeeper connection that we also <code>exit</code> any highlander processes that we had booted — since their keys are no longer set in zookeeper at that point. We can do this with a supervision tree:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-elixir" data-lang="elixir"><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">opts</span> <span class="o">=</span> <span class="p">[</span><span class="n">host</span><span class="p">,</span> 
-</span></span><span class="line"><span class="cl">  <span class="p">[</span><span class="ss">stop_on_disconnect</span><span class="p">:</span> <span class="no">true</span><span class="p">,</span> <span class="ss">name</span><span class="p">:</span> <span class="ss">:zk</span><span class="p">]]</span>
+</span></span></code></pre>
+          </div>
+          <p>
+            <strong>The most important part of this code snippet is</strong>
+            <code>**ephemeral_sequential**</code><strong>.</strong> It is “ephemeral” so it’s
+            temporary and if we drop our connection to zookeeper all the keys we created will be
+            auto-deleted. It’s “sequential” so that zookeeper will append a number to the keyname
+            we provided (the return value of <code>prefix/2</code>).
+          </p>
+          <p>
+            <strong>Zookeeper keeps time in order.</strong> It’s very good and forming consensus
+            around sequential numbers. So instead of asking everyone in it’s cluster “is this key
+            already taken” it gets agreement on the next number, you create that key, then you look
+            back at all keys that start with the same “prefix” and if you were the lowest number
+            then you must have been first.
+          </p>
+          <p>
+            Because of the “ephemeral” flag, we need to make sure that if we drop our zookeeper
+            connection that we also <code>exit</code> any highlander processes that we had
+            booted — since their keys are no longer set in zookeeper at that point. We can do this
+            with a supervision tree:
+          </p>
+          <div class="highlight">
+            <pre class="chroma" tabindex="0"><code class="language-elixir" data-lang=
+            "elixir"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">opts</span> <span class=
+"o">=</span> <span class="p">[</span><span class="n">host</span><span class="p">,</span> 
+</span></span><span class="line"><span class="cl">  <span class="p">[</span><span class=
+"ss">stop_on_disconnect</span><span class="p">:</span> <span class="no">true</span><span class=
+"p">,</span> <span class="ss">name</span><span class="p">:</span> <span class=
+"ss">:zk</span><span class="p">]]</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">children</span> <span class="o">=</span> <span class="p">[</span>
-</span></span><span class="line"><span class="cl">  <span class="n">worker</span><span class="p">(</span><span class="nc">Zookeeper.Client</span><span class="p">,</span> <span class="n">opts</span><span class="p">,</span> <span class="p">[]),</span>
-</span></span><span class="line"><span class="cl">  <span class="n">worker</span><span class="p">(</span><span class="nc">Registry.Server</span><span class="p">,</span> <span class="p">[],</span> <span class="p">[]),</span>
-</span></span><span class="line"><span class="cl">  <span class="n">worker</span><span class="p">(</span><span class="nc">Registry.NodeCycleServer</span><span class="p">,</span> <span class="p">[],</span> <span class="p">[]),</span>
-</span></span><span class="line"><span class="cl">  <span class="n">supervisor</span><span class="p">(</span><span class="nc">Object.Supervisor</span><span class="p">,</span> <span class="p">[],</span> <span class="p">[])</span>
+</span></span><span class="line"><span class="cl"><span class="n">children</span> <span class=
+"o">=</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">  <span class="n">worker</span><span class=
+"p">(</span><span class="nc">Zookeeper.Client</span><span class="p">,</span> <span class=
+"n">opts</span><span class="p">,</span> <span class="p">[]),</span>
+</span></span><span class="line"><span class="cl">  <span class="n">worker</span><span class=
+"p">(</span><span class="nc">Registry.Server</span><span class="p">,</span> <span class=
+"p">[],</span> <span class="p">[]),</span>
+</span></span><span class="line"><span class="cl">  <span class="n">worker</span><span class=
+"p">(</span><span class="nc">Registry.NodeCycleServer</span><span class="p">,</span> <span class=
+"p">[],</span> <span class="p">[]),</span>
+</span></span><span class="line"><span class="cl">  <span class="n">supervisor</span><span class=
+"p">(</span><span class="nc">Object.Supervisor</span><span class="p">,</span> <span class=
+"p">[],</span> <span class="p">[])</span>
 </span></span><span class="line"><span class="cl"><span class="p">]</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">supervise</span> <span class="n">children</span><span class="p">,</span> <span class="ss">strategy</span><span class="p">:</span> <span class="ss">:rest_for_one</span>
-</span></span></code></pre></div><p>The <code>:rest_for_one</code> strategy means that if any child dies, then all children declared after it in the array will be <code>exit</code>&lsquo;ed. So we simply put <code>Zookeeper.Client</code> first there. That process will exit if it loses it’s connection because above we set <code>stop_on_disconnect</code> to <code>true</code>. It exiting will cause the registry server, my “node cycle server”, and all objects being supervised to also exit. Once zookeeper reconnects then the registry and object supervisor will restart and we are back in business.</p>
-<h3 id="developer-ux">Developer UX</h3>
-<p>Highlander “objects” are <code>GenServer</code>s with some extra functions. Instead of having to build the same <code>GenServer</code>s over and over again, I also created some macros to help with that. An example of making a “todo” object to contain a simple task:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-elixir" data-lang="elixir"><span class="line"><span class="cl"><span class="kd">defmodule</span> <span class="nc">Todo</span> <span class="k">do</span>
-</span></span><span class="line"><span class="cl">  <span class="kn">use</span> <span class="nc">Highlander.Object</span><span class="p">,</span> <span class="ss">type</span><span class="p">:</span> <span class="ss">:todo</span>
+</span></span><span class="line"><span class="cl"><span class="n">supervise</span> <span class=
+"n">children</span><span class="p">,</span> <span class="ss">strategy</span><span class=
+"p">:</span> <span class="ss">:rest_for_one</span>
+</span></span></code></pre>
+          </div>
+          <p>
+            The&nbsp;<code>:rest_for_one</code> strategy means that if any child dies, then all
+            children declared after it in the array will be <code>exit</code>‘ed. So we simply put
+            <code>Zookeeper.Client</code> first there. That process will exit if it loses it’s
+            connection because above we set <code>stop_on_disconnect</code> to <code>true</code>.
+            It exiting will cause the registry server, my “node cycle server”, and all objects
+            being supervised to also exit. Once zookeeper reconnects then the registry and object
+            supervisor will restart and we are back in business.
+          </p>
+          <h3 id="developer-ux">
+            Developer UX
+          </h3>
+          <p>
+            Highlander “objects” are <code>GenServer</code>s with some extra functions. Instead of
+            having to build the same <code>GenServer</code>s over and over again, I also created
+            some macros to help with that. An example of making a “todo” object to contain a simple
+            task:
+          </p>
+          <div class="highlight">
+            <pre class="chroma" tabindex="0"><code class="language-elixir" data-lang=
+            "elixir"><span class="line"><span class="cl"><span class=
+            "kd">defmodule</span> <span class="nc">Todo</span> <span class="k">do</span>
+</span></span><span class="line"><span class="cl">  <span class="kn">use</span> <span class=
+"nc">Highlander.Object</span><span class="p">,</span> <span class="ss">type</span><span class=
+"p">:</span> <span class="ss">:todo</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">  <span class="n">defobject</span> <span class="ss">title</span><span class="p">:</span> <span class="s2">&#34;&#34;</span><span class="p">,</span> <span class="ss">completed</span><span class="p">:</span> <span class="no">false</span><span class="p">,</span> <span class="ss">color</span><span class="p">:</span> <span class="ss">:blue</span>
+</span></span><span class="line"><span class="cl">  <span class="n">defobject</span> <span class=
+"ss">title</span><span class="p">:</span> <span class="s2">""</span><span class=
+"p">,</span> <span class="ss">completed</span><span class="p">:</span> <span class=
+"no">false</span><span class="p">,</span> <span class="ss">color</span><span class=
+"p">:</span> <span class="ss">:blue</span>
 </span></span><span class="line"><span class="cl"><span class="k">end</span>
-</span></span></code></pre></div><p><code>defobject</code> really just calls <code>defstruct</code> behind the scenes and setups up seriliazation for when the todo’s state is persisted to S3. Yes, with this “object,” every todo will be it’s own process and it’s state will be serialized to S3. Here is an example of how to use it:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-elixir" data-lang="elixir"><span class="line"><span class="cl"><span class="n">id</span> <span class="o">=</span> <span class="nc">UUID</span><span class="o">.</span><span class="n">uuid4</span><span class="p">()</span>
+</span></span></code></pre>
+          </div>
+          <p>
+            <code>defobject</code> really just calls <code>defstruct</code> behind the scenes and
+            setups up seriliazation for when the todo’s state is persisted to S3. Yes, with this
+            “object,” every todo will be it’s own process and it’s state will be serialized to S3.
+            Here is an example of how to use it:
+          </p>
+          <div class="highlight">
+            <pre class="chroma" tabindex="0"><code class="language-elixir" data-lang=
+            "elixir"><span class="line"><span class="cl"><span class="n">id</span> <span class=
+            "o">=</span> <span class="nc">UUID</span><span class="o">.</span><span class=
+            "n">uuid4</span><span class="p">()</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="p">{</span><span class="ss">:ok</span><span class="p">,</span> <span class="n">todo</span><span class="p">}</span> <span class="o">=</span> <span class="nc">Todo</span><span class="o">.</span><span class="n">get</span> <span class="n">id</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span><span class=
+"ss">:ok</span><span class="p">,</span> <span class="n">todo</span><span class=
+"p">}</span> <span class="o">=</span> <span class="nc">Todo</span><span class=
+"o">.</span><span class="n">get</span> <span class="n">id</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">assert</span> <span class="n">todo</span><span class="o">.</span><span class="n">completed</span> <span class="o">==</span> <span class="no">false</span>
-</span></span><span class="line"><span class="cl"><span class="n">assert</span> <span class="n">todo</span><span class="o">.</span><span class="n">title</span> <span class="o">==</span> <span class="s2">&#34;&#34;</span>
-</span></span><span class="line"><span class="cl"><span class="n">assert</span> <span class="n">todo</span><span class="o">.</span><span class="n">color</span> <span class="o">==</span> <span class="ss">:blue</span>
+</span></span><span class="line"><span class="cl"><span class="n">assert</span> <span class=
+"n">todo</span><span class="o">.</span><span class="n">completed</span> <span class=
+"o">==</span> <span class="no">false</span>
+</span></span><span class="line"><span class="cl"><span class="n">assert</span> <span class=
+"n">todo</span><span class="o">.</span><span class="n">title</span> <span class=
+"o">==</span> <span class="s2">""</span>
+</span></span><span class="line"><span class="cl"><span class="n">assert</span> <span class=
+"n">todo</span><span class="o">.</span><span class="n">color</span> <span class=
+"o">==</span> <span class="ss">:blue</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">todo</span> <span class="o">=</span> <span class="p">%{</span><span class="n">todo</span> <span class="o">|</span> <span class="ss">title</span><span class="p">:</span> <span class="s2">&#34;Hello&#34;</span><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="n">todo</span> <span class=
+"o">=</span> <span class="p">%{</span><span class="n">todo</span> <span class=
+"o">|</span> <span class="ss">title</span><span class="p">:</span> <span class=
+"s2">"Hello"</span><span class="p">}</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="p">{</span><span class="ss">:ok</span><span class="p">,</span> <span class="n">_</span><span class="p">}</span> <span class="o">=</span> <span class="nc">Todo</span><span class="o">.</span><span class="n">put</span> <span class="n">id</span><span class="p">,</span> <span class="n">todo</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span><span class=
+"ss">:ok</span><span class="p">,</span> <span class="n">_</span><span class=
+"p">}</span> <span class="o">=</span> <span class="nc">Todo</span><span class=
+"o">.</span><span class="n">put</span> <span class="n">id</span><span class=
+"p">,</span> <span class="n">todo</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># any amount of time later</span>
+</span></span><span class="line"><span class="cl"><span class=
+"c1"># any amount of time later</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="p">{</span><span class="ss">:ok</span><span class="p">,</span> <span class="n">todo</span><span class="p">}</span> <span class="o">=</span> <span class="nc">Todo</span><span class="o">.</span><span class="n">get</span> <span class="n">id</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span><span class=
+"ss">:ok</span><span class="p">,</span> <span class="n">todo</span><span class=
+"p">}</span> <span class="o">=</span> <span class="nc">Todo</span><span class=
+"o">.</span><span class="n">get</span> <span class="n">id</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">assert</span> <span class="n">todo</span><span class="o">.</span><span class="n">title</span> <span class="o">==</span> <span class="s2">&#34;Hello&#34;</span>
-</span></span></code></pre></div><h4 id="model-everything-as-aprocess">Model everything as a process</h4>
-<p>With this approach we can model everything in our system as it’s own process. That makes it super easy to serialize access to state, persist it to S3 as necessary, and our system becomes a reflection of the active “objects” currently collaborating.</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-elixir" data-lang="elixir"><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="kd">defmodule</span> <span class="nc">User</span> <span class="k">do</span>
-</span></span><span class="line"><span class="cl">  <span class="kn">use</span> <span class="nc">Highlander.Object</span><span class="p">,</span> <span class="ss">type</span><span class="p">:</span> <span class="ss">:user</span>
+</span></span><span class="line"><span class="cl"><span class="n">assert</span> <span class=
+"n">todo</span><span class="o">.</span><span class="n">title</span> <span class=
+"o">==</span> <span class="s2">"Hello"</span>
+</span></span></code></pre>
+          </div>
+          <h4 id="model-everything-as-aprocess">
+            Model everything as a&nbsp;process
+          </h4>
+          <p>
+            With this approach we can model everything in our system as it’s own process. That
+            makes it super easy to serialize access to state, persist it to S3 as necessary, and
+            our system becomes a reflection of the active “objects” currently collaborating.
+          </p>
+          <div class="highlight">
+            <pre class="chroma" tabindex="0"><code class="language-elixir" data-lang=
+            "elixir"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">defmodule</span> <span class=
+"nc">User</span> <span class="k">do</span>
+</span></span><span class="line"><span class="cl">  <span class="kn">use</span> <span class=
+"nc">Highlander.Object</span><span class="p">,</span> <span class="ss">type</span><span class=
+"p">:</span> <span class="ss">:user</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">  <span class="n">defobject</span> <span class="ss">name</span><span class="p">:</span> <span class="s2">&#34;&#34;</span><span class="p">,</span> <span class="ss">email</span><span class="p">:</span> <span class="s2">&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">defobject</span> <span class=
+"ss">name</span><span class="p">:</span> <span class="s2">""</span><span class=
+"p">,</span> <span class="ss">email</span><span class="p">:</span> <span class="s2">""</span>
 </span></span><span class="line"><span class="cl"><span class="k">end</span>
-</span></span></code></pre></div><p><em>An example user module.</em></p>
-<h4 id="model-all-shared-objects-as-their-ownprocess">Model all shared objects as their own process</h4>
-<p>After every user has a process with state, it is tempting to nest everything under the user who created it. For a lot of data this makes perfect sense. But objects which are collaborated on by multiple users needs to be separated out, given it’s own state, and possibly protected with some sort of permissions.</p>
-<p>An example might be a shared list, where any user with permission can manage a list of todos:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-elixir" data-lang="elixir"><span class="line"><span class="cl"><span class="kd">defmodule</span> <span class="nc">List</span> <span class="k">do</span>
-</span></span><span class="line"><span class="cl">  <span class="kn">use</span> <span class="nc">Highlander.Object</span><span class="p">,</span> <span class="ss">type</span><span class="p">:</span> <span class="ss">:list</span>
+</span></span></code></pre>
+          </div>
+          <p>
+            <em>An example user module.</em>
+          </p>
+          <h4 id="model-all-shared-objects-as-their-ownprocess">
+            Model all shared objects as their own&nbsp;process
+          </h4>
+          <p>
+            After every user has a process with state, it is tempting to nest everything under the
+            user who created it. For a lot of data this makes perfect sense. But objects which are
+            collaborated on by multiple users needs to be separated out, given it’s own state, and
+            possibly protected with some sort of permissions.
+          </p>
+          <p>
+            An example might be a shared list, where any user with permission can manage a list of
+            todos:
+          </p>
+          <div class="highlight">
+            <pre class="chroma" tabindex="0"><code class="language-elixir" data-lang=
+            "elixir"><span class="line"><span class="cl"><span class=
+            "kd">defmodule</span> <span class="nc">List</span> <span class="k">do</span>
+</span></span><span class="line"><span class="cl">  <span class="kn">use</span> <span class=
+"nc">Highlander.Object</span><span class="p">,</span> <span class="ss">type</span><span class=
+"p">:</span> <span class="ss">:list</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">  <span class="n">defobject</span> <span class="ss">title</span><span class="p">:</span> <span class="s2">&#34;&#34;</span><span class="p">,</span> <span class="ss">todos</span><span class="p">:</span> <span class="p">[]</span>
+</span></span><span class="line"><span class="cl">  <span class="n">defobject</span> <span class=
+"ss">title</span><span class="p">:</span> <span class="s2">""</span><span class=
+"p">,</span> <span class="ss">todos</span><span class="p">:</span> <span class="p">[]</span>
 </span></span><span class="line"><span class="cl"><span class="k">end</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="kd">defmodule</span> <span class="nc">Todo</span> <span class="k">do</span>
-</span></span><span class="line"><span class="cl">  <span class="kd">defstruct</span> <span class="ss">title</span><span class="p">:</span> <span class="s2">&#34;&#34;</span><span class="p">,</span> <span class="ss">completed</span><span class="p">:</span> <span class="no">false</span><span class="p">,</span> <span class="ss">color</span><span class="p">:</span> <span class="ss">:blue</span>
+</span></span><span class="line"><span class="cl"><span class="kd">defmodule</span> <span class=
+"nc">Todo</span> <span class="k">do</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">defstruct</span> <span class=
+"ss">title</span><span class="p">:</span> <span class="s2">""</span><span class=
+"p">,</span> <span class="ss">completed</span><span class="p">:</span> <span class=
+"no">false</span><span class="p">,</span> <span class="ss">color</span><span class=
+"p">:</span> <span class="ss">:blue</span>
 </span></span><span class="line"><span class="cl"><span class="k">end</span>
-</span></span></code></pre></div><p>To manage permission, the <code>User</code> probably needs to know which lists it has seen before. And the <code>List</code> could keep an array of allowed users. See below:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-elixir" data-lang="elixir"><span class="line"><span class="cl"><span class="kd">defmodule</span> <span class="nc">User</span> <span class="k">do</span>
-</span></span><span class="line"><span class="cl">  <span class="kn">use</span> <span class="nc">Highlander.Object</span><span class="p">,</span> <span class="ss">type</span><span class="p">:</span> <span class="ss">:user</span>
+</span></span></code></pre>
+          </div>
+          <p>
+            To manage permission, the <code>User</code> probably needs to know which lists it has
+            seen before. And the <code>List</code> could keep an array of allowed users. See below:
+          </p>
+          <div class="highlight">
+            <pre class="chroma" tabindex="0"><code class="language-elixir" data-lang=
+            "elixir"><span class="line"><span class="cl"><span class=
+            "kd">defmodule</span> <span class="nc">User</span> <span class="k">do</span>
+</span></span><span class="line"><span class="cl">  <span class="kn">use</span> <span class=
+"nc">Highlander.Object</span><span class="p">,</span> <span class="ss">type</span><span class=
+"p">:</span> <span class="ss">:user</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">  <span class="n">defobject</span> <span class="ss">name</span><span class="p">:</span> <span class="s2">&#34;&#34;</span><span class="p">,</span> <span class="ss">email</span><span class="p">:</span> <span class="s2">&#34;&#34;</span><span class="p">,</span> <span class="ss">known_lists</span><span class="p">:</span> <span class="p">[]</span>
+</span></span><span class="line"><span class="cl">  <span class="n">defobject</span> <span class=
+"ss">name</span><span class="p">:</span> <span class="s2">""</span><span class=
+"p">,</span> <span class="ss">email</span><span class="p">:</span> <span class=
+"s2">""</span><span class="p">,</span> <span class="ss">known_lists</span><span class=
+"p">:</span> <span class="p">[]</span>
 </span></span><span class="line"><span class="cl"><span class="k">end</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="kd">defmodule</span> <span class="nc">List</span> <span class="k">do</span>
-</span></span><span class="line"><span class="cl">  <span class="kn">use</span> <span class="nc">Highlander.Object</span><span class="p">,</span> <span class="ss">type</span><span class="p">:</span> <span class="ss">:list</span>
+</span></span><span class="line"><span class="cl"><span class="kd">defmodule</span> <span class=
+"nc">List</span> <span class="k">do</span>
+</span></span><span class="line"><span class="cl">  <span class="kn">use</span> <span class=
+"nc">Highlander.Object</span><span class="p">,</span> <span class="ss">type</span><span class=
+"p">:</span> <span class="ss">:list</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">  <span class="n">defobject</span> <span class="ss">title</span><span class="p">:</span> <span class="s2">&#34;&#34;</span><span class="p">,</span> <span class="ss">todos</span><span class="p">:</span> <span class="p">[],</span> <span class="ss">allowed_users</span><span class="p">:</span> <span class="p">[]</span>
+</span></span><span class="line"><span class="cl">  <span class="n">defobject</span> <span class=
+"ss">title</span><span class="p">:</span> <span class="s2">""</span><span class=
+"p">,</span> <span class="ss">todos</span><span class="p">:</span> <span class=
+"p">[],</span> <span class="ss">allowed_users</span><span class="p">:</span> <span class=
+"p">[]</span>
 </span></span><span class="line"><span class="cl">    
-</span></span><span class="line"><span class="cl">  <span class="kd">def</span> <span class="n">handle_update</span><span class="p">({</span><span class="ss">:insert_todo</span><span class="p">,</span> <span class="n">list</span><span class="p">,</span> <span class="n">todo</span><span class="p">,</span> <span class="n">user</span><span class="p">},</span> <span class="n">state</span><span class="p">)</span> <span class="k">do</span>
-</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="nc">Enum</span><span class="o">.</span><span class="n">any?</span><span class="p">(</span><span class="n">list</span><span class="o">.</span><span class="n">allowed_users</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">      <span class="k">fn</span> <span class="n">id</span> <span class="o">-&gt;</span> <span class="n">id</span> <span class="o">==</span> <span class="n">user</span><span class="o">.</span><span class="n">id</span> <span class="k">end</span><span class="p">)</span> <span class="k">do</span>
-</span></span><span class="line"><span class="cl">        <span class="p">%{</span><span class="ss">todos</span><span class="p">:</span> <span class="p">[</span><span class="n">todo</span> <span class="o">|</span> <span class="n">state</span><span class="o">.</span><span class="n">todos</span><span class="p">]}</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">def</span> <span class=
+"n">handle_update</span><span class="p">({</span><span class="ss">:insert_todo</span><span class=
+"p">,</span> <span class="n">list</span><span class="p">,</span> <span class=
+"n">todo</span><span class="p">,</span> <span class="n">user</span><span class=
+"p">},</span> <span class="n">state</span><span class="p">)</span> <span class="k">do</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class=
+"nc">Enum</span><span class="o">.</span><span class="n">any?</span><span class=
+"p">(</span><span class="n">list</span><span class="o">.</span><span class=
+"n">allowed_users</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="k">fn</span> <span class=
+"n">id</span> <span class="o">-&gt;</span> <span class="n">id</span> <span class=
+"o">==</span> <span class="n">user</span><span class="o">.</span><span class=
+"n">id</span> <span class="k">end</span><span class="p">)</span> <span class="k">do</span>
+</span></span><span class="line"><span class="cl">        <span class="p">%{</span><span class=
+"ss">todos</span><span class="p">:</span> <span class="p">[</span><span class=
+"n">todo</span> <span class="o">|</span> <span class="n">state</span><span class=
+"o">.</span><span class="n">todos</span><span class="p">]}</span>
 </span></span><span class="line"><span class="cl">    <span class="k">end</span>
 </span></span><span class="line"><span class="cl">  <span class="k">end</span>
 </span></span><span class="line"><span class="cl"><span class="k">end</span>
-</span></span></code></pre></div><p>So each list is a concurrent object in the system. If one list because super busy with updates, it wouldn’t slow down any other list’s access or anything like that. The <code>handle_update</code> above doesn’t actually work yet: I haven’t decided on the syntax for handling state updates yet. <strong>Do you have opinions or ideas?</strong> Let me know.</p>
-<h3 id="an-aside-multi-vmtesting">An aside: Multi-VM testing</h3>
-<p>When building highlander I needed to boot multiple erlang nodes to be able to test cross-node calls and stuff like that. That wasn’t entirely easy or straight forward. It turns out <a href="https://github.com/phoenixframework/phoenix_pubsub/tree/master/test/support">Phoenix does this</a> to test it’s websockets stuff, so I just copied a lot of that code.</p>
-<p>The most interesting bits are:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-elixir" data-lang="elixir"><span class="line"><span class="cl"><span class="c1"># how to boot a new VM process</span>
-</span></span><span class="line"><span class="cl"><span class="kd">def</span> <span class="n">spawn</span> <span class="k">do</span>
-</span></span><span class="line"><span class="cl">  <span class="ss">:net_kernel</span><span class="o">.</span><span class="n">start</span><span class="p">([</span><span class="ss">:&#34;primary@127.0.0.1&#34;</span><span class="p">])</span>
-</span></span><span class="line"><span class="cl">  <span class="ss">:erl_boot_server</span><span class="o">.</span><span class="n">start</span><span class="p">([])</span>
-</span></span><span class="line"><span class="cl">  <span class="n">allow_boot</span> <span class="n">to_char_list</span><span class="p">(</span><span class="s2">&#34;127.0.0.1&#34;</span><span class="p">)</span>
+</span></span></code></pre>
+          </div>
+          <p>
+            So each list is a concurrent object in the system. If one list because super busy with
+            updates, it wouldn’t slow down any other list’s access or anything like that. The
+            <code>handle_update</code> above doesn’t actually work yet: I haven’t decided on the
+            syntax for handling state updates yet. <strong>Do you have opinions or ideas?</strong>
+            Let me know.
+          </p>
+          <h3 id="an-aside-multi-vmtesting">
+            An aside: Multi-VM&nbsp;testing
+          </h3>
+          <p>
+            When building highlander I needed to boot multiple erlang nodes to be able to test
+            cross-node calls and stuff like that. That wasn’t entirely easy or straight forward. It
+            turns out <a href=
+            "https://github.com/phoenixframework/phoenix_pubsub/tree/master/test/support">Phoenix
+            does this</a> to test it’s websockets stuff, so I just copied a lot of that code.
+          </p>
+          <p>
+            The most interesting bits are:
+          </p>
+          <div class="highlight">
+            <pre class="chroma" tabindex="0"><code class="language-elixir" data-lang=
+            "elixir"><span class="line"><span class="cl"><span class=
+            "c1"># how to boot a new VM process</span>
+</span></span><span class="line"><span class="cl"><span class="kd">def</span> <span class=
+"n">spawn</span> <span class="k">do</span>
+</span></span><span class="line"><span class="cl">  <span class="ss">:net_kernel</span><span class=
+"o">.</span><span class="n">start</span><span class="p">([</span><span class=
+"ss">:"primary@127.0.0.1"</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl">  <span class=
+"ss">:erl_boot_server</span><span class="o">.</span><span class="n">start</span><span class=
+"p">([])</span>
+</span></span><span class="line"><span class="cl">  <span class="n">allow_boot</span> <span class=
+"n">to_char_list</span><span class="p">(</span><span class="s2">"127.0.0.1"</span><span class=
+"p">)</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">  <span class="nc">Application</span><span class="o">.</span><span class="n">get_env</span><span class="p">(</span><span class="ss">:highlander</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">    <span class="ss">:spawn_nodes</span><span class="p">,</span> <span class="p">[])</span>
-</span></span><span class="line"><span class="cl">  <span class="o">|&gt;</span> <span class="nc">Enum</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="o">&amp;</span><span class="nc">Task</span><span class="o">.</span><span class="n">async</span><span class="p">(</span><span class="k">fn</span> <span class="o">-&gt;</span>
-</span></span><span class="line"><span class="cl">    <span class="p">{</span><span class="ss">:ok</span><span class="p">,</span> <span class="n">_node</span><span class="p">}</span> <span class="o">=</span> <span class="n">spawn_node</span><span class="p">(</span><span class="ni">&amp;1</span><span class="p">)</span> 
-</span></span><span class="line"><span class="cl">  <span class="k">end</span><span class="p">))</span>
-</span></span><span class="line"><span class="cl">  <span class="o">|&gt;</span> <span class="nc">Enum</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="o">&amp;</span><span class="nc">Task</span><span class="o">.</span><span class="n">await</span><span class="p">(</span><span class="ni">&amp;1</span><span class="p">,</span> <span class="mi">30_000</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">  <span class="nc">Application</span><span class=
+"o">.</span><span class="n">get_env</span><span class="p">(</span><span class=
+"ss">:highlander</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class=
+"ss">:spawn_nodes</span><span class="p">,</span> <span class="p">[])</span>
+</span></span><span class="line"><span class="cl">  <span class="o">|&gt;</span> <span class=
+"nc">Enum</span><span class="o">.</span><span class="n">map</span><span class=
+"p">(</span><span class="o">&</span><span class="nc">Task</span><span class=
+"o">.</span><span class="n">async</span><span class="p">(</span><span class=
+"k">fn</span> <span class="o">-&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span><span class=
+"ss">:ok</span><span class="p">,</span> <span class="n">_node</span><span class=
+"p">}</span> <span class="o">=</span> <span class="n">spawn_node</span><span class=
+"p">(</span><span class="ni">&amp;1</span><span class="p">)</span> 
+</span></span><span class="line"><span class="cl">  <span class="k">end</span><span class=
+"p">))</span>
+</span></span><span class="line"><span class="cl">  <span class="o">|&gt;</span> <span class=
+"nc">Enum</span><span class="o">.</span><span class="n">map</span><span class=
+"p">(</span><span class="o">&</span><span class="nc">Task</span><span class=
+"o">.</span><span class="n">await</span><span class="p">(</span><span class=
+"ni">&amp;1</span><span class="p">,</span> <span class="mi">30_000</span><span class="p">))</span>
 </span></span><span class="line"><span class="cl"><span class="k">end</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># how to start a `:slave` and then send it the code to load</span>
-</span></span><span class="line"><span class="cl"><span class="kd">defp</span> <span class="n">spawn_node</span><span class="p">(</span><span class="n">node_host</span><span class="p">)</span> <span class="k">do</span>
-</span></span><span class="line"><span class="cl">  <span class="p">{</span><span class="ss">:ok</span><span class="p">,</span> <span class="n">node</span><span class="p">}</span> <span class="o">=</span> <span class="ss">:slave</span><span class="o">.</span><span class="n">start</span><span class="p">(</span>
-</span></span><span class="line"><span class="cl">    <span class="n">to_char_list</span><span class="p">(</span><span class="s2">&#34;127.0.0.1&#34;</span><span class="p">),</span> 
-</span></span><span class="line"><span class="cl">    <span class="n">node_name</span><span class="p">(</span><span class="n">node_host</span><span class="p">),</span> 
-</span></span><span class="line"><span class="cl">    <span class="n">inet_loader_args</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl"><span class=
+"c1"># how to start a `:slave` and then send it the code to load</span>
+</span></span><span class="line"><span class="cl"><span class="kd">defp</span> <span class=
+"n">spawn_node</span><span class="p">(</span><span class="n">node_host</span><span class=
+"p">)</span> <span class="k">do</span>
+</span></span><span class="line"><span class="cl">  <span class="p">{</span><span class=
+"ss">:ok</span><span class="p">,</span> <span class="n">node</span><span class=
+"p">}</span> <span class="o">=</span> <span class="ss">:slave</span><span class=
+"o">.</span><span class="n">start</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">    <span class=
+"n">to_char_list</span><span class="p">(</span><span class="s2">"127.0.0.1"</span><span class=
+"p">),</span> 
+</span></span><span class="line"><span class="cl">    <span class="n">node_name</span><span class=
+"p">(</span><span class="n">node_host</span><span class="p">),</span> 
+</span></span><span class="line"><span class="cl">    <span class=
+"n">inet_loader_args</span><span class="p">())</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">  <span class="n">add_code_paths</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">  <span class="n">transfer_configuration</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">  <span class="n">ensure_applications_started</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">  <span class="p">{</span><span class="ss">:ok</span><span class="p">,</span> <span class="n">node</span><span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class=
+"n">add_code_paths</span><span class="p">(</span><span class="n">node</span><span class=
+"p">)</span>
+</span></span><span class="line"><span class="cl">  <span class=
+"n">transfer_configuration</span><span class="p">(</span><span class="n">node</span><span class=
+"p">)</span>
+</span></span><span class="line"><span class="cl">  <span class=
+"n">ensure_applications_started</span><span class="p">(</span><span class=
+"n">node</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="p">{</span><span class=
+"ss">:ok</span><span class="p">,</span> <span class="n">node</span><span class="p">}</span>
 </span></span><span class="line"><span class="cl"><span class="k">end</span>
-</span></span></code></pre></div><p>You can see all of it in the <a href="https://github.com/myobie/highlander/tree/master/test/support">highlander repo’s test folder</a>.</p>
-<figure>
-  <img
-    alt="The skeleton surfing again, but zoomed in"
-    width="800"
-    height="450"
-    src="https://nathanherald.com/posts/legacy/elixirconf-eu-2017-in-barcelona/1-FbxEeSZG0ulVSr0BYUBYYQ_hu15374176244318222221.png">
-  <figcaption>
-    That was fun!
-  </figcaption>
-</figure>
-
-<h3 id="scaling">Scaling</h3>
-<p><strong>Granular = scalable.</strong> Having all these small processes is a lot like “pouring sand” into our cluster.</p>
-<p>H<strong>ow many locks can a small zookeeper cluster handle?</strong> I don’t know.</p>
-<p>If it became a problem one could shard zookeeper. Or one could do what other libraries do and not store a zookeeper key for every process, but instead setup a partition map in zookeeper and use that to shard processes onto the box they map to. Then there would only be a key for every erlang VM and not for every erlang process.</p>
-<h4 id="orleans">Orleans</h4>
-<p>That is what <a href="https://github.com/dotnet/orleans">orleans</a> does: setup a partition map in zookeeper. Orleans is what the Halo team used to scale Halo 4 and 5. As far as I know every player, game, etc is a process in the cluster and they collaborate with message passing.</p>
-<p>There is also Microsoft Service Fabric which is a lot like Orleans, but tries to help with building stateful and stateless services more than actors. It also uses zookeeper to setup a partition map for it’s services. It also persists the services state across the cluster when that state is updated.</p>
-<h4 id="akkahttpakkaio"><a href="http://akka.io">Akka</a></h4>
-<p>Sure. That’s a good choice. I am not really doing any scala right now and I’m a bit scala’ed out for the moment. As I said before, Wunderlist’s websockets servers are all in scala (using <a href="https://playframework.com">play</a>) and it’s very reliable and performant. Love it. It’s good. Use it.</p>
-<h4 id="riak_core">riak_core</h4>
-<p>Sure, you could use the riak internals to do your own consensus, but I haven’t yet drank enough coffee in my life to start down that road. Maybe I will one day, and if you are interested then definitely go for it, but I am not able to think about that without having a lot of anxiety. 🤷‍♂️ 🌳 🤷‍♀️</p>
-<p>And that’s it. Hope you maybe learned something.</p>
-<p><strong>Have fun. Have crazy ideas. Build things.</strong> 🏁</p>
-
-      </div>
-
-      <footer>
-        
-        <p>
-          
-            Posted on
-          
-          <time datetime="2017-06-27T10:01:17Z">
-            27 Jun, 2017
-          </time>
-          
-            onto
-            <a href="https://medium.com/@myobie/elixirconf-eu-2017-in-barcelona-3de660eff76d">Medium</a>
-          
-          
-          
-        </p>
-      </footer>
-    </article>
-  </main>
-
-    
-    
-    <script async src="/behavior.js"></script>
-      <script defer data-domain="nathanherald.com" src="https://stats.myobie.wtf/script.js"></script>
+</span></span></code></pre>
+          </div>
+          <p>
+            You can see all of it in the <a href=
+            "https://github.com/myobie/highlander/tree/master/test/support">highlander repo’s test
+            folder</a>.
+          </p>
+          <figure>
+            <img alt="The skeleton surfing again, but zoomed in" height="450" src=
+            "https://nathanherald.com/posts/legacy/elixirconf-eu-2017-in-barcelona/1-FbxEeSZG0ulVSr0BYUBYYQ_hu15374176244318222221.png"
+            width="800">
+            <figcaption>
+              That was&nbsp;fun!
+            </figcaption>
+          </figure>
+          <h3 id="scaling">
+            Scaling
+          </h3>
+          <p>
+            <strong>Granular = scalable.</strong> Having all these small processes is a lot like
+            “pouring sand” into our cluster.
+          </p>
+          <p>
+            H<strong>ow many locks can a small zookeeper cluster handle?</strong> I don’t know.
+          </p>
+          <p>
+            If it became a problem one could shard zookeeper. Or one could do what other libraries
+            do and not store a zookeeper key for every process, but instead setup a partition map
+            in zookeeper and use that to shard processes onto the box they map to. Then there would
+            only be a key for every erlang VM and not for every erlang process.
+          </p>
+          <h4 id="orleans">
+            Orleans
+          </h4>
+          <p>
+            That is what <a href="https://github.com/dotnet/orleans">orleans</a> does: setup a
+            partition map in zookeeper. Orleans is what the Halo team used to scale Halo 4 and 5.
+            As far as I know every player, game, etc is a process in the cluster and they
+            collaborate with message passing.
+          </p>
+          <p>
+            There is also Microsoft Service Fabric which is a lot like Orleans, but tries to help
+            with building stateful and stateless services more than actors. It also uses zookeeper
+            to setup a partition map for it’s services. It also persists the services state across
+            the cluster when that state is updated.
+          </p>
+          <h4 id="akkahttpakkaio">
+            <a href="http://akka.io">Akka</a>
+          </h4>
+          <p>
+            Sure. That’s a good choice. I am not really doing any scala right now and I’m a bit
+            scala’ed out for the moment. As I said before, Wunderlist’s websockets servers are all
+            in scala (using <a href="https://playframework.com">play</a>) and it’s very reliable
+            and performant. Love it. It’s good. Use it.
+          </p>
+          <h4 id="riak_core">
+            riak_core
+          </h4>
+          <p>
+            Sure, you could use the riak internals to do your own consensus, but I haven’t yet
+            drank enough coffee in my life to start down that road. Maybe I will one day, and if
+            you are interested then definitely go for it, but I am not able to think about that
+            without having a lot of anxiety. 🤷‍♂️ 🌳 🤷‍♀️
+          </p>
+          <p>
+            And that’s it. Hope you maybe learned something.
+          </p>
+          <p>
+            <strong>Have fun. Have crazy ideas. Build things.</strong>&nbsp;🏁
+          </p>
+        </div>
+        <footer>
+          <p>
+            Posted on <time datetime="2017-06-27T10:01:17Z">27 Jun, 2017</time> onto <a href=
+            "https://medium.com/@myobie/elixirconf-eu-2017-in-barcelona-3de660eff76d">Medium</a>
+          </p>
+        </footer>
+      </article>
+    </main>
+    <script async src="/behavior.js"></script> 
+    <script data-domain="nathanherald.com" defer src="https://stats.myobie.wtf/script.js"></script>
   </body>
 </html>

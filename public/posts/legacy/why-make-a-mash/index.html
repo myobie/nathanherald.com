@@ -1,206 +1,526 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
   <head lang="en-us">
+    <meta content="HTML Tidy for HTML5 for Apple macOS version 5.8.0" name="generator">
     <meta charset="UTF-8">
-    <title>I‘m Nathan Herald → Why make a Mash?</title>
+    <title>
+      I‘m Nathan Herald → Why make a Mash?
+    </title>
     <script>
       if ((new URL(window.location.href)).host === 'myobie.com') { window.location.assign('https://nathanherald.com') }
     </script>
-    <link rel="canonical" href="https://nathanherald.com/posts/legacy/why-make-a-mash/">
-    <link rel="stylesheet" type="text/css" href="https://cloud.typography.com/6836312/761366/css/fonts.css"><link rel="stylesheet" type="text/css" href="/styles.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="generator" content="Hugo 0.136.5">
-    <meta name="title" content="I‘m Nathan Herald  → Why make a Mash?">
-    <meta name="description" content="">
-    <meta property="og:title" content="Why make a Mash?">
-    <meta property="og:type" content="website">
-    <meta property="og:description" content="">
-    <meta property="og:url" content="https://nathanherald.com/posts/legacy/why-make-a-mash/">
-    <meta property="og:image" content="/og.png">
-    <meta property="og:site_name" content="I‘m Nathan Herald">
-    
-  
-
-<link rel="alternate" type="application/rss+xml" href="/rss.xml" title="Feed of all the posts on nathanherald.com">
-
-
+    <link href="https://nathanherald.com/posts/legacy/why-make-a-mash/" rel="canonical">
+    <link href="https://cloud.typography.com/6836312/761366/css/fonts.css" rel="stylesheet" type=
+    "text/css">
+    <link href="/styles.css" rel="stylesheet" type="text/css">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="Hugo 0.136.5" name="generator">
+    <meta content="I‘m Nathan Herald → Why make a Mash?" name="title">
+    <meta content="" name="description">
+    <meta content="Why make a Mash?" property="og:title">
+    <meta content="website" property="og:type">
+    <meta content="" property="og:description">
+    <meta content="https://nathanherald.com/posts/legacy/why-make-a-mash/" property="og:url">
+    <meta content="/og.png" property="og:image">
+    <meta content="I‘m Nathan Herald" property="og:site_name">
+    <link href="/rss.xml" rel="alternate" title="Feed of all the posts on nathanherald.com" type=
+    "application/rss+xml">
   </head>
   <body class="default">
-    
-  <header class="section-header">
-    <div class="section-nav">
-      <h1 class="home-link">
-        <a data-nospan href="/" class="never-underline"><abbr title="Hello">👋</abbr></a>
-        <a href="/">I&rsquo;m Nathan</a>
-      </h1>
-      <nav>
-        <p>
-          Find more in the <a href="https://nathanherald.com/posts/">archive of all the posts on this site</a>
-or <a href="https://nathanherald.com/posts/rss.xml">subscribe with RSS</a>.
-
-        </p>
-      </nav>
-    </div>
-  </header>
-
-    
-  <main class="single">
-    <article>
-      <header>
-        <h1>
-          
-          
-            Why make a Mash?
-            <p class="annotation">⭐️ a blog post</a>
-          
+    <header class="section-header">
+      <div class="section-nav">
+        <h1 class="home-link">
+          <a class="never-underline" data-nospan="" href="/"><abbr title="Hello">👋</abbr></a>
+          <a href="/">I’m Nathan</a>
         </h1>
-        
-      </header>
-
-      <div class="content">
-        <h2 id="hashiehttpsgithubcomintrideahashie-is-fine"><a href="https://github.com/intridea/hashie">Hashie</a> is fine</h2>
-<p>Recently, Richard Schneeman wrote a very good article titled <a href="http://www.schneems.com/2014/12/15/hashie-considered-harmful.html">Hashie Considered Harmful - An Ode to Hash and OpenStruct</a>. Give it a read, there is some wisdom there. However, I have a bit of a different take on this issue. I’ve also had this as a draft in Svbtle for way too long.</p>
-<p>First, let’s get this straight: if <code>OpenStruct</code> is useful then <code>Hashie::Mash</code> is useful too. And <code>OpenStruct</code> <strong>is</strong> really useful. Also, don’t let anyone tell you “you don’t need a hash-like object that responds to methods” because you very well might need it. Always contrast your goals and the implementation  of a library to make sure it’s as simple as it could be.</p>
-<p>Second, don’t take advice about what to use from people who can’t explain the pain or joy around it. It’s like someone who says to use postgres instead of mysql, but has no clear reason to prefer anything. What is the real pain here? What is the real benefit? What circumstances were there?</p>
-<p>To be clear, Richard explains that misspellings, insensitive access to hash-like object keys, and increased memory usage can cause issues, and he is correct. However, from certain perspectives, the tools shouldn’t try to help with misspellings at all: Javascript objects don’t raise on missing keys. Memory usage is relative to each application and my libs are not generally my problem, so we differ here too.</p>
-<p>I will try to detail why I always tell people to use what they want, but they probably don’t need <code>Hashie</code> anyway.</p>
-<h2 id="why-not-to-use-hashie">Why not to use <code>Hashie</code></h2>
-<p>There is one very good reason not to use <code>Hashie::Mash</code> at all that I don’t see explained very often: <code>#zip</code>.</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">$ gem install hashie
+        <nav>
+          <p>
+            Find more in the <a href="https://nathanherald.com/posts/">archive of all the posts on
+            this site</a> or <a href="https://nathanherald.com/posts/rss.xml">subscribe with
+            RSS</a>.
+          </p>
+        </nav>
+      </div>
+    </header>
+    <main class="single">
+      <article>
+        <header>
+          <h1>
+            Why make a Mash?
+          </h1>
+          <p class="annotation">
+            ⭐️ a blog post
+          </p>
+        </header>
+        <div class="content">
+          <h2 id="hashiehttpsgithubcomintrideahashie-is-fine">
+            <a href="https://github.com/intridea/hashie">Hashie</a> is fine
+          </h2>
+          <p>
+            Recently, Richard Schneeman wrote a very good article titled <a href=
+            "http://www.schneems.com/2014/12/15/hashie-considered-harmful.html">Hashie Considered
+            Harmful - An Ode to Hash and OpenStruct</a>. Give it a read, there is some wisdom
+            there. However, I have a bit of a different take on this issue. I’ve also had this as a
+            draft in Svbtle for way too long.
+          </p>
+          <p>
+            First, let’s get this straight: if <code>OpenStruct</code> is useful then
+            <code>Hashie::Mash</code> is useful too. And <code>OpenStruct</code>
+            <strong>is</strong> really useful. Also, don’t let anyone tell you “you don’t need a
+            hash-like object that responds to methods” because you very well might need it. Always
+            contrast your goals and the implementation of a library to make sure it’s as simple as
+            it could be.
+          </p>
+          <p>
+            Second, don’t take advice about what to use from people who can’t explain the pain or
+            joy around it. It’s like someone who says to use postgres instead of mysql, but has no
+            clear reason to prefer anything. What is the real pain here? What is the real benefit?
+            What circumstances were there?
+          </p>
+          <p>
+            To be clear, Richard explains that misspellings, insensitive access to hash-like object
+            keys, and increased memory usage can cause issues, and he is correct. However, from
+            certain perspectives, the tools shouldn’t try to help with misspellings at all:
+            Javascript objects don’t raise on missing keys. Memory usage is relative to each
+            application and my libs are not generally my problem, so we differ here too.
+          </p>
+          <p>
+            I will try to detail why I always tell people to use what they want, but they probably
+            don’t need <code>Hashie</code> anyway.
+          </p>
+          <h2 id="why-not-to-use-hashie">
+            Why not to use <code>Hashie</code>
+          </h2>
+          <p>
+            There is one very good reason not to use <code>Hashie::Mash</code> at all that I don’t
+            see explained very often: <code>#zip</code>.
+          </p>
+          <div class="highlight">
+            <pre class="chroma" tabindex="0"><code class="language-sh" data-lang="sh"><span class=
+            "line"><span class="cl">$ gem install hashie
 </span></span><span class="line"><span class="cl">$ irb -rhashie
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-ruby" data-lang="ruby"><span class="line"><span class="cl"><span class="n">address</span> <span class="o">=</span> <span class="no">Hashie</span><span class="o">::</span><span class="no">Mash</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="ss">street</span><span class="p">:</span> <span class="s2">&#34;100 Street St&#34;</span><span class="p">,</span> <span class="ss">city</span><span class="p">:</span> <span class="s2">&#34;city&#34;</span><span class="p">,</span> <span class="ss">zip</span><span class="p">:</span> <span class="mi">10119</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="n">address</span><span class="o">.</span><span class="n">zip</span> <span class="c1"># =&gt; [[[&#34;street&#34;, &#34;100 Street St&#34;]], [[&#34;city&#34;, &#34;city&#34;]], [[&#34;zip&#34;, 10119]]]</span>
-</span></span></code></pre></div><p>It’s honestly that simple. <code>Mash</code> inherits from <code>Hash</code> which includes <code>Enumerable</code> and you have a huge number of keys (175) that have surprising behavior. However, this does not mean <code>Hashie</code> is bad or not useful, it’s just how it works and one needs to know that.</p>
-<h2 id="what-to-use-instead">What to use instead</h2>
-<h3 id="maybe-openstruct-is-better">Maybe <code>OpenStruct</code> is “better”</h3>
-<p>No, <code>OpenStruct</code> is slow. Let’s see some data comparing it to <code>Hashie</code>:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">$ gem install benchmark-ips hashie
+</span></span></code></pre>
+          </div>
+          <div class="highlight">
+            <pre class="chroma" tabindex="0"><code class="language-ruby" data-lang=
+            "ruby"><span class="line"><span class="cl"><span class="n">address</span> <span class=
+            "o">=</span> <span class="no">Hashie</span><span class="o">::</span><span class=
+            "no">Mash</span><span class="o">.</span><span class="n">new</span><span class=
+            "p">(</span><span class="ss">street</span><span class="p">:</span> <span class=
+            "s2">"100 Street St"</span><span class="p">,</span> <span class=
+            "ss">city</span><span class="p">:</span> <span class="s2">"city"</span><span class=
+            "p">,</span> <span class="ss">zip</span><span class="p">:</span> <span class=
+            "mi">10119</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">address</span><span class=
+"o">.</span><span class="n">zip</span> <span class=
+"c1"># =&gt; [[["street", "100 Street St"]], [["city", "city"]], [["zip", 10119]]]</span>
+</span></span></code></pre>
+          </div>
+          <p>
+            It’s honestly that simple. <code>Mash</code> inherits from <code>Hash</code> which
+            includes <code>Enumerable</code> and you have a huge number of keys (175) that have
+            surprising behavior. However, this does not mean <code>Hashie</code> is bad or not
+            useful, it’s just how it works and one needs to know that.
+          </p>
+          <h2 id="what-to-use-instead">
+            What to use instead
+          </h2>
+          <h3 id="maybe-openstruct-is-better">
+            Maybe <code>OpenStruct</code> is “better”
+          </h3>
+          <p>
+            No, <code>OpenStruct</code> is slow. Let’s see some data comparing it to
+            <code>Hashie</code>:
+          </p>
+          <div class="highlight">
+            <pre class="chroma" tabindex="0"><code class="language-sh" data-lang="sh"><span class=
+            "line"><span class="cl">$ gem install benchmark-ips hashie
 </span></span><span class="line"><span class="cl">$ irb -rbenchmark/ips -rhashie -rostruct
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-ruby" data-lang="ruby"><span class="line"><span class="cl"><span class="no">Benchmark</span><span class="o">.</span><span class="n">ips</span> <span class="k">do</span> <span class="o">|</span><span class="n">x</span><span class="o">|</span>
-</span></span><span class="line"><span class="cl">  <span class="n">x</span><span class="o">.</span><span class="n">report</span><span class="p">(</span><span class="s2">&#34;ostruct&#34;</span><span class="p">)</span> <span class="p">{</span> <span class="no">OpenStruct</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="ss">street</span><span class="p">:</span> <span class="s2">&#34;100 Street St&#34;</span><span class="p">)</span><span class="o">.</span><span class="n">street</span> <span class="p">}</span>
-</span></span><span class="line"><span class="cl">  <span class="n">x</span><span class="o">.</span><span class="n">report</span><span class="p">(</span><span class="s2">&#34;hashie&#34;</span><span class="p">)</span> <span class="p">{</span> <span class="no">Hashie</span><span class="o">::</span><span class="no">Mash</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="ss">street</span><span class="p">:</span> <span class="s2">&#34;100 Street St&#34;</span><span class="p">)</span><span class="o">.</span><span class="n">street</span> <span class="p">}</span>
+</span></span></code></pre>
+          </div>
+          <div class="highlight">
+            <pre class="chroma" tabindex="0"><code class="language-ruby" data-lang=
+            "ruby"><span class="line"><span class="cl"><span class="no">Benchmark</span><span class=
+            "o">.</span><span class="n">ips</span> <span class="k">do</span> <span class=
+            "o">|</span><span class="n">x</span><span class="o">|</span>
+</span></span><span class="line"><span class="cl">  <span class="n">x</span><span class=
+"o">.</span><span class="n">report</span><span class="p">(</span><span class=
+"s2">"ostruct"</span><span class="p">)</span> <span class="p">{</span> <span class=
+"no">OpenStruct</span><span class="o">.</span><span class="n">new</span><span class=
+"p">(</span><span class="ss">street</span><span class="p">:</span> <span class=
+"s2">"100 Street St"</span><span class="p">)</span><span class="o">.</span><span class=
+"n">street</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="n">x</span><span class=
+"o">.</span><span class="n">report</span><span class="p">(</span><span class=
+"s2">"hashie"</span><span class="p">)</span> <span class="p">{</span> <span class=
+"no">Hashie</span><span class="o">::</span><span class="no">Mash</span><span class=
+"o">.</span><span class="n">new</span><span class="p">(</span><span class=
+"ss">street</span><span class="p">:</span> <span class="s2">"100 Street St"</span><span class=
+"p">)</span><span class="o">.</span><span class="n">street</span> <span class="p">}</span>
 </span></span><span class="line"><span class="cl"><span class="k">end</span>
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-txt" data-lang="txt"><span class="line"><span class="cl">Calculating -------------------------------------
+</span></span></code></pre>
+          </div>
+          <div class="highlight">
+            <pre class="chroma" tabindex="0"><code class="language-txt" data-lang="txt"><span class=
+            "line"><span class="cl">Calculating -------------------------------------
 </span></span><span class="line"><span class="cl">             ostruct    12.509k i/100ms
 </span></span><span class="line"><span class="cl">              hashie    23.823k i/100ms
 </span></span><span class="line"><span class="cl">-------------------------------------------------
-</span></span><span class="line"><span class="cl">             ostruct    135.329k (± 7.8%) i/s -    675.486k
-</span></span><span class="line"><span class="cl">              hashie    313.649k (± 5.9%) i/s -      1.572M
-</span></span></code></pre></div><p><strong><code>Hashie</code> is at least twice as fast</strong> for the simple case of building a hash-like object and calling a method on it. This is what my normal usage of these tools looks like, grab some data and call methods on the resulting objects.</p>
-<h3 id="oh-why-would-one-use-openstruct-then">Oh, why would one use “OpenStruct” then?</h3>
-<p><code>OpenStruct</code> compiles the method into the instance so repeated calls will be fast. Here is what that looks like:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">$ gem install benchmark-ips hashie
+</span></span><span class="line"><span class=
+"cl">             ostruct    135.329k (± 7.8%) i/s -    675.486k
+</span></span><span class="line"><span class=
+"cl">              hashie    313.649k (± 5.9%) i/s -      1.572M
+</span></span></code></pre>
+          </div>
+          <p>
+            <strong><code>Hashie</code> is at least twice as fast</strong> for the simple case of
+            building a hash-like object and calling a method on it. This is what my normal usage of
+            these tools looks like, grab some data and call methods on the resulting objects.
+          </p>
+          <h3 id="oh-why-would-one-use-openstruct-then">
+            Oh, why would one use “OpenStruct” then?
+          </h3>
+          <p>
+            <code>OpenStruct</code> compiles the method into the instance so repeated calls will be
+            fast. Here is what that looks like:
+          </p>
+          <div class="highlight">
+            <pre class="chroma" tabindex="0"><code class="language-sh" data-lang="sh"><span class=
+            "line"><span class="cl">$ gem install benchmark-ips hashie
 </span></span><span class="line"><span class="cl">$ $ irb -rbenchmark/ips -rhashie -rostruct
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-ruby" data-lang="ruby"><span class="line"><span class="cl"><span class="no">Benchmark</span><span class="o">.</span><span class="n">ips</span> <span class="k">do</span> <span class="o">|</span><span class="n">x</span><span class="o">|</span>
-</span></span><span class="line"><span class="cl">  <span class="n">x</span><span class="o">.</span><span class="n">report</span><span class="p">(</span><span class="s2">&#34;ostruct&#34;</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="n">o</span> <span class="o">=</span> <span class="no">OpenStruct</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="ss">street</span><span class="p">:</span> <span class="s2">&#34;100 Street St&#34;</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">    <span class="mi">100</span><span class="o">.</span><span class="n">times</span> <span class="p">{</span> <span class="n">o</span><span class="o">.</span><span class="n">street</span> <span class="p">}</span>
+</span></span></code></pre>
+          </div>
+          <div class="highlight">
+            <pre class="chroma" tabindex="0"><code class="language-ruby" data-lang=
+            "ruby"><span class="line"><span class="cl"><span class="no">Benchmark</span><span class=
+            "o">.</span><span class="n">ips</span> <span class="k">do</span> <span class=
+            "o">|</span><span class="n">x</span><span class="o">|</span>
+</span></span><span class="line"><span class="cl">  <span class="n">x</span><span class=
+"o">.</span><span class="n">report</span><span class="p">(</span><span class=
+"s2">"ostruct"</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">o</span> <span class=
+"o">=</span> <span class="no">OpenStruct</span><span class="o">.</span><span class=
+"n">new</span><span class="p">(</span><span class="ss">street</span><span class=
+"p">:</span> <span class="s2">"100 Street St"</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="mi">100</span><span class=
+"o">.</span><span class="n">times</span> <span class="p">{</span> <span class=
+"n">o</span><span class="o">.</span><span class="n">street</span> <span class="p">}</span>
 </span></span><span class="line"><span class="cl">  <span class="p">}</span>
-</span></span><span class="line"><span class="cl">  <span class="n">x</span><span class="o">.</span><span class="n">report</span><span class="p">(</span><span class="s2">&#34;hashie&#34;</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="n">m</span> <span class="o">=</span> <span class="no">Hashie</span><span class="o">::</span><span class="no">Mash</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="ss">street</span><span class="p">:</span> <span class="s2">&#34;100 Street St&#34;</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">    <span class="mi">100</span><span class="o">.</span><span class="n">times</span> <span class="p">{</span> <span class="n">m</span><span class="o">.</span><span class="n">street</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="n">x</span><span class=
+"o">.</span><span class="n">report</span><span class="p">(</span><span class=
+"s2">"hashie"</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">m</span> <span class=
+"o">=</span> <span class="no">Hashie</span><span class="o">::</span><span class=
+"no">Mash</span><span class="o">.</span><span class="n">new</span><span class=
+"p">(</span><span class="ss">street</span><span class="p">:</span> <span class=
+"s2">"100 Street St"</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="mi">100</span><span class=
+"o">.</span><span class="n">times</span> <span class="p">{</span> <span class=
+"n">m</span><span class="o">.</span><span class="n">street</span> <span class="p">}</span>
 </span></span><span class="line"><span class="cl">  <span class="p">}</span>
 </span></span><span class="line"><span class="cl"><span class="k">end</span>
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-txt" data-lang="txt"><span class="line"><span class="cl">Calculating -------------------------------------
+</span></span></code></pre>
+          </div>
+          <div class="highlight">
+            <pre class="chroma" tabindex="0"><code class="language-txt" data-lang="txt"><span class=
+            "line"><span class="cl">Calculating -------------------------------------
 </span></span><span class="line"><span class="cl">             ostruct     4.563k i/100ms
 </span></span><span class="line"><span class="cl">              hashie     1.363k i/100ms
 </span></span><span class="line"><span class="cl">-------------------------------------------------
-</span></span><span class="line"><span class="cl">             ostruct     46.592k (± 3.7%) i/s -    232.713k
-</span></span><span class="line"><span class="cl">              hashie     13.598k (± 4.1%) i/s -     68.150k
-</span></span></code></pre></div><p><strong><code>OpenStruct</code> is over three times faster</strong> for repeated calls to keys. So for long lived objects, <code>OpenStruct</code> is way better than <code>Hashie</code>. However, there is something <strong>even better</strong> for long lived objects: <code>Struct</code>. If your objects are really that long lived you will probably know their schema and you can just make a class (<code>Struct</code> is a class factory, so use it) that conforms to that schema.</p>
-<h3 id="what-does-this-mean">What does this mean?</h3>
-<p>What it always means: the tools one chooses to use should be tailored to the use case.</p>
-<p>I build a lot of apis and those apis all produce and consume JSON which in ruby is best represented as <code>Hash</code>’s or <code>Array</code>’s of <code>Hash</code>’s. However, one of these lines of code is prettier:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-ruby" data-lang="ruby"><span class="line"><span class="cl"><span class="n">task_ids</span> <span class="o">=</span> <span class="n">tasks</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="o">&amp;</span><span class="ss">:id</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="n">task_ids</span> <span class="o">=</span> <span class="n">tasks</span><span class="o">.</span><span class="n">map</span> <span class="p">{</span> <span class="o">|</span><span class="n">task</span><span class="o">|</span> <span class="n">task</span><span class="o">[</span><span class="err">“</span><span class="nb">id</span><span class="err">”</span><span class="o">]</span> <span class="p">}</span>
-</span></span></code></pre></div><p>There are other examples too where using methods is much preferred from a stylistic point of view. My apis change a lot at first, so dynamically providing the <code>Hash#keys</code> as methods allows me to move quicker. It’s possible that eventually I would define a <code>Struct</code> for each version of each api later, which is an easy refactor since the tests all still pass because nothing really changes.</p>
-<p>If we shouldn’t use <code>Hashie</code> and <code>OpenStruct</code> is slow, what do we do?</p>
-<h2 id="i-made-my-own-mash">I made my own Mash</h2>
-<p>Yeah, I know, NIH and all that. But, as I typed above, evaluate tools on what they are being or will be used for. For my api producing/consuming applications I need hash wrappers that are fast and use very little memory. These wrapped objects are not long lived.</p>
-<p>My library is called <a href="https://github.com/myobie/mashed"><code>Mashed</code></a>. It does three things: provides indifferent access in a predictable way, provides a hash wrapper that has a very small method footprint, and represents the internal hash’s keys as methods.</p>
-<h3 id="indifferent-access">Indifferent access</h3>
-<p>Symbols in ruby are kinda annoying. Until 2.2 (due out very soon I guess) they are not garbage collected, so technically you could allow anyone to DDOS your app by making every JSON object into a symbolized hash. (I’ve considered just going down this road and making sure I monitor my app correctly, but I’ve never actually done it.) Luckily this will go away when they are garbage collected and I will even change my implementation when that happens.</p>
-<p>But for now, I created the <a href="https://github.com/myobie/mashed#stringyhash"><code>StringyHash</code></a>. It <strong>does not</strong> inherit from <code>Hash</code>, but instead wraps and delegates to a hash instance. The <a href="https://github.com/myobie/mashed/blob/master/lib/mashed/stringy_hash.rb">method footprint</a> is small and it doesn’t extend any built-in ruby classes at all.</p>
-<p>The example from the README should explain it all:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-ruby" data-lang="ruby"><span class="line"><span class="cl"><span class="no">StringyHash</span> <span class="o">=</span> <span class="no">Mash</span><span class="o">::</span><span class="no">StringyHash</span>
+</span></span><span class="line"><span class=
+"cl">             ostruct     46.592k (± 3.7%) i/s -    232.713k
+</span></span><span class="line"><span class=
+"cl">              hashie     13.598k (± 4.1%) i/s -     68.150k
+</span></span></code></pre>
+          </div>
+          <p>
+            <strong><code>OpenStruct</code> is over three times faster</strong> for repeated calls
+            to keys. So for long lived objects, <code>OpenStruct</code> is way better than
+            <code>Hashie</code>. However, there is something <strong>even better</strong> for long
+            lived objects: <code>Struct</code>. If your objects are really that long lived you will
+            probably know their schema and you can just make a class (<code>Struct</code> is a
+            class factory, so use it) that conforms to that schema.
+          </p>
+          <h3 id="what-does-this-mean">
+            What does this mean?
+          </h3>
+          <p>
+            What it always means: the tools one chooses to use should be tailored to the use case.
+          </p>
+          <p>
+            I build a lot of apis and those apis all produce and consume JSON which in ruby is best
+            represented as <code>Hash</code>’s or <code>Array</code>’s of <code>Hash</code>’s.
+            However, one of these lines of code is prettier:
+          </p>
+          <div class="highlight">
+            <pre class="chroma" tabindex="0"><code class="language-ruby" data-lang=
+            "ruby"><span class="line"><span class="cl"><span class="n">task_ids</span> <span class=
+            "o">=</span> <span class="n">tasks</span><span class="o">.</span><span class=
+            "n">map</span><span class="p">(</span><span class="o">&</span><span class=
+            "ss">:id</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">task_ids</span> <span class=
+"o">=</span> <span class="n">tasks</span><span class="o">.</span><span class=
+"n">map</span> <span class="p">{</span> <span class="o">|</span><span class=
+"n">task</span><span class="o">|</span> <span class="n">task</span><span class=
+"o">[</span><span class="err">“</span><span class="nb">id</span><span class=
+"err">”</span><span class="o">]</span> <span class="p">}</span>
+</span></span></code></pre>
+          </div>
+          <p>
+            There are other examples too where using methods is much preferred from a stylistic
+            point of view. My apis change a lot at first, so dynamically providing the
+            <code>Hash#keys</code> as methods allows me to move quicker. It’s possible that
+            eventually I would define a <code>Struct</code> for each version of each api later,
+            which is an easy refactor since the tests all still pass because nothing really
+            changes.
+          </p>
+          <p>
+            If we shouldn’t use <code>Hashie</code> and <code>OpenStruct</code> is slow, what do we
+            do?
+          </p>
+          <h2 id="i-made-my-own-mash">
+            I made my own Mash
+          </h2>
+          <p>
+            Yeah, I know, NIH and all that. But, as I typed above, evaluate tools on what they are
+            being or will be used for. For my api producing/consuming applications I need hash
+            wrappers that are fast and use very little memory. These wrapped objects are not long
+            lived.
+          </p>
+          <p>
+            My library is called <a href=
+            "https://github.com/myobie/mashed"><code>Mashed</code></a>. It does three things:
+            provides indifferent access in a predictable way, provides a hash wrapper that has a
+            very small method footprint, and represents the internal hash’s keys as methods.
+          </p>
+          <h3 id="indifferent-access">
+            Indifferent access
+          </h3>
+          <p>
+            Symbols in ruby are kinda annoying. Until 2.2 (due out very soon I guess) they are not
+            garbage collected, so technically you could allow anyone to DDOS your app by making
+            every JSON object into a symbolized hash. (I’ve considered just going down this road
+            and making sure I monitor my app correctly, but I’ve never actually done it.) Luckily
+            this will go away when they are garbage collected and I will even change my
+            implementation when that happens.
+          </p>
+          <p>
+            But for now, I created the <a href=
+            "https://github.com/myobie/mashed#stringyhash"><code>StringyHash</code></a>. It
+            <strong>does not</strong> inherit from <code>Hash</code>, but instead wraps and
+            delegates to a hash instance. The <a href=
+            "https://github.com/myobie/mashed/blob/master/lib/mashed/stringy_hash.rb">method
+            footprint</a> is small and it doesn’t extend any built-in ruby classes at all.
+          </p>
+          <p>
+            The example from the README should explain it all:
+          </p>
+          <div class="highlight">
+            <pre class="chroma" tabindex="0"><code class="language-ruby" data-lang=
+            "ruby"><span class="line"><span class="cl"><span class=
+            "no">StringyHash</span> <span class="o">=</span> <span class=
+            "no">Mash</span><span class="o">::</span><span class="no">StringyHash</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">sh</span> <span class="o">=</span> <span class="no">StringyHash</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="ss">title</span><span class="p">:</span> <span class="s2">&#34;Hello&#34;</span><span class="p">,</span> <span class="ss">starred</span><span class="p">:</span> <span class="kp">false</span><span class="p">,</span> <span class="ss">completed_at</span><span class="p">:</span> <span class="kp">nil</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="n">sh</span><span class="o">.</span><span class="n">keys</span> <span class="c1"># =&gt; [&#34;title&#34;, &#34;starred&#34;, &#34;completed_at&#34;]</span>
-</span></span><span class="line"><span class="cl"><span class="n">sh</span><span class="o">[</span><span class="ss">:title</span><span class="o">]</span> <span class="c1"># =&gt; &#34;Hello&#34;</span>
-</span></span><span class="line"><span class="cl"><span class="n">sh</span><span class="o">[</span><span class="s2">&#34;title&#34;</span><span class="o">]</span> <span class="c1"># =&gt; &#34;Hello&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="n">sh</span> <span class=
+"o">=</span> <span class="no">StringyHash</span><span class="o">.</span><span class=
+"n">new</span><span class="p">(</span><span class="ss">title</span><span class=
+"p">:</span> <span class="s2">"Hello"</span><span class="p">,</span> <span class=
+"ss">starred</span><span class="p">:</span> <span class="kp">false</span><span class=
+"p">,</span> <span class="ss">completed_at</span><span class="p">:</span> <span class=
+"kp">nil</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">sh</span><span class=
+"o">.</span><span class="n">keys</span> <span class=
+"c1"># =&gt; ["title", "starred", "completed_at"]</span>
+</span></span><span class="line"><span class="cl"><span class="n">sh</span><span class=
+"o">[</span><span class="ss">:title</span><span class="o">]</span> <span class=
+"c1"># =&gt; "Hello"</span>
+</span></span><span class="line"><span class="cl"><span class="n">sh</span><span class=
+"o">[</span><span class="s2">"title"</span><span class="o">]</span> <span class=
+"c1"># =&gt; "Hello"</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Title</span>
-</span></span><span class="line"><span class="cl">  <span class="k">def</span> <span class="nf">to_s</span>
-</span></span><span class="line"><span class="cl">    <span class="s2">&#34;title&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class=
+"nc">Title</span>
+</span></span><span class="line"><span class="cl">  <span class="k">def</span> <span class=
+"nf">to_s</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">"title"</span>
 </span></span><span class="line"><span class="cl">  <span class="k">end</span>
 </span></span><span class="line"><span class="cl"><span class="k">end</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">sh</span><span class="o">[</span><span class="no">Title</span><span class="o">.</span><span class="n">new</span><span class="o">]</span> <span class="c1"># =&gt; &#34;Hello&#34;</span>
-</span></span></code></pre></div><p>The goal is to be a very sensible delegator to the internal hash instance. I’ve had zero issues so far with this in many production systems. For 2.2 I will make a <code>SymbolizedHash</code> class I guess.</p>
-<h3 id="wrapper-with-very-small-method-footprint">Wrapper with very small method footprint</h3>
-<p>In ruby, every object has a lot of built-in methods.</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-ruby" data-lang="ruby"><span class="line"><span class="cl"><span class="no">Object</span><span class="o">.</span><span class="n">new</span><span class="o">.</span><span class="n">methods</span><span class="o">.</span><span class="n">count</span> <span class="c1"># =&gt; 55</span>
-</span></span></code></pre></div><p>Every ruby object has at least 55 methods. If the goal is to provide almost any key that might be set in a <code>Hash</code> as a method, that is 55 keys that are impossible to get to. Luckily, ruby allows one to start from a smaller point with <code>BasicObject</code>.</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-ruby" data-lang="ruby"><span class="line"><span class="cl"><span class="no">BasicObject</span><span class="o">.</span><span class="n">new</span><span class="o">.</span><span class="n">methods</span><span class="o">.</span><span class="n">count</span> <span class="c1"># =&gt;</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># NoMethodError: undefined method `methods&#39; for #&lt;BasicObject:0x007fd454b8fdc8&gt;</span>
-</span></span></code></pre></div><p>That’s right, it doesn’t even know what it’s list of methods are. My <a href="https://github.com/myobie/mashed/blob/master/lib/mashed/mash.rb"><code>Mash</code></a> inherits from <code>BasicObject</code> and provides a very small amount of built-in methods.</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">$ gem install mashed
+</span></span><span class="line"><span class="cl"><span class="n">sh</span><span class=
+"o">[</span><span class="no">Title</span><span class="o">.</span><span class=
+"n">new</span><span class="o">]</span> <span class="c1"># =&gt; "Hello"</span>
+</span></span></code></pre>
+          </div>
+          <p>
+            The goal is to be a very sensible delegator to the internal hash instance. I’ve had
+            zero issues so far with this in many production systems. For 2.2 I will make a
+            <code>SymbolizedHash</code> class I guess.
+          </p>
+          <h3 id="wrapper-with-very-small-method-footprint">
+            Wrapper with very small method footprint
+          </h3>
+          <p>
+            In ruby, every object has a lot of built-in methods.
+          </p>
+          <div class="highlight">
+            <pre class="chroma" tabindex="0"><code class="language-ruby" data-lang=
+            "ruby"><span class="line"><span class="cl"><span class="no">Object</span><span class=
+            "o">.</span><span class="n">new</span><span class="o">.</span><span class=
+            "n">methods</span><span class="o">.</span><span class="n">count</span> <span class=
+            "c1"># =&gt; 55</span>
+</span></span></code></pre>
+          </div>
+          <p>
+            Every ruby object has at least 55 methods. If the goal is to provide almost any key
+            that might be set in a <code>Hash</code> as a method, that is 55 keys that are
+            impossible to get to. Luckily, ruby allows one to start from a smaller point with
+            <code>BasicObject</code>.
+          </p>
+          <div class="highlight">
+            <pre class="chroma" tabindex="0"><code class="language-ruby" data-lang=
+            "ruby"><span class="line"><span class="cl"><span class=
+            "no">BasicObject</span><span class="o">.</span><span class="n">new</span><span class=
+            "o">.</span><span class="n">methods</span><span class="o">.</span><span class=
+            "n">count</span> <span class="c1"># =&gt;</span>
+</span></span><span class="line"><span class="cl"><span class=
+"c1"># NoMethodError: undefined method `methods' for #&lt;BasicObject:0x007fd454b8fdc8&gt;</span>
+</span></span></code></pre>
+          </div>
+          <p>
+            That’s right, it doesn’t even know what it’s list of methods are. My <a href=
+            "https://github.com/myobie/mashed/blob/master/lib/mashed/mash.rb"><code>Mash</code></a>
+            inherits from <code>BasicObject</code> and provides a very small amount of built-in
+            methods.
+          </p>
+          <div class="highlight">
+            <pre class="chroma" tabindex="0"><code class="language-sh" data-lang="sh"><span class=
+            "line"><span class="cl">$ gem install mashed
 </span></span><span class="line"><span class="cl">$ irb -rmashed
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-ruby" data-lang="ruby"><span class="line"><span class="cl"><span class="no">Mashed</span><span class="o">::</span><span class="no">Mash</span><span class="o">.</span><span class="n">new</span><span class="p">({})</span><span class="o">.</span><span class="n">methods</span><span class="o">.</span><span class="n">count</span> <span class="c1"># =&gt; 26</span>
-</span></span></code></pre></div><p>I’m always trying to get that number lower as well. Please, if you ever have ideas for how to do that then make a <a href="https://github.com/myobie/mashed/pulls">PR</a> or <a href="https://github.com/myobie/mashed/issues">Issue</a>.</p>
-<h3 id="delegate-methods-to-keyvalue-lookups">Delegate methods to key/value lookups</h3>
-<p>Now, how does <code>Mash</code> fare in the <code>#zip</code> example:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">$ gem install mashed
+</span></span></code></pre>
+          </div>
+          <div class="highlight">
+            <pre class="chroma" tabindex="0"><code class="language-ruby" data-lang=
+            "ruby"><span class="line"><span class="cl"><span class="no">Mashed</span><span class=
+            "o">::</span><span class="no">Mash</span><span class="o">.</span><span class=
+            "n">new</span><span class="p">({})</span><span class="o">.</span><span class=
+            "n">methods</span><span class="o">.</span><span class="n">count</span> <span class=
+            "c1"># =&gt; 26</span>
+</span></span></code></pre>
+          </div>
+          <p>
+            I’m always trying to get that number lower as well. Please, if you ever have ideas for
+            how to do that then make a <a href="https://github.com/myobie/mashed/pulls">PR</a> or
+            <a href="https://github.com/myobie/mashed/issues">Issue</a>.
+          </p>
+          <h3 id="delegate-methods-to-keyvalue-lookups">
+            Delegate methods to key/value lookups
+          </h3>
+          <p>
+            Now, how does <code>Mash</code> fare in the <code>#zip</code> example:
+          </p>
+          <div class="highlight">
+            <pre class="chroma" tabindex="0"><code class="language-sh" data-lang="sh"><span class=
+            "line"><span class="cl">$ gem install mashed
 </span></span><span class="line"><span class="cl">$ irb -rmashed
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-ruby" data-lang="ruby"><span class="line"><span class="cl"><span class="n">address</span> <span class="o">=</span> <span class="no">Mashed</span><span class="o">::</span><span class="no">Mash</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="ss">street</span><span class="p">:</span> <span class="s2">&#34;100 Street St&#34;</span><span class="p">,</span> <span class="ss">city</span><span class="p">:</span> <span class="s2">&#34;city&#34;</span><span class="p">,</span> <span class="ss">zip</span><span class="p">:</span> <span class="mi">10119</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="n">address</span><span class="o">.</span><span class="n">zip</span> <span class="c1"># =&gt; 10119</span>
-</span></span></code></pre></div><p>It works in an unsurprising manner. The “secret” to <code>Mash</code> being a good citizen is for it not to be hash-like at all.</p>
-<p>Examples:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-ruby" data-lang="ruby"><span class="line"><span class="cl"><span class="n">address</span><span class="o">[</span><span class="s2">&#34;zip&#34;</span><span class="o">]</span> <span class="c1"># =&gt;</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># NoMethodError: private method `[]&#39; called for #&lt;Mashed::Mash:0x007fb501049cd8&gt;</span>
+</span></span></code></pre>
+          </div>
+          <div class="highlight">
+            <pre class="chroma" tabindex="0"><code class="language-ruby" data-lang=
+            "ruby"><span class="line"><span class="cl"><span class="n">address</span> <span class=
+            "o">=</span> <span class="no">Mashed</span><span class="o">::</span><span class=
+            "no">Mash</span><span class="o">.</span><span class="n">new</span><span class=
+            "p">(</span><span class="ss">street</span><span class="p">:</span> <span class=
+            "s2">"100 Street St"</span><span class="p">,</span> <span class=
+            "ss">city</span><span class="p">:</span> <span class="s2">"city"</span><span class=
+            "p">,</span> <span class="ss">zip</span><span class="p">:</span> <span class=
+            "mi">10119</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">address</span><span class=
+"o">.</span><span class="n">zip</span> <span class="c1"># =&gt; 10119</span>
+</span></span></code></pre>
+          </div>
+          <p>
+            It works in an unsurprising manner. The “secret” to <code>Mash</code> being a good
+            citizen is for it not to be hash-like at all.
+          </p>
+          <p>
+            Examples:
+          </p>
+          <div class="highlight">
+            <pre class="chroma" tabindex="0"><code class="language-ruby" data-lang=
+            "ruby"><span class="line"><span class="cl"><span class="n">address</span><span class=
+            "o">[</span><span class="s2">"zip"</span><span class="o">]</span> <span class=
+            "c1"># =&gt;</span>
+</span></span><span class="line"><span class="cl"><span class=
+"c1"># NoMethodError: private method `[]' called for #&lt;Mashed::Mash:0x007fb501049cd8&gt;</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">address</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="ss">state</span><span class="p">:</span> <span class="s2">&#34;VA&#34;</span><span class="p">)</span> <span class="c1"># =&gt;</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># NoMethodError: undefined method `merge&#39; for #&lt;Mashed::Mash:0x007fb501049cd8&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="n">address</span><span class=
+"o">.</span><span class="n">merge</span><span class="p">(</span><span class=
+"ss">state</span><span class="p">:</span> <span class="s2">"VA"</span><span class=
+"p">)</span> <span class="c1"># =&gt;</span>
+</span></span><span class="line"><span class="cl"><span class=
+"c1"># NoMethodError: undefined method `merge' for #&lt;Mashed::Mash:0x007fb501049cd8&gt;</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">address</span><span class="o">.</span><span class="n">map</span> <span class="p">{</span> <span class="o">|</span><span class="n">k</span><span class="p">,</span><span class="n">v</span><span class="o">|</span> <span class="nb">puts</span> <span class="s2">&#34;</span><span class="si">#{</span><span class="n">k</span><span class="si">}</span><span class="s2">: </span><span class="si">#{</span><span class="n">v</span><span class="si">}</span><span class="s2">&#34;</span> <span class="p">}</span> <span class="c1"># =&gt;</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># NoMethodError: undefined method `map&#39; for #&lt;Mashed::Mash:0x007fb501049cd8&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="n">address</span><span class=
+"o">.</span><span class="n">map</span> <span class="p">{</span> <span class=
+"o">|</span><span class="n">k</span><span class="p">,</span><span class="n">v</span><span class=
+"o">|</span> <span class="nb">puts</span> <span class="s2">"</span><span class=
+"si">#{</span><span class="n">k</span><span class="si">}</span><span class=
+"s2">: </span><span class="si">#{</span><span class="n">v</span><span class=
+"si">}</span><span class="s2">"</span> <span class="p">}</span> <span class="c1"># =&gt;</span>
+</span></span><span class="line"><span class="cl"><span class=
+"c1"># NoMethodError: undefined method `map' for #&lt;Mashed::Mash:0x007fb501049cd8&gt;</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">address</span><span class="o">.</span><span class="n">inspect</span> <span class="c1"># =&gt; &#34;#&lt;Mashed::Mash @hash=&gt;{\&#34;street\&#34;=&gt;\&#34;100 Street St\&#34;, \&#34;city\&#34;=&gt;\&#34;city\&#34;, \&#34;zip\&#34;=&gt;10119}&gt;&#34;</span>
-</span></span></code></pre></div><p><strong>It just refused to appear to be a <code>Hash</code>.</strong></p>
-<p>There are still problems, one of which is <a href="https://github.com/myobie/mashed/issues/4">an issue right now</a>: single method calls with zero arguments return <code>nil</code> if the key is missing. This is inevitable based on the current design constraints: <code>Mash</code> acts like a Javascript <code>Object</code> where missing keys are <code>undefined</code>.</p>
-<p>I find this unsurprising since accessing a missing key on a <code>Hash</code> returns <code>nil</code>. However, I am considering making a monad or something to possibly make it easier to understand.</p>
-<h2 id="why-is-hashie-not-like-mashed">Why is <code>Hashie</code> not like <code>Mashed</code>?</h2>
-<p>Because it’s a different tool. <code>Hashie</code> is actually a great library and everyone should not only try to use it at least once, but read through it’s code. You can learn a ton by seeing how other’s have solved similar problems.</p>
-<p><code>OpenStruct</code> is awesome too. If you’re making a ruby script and you want to have no dependencies outside the standard library then use it; this happens to me when I’m working on build or deployment scripts.</p>
-<h2 id="use-what-works-for-youre-current-situation">Use what works for you’re current situation</h2>
-<p>Write tests, evaluate libraries based on their implementation and api, and don’t listen to anyone including me (:</p>
-
-      </div>
-
-      <footer>
-        
-        <p>
-          
-            Posted on
-          
-          <time datetime="2014-12-19T07:45:09Z">
-            19 Dec, 2014
-          </time>
-          
-          
-            onto
-            <a href="https://myobie.svbtle.com/why-make-a-mash">Svbtle</a>
-          
-          
-        </p>
-      </footer>
-    </article>
-  </main>
-
-    
-    
-    <script async src="/behavior.js"></script>
-      <script defer data-domain="nathanherald.com" src="https://stats.myobie.wtf/script.js"></script>
+</span></span><span class="line"><span class="cl"><span class="n">address</span><span class=
+"o">.</span><span class="n">inspect</span> <span class=
+"c1"># =&gt; "#&lt;Mashed::Mash @hash=&gt;{\"street\"=&gt;\"100 Street St\", \"city\"=&gt;\"city\", \"zip\"=&gt;10119}&gt;"</span>
+</span></span></code></pre>
+          </div>
+          <p>
+            <strong>It just refused to appear to be a <code>Hash</code>.</strong>
+          </p>
+          <p>
+            There are still problems, one of which is <a href=
+            "https://github.com/myobie/mashed/issues/4">an issue right now</a>: single method calls
+            with zero arguments return <code>nil</code> if the key is missing. This is inevitable
+            based on the current design constraints: <code>Mash</code> acts like a Javascript
+            <code>Object</code> where missing keys are <code>undefined</code>.
+          </p>
+          <p>
+            I find this unsurprising since accessing a missing key on a <code>Hash</code> returns
+            <code>nil</code>. However, I am considering making a monad or something to possibly
+            make it easier to understand.
+          </p>
+          <h2 id="why-is-hashie-not-like-mashed">
+            Why is <code>Hashie</code> not like <code>Mashed</code>?
+          </h2>
+          <p>
+            Because it’s a different tool. <code>Hashie</code> is actually a great library and
+            everyone should not only try to use it at least once, but read through it’s code. You
+            can learn a ton by seeing how other’s have solved similar problems.
+          </p>
+          <p>
+            <code>OpenStruct</code> is awesome too. If you’re making a ruby script and you want to
+            have no dependencies outside the standard library then use it; this happens to me when
+            I’m working on build or deployment scripts.
+          </p>
+          <h2 id="use-what-works-for-youre-current-situation">
+            Use what works for you’re current situation
+          </h2>
+          <p>
+            Write tests, evaluate libraries based on their implementation and api, and don’t listen
+            to anyone including me (:
+          </p>
+        </div>
+        <footer>
+          <p>
+            Posted on <time datetime="2014-12-19T07:45:09Z">19 Dec, 2014</time> onto <a href=
+            "https://myobie.svbtle.com/why-make-a-mash">Svbtle</a>
+          </p>
+        </footer>
+      </article>
+    </main>
+    <script async src="/behavior.js"></script> 
+    <script data-domain="nathanherald.com" defer src="https://stats.myobie.wtf/script.js"></script>
   </body>
 </html>

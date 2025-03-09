@@ -1,365 +1,842 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
   <head lang="en-us">
+    <meta content="HTML Tidy for HTML5 for Apple macOS version 5.8.0" name="generator">
     <meta charset="UTF-8">
-    <title>I‘m Nathan Herald → How to manage reactive state using Custom Elements (Web Components)</title>
+    <title>
+      I‘m Nathan Herald → How to manage reactive state using Custom Elements (Web Components)
+    </title>
     <script>
       if ((new URL(window.location.href)).host === 'myobie.com') { window.location.assign('https://nathanherald.com') }
     </script>
-    <link rel="canonical" href="https://nathanherald.com/posts/reactive-state-in-custom-elements/">
-    <link rel="stylesheet" type="text/css" href="https://cloud.typography.com/6836312/761366/css/fonts.css"><link rel="stylesheet" type="text/css" href="/styles.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="generator" content="Hugo 0.136.5">
-    <meta name="title" content="I‘m Nathan Herald  → How to manage reactive state using Custom Elements (Web Components)">
-    <meta name="description" content="">
-    <meta property="og:title" content="How to manage reactive state using Custom Elements (Web Components)">
-    <meta property="og:type" content="website">
-    <meta property="og:description" content="">
-    <meta property="og:url" content="https://nathanherald.com/posts/reactive-state-in-custom-elements/">
-    <meta property="og:image" content="/og.png">
-    <meta property="og:site_name" content="I‘m Nathan Herald">
-    
-  
-
-<link rel="alternate" type="application/rss+xml" href="/rss.xml" title="Feed of all the posts on nathanherald.com">
-
-
+    <link href="https://nathanherald.com/posts/reactive-state-in-custom-elements/" rel="canonical">
+    <link href="https://cloud.typography.com/6836312/761366/css/fonts.css" rel="stylesheet" type=
+    "text/css">
+    <link href="/styles.css" rel="stylesheet" type="text/css">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="Hugo 0.136.5" name="generator">
+    <meta content=
+    "I‘m Nathan Herald → How to manage reactive state using Custom Elements (Web Components)" name=
+    "title">
+    <meta content="" name="description">
+    <meta content="How to manage reactive state using Custom Elements (Web Components)" property=
+    "og:title">
+    <meta content="website" property="og:type">
+    <meta content="" property="og:description">
+    <meta content="https://nathanherald.com/posts/reactive-state-in-custom-elements/" property=
+    "og:url">
+    <meta content="/og.png" property="og:image">
+    <meta content="I‘m Nathan Herald" property="og:site_name">
+    <link href="/rss.xml" rel="alternate" title="Feed of all the posts on nathanherald.com" type=
+    "application/rss+xml">
   </head>
   <body class="default">
-    
-  <header class="section-header">
-    <div class="section-nav">
-      <h1 class="home-link">
-        <a data-nospan href="/" class="never-underline"><abbr title="Hello">👋</abbr></a>
-        <a href="/">I&rsquo;m Nathan</a>
-      </h1>
-      <nav>
-        <p>
-          Find more in the <a href="https://nathanherald.com/posts/">archive of all the posts on this site</a>
-or <a href="https://nathanherald.com/posts/rss.xml">subscribe with RSS</a>.
-
-        </p>
-      </nav>
-    </div>
-  </header>
-
-    
-  <main class="single">
-    <article>
-      <header>
-        <h1>
-          
-          
-            How to manage reactive state using Custom Elements (Web Components)
-            <p class="annotation">⭐️ a blog post</a>
-          
+    <header class="section-header">
+      <div class="section-nav">
+        <h1 class="home-link">
+          <a class="never-underline" data-nospan="" href="/"><abbr title="Hello">👋</abbr></a>
+          <a href="/">I’m Nathan</a>
         </h1>
-        
-      </header>
-
-      <div class="content">
-        <blockquote>
-<p>TL;DR: signals work well in custom elements and grabbing state from a parent through event dispatch is great. <a href="https://codepen.io/myobie/pen/JjgbxyN">Checkout this codepen.</a> 💪</p>
-</blockquote>
-<hr>
-<p>To make things truly <em>reactive</em> in our custom elements (web components) we need some reactive state primitive. In frameworks, we usually use a hook or some other kind of “handle” to some state <em>somewhere out there</em> in a place we can’t really see.</p>
-<p>This is how I would do this in preact:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-jsx" data-lang="jsx"><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">App</span> <span class="o">=</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">  <span class="kr">const</span> <span class="p">[</span><span class="nx">count</span><span class="p">,</span> <span class="nx">updateCount</span><span class="p">]</span> <span class="o">=</span> <span class="nx">useState</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">  <span class="kr">const</span> <span class="nx">increment</span> <span class="o">=</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="nx">updateCount</span><span class="p">(</span><span class="nx">c</span> <span class="p">=&gt;</span> <span class="nx">c</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <nav>
+          <p>
+            Find more in the <a href="https://nathanherald.com/posts/">archive of all the posts on
+            this site</a> or <a href="https://nathanherald.com/posts/rss.xml">subscribe with
+            RSS</a>.
+          </p>
+        </nav>
+      </div>
+    </header>
+    <main class="single">
+      <article>
+        <header>
+          <h1>
+            How to manage reactive state using Custom Elements (Web Components)
+          </h1>
+          <p class="annotation">
+            ⭐️ a blog post
+          </p>
+        </header>
+        <div class="content">
+          <blockquote>
+            <p>
+              TL;DR: signals work well in custom elements and grabbing state from a parent through
+              event dispatch is great. <a href="https://codepen.io/myobie/pen/JjgbxyN">Checkout
+              this codepen.</a> 💪
+            </p>
+          </blockquote>
+          <hr>
+          <p>
+            To make things truly <em>reactive</em> in our custom elements (web components) we need
+            some reactive state primitive. In frameworks, we usually use a hook or some other kind
+            of “handle” to some state <em>somewhere out there</em> in a place we can’t really see.
+          </p>
+          <p>
+            This is how I would do this in preact:
+          </p>
+          <div class="highlight">
+            <pre class="chroma" tabindex="0"><code class="language-jsx" data-lang="jsx"><span class=
+            "line"><span class="cl"><span class="kr">const</span> <span class=
+            "nx">App</span> <span class="o">=</span> <span class="p">()</span> <span class=
+            "p">=&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kr">const</span> <span class=
+"p">[</span><span class="nx">count</span><span class="p">,</span> <span class=
+"nx">updateCount</span><span class="p">]</span> <span class="o">=</span> <span class=
+"nx">useState</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="kr">const</span> <span class=
+"nx">increment</span> <span class="o">=</span> <span class="p">()</span> <span class=
+"p">=&gt;</span> <span class="nx">updateCount</span><span class="p">(</span><span class=
+"nx">c</span> <span class="p">=&gt;</span> <span class="nx">c</span> <span class=
+"o">+</span> <span class="mi">1</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">  
-</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="p">(</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class=
+"p">(</span>
 </span></span><span class="line"><span class="cl">    <span class="p">&lt;&gt;</span>
-</span></span><span class="line"><span class="cl">      <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>
-</span></span><span class="line"><span class="cl">        <span class="nx">You</span><span class="err">’</span><span class="nx">ve</span> <span class="nx">clicked</span> <span class="nx">the</span> <span class="nx">button</span>
-</span></span><span class="line"><span class="cl">        <span class="p">{</span><span class="nx">count</span><span class="p">}</span> <span class="nx">time</span><span class="p">{</span><span class="nx">count</span> <span class="o">===</span> <span class="mi">1</span> <span class="o">?</span> <span class="s1">&#39;&#39;</span> <span class="o">:</span> <span class="s1">&#39;s&#39;</span><span class="p">}</span>
-</span></span><span class="line"><span class="cl">      <span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
-</span></span><span class="line"><span class="cl">      <span class="p">&lt;</span><span class="nt">button</span> <span class="na">onClick</span><span class="o">=</span><span class="p">{</span><span class="nx">increment</span><span class="p">}&gt;</span><span class="nx">Increment</span><span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="p">&lt;</span><span class=
+"nt">p</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">You</span><span class=
+"err">’</span><span class="nx">ve</span> <span class="nx">clicked</span> <span class=
+"nx">the</span> <span class="nx">button</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span><span class=
+"nx">count</span><span class="p">}</span> <span class="nx">time</span><span class=
+"p">{</span><span class="nx">count</span> <span class="o">===</span> <span class=
+"mi">1</span> <span class="o">?</span> <span class="s1">''</span> <span class=
+"o">:</span> <span class="s1">'s'</span><span class="p">}</span>
+</span></span><span class="line"><span class="cl">      <span class="p">&lt;/</span><span class=
+"nt">p</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="p">&lt;</span><span class=
+"nt">button</span> <span class="na">onClick</span><span class="o">=</span><span class=
+"p">{</span><span class="nx">increment</span><span class="p">}&gt;</span><span class=
+"nx">Increment</span><span class="p">&lt;/</span><span class="nt">button</span><span class=
+"p">&gt;</span>
 </span></span><span class="line"><span class="cl">    <span class="p">&lt;/&gt;</span>
 </span></span><span class="line"><span class="cl">  <span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></div><p>Where is <code>count</code> really? We don’t know. It’s <em>in preact.</em> Which is fine most of the time.</p>
-<p>But still, isn’t that kinda weird. This “function component” <code>App</code> doesn’t take any arguments. And yet, as I call the function over and over, it returns different results depending on some state somewhere not in the function…</p>
-<p>Also, we can’t actually call <code>App()</code> ourselves, it will throw… so it’s a function, but not a function for us to use. It’s a function for preact.</p>
-<p>This puts a lot of pressure on the UI framework – it now must contain the definition of the views, probably some styling, the state, the behavior, <strong>all of it.</strong></p>
-<p>Writing a unit test for the “counting feature” is also not that easy, we need to setup a render loop, etc. We don’t know where that state is, so we gotta let the framework help us.</p>
-<p>It’d be better if our state <em>itself</em> was reactive and our UI just showed that reactive state…</p>
-<h3 id="signals">Signals</h3>
-<p>Every framework is re-discovering signals these days, and that’s a great thing. <em>(Checkout the old <a href="https://github.com/adamhaile/S">S</a> library, which is still there after all these years and still works fine… signals have been great for a while.)</em></p>
-<p>Signals can make your state reactive, let you model your app purely as data, and you can unit test your app’s state without having to write any JSX or do any rendering or any of that.</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="kr">export</span> <span class="kr">const</span> <span class="nx">count</span> <span class="o">=</span> <span class="nx">signal</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+</span></span></code></pre>
+          </div>
+          <p>
+            Where is <code>count</code> really? We don’t know. It’s <em>in preact.</em> Which is
+            fine most of the time.
+          </p>
+          <p>
+            But still, isn’t that kinda weird. This “function component” <code>App</code> doesn’t
+            take any arguments. And yet, as I call the function over and over, it returns different
+            results depending on some state somewhere not in the function…
+          </p>
+          <p>
+            Also, we can’t actually call <code>App()</code> ourselves, it will throw… so it’s a
+            function, but not a function for us to use. It’s a function for preact.
+          </p>
+          <p>
+            This puts a lot of pressure on the UI framework – it now must contain the definition of
+            the views, probably some styling, the state, the behavior, <strong>all of it.</strong>
+          </p>
+          <p>
+            Writing a unit test for the “counting feature” is also not that easy, we need to setup
+            a render loop, etc. We don’t know where that state is, so we gotta let the framework
+            help us.
+          </p>
+          <p>
+            It’d be better if our state <em>itself</em> was reactive and our UI just showed that
+            reactive state…
+          </p>
+          <h3 id="signals">
+            Signals
+          </h3>
+          <p>
+            Every framework is re-discovering signals these days, and that’s a great thing.
+            <em>(Checkout the old <a href="https://github.com/adamhaile/S">S</a> library, which is
+            still there after all these years and still works fine… signals have been great for a
+            while.)</em>
+          </p>
+          <p>
+            Signals can make your state reactive, let you model your app purely as data, and you
+            can unit test your app’s state without having to write any JSX or do any rendering or
+            any of that.
+          </p>
+          <div class="highlight">
+            <pre class="chroma" tabindex="0"><code class="language-js" data-lang="js"><span class=
+            "line"><span class="cl"><span class="kr">export</span> <span class=
+            "kr">const</span> <span class="nx">count</span> <span class="o">=</span> <span class=
+            "nx">signal</span><span class="p">(</span><span class="mi">0</span><span class=
+            "p">)</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="kr">export</span> <span class="kd">function</span> <span class="nx">increment</span><span class="p">()</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">  <span class="nx">count</span><span class="p">.</span><span class="nx">value</span> <span class="o">+=</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl"><span class="kr">export</span> <span class=
+"kd">function</span> <span class="nx">increment</span><span class="p">()</span> <span class=
+"p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">count</span><span class=
+"p">.</span><span class="nx">value</span> <span class="o">+=</span> <span class="mi">1</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></div><p>And then our app can just focus on the DOM we wish we had:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-jsx" data-lang="jsx"><span class="line"><span class="cl"><span class="kr">import</span> <span class="p">{</span> <span class="nx">count</span><span class="p">,</span> <span class="nx">increment</span> <span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;./count.js&#39;</span>
+</span></span></code></pre>
+          </div>
+          <p>
+            And then our app can just focus on the DOM we wish we had:
+          </p>
+          <div class="highlight">
+            <pre class="chroma" tabindex="0"><code class="language-jsx" data-lang="jsx"><span class=
+            "line"><span class="cl"><span class="kr">import</span> <span class=
+            "p">{</span> <span class="nx">count</span><span class="p">,</span> <span class=
+            "nx">increment</span> <span class="p">}</span> <span class="nx">from</span> <span class=
+            "s1">'./count.js'</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">App</span> <span class="o">=</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>  
-</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="p">(</span>
+</span></span><span class="line"><span class="cl"><span class="kr">const</span> <span class=
+"nx">App</span> <span class="o">=</span> <span class="p">()</span> <span class=
+"p">=&gt;</span> <span class="p">{</span>  
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class=
+"p">(</span>
 </span></span><span class="line"><span class="cl">    <span class="p">&lt;&gt;</span>
-</span></span><span class="line"><span class="cl">      <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>
-</span></span><span class="line"><span class="cl">        <span class="nx">You</span><span class="err">’</span><span class="nx">ve</span> <span class="nx">clicked</span> <span class="nx">the</span> <span class="nx">button</span>
-</span></span><span class="line"><span class="cl">        <span class="p">{</span><span class="nx">count</span><span class="p">.</span><span class="nx">value</span><span class="p">}</span> <span class="nx">time</span><span class="p">{</span><span class="nx">count</span><span class="p">.</span><span class="nx">value</span> <span class="o">===</span> <span class="mi">1</span> <span class="o">?</span> <span class="s1">&#39;&#39;</span> <span class="o">:</span> <span class="s1">&#39;s&#39;</span><span class="p">}</span>
-</span></span><span class="line"><span class="cl">      <span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
-</span></span><span class="line"><span class="cl">      <span class="p">&lt;</span><span class="nt">button</span> <span class="na">onClick</span><span class="o">=</span><span class="p">{</span><span class="nx">increment</span><span class="p">}&gt;</span><span class="nx">Increment</span><span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="p">&lt;</span><span class=
+"nt">p</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">You</span><span class=
+"err">’</span><span class="nx">ve</span> <span class="nx">clicked</span> <span class=
+"nx">the</span> <span class="nx">button</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span><span class=
+"nx">count</span><span class="p">.</span><span class="nx">value</span><span class=
+"p">}</span> <span class="nx">time</span><span class="p">{</span><span class=
+"nx">count</span><span class="p">.</span><span class="nx">value</span> <span class=
+"o">===</span> <span class="mi">1</span> <span class="o">?</span> <span class=
+"s1">''</span> <span class="o">:</span> <span class="s1">'s'</span><span class="p">}</span>
+</span></span><span class="line"><span class="cl">      <span class="p">&lt;/</span><span class=
+"nt">p</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="p">&lt;</span><span class=
+"nt">button</span> <span class="na">onClick</span><span class="o">=</span><span class=
+"p">{</span><span class="nx">increment</span><span class="p">}&gt;</span><span class=
+"nx">Increment</span><span class="p">&lt;/</span><span class="nt">button</span><span class=
+"p">&gt;</span>
 </span></span><span class="line"><span class="cl">    <span class="p">&lt;/&gt;</span>
 </span></span><span class="line"><span class="cl">  <span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></div><p>And if somewhere else needed to either display or increment the count, they could import the functionality the same way. Anytime the count changes, any UI component using its value will re-render.</p>
-<p>This takes a lot of pressure off the UI: it can focus only on the actual UI stuff.</p>
-<p>You can imagine writing some tests like:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="nx">it</span><span class="p">(</span><span class="s1">&#39;counts&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">  <span class="nx">assertEquals</span><span class="p">(</span><span class="nx">count</span><span class="p">.</span><span class="nx">value</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">  <span class="nx">increment</span><span class="p">()</span>
-</span></span><span class="line"><span class="cl">  <span class="nx">assertEquals</span><span class="p">(</span><span class="nx">count</span><span class="p">.</span><span class="nx">value</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</span></span></code></pre>
+          </div>
+          <p>
+            And if somewhere else needed to either display or increment the count, they could
+            import the functionality the same way. Anytime the count changes, any UI component
+            using its value will re-render.
+          </p>
+          <p>
+            This takes a lot of pressure off the UI: it can focus only on the actual UI stuff.
+          </p>
+          <p>
+            You can imagine writing some tests like:
+          </p>
+          <div class="highlight">
+            <pre class="chroma" tabindex="0"><code class="language-js" data-lang="js"><span class=
+            "line"><span class="cl"><span class="nx">it</span><span class="p">(</span><span class=
+            "s1">'counts'</span><span class="p">,</span> <span class="p">()</span> <span class=
+            "p">=&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class=
+"nx">assertEquals</span><span class="p">(</span><span class="nx">count</span><span class=
+"p">.</span><span class="nx">value</span><span class="p">,</span> <span class=
+"mi">0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">increment</span><span class=
+"p">()</span>
+</span></span><span class="line"><span class="cl">  <span class=
+"nx">assertEquals</span><span class="p">(</span><span class="nx">count</span><span class=
+"p">.</span><span class="nx">value</span><span class="p">,</span> <span class=
+"mi">1</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="p">})</span>
-</span></span></code></pre></div><h3 id="signals-work-great-in-custom-elements-too">Signals work great in custom elements too</h3>
-<p>We can wire that same state straight up to where it’s used in our custom element:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="kr">import</span> <span class="p">{</span> <span class="nx">count</span><span class="p">,</span> <span class="nx">increment</span> <span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;./count.js&#39;</span>
+</span></span></code></pre>
+          </div>
+          <h3 id="signals-work-great-in-custom-elements-too">
+            Signals work great in custom elements too
+          </h3>
+          <p>
+            We can wire that same state straight up to where it’s used in our custom element:
+          </p>
+          <div class="highlight">
+            <pre class="chroma" tabindex="0"><code class="language-js" data-lang="js"><span class=
+            "line"><span class="cl"><span class="kr">import</span> <span class=
+            "p">{</span> <span class="nx">count</span><span class="p">,</span> <span class=
+            "nx">increment</span> <span class="p">}</span> <span class="nx">from</span> <span class=
+            "s1">'./count.js'</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">times</span> <span class="o">=</span> <span class="nx">computed</span><span class="p">(()</span> <span class="p">=&gt;</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="nx">count</span><span class="p">.</span><span class="nx">value</span> <span class="o">===</span> <span class="mi">1</span> <span class="o">?</span> <span class="s1">&#39;time&#39;</span> <span class="o">:</span> <span class="s1">&#39;times&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="kr">const</span> <span class=
+"nx">times</span> <span class="o">=</span> <span class="nx">computed</span><span class=
+"p">(()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class=
+"nx">count</span><span class="p">.</span><span class="nx">value</span> <span class=
+"o">===</span> <span class="mi">1</span> <span class="o">?</span> <span class=
+"s1">'time'</span> <span class="o">:</span> <span class="s1">'times'</span>
 </span></span><span class="line"><span class="cl"><span class="p">})</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="kr">class</span> <span class="nx">CounterApp</span> <span class="kr">extends</span> <span class="nx">HTMLElement</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">  <span class="kr">static</span> <span class="nx">define</span><span class="p">(</span><span class="nx">name</span> <span class="o">=</span> <span class="s1">&#39;counter-app&#39;</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="nx">customElements</span><span class="p">.</span><span class="nx">define</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="k">this</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="kr">class</span> <span class=
+"nx">CounterApp</span> <span class="kr">extends</span> <span class=
+"nx">HTMLElement</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kr">static</span> <span class=
+"nx">define</span><span class="p">(</span><span class="nx">name</span> <span class=
+"o">=</span> <span class="s1">'counter-app'</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class=
+"nx">customElements</span><span class="p">.</span><span class="nx">define</span><span class=
+"p">(</span><span class="nx">name</span><span class="p">,</span> <span class=
+"k">this</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">  <span class="p">}</span>
 </span></span><span class="line"><span class="cl">  
-</span></span><span class="line"><span class="cl">  <span class="nx">constructor</span><span class="p">()</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="kr">super</span><span class="p">()</span>
-</span></span><span class="line"><span class="cl">    <span class="k">this</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">display</span> <span class="o">=</span> <span class="s1">&#39;contents&#39;</span>
-</span></span><span class="line"><span class="cl">    <span class="k">this</span><span class="p">.</span><span class="nx">disposes</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Set</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">constructor</span><span class=
+"p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kr">super</span><span class=
+"p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="k">this</span><span class=
+"p">.</span><span class="nx">style</span><span class="p">.</span><span class=
+"nx">display</span> <span class="o">=</span> <span class="s1">'contents'</span>
+</span></span><span class="line"><span class="cl">    <span class="k">this</span><span class=
+"p">.</span><span class="nx">disposes</span> <span class="o">=</span> <span class=
+"k">new</span> <span class="nx">Set</span><span class="p">()</span>
 </span></span><span class="line"><span class="cl">  <span class="p">}</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">  <span class="nx">handleEvent</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">type</span> <span class="o">===</span> <span class="s1">&#39;click&#39;</span> <span class="o">&amp;&amp;</span> <span class="nx">e</span><span class="p">.</span><span class="nx">target</span><span class="p">.</span><span class="nx">tagName</span> <span class="o">===</span> <span class="s1">&#39;BUTTON&#39;</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">      <span class="nx">increment</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">handleEvent</span><span class=
+"p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class=
+"p">(</span><span class="nx">e</span><span class="p">.</span><span class=
+"nx">type</span> <span class="o">===</span> <span class="s1">'click'</span> <span class=
+"o">&amp;&</span> <span class="nx">e</span><span class="p">.</span><span class=
+"nx">target</span><span class="p">.</span><span class="nx">tagName</span> <span class=
+"o">===</span> <span class="s1">'BUTTON'</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class=
+"nx">increment</span><span class="p">()</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
 </span></span><span class="line"><span class="cl">  <span class="p">}</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">  <span class="nx">connectedCallback</span><span class="p">()</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="k">this</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class=
+"nx">connectedCallback</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">this</span><span class=
+"p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class=
+"s1">'click'</span><span class="p">,</span> <span class="k">this</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">    
-</span></span><span class="line"><span class="cl">    <span class="kr">const</span> <span class="nx">countEl</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">&#39;[data-count]&#39;</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">    <span class="kr">const</span> <span class="nx">timesEl</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">&#39;[data-times]&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="kr">const</span> <span class=
+"nx">countEl</span> <span class="o">=</span> <span class="k">this</span><span class=
+"p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class=
+"s1">'[data-count]'</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="kr">const</span> <span class=
+"nx">timesEl</span> <span class="o">=</span> <span class="k">this</span><span class=
+"p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class=
+"s1">'[data-times]'</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">    
-</span></span><span class="line"><span class="cl">    <span class="k">this</span><span class="p">.</span><span class="nx">disposes</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="nx">count</span><span class="p">.</span><span class="nx">subscribe</span><span class="p">(</span><span class="nx">c</span> <span class="p">=&gt;</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">      <span class="nx">countEl</span><span class="p">.</span><span class="nx">innerText</span> <span class="o">=</span> <span class="nx">c</span>
+</span></span><span class="line"><span class="cl">    <span class="k">this</span><span class=
+"p">.</span><span class="nx">disposes</span><span class="p">.</span><span class=
+"nx">add</span><span class="p">(</span><span class="nx">count</span><span class=
+"p">.</span><span class="nx">subscribe</span><span class="p">(</span><span class=
+"nx">c</span> <span class="p">=&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nx">countEl</span><span class=
+"p">.</span><span class="nx">innerText</span> <span class="o">=</span> <span class="nx">c</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}))</span>
 </span></span><span class="line"><span class="cl">    
-</span></span><span class="line"><span class="cl">    <span class="k">this</span><span class="p">.</span><span class="nx">disposes</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="nx">times</span><span class="p">.</span><span class="nx">subscribe</span><span class="p">(</span><span class="nx">t</span> <span class="p">=&gt;</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">      <span class="nx">timesEl</span><span class="p">.</span><span class="nx">innerText</span> <span class="o">=</span> <span class="nx">t</span>
+</span></span><span class="line"><span class="cl">    <span class="k">this</span><span class=
+"p">.</span><span class="nx">disposes</span><span class="p">.</span><span class=
+"nx">add</span><span class="p">(</span><span class="nx">times</span><span class=
+"p">.</span><span class="nx">subscribe</span><span class="p">(</span><span class=
+"nx">t</span> <span class="p">=&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nx">timesEl</span><span class=
+"p">.</span><span class="nx">innerText</span> <span class="o">=</span> <span class="nx">t</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}))</span>
 </span></span><span class="line"><span class="cl">    
-</span></span><span class="line"><span class="cl">    <span class="kr">const</span> <span class="nx">button</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">&#39;button&#39;</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">    <span class="nx">button</span><span class="p">.</span><span class="nx">disabled</span> <span class="o">=</span> <span class="kc">false</span>
+</span></span><span class="line"><span class="cl">    <span class="kr">const</span> <span class=
+"nx">button</span> <span class="o">=</span> <span class="k">this</span><span class=
+"p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class=
+"s1">'button'</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">button</span><span class=
+"p">.</span><span class="nx">disabled</span> <span class="o">=</span> <span class="kc">false</span>
 </span></span><span class="line"><span class="cl">  <span class="p">}</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">  <span class="nx">disconnectedCallback</span><span class="p">()</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="k">this</span><span class="p">.</span><span class="nx">removeEventListener</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">    <span class="k">this</span><span class="p">.</span><span class="nx">disposes</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="nx">cb</span> <span class="p">=&gt;</span> <span class="nx">cb</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">  <span class=
+"nx">disconnectedCallback</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">this</span><span class=
+"p">.</span><span class="nx">removeEventListener</span><span class="p">(</span><span class=
+"s1">'click'</span><span class="p">,</span> <span class="k">this</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">this</span><span class=
+"p">.</span><span class="nx">disposes</span><span class="p">.</span><span class=
+"nx">forEach</span><span class="p">(</span><span class="nx">cb</span> <span class=
+"p">=&gt;</span> <span class="nx">cb</span><span class="p">())</span>
 </span></span><span class="line"><span class="cl">  <span class="p">}</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></div><p>And then:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="line"><span class="cl"><span class="c">&lt;!-- assuming CounterApp.define() has been run --&gt;</span>
-</span></span><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">counter-app</span><span class="p">&gt;</span>
-</span></span><span class="line"><span class="cl">  <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>You’ve clicked the button <span class="p">&lt;</span><span class="nt">span</span> <span class="na">data-count</span><span class="p">&gt;</span>0<span class="p">&lt;/</span><span class="nt">span</span><span class="p">&gt;</span> <span class="p">&lt;</span><span class="nt">span</span> <span class="na">data-times</span><span class="p">&gt;</span>times<span class="p">&lt;/</span><span class="nt">span</span><span class="p">&gt;&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
-</span></span><span class="line"><span class="cl">  <span class="p">&lt;</span><span class="nt">button</span> <span class="na">disabled</span><span class="p">&gt;</span>Increment<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
-</span></span><span class="line"><span class="cl"><span class="p">&lt;/</span><span class="nt">counter-app</span><span class="p">&gt;</span>
-</span></span></code></pre></div><p><em>My custom element here requires that you provide the correct HTML: a <code>p</code> and a <code>button</code>. It’s fine if a custom element has opinions/requirements about it’s children.</em></p>
-<p>Notice in the initial serialized HTML I’ve disabled the button. Then once the custom element is fully attached, I will enable it. This way we never have an enabled button that can’t work on the page. <strong>Old-school progressive enhancement.</strong> 🆒</p>
-<p>This component gets the reactive state, encapsulates and wires up the behavior, and then everything is hunky-dory.</p>
-<p>Now, of course, web apps are much larger than this… an entire app’s state <strong><em>can</em></strong> be modeled, tested, and then consumed by the UI. It is possible. Be optimistic 🤓</p>
-<p>And (I say) it’s preferable to have the state outside the UI rather than keeping the app’s state spread throughout our UI code just because <code>useState()</code> is the only reactive primitive we have there in our framework…</p>
-<p>Moving the app’s state out of the UI layer is a way we can start to bridge the gap between custom elements and framework components. It also makes the decision of “which framework?” less important, so you can feel more free to experiment.</p>
-<h3 id="give-it-some-context">Give it some context</h3>
-<p>Keeping an app’s state in globals can be problematic: it makes testing hard and it makes it impossible to have two counters on the page at once (which are related problems).</p>
-<p>Most frameworks provide a way to setup a context which can have a sort of “scoped state” that is for any children of the context.</p>
-<p>An example in preact might look like:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-jsx" data-lang="jsx"><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">CounterContext</span> <span class="na">initial</span><span class="o">=</span><span class="p">{</span><span class="mi">0</span><span class="p">}&gt;</span>
-</span></span><span class="line"><span class="cl">  <span class="p">&lt;</span><span class="nt">CounterApp</span> <span class="p">/&gt;</span>
-</span></span><span class="line"><span class="cl"><span class="p">&lt;/</span><span class="nt">CounterContext</span><span class="p">&gt;</span>
-</span></span><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">CounterContext</span> <span class="na">initial</span><span class="o">=</span><span class="p">{</span><span class="mi">0</span><span class="p">}&gt;</span>
-</span></span><span class="line"><span class="cl">  <span class="p">&lt;</span><span class="nt">CounterApp</span> <span class="p">/&gt;</span>
-</span></span><span class="line"><span class="cl"><span class="p">&lt;/</span><span class="nt">CounterContext</span><span class="p">&gt;</span>
-</span></span></code></pre></div><p>And then we’d have two completely independent counter apps on the page at the same time without having to move our reactive state back into the UI components themselves.</p>
-<p><strong>How can we communicate a sophisticated scoped state object (or set of objects) to some of the DOM when using custom elements?</strong></p>
-<p>It’s not about “passing data down,” it’s really about <strong>events bubbling up.</strong></p>
-<h4 id="events-are-dispatched-synchronously">Events are dispatched synchronously</h4>
-<p>Yep. Prepare to feel weird about this. Event dispatch is often incredibly misunderstood. <em>React implemented their own synthetic events because of how weird DOM events are…</em></p>
-<p>DOM events are like a lightening strike: an event travels down, then bubbles up. There is a capture phase, then a bubble phase. And that entire traversal is synchronous. 🤔 ⚡</p>
-<p>So we can use the <strong>events go up</strong> principle of the DOM to grab context from a parent, if there is one.</p>
-<p>First, let’s package up all our app’s state into a “factory” or “generate” function:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="kr">import</span> <span class="p">{</span> <span class="nx">computed</span><span class="p">,</span> <span class="nx">signal</span> <span class="p">}</span> <span class="nx">from</span> <span class="s2">&#34;https://esm.sh/@preact/signals-core&#34;</span><span class="p">;</span>
+</span></span></code></pre>
+          </div>
+          <p>
+            And then:
+          </p>
+          <div class="highlight">
+            <pre class="chroma" tabindex="0"><code class="language-html" data-lang=
+            "html"><span class="line"><span class="cl"><span class=
+            "c">&lt;!-- assuming CounterApp.define() has been run --&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;</span><span class=
+"nt">counter-app</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">&lt;</span><span class=
+"nt">p</span><span class="p">&gt;</span>You’ve clicked the button <span class=
+"p">&lt;</span><span class="nt">span</span> <span class="na">data-count</span><span class=
+"p">&gt;</span>0<span class="p">&lt;/</span><span class="nt">span</span><span class=
+"p">&gt;</span> <span class="p">&lt;</span><span class="nt">span</span> <span class=
+"na">data-times</span><span class="p">&gt;</span>times<span class="p">&lt;/</span><span class=
+"nt">span</span><span class="p">&gt;&lt;/</span><span class="nt">p</span><span class=
+"p">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">&lt;</span><span class=
+"nt">button</span> <span class="na">disabled</span><span class="p">&gt;</span>Increment<span class=
+"p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;/</span><span class=
+"nt">counter-app</span><span class="p">&gt;</span>
+</span></span></code></pre>
+          </div>
+          <p>
+            <em>My custom element here requires that you provide the correct HTML: a <code>p</code>
+            and a <code>button</code>. It’s fine if a custom element has opinions/requirements
+            about it’s children.</em>
+          </p>
+          <p>
+            Notice in the initial serialized HTML I’ve disabled the button. Then once the custom
+            element is fully attached, I will enable it. This way we never have an enabled button
+            that can’t work on the page. <strong>Old-school progressive enhancement.</strong> 🆒
+          </p>
+          <p>
+            This component gets the reactive state, encapsulates and wires up the behavior, and
+            then everything is hunky-dory.
+          </p>
+          <p>
+            Now, of course, web apps are much larger than this… an entire app’s state
+            <strong><em>can</em></strong> be modeled, tested, and then consumed by the UI. It is
+            possible. Be optimistic 🤓
+          </p>
+          <p>
+            And (I say) it’s preferable to have the state outside the UI rather than keeping the
+            app’s state spread throughout our UI code just because <code>useState()</code> is the
+            only reactive primitive we have there in our framework…
+          </p>
+          <p>
+            Moving the app’s state out of the UI layer is a way we can start to bridge the gap
+            between custom elements and framework components. It also makes the decision of “which
+            framework?” less important, so you can feel more free to experiment.
+          </p>
+          <h3 id="give-it-some-context">
+            Give it some context
+          </h3>
+          <p>
+            Keeping an app’s state in globals can be problematic: it makes testing hard and it
+            makes it impossible to have two counters on the page at once (which are related
+            problems).
+          </p>
+          <p>
+            Most frameworks provide a way to setup a context which can have a sort of “scoped
+            state” that is for any children of the context.
+          </p>
+          <p>
+            An example in preact might look like:
+          </p>
+          <div class="highlight">
+            <pre class="chroma" tabindex="0"><code class="language-jsx" data-lang="jsx"><span class=
+            "line"><span class="cl"><span class="p">&lt;</span><span class=
+            "nt">CounterContext</span> <span class="na">initial</span><span class=
+            "o">=</span><span class="p">{</span><span class="mi">0</span><span class=
+            "p">}&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">&lt;</span><span class=
+"nt">CounterApp</span> <span class="p">/&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;/</span><span class=
+"nt">CounterContext</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;</span><span class=
+"nt">CounterContext</span> <span class="na">initial</span><span class="o">=</span><span class=
+"p">{</span><span class="mi">0</span><span class="p">}&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">&lt;</span><span class=
+"nt">CounterApp</span> <span class="p">/&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;/</span><span class=
+"nt">CounterContext</span><span class="p">&gt;</span>
+</span></span></code></pre>
+          </div>
+          <p>
+            And then we’d have two completely independent counter apps on the page at the same time
+            without having to move our reactive state back into the UI components themselves.
+          </p>
+          <p>
+            <strong>How can we communicate a sophisticated scoped state object (or set of objects)
+            to some of the DOM when using custom elements?</strong>
+          </p>
+          <p>
+            It’s not about “passing data down,” it’s really about <strong>events bubbling
+            up.</strong>
+          </p>
+          <h4 id="events-are-dispatched-synchronously">
+            Events are dispatched synchronously
+          </h4>
+          <p>
+            Yep. Prepare to feel weird about this. Event dispatch is often incredibly
+            misunderstood. <em>React implemented their own synthetic events because of how weird
+            DOM events are…</em>
+          </p>
+          <p>
+            DOM events are like a lightening strike: an event travels down, then bubbles up. There
+            is a capture phase, then a bubble phase. And that entire traversal is synchronous. 🤔 ⚡
+          </p>
+          <p>
+            So we can use the <strong>events go up</strong> principle of the DOM to grab context
+            from a parent, if there is one.
+          </p>
+          <p>
+            First, let’s package up all our app’s state into a “factory” or “generate” function:
+          </p>
+          <div class="highlight">
+            <pre class="chroma" tabindex="0"><code class="language-js" data-lang="js"><span class=
+            "line"><span class="cl"><span class="kr">import</span> <span class=
+            "p">{</span> <span class="nx">computed</span><span class="p">,</span> <span class=
+            "nx">signal</span> <span class="p">}</span> <span class="nx">from</span> <span class=
+            "s2">"https://esm.sh/@preact/signals-core"</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="kr">export</span> <span class="kd">function</span> <span class="nx">genState</span><span class="p">()</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">  <span class="kr">const</span> <span class="nx">count</span> <span class="o">=</span> <span class="nx">signal</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="kr">export</span> <span class=
+"kd">function</span> <span class="nx">genState</span><span class="p">()</span> <span class=
+"p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kr">const</span> <span class=
+"nx">count</span> <span class="o">=</span> <span class="nx">signal</span><span class=
+"p">(</span><span class="mi">0</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">  <span class="kr">const</span> <span class="nx">times</span> <span class="o">=</span> <span class="nx">computed</span><span class="p">(()</span> <span class="p">=&gt;</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="nx">count</span><span class="p">.</span><span class="nx">value</span> <span class="o">===</span> <span class="mi">1</span> <span class="o">?</span> <span class="s1">&#39;time&#39;</span> <span class="o">:</span> <span class="s1">&#39;times&#39;</span>
+</span></span><span class="line"><span class="cl">  <span class="kr">const</span> <span class=
+"nx">times</span> <span class="o">=</span> <span class="nx">computed</span><span class=
+"p">(()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class=
+"nx">count</span><span class="p">.</span><span class="nx">value</span> <span class=
+"o">===</span> <span class="mi">1</span> <span class="o">?</span> <span class=
+"s1">'time'</span> <span class="o">:</span> <span class="s1">'times'</span>
 </span></span><span class="line"><span class="cl">  <span class="p">})</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="nx">count</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">    <span class="nx">times</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">    <span class="nx">increment</span><span class="p">()</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">      <span class="nx">count</span><span class="p">.</span><span class="nx">value</span> <span class="o">+=</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class=
+"p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">count</span><span class=
+"p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">times</span><span class=
+"p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">increment</span><span class=
+"p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nx">count</span><span class=
+"p">.</span><span class="nx">value</span> <span class="o">+=</span> <span class="mi">1</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
 </span></span><span class="line"><span class="cl">  <span class="p">}</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></div><p>Now we can make as many <em>app states</em> as we like.</p>
-<p>Let’s make a custom element to create, contain, and scope that state:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="kr">import</span> <span class="p">{</span> <span class="nx">genState</span> <span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;./state.js&#39;</span>
+</span></span></code></pre>
+          </div>
+          <p>
+            Now we can make as many <em>app states</em> as we like.
+          </p>
+          <p>
+            Let’s make a custom element to create, contain, and scope that state:
+          </p>
+          <div class="highlight">
+            <pre class="chroma" tabindex="0"><code class="language-js" data-lang="js"><span class=
+            "line"><span class="cl"><span class="kr">import</span> <span class=
+            "p">{</span> <span class="nx">genState</span> <span class="p">}</span> <span class=
+            "nx">from</span> <span class="s1">'./state.js'</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="kr">export</span> <span class="kr">class</span> <span class="nx">CounterContext</span> <span class="kr">extends</span> <span class="nx">HTMLElement</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">  <span class="kr">static</span> <span class="nx">define</span><span class="p">()</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="nx">customElements</span><span class="p">.</span><span class="nx">define</span><span class="p">(</span><span class="s1">&#39;counter-context&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="kr">export</span> <span class=
+"kr">class</span> <span class="nx">CounterContext</span> <span class=
+"kr">extends</span> <span class="nx">HTMLElement</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kr">static</span> <span class=
+"nx">define</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class=
+"nx">customElements</span><span class="p">.</span><span class="nx">define</span><span class=
+"p">(</span><span class="s1">'counter-context'</span><span class="p">,</span> <span class=
+"k">this</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">  <span class="p">}</span>
 </span></span><span class="line"><span class="cl">  
-</span></span><span class="line"><span class="cl">  <span class="nx">constructor</span><span class="p">()</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="kr">super</span><span class="p">()</span>
-</span></span><span class="line"><span class="cl">    <span class="k">this</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">display</span> <span class="o">=</span> <span class="s1">&#39;contents&#39;</span>
-</span></span><span class="line"><span class="cl">    <span class="k">this</span><span class="p">.</span><span class="nx">context</span> <span class="o">=</span> <span class="nx">genState</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">constructor</span><span class=
+"p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kr">super</span><span class=
+"p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="k">this</span><span class=
+"p">.</span><span class="nx">style</span><span class="p">.</span><span class=
+"nx">display</span> <span class="o">=</span> <span class="s1">'contents'</span>
+</span></span><span class="line"><span class="cl">    <span class="k">this</span><span class=
+"p">.</span><span class="nx">context</span> <span class="o">=</span> <span class=
+"nx">genState</span><span class="p">()</span>
 </span></span><span class="line"><span class="cl">  <span class="p">}</span>
 </span></span><span class="line"><span class="cl">  
-</span></span><span class="line"><span class="cl">  <span class="nx">handleEvent</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="c1">// I just made this event name up
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">if</span> <span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">type</span> <span class="o">===</span> <span class="s1">&#39;getContext&#39;</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">      <span class="c1">// if any event comes through wanting a context, I&#39;ll throw mine into the detail of the event here and then stop propigation so no further parents can overwrite which allows contexts to be nested, closest one wins
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>      <span class="nx">e</span><span class="p">.</span><span class="nx">context</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">context</span>
-</span></span><span class="line"><span class="cl">      <span class="nx">e</span><span class="p">.</span><span class="nx">stopPropagation</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">handleEvent</span><span class=
+"p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class=
+"c1">// I just made this event name up
+</span></span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class=
+"p">(</span><span class="nx">e</span><span class="p">.</span><span class=
+"nx">type</span> <span class="o">===</span> <span class="s1">'getContext'</span><span class=
+"p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class=
+"c1">// if any event comes through wanting a context, I'll throw mine into the detail of the event here and then stop propigation so no further parents can overwrite which allows contexts to be nested, closest one wins
+</span></span></span><span class="line"><span class="cl">      <span class=
+"nx">e</span><span class="p">.</span><span class="nx">context</span> <span class=
+"o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">context</span>
+</span></span><span class="line"><span class="cl">      <span class="nx">e</span><span class=
+"p">.</span><span class="nx">stopPropagation</span><span class="p">()</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
 </span></span><span class="line"><span class="cl">  <span class="p">}</span>
 </span></span><span class="line"><span class="cl">  
-</span></span><span class="line"><span class="cl">  <span class="nx">connectedCallback</span><span class="p">()</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="k">this</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;getContext&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class=
+"nx">connectedCallback</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">this</span><span class=
+"p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class=
+"s1">'getContext'</span><span class="p">,</span> <span class="k">this</span><span class=
+"p">)</span>
 </span></span><span class="line"><span class="cl">  <span class="p">}</span>
 </span></span><span class="line"><span class="cl">  
-</span></span><span class="line"><span class="cl">  <span class="nx">disconnectedCallback</span><span class="p">()</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="k">this</span><span class="p">.</span><span class="nx">removeEventListener</span><span class="p">(</span><span class="s1">&#39;getContext&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class=
+"nx">disconnectedCallback</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">this</span><span class=
+"p">.</span><span class="nx">removeEventListener</span><span class="p">(</span><span class=
+"s1">'getContext'</span><span class="p">,</span> <span class="k">this</span><span class=
+"p">)</span>
 </span></span><span class="line"><span class="cl">  <span class="p">}</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="kr">export</span> <span class="kr">class</span> <span class="nx">GetContextEvent</span> <span class="kr">extends</span> <span class="nx">Event</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">  <span class="nx">constructor</span><span class="p">()</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="kr">super</span><span class="p">(</span><span class="s1">&#39;getContext&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">bubbles</span><span class="o">:</span> <span class="kc">true</span> <span class="p">})</span>
-</span></span><span class="line"><span class="cl">    <span class="k">this</span><span class="p">.</span><span class="nx">context</span> <span class="o">=</span> <span class="kc">null</span>
+</span></span><span class="line"><span class="cl"><span class="kr">export</span> <span class=
+"kr">class</span> <span class="nx">GetContextEvent</span> <span class=
+"kr">extends</span> <span class="nx">Event</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">constructor</span><span class=
+"p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kr">super</span><span class=
+"p">(</span><span class="s1">'getContext'</span><span class="p">,</span> <span class=
+"p">{</span> <span class="nx">bubbles</span><span class="o">:</span> <span class=
+"kc">true</span> <span class="p">})</span>
+</span></span><span class="line"><span class="cl">    <span class="k">this</span><span class=
+"p">.</span><span class="nx">context</span> <span class="o">=</span> <span class="kc">null</span>
 </span></span><span class="line"><span class="cl">  <span class="p">}</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></div><p>And now the component which wants to subscribe to some state can check for any context from any parents first, falling back to creating it’s own state if no parents have a context for it:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="kr">import</span> <span class="p">{</span> <span class="nx">GetContextEvent</span> <span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;./context.js&#39;</span>
+</span></span></code></pre>
+          </div>
+          <p>
+            And now the component which wants to subscribe to some state can check for any context
+            from any parents first, falling back to creating it’s own state if no parents have a
+            context for it:
+          </p>
+          <div class="highlight">
+            <pre class="chroma" tabindex="0"><code class="language-js" data-lang="js"><span class=
+            "line"><span class="cl"><span class="kr">import</span> <span class=
+            "p">{</span> <span class="nx">GetContextEvent</span> <span class=
+            "p">}</span> <span class="nx">from</span> <span class="s1">'./context.js'</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="kr">export</span> <span class="kr">class</span> <span class="nx">CounterApp</span> <span class="kr">extends</span> <span class="nx">HTMLElement</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">  <span class="kr">static</span> <span class="nx">define</span><span class="p">(</span><span class="nx">name</span> <span class="o">=</span> <span class="s1">&#39;counter-app&#39;</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="nx">customElements</span><span class="p">.</span><span class="nx">define</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="k">this</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="kr">export</span> <span class=
+"kr">class</span> <span class="nx">CounterApp</span> <span class="kr">extends</span> <span class=
+"nx">HTMLElement</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kr">static</span> <span class=
+"nx">define</span><span class="p">(</span><span class="nx">name</span> <span class=
+"o">=</span> <span class="s1">'counter-app'</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class=
+"nx">customElements</span><span class="p">.</span><span class="nx">define</span><span class=
+"p">(</span><span class="nx">name</span><span class="p">,</span> <span class=
+"k">this</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">  <span class="p">}</span>
 </span></span><span class="line"><span class="cl">  
-</span></span><span class="line"><span class="cl">  <span class="nx">constructor</span><span class="p">()</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="kr">super</span><span class="p">()</span>
-</span></span><span class="line"><span class="cl">    <span class="k">this</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">display</span> <span class="o">=</span> <span class="s1">&#39;contents&#39;</span>
-</span></span><span class="line"><span class="cl">    <span class="k">this</span><span class="p">.</span><span class="nx">disposes</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Set</span><span class="p">()</span>
-</span></span><span class="line"><span class="cl">    <span class="k">this</span><span class="p">.</span><span class="nx">context</span> <span class="o">=</span> <span class="kc">null</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">constructor</span><span class=
+"p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kr">super</span><span class=
+"p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="k">this</span><span class=
+"p">.</span><span class="nx">style</span><span class="p">.</span><span class=
+"nx">display</span> <span class="o">=</span> <span class="s1">'contents'</span>
+</span></span><span class="line"><span class="cl">    <span class="k">this</span><span class=
+"p">.</span><span class="nx">disposes</span> <span class="o">=</span> <span class=
+"k">new</span> <span class="nx">Set</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="k">this</span><span class=
+"p">.</span><span class="nx">context</span> <span class="o">=</span> <span class="kc">null</span>
 </span></span><span class="line"><span class="cl">  <span class="p">}</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">  <span class="nx">handleEvent</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">type</span> <span class="o">===</span> <span class="s1">&#39;click&#39;</span> <span class="o">&amp;&amp;</span> <span class="nx">e</span><span class="p">.</span><span class="nx">target</span><span class="p">.</span><span class="nx">tagName</span> <span class="o">===</span> <span class="s1">&#39;BUTTON&#39;</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">      <span class="k">this</span><span class="p">.</span><span class="nx">context</span><span class="o">?</span><span class="p">.</span><span class="nx">increment</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">handleEvent</span><span class=
+"p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class=
+"p">(</span><span class="nx">e</span><span class="p">.</span><span class=
+"nx">type</span> <span class="o">===</span> <span class="s1">'click'</span> <span class=
+"o">&amp;&</span> <span class="nx">e</span><span class="p">.</span><span class=
+"nx">target</span><span class="p">.</span><span class="nx">tagName</span> <span class=
+"o">===</span> <span class="s1">'BUTTON'</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="k">this</span><span class=
+"p">.</span><span class="nx">context</span><span class="o">?</span><span class=
+"p">.</span><span class="nx">increment</span><span class="p">()</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
 </span></span><span class="line"><span class="cl">  <span class="p">}</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"> 
-</span></span><span class="line"><span class="cl">  <span class="nx">connectedCallback</span><span class="p">()</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="kr">const</span> <span class="nx">getContext</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">GetContextEvent</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">  <span class=
+"nx">connectedCallback</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kr">const</span> <span class=
+"nx">getContext</span> <span class="o">=</span> <span class="k">new</span> <span class=
+"nx">GetContextEvent</span><span class="p">()</span>
 </span></span><span class="line"><span class="cl">    
 </span></span><span class="line"><span class="cl">    <span class="c1">// ⚡
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">this</span><span class="p">.</span><span class="nx">dispatchEvent</span><span class="p">(</span><span class="nx">getContext</span><span class="p">)</span>
+</span></span></span><span class="line"><span class="cl">    <span class=
+"k">this</span><span class="p">.</span><span class="nx">dispatchEvent</span><span class=
+"p">(</span><span class="nx">getContext</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">    <span class="c1">// the .context value has been mutated synchronously by the event listener in the parent node
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">this</span><span class="p">.</span><span class="nx">context</span> <span class="o">=</span> <span class="nx">getContext</span><span class="p">.</span><span class="nx">context</span>
+</span></span><span class="line"><span class="cl">    <span class=
+"c1">// the .context value has been mutated synchronously by the event listener in the parent node
+</span></span></span><span class="line"><span class="cl">    <span class=
+"k">this</span><span class="p">.</span><span class="nx">context</span> <span class=
+"o">=</span> <span class="nx">getContext</span><span class="p">.</span><span class=
+"nx">context</span>
 </span></span><span class="line"><span class="cl">    
-</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">context</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">      <span class="c1">// if no parent provides the context, then we will make our own
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>      <span class="nx">console</span><span class="p">.</span><span class="nx">warn</span><span class="p">(</span><span class="s1">&#39;no parent context, making local state&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">      <span class="k">this</span><span class="p">.</span><span class="nx">context</span> <span class="o">=</span> <span class="nx">genState</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class=
+"p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class=
+"nx">context</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class=
+"c1">// if no parent provides the context, then we will make our own
+</span></span></span><span class="line"><span class="cl">      <span class=
+"nx">console</span><span class="p">.</span><span class="nx">warn</span><span class=
+"p">(</span><span class="s1">'no parent context, making local state'</span><span class=
+"p">,</span> <span class="k">this</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">      <span class="k">this</span><span class=
+"p">.</span><span class="nx">context</span> <span class="o">=</span> <span class=
+"nx">genState</span><span class="p">()</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
 </span></span><span class="line"><span class="cl">    
-</span></span><span class="line"><span class="cl">    <span class="k">this</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">this</span><span class=
+"p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class=
+"s1">'click'</span><span class="p">,</span> <span class="k">this</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">    
-</span></span><span class="line"><span class="cl">    <span class="kr">const</span> <span class="nx">countEl</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">&#39;[data-count]&#39;</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">    <span class="kr">const</span> <span class="nx">timesEl</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">&#39;[data-times]&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="kr">const</span> <span class=
+"nx">countEl</span> <span class="o">=</span> <span class="k">this</span><span class=
+"p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class=
+"s1">'[data-count]'</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="kr">const</span> <span class=
+"nx">timesEl</span> <span class="o">=</span> <span class="k">this</span><span class=
+"p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class=
+"s1">'[data-times]'</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">    
-</span></span><span class="line"><span class="cl">    <span class="k">this</span><span class="p">.</span><span class="nx">disposes</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">context</span><span class="p">.</span><span class="nx">count</span><span class="p">.</span><span class="nx">subscribe</span><span class="p">(</span><span class="nx">c</span> <span class="p">=&gt;</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">      <span class="nx">countEl</span><span class="p">.</span><span class="nx">innerText</span> <span class="o">=</span> <span class="nx">c</span>
+</span></span><span class="line"><span class="cl">    <span class="k">this</span><span class=
+"p">.</span><span class="nx">disposes</span><span class="p">.</span><span class=
+"nx">add</span><span class="p">(</span><span class="k">this</span><span class=
+"p">.</span><span class="nx">context</span><span class="p">.</span><span class=
+"nx">count</span><span class="p">.</span><span class="nx">subscribe</span><span class=
+"p">(</span><span class="nx">c</span> <span class="p">=&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nx">countEl</span><span class=
+"p">.</span><span class="nx">innerText</span> <span class="o">=</span> <span class="nx">c</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}))</span>
 </span></span><span class="line"><span class="cl">    
-</span></span><span class="line"><span class="cl">    <span class="k">this</span><span class="p">.</span><span class="nx">disposes</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">context</span><span class="p">.</span><span class="nx">times</span><span class="p">.</span><span class="nx">subscribe</span><span class="p">(</span><span class="nx">t</span> <span class="p">=&gt;</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">      <span class="nx">timesEl</span><span class="p">.</span><span class="nx">innerText</span> <span class="o">=</span> <span class="nx">t</span>
+</span></span><span class="line"><span class="cl">    <span class="k">this</span><span class=
+"p">.</span><span class="nx">disposes</span><span class="p">.</span><span class=
+"nx">add</span><span class="p">(</span><span class="k">this</span><span class=
+"p">.</span><span class="nx">context</span><span class="p">.</span><span class=
+"nx">times</span><span class="p">.</span><span class="nx">subscribe</span><span class=
+"p">(</span><span class="nx">t</span> <span class="p">=&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nx">timesEl</span><span class=
+"p">.</span><span class="nx">innerText</span> <span class="o">=</span> <span class="nx">t</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}))</span>
 </span></span><span class="line"><span class="cl">    
-</span></span><span class="line"><span class="cl">    <span class="kr">const</span> <span class="nx">button</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">&#39;button&#39;</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">    <span class="nx">button</span><span class="p">.</span><span class="nx">disabled</span> <span class="o">=</span> <span class="kc">false</span>
+</span></span><span class="line"><span class="cl">    <span class="kr">const</span> <span class=
+"nx">button</span> <span class="o">=</span> <span class="k">this</span><span class=
+"p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class=
+"s1">'button'</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">button</span><span class=
+"p">.</span><span class="nx">disabled</span> <span class="o">=</span> <span class="kc">false</span>
 </span></span><span class="line"><span class="cl">  <span class="p">}</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">  <span class="nx">disconnectedCallback</span><span class="p">()</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="k">this</span><span class="p">.</span><span class="nx">removeEventListener</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">    <span class="k">this</span><span class="p">.</span><span class="nx">disposes</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="nx">cb</span> <span class="p">=&gt;</span> <span class="nx">cb</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">  <span class=
+"nx">disconnectedCallback</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">this</span><span class=
+"p">.</span><span class="nx">removeEventListener</span><span class="p">(</span><span class=
+"s1">'click'</span><span class="p">,</span> <span class="k">this</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">this</span><span class=
+"p">.</span><span class="nx">disposes</span><span class="p">.</span><span class=
+"nx">forEach</span><span class="p">(</span><span class="nx">cb</span> <span class=
+"p">=&gt;</span> <span class="nx">cb</span><span class="p">())</span>
 </span></span><span class="line"><span class="cl">  <span class="p">}</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></div><p>And now we can run multiple of these count apps, some of which can have a shared context, some of which can have an isolated context:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">counter-context</span><span class="p">&gt;</span>
-</span></span><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">counter-app</span><span class="p">&gt;</span>
-</span></span><span class="line"><span class="cl">  <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>You’ve clicked the button <span class="p">&lt;</span><span class="nt">span</span> <span class="na">data-count</span><span class="p">&gt;</span>0<span class="p">&lt;/</span><span class="nt">span</span><span class="p">&gt;</span> <span class="p">&lt;</span><span class="nt">span</span> <span class="na">data-times</span><span class="p">&gt;</span>times<span class="p">&lt;/</span><span class="nt">span</span><span class="p">&gt;&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
-</span></span><span class="line"><span class="cl">  <span class="p">&lt;</span><span class="nt">button</span> <span class="na">disabled</span><span class="p">&gt;</span>Increment<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
-</span></span><span class="line"><span class="cl"><span class="p">&lt;/</span><span class="nt">counter-app</span><span class="p">&gt;</span>
-</span></span><span class="line"><span class="cl"><span class="p">&lt;/</span><span class="nt">counter-context</span><span class="p">&gt;</span>
+</span></span></code></pre>
+          </div>
+          <p>
+            And now we can run multiple of these count apps, some of which can have a shared
+            context, some of which can have an isolated context:
+          </p>
+          <div class="highlight">
+            <pre class="chroma" tabindex="0"><code class="language-html" data-lang=
+            "html"><span class="line"><span class="cl"><span class="p">&lt;</span><span class=
+            "nt">counter-context</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;</span><span class=
+"nt">counter-app</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">&lt;</span><span class=
+"nt">p</span><span class="p">&gt;</span>You’ve clicked the button <span class=
+"p">&lt;</span><span class="nt">span</span> <span class="na">data-count</span><span class=
+"p">&gt;</span>0<span class="p">&lt;/</span><span class="nt">span</span><span class=
+"p">&gt;</span> <span class="p">&lt;</span><span class="nt">span</span> <span class=
+"na">data-times</span><span class="p">&gt;</span>times<span class="p">&lt;/</span><span class=
+"nt">span</span><span class="p">&gt;&lt;/</span><span class="nt">p</span><span class=
+"p">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">&lt;</span><span class=
+"nt">button</span> <span class="na">disabled</span><span class="p">&gt;</span>Increment<span class=
+"p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;/</span><span class=
+"nt">counter-app</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;/</span><span class=
+"nt">counter-context</span><span class="p">&gt;</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">hr</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;</span><span class=
+"nt">hr</span><span class="p">&gt;</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c">&lt;!-- both counter-app&#39;s will share the context state provided by this counter-context --&gt;</span>
-</span></span><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">counter-context</span><span class="p">&gt;</span>
-</span></span><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">counter-app</span><span class="p">&gt;</span>
-</span></span><span class="line"><span class="cl">  <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>You’ve clicked the button <span class="p">&lt;</span><span class="nt">span</span> <span class="na">data-count</span><span class="p">&gt;</span>0<span class="p">&lt;/</span><span class="nt">span</span><span class="p">&gt;</span> <span class="p">&lt;</span><span class="nt">span</span> <span class="na">data-times</span><span class="p">&gt;</span>times<span class="p">&lt;/</span><span class="nt">span</span><span class="p">&gt;&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
-</span></span><span class="line"><span class="cl">  <span class="p">&lt;</span><span class="nt">button</span> <span class="na">disabled</span><span class="p">&gt;</span>Increment<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
-</span></span><span class="line"><span class="cl"><span class="p">&lt;/</span><span class="nt">counter-app</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class=
+"c">&lt;!-- both counter-app's will share the context state provided by this counter-context --&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;</span><span class=
+"nt">counter-context</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;</span><span class=
+"nt">counter-app</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">&lt;</span><span class=
+"nt">p</span><span class="p">&gt;</span>You’ve clicked the button <span class=
+"p">&lt;</span><span class="nt">span</span> <span class="na">data-count</span><span class=
+"p">&gt;</span>0<span class="p">&lt;/</span><span class="nt">span</span><span class=
+"p">&gt;</span> <span class="p">&lt;</span><span class="nt">span</span> <span class=
+"na">data-times</span><span class="p">&gt;</span>times<span class="p">&lt;/</span><span class=
+"nt">span</span><span class="p">&gt;&lt;/</span><span class="nt">p</span><span class=
+"p">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">&lt;</span><span class=
+"nt">button</span> <span class="na">disabled</span><span class="p">&gt;</span>Increment<span class=
+"p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;/</span><span class=
+"nt">counter-app</span><span class="p">&gt;</span>
 </span></span><span class="line"><span class="cl">  
-</span></span><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">counter-app</span><span class="p">&gt;</span>
-</span></span><span class="line"><span class="cl">  <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>Same count here: <span class="p">&lt;</span><span class="nt">span</span> <span class="na">data-count</span><span class="p">&gt;</span>0<span class="p">&lt;/</span><span class="nt">span</span><span class="p">&gt;</span> <span class="p">&lt;</span><span class="nt">span</span> <span class="na">data-times</span><span class="p">&gt;</span>times<span class="p">&lt;/</span><span class="nt">span</span><span class="p">&gt;&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
-</span></span><span class="line"><span class="cl">  <span class="p">&lt;</span><span class="nt">button</span> <span class="na">disabled</span><span class="p">&gt;</span>Increment<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
-</span></span><span class="line"><span class="cl"><span class="p">&lt;/</span><span class="nt">counter-app</span><span class="p">&gt;</span>
-</span></span><span class="line"><span class="cl"><span class="p">&lt;/</span><span class="nt">counter-context</span><span class="p">&gt;</span>
-</span></span></code></pre></div><p><strong>Now that feels a lot like a “reusable component” to me.</strong> 💪</p>
-<p>➡️ Checkout this codepen: <a href="https://codepen.io/myobie/pen/JjgbxyN">https://codepen.io/myobie/pen/JjgbxyN</a></p>
-<p>Go ahead and move elements in and out of the contexts in the example… hopefully you are starting to imagine how one can build up a sophisticated app with these loosely coupled components through passing simple string data down, and using events to grab more sophisticated objects / states when necessary.</p>
-<h3 id="this-will-probably-be-a-standard">This will probably be a standard</h3>
-<p>There is a Community Proposal for a <a href="https://github.com/webcomponents-cg/community-protocols/blob/main/proposals/context.md">Context Protocol</a> which works exactly the same using event dispatch. Check it out. The event which is dispatched is a little different, it has a <code>callback</code> function which is called by a parent – so not direct object mutation like my example above.</p>
-<p>So, maybe one day this will be 100% built-in 💪</p>
-<p>Try out the <a href="https://codepen.io/myobie/pen/JjgbxyN">codepen</a>, try this out in your project, and <a href="https://indieweb.social/@myobie">let me know how it goes</a>.</p>
-
-      </div>
-
-      <footer>
-        
-        <p>
-          
-            Posted on
-          
-          <time datetime="2024-11-17T11:39:10&#43;01:00">
-            17 Nov, 2024
-          </time>
-          
-          
-          
-        </p>
-      </footer>
-    </article>
-  </main>
-
-    
-    
-    <script async src="/behavior.js"></script>
-      <script defer data-domain="nathanherald.com" src="https://stats.myobie.wtf/script.js"></script>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;</span><span class=
+"nt">counter-app</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">&lt;</span><span class=
+"nt">p</span><span class="p">&gt;</span>Same count here: <span class="p">&lt;</span><span class=
+"nt">span</span> <span class="na">data-count</span><span class="p">&gt;</span>0<span class=
+"p">&lt;/</span><span class="nt">span</span><span class="p">&gt;</span> <span class=
+"p">&lt;</span><span class="nt">span</span> <span class="na">data-times</span><span class=
+"p">&gt;</span>times<span class="p">&lt;/</span><span class="nt">span</span><span class=
+"p">&gt;&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">&lt;</span><span class=
+"nt">button</span> <span class="na">disabled</span><span class="p">&gt;</span>Increment<span class=
+"p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;/</span><span class=
+"nt">counter-app</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;/</span><span class=
+"nt">counter-context</span><span class="p">&gt;</span>
+</span></span></code></pre>
+          </div>
+          <p>
+            <strong>Now that feels a lot like a “reusable component” to me.</strong> 💪
+          </p>
+          <p>
+            ➡️ Checkout this codepen: <a href=
+            "https://codepen.io/myobie/pen/JjgbxyN">https://codepen.io/myobie/pen/JjgbxyN</a>
+          </p>
+          <p>
+            Go ahead and move elements in and out of the contexts in the example… hopefully you are
+            starting to imagine how one can build up a sophisticated app with these loosely coupled
+            components through passing simple string data down, and using events to grab more
+            sophisticated objects / states when necessary.
+          </p>
+          <h3 id="this-will-probably-be-a-standard">
+            This will probably be a standard
+          </h3>
+          <p>
+            There is a Community Proposal for a <a href=
+            "https://github.com/webcomponents-cg/community-protocols/blob/main/proposals/context.md">
+            Context Protocol</a> which works exactly the same using event dispatch. Check it out.
+            The event which is dispatched is a little different, it has a <code>callback</code>
+            function which is called by a parent –&nbsp;so not direct object mutation like my
+            example above.
+          </p>
+          <p>
+            So, maybe one day this will be 100% built-in 💪
+          </p>
+          <p>
+            Try out the <a href="https://codepen.io/myobie/pen/JjgbxyN">codepen</a>, try this out
+            in your project, and <a href="https://indieweb.social/@myobie">let me know how it
+            goes</a>.
+          </p>
+        </div>
+        <footer>
+          <p>
+            Posted on <time datetime="2024-11-17T11:39:10+01:00">17 Nov, 2024</time>
+          </p>
+        </footer>
+      </article>
+    </main>
+    <script async src="/behavior.js"></script> 
+    <script data-domain="nathanherald.com" defer src="https://stats.myobie.wtf/script.js"></script>
   </body>
 </html>

@@ -1,215 +1,373 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
   <head lang="en-us">
+    <meta content="HTML Tidy for HTML5 for Apple macOS version 5.8.0" name="generator">
     <meta charset="UTF-8">
-    <title>I‘m Nathan Herald → Make workflows for complicated tasks</title>
+    <title>
+      I‘m Nathan Herald → Make workflows for complicated tasks
+    </title>
     <script>
       if ((new URL(window.location.href)).host === 'myobie.com') { window.location.assign('https://nathanherald.com') }
     </script>
-    <link rel="canonical" href="https://nathanherald.com/posts/legacy/make-workflows-for-complicated-tasks/">
-    <link rel="stylesheet" type="text/css" href="https://cloud.typography.com/6836312/761366/css/fonts.css"><link rel="stylesheet" type="text/css" href="/styles.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="generator" content="Hugo 0.136.5">
-    <meta name="title" content="I‘m Nathan Herald  → Make workflows for complicated tasks">
-    <meta name="description" content="">
-    <meta property="og:title" content="Make workflows for complicated tasks">
-    <meta property="og:type" content="website">
-    <meta property="og:description" content="">
-    <meta property="og:url" content="https://nathanherald.com/posts/legacy/make-workflows-for-complicated-tasks/">
-    <meta property="og:image" content="/og.png">
-    <meta property="og:site_name" content="I‘m Nathan Herald">
-    
-  
-
-<link rel="alternate" type="application/rss+xml" href="/rss.xml" title="Feed of all the posts on nathanherald.com">
-
-
+    <link href="https://nathanherald.com/posts/legacy/make-workflows-for-complicated-tasks/" rel=
+    "canonical">
+    <link href="https://cloud.typography.com/6836312/761366/css/fonts.css" rel="stylesheet" type=
+    "text/css">
+    <link href="/styles.css" rel="stylesheet" type="text/css">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="Hugo 0.136.5" name="generator">
+    <meta content="I‘m Nathan Herald → Make workflows for complicated tasks" name="title">
+    <meta content="" name="description">
+    <meta content="Make workflows for complicated tasks" property="og:title">
+    <meta content="website" property="og:type">
+    <meta content="" property="og:description">
+    <meta content="https://nathanherald.com/posts/legacy/make-workflows-for-complicated-tasks/"
+    property="og:url">
+    <meta content="/og.png" property="og:image">
+    <meta content="I‘m Nathan Herald" property="og:site_name">
+    <link href="/rss.xml" rel="alternate" title="Feed of all the posts on nathanherald.com" type=
+    "application/rss+xml">
   </head>
   <body class="default">
-    
-  <header class="section-header">
-    <div class="section-nav">
-      <h1 class="home-link">
-        <a data-nospan href="/" class="never-underline"><abbr title="Hello">👋</abbr></a>
-        <a href="/">I&rsquo;m Nathan</a>
-      </h1>
-      <nav>
-        <p>
-          Find more in the <a href="https://nathanherald.com/posts/">archive of all the posts on this site</a>
-or <a href="https://nathanherald.com/posts/rss.xml">subscribe with RSS</a>.
-
-        </p>
-      </nav>
-    </div>
-  </header>
-
-    
-  <main class="single">
-    <article>
-      <header>
-        <h1>
-          
-          
-            Make workflows for complicated tasks
-            <p class="annotation">⭐️ a blog post</a>
-          
+    <header class="section-header">
+      <div class="section-nav">
+        <h1 class="home-link">
+          <a class="never-underline" data-nospan="" href="/"><abbr title="Hello">👋</abbr></a>
+          <a href="/">I’m Nathan</a>
         </h1>
-        
-      </header>
-
-      <div class="content">
-        <p>I&rsquo;ve been extracting a lot of controller code into simple POROs recently, but it&rsquo;s become more and more difficult and repetitive to get things to work consistently. I end up doing a lot of <code>if</code> statements in the <code>#call</code> method to manage failure states. An example might be:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-ruby" data-lang="ruby"><span class="line"><span class="cl"><span class="c1"># in a controller</span>
-</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">create</span>
-</span></span><span class="line"><span class="cl">  <span class="vi">@amount</span> <span class="o">=</span> <span class="n">params</span><span class="o">[</span><span class="ss">:amount</span><span class="o">].</span><span class="n">to_i</span>
-</span></span><span class="line"><span class="cl">  <span class="k">unless</span> <span class="vi">@amount</span> <span class="o">&gt;</span> <span class="mi">100</span>
-</span></span><span class="line"><span class="cl">    <span class="n">render</span> <span class="ss">:error</span> <span class="ow">and</span> <span class="k">return</span>
+        <nav>
+          <p>
+            Find more in the <a href="https://nathanherald.com/posts/">archive of all the posts on
+            this site</a> or <a href="https://nathanherald.com/posts/rss.xml">subscribe with
+            RSS</a>.
+          </p>
+        </nav>
+      </div>
+    </header>
+    <main class="single">
+      <article>
+        <header>
+          <h1>
+            Make workflows for complicated tasks
+          </h1>
+          <p class="annotation">
+            ⭐️ a blog post
+          </p>
+        </header>
+        <div class="content">
+          <p>
+            I’ve been extracting a lot of controller code into simple POROs recently, but it’s
+            become more and more difficult and repetitive to get things to work consistently. I end
+            up doing a lot of <code>if</code> statements in the <code>#call</code> method to manage
+            failure states. An example might be:
+          </p>
+          <div class="highlight">
+            <pre class="chroma" tabindex="0"><code class="language-ruby" data-lang=
+            "ruby"><span class="line"><span class="cl"><span class="c1"># in a controller</span>
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class=
+"nf">create</span>
+</span></span><span class="line"><span class="cl">  <span class="vi">@amount</span> <span class=
+"o">=</span> <span class="n">params</span><span class="o">[</span><span class=
+"ss">:amount</span><span class="o">].</span><span class="n">to_i</span>
+</span></span><span class="line"><span class="cl">  <span class="k">unless</span> <span class=
+"vi">@amount</span> <span class="o">&gt;</span> <span class="mi">100</span>
+</span></span><span class="line"><span class="cl">    <span class="n">render</span> <span class=
+"ss">:error</span> <span class="ow">and</span> <span class="k">return</span>
 </span></span><span class="line"><span class="cl">  <span class="k">end</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">  <span class="k">begin</span>
-</span></span><span class="line"><span class="cl">    <span class="vi">@charge</span> <span class="o">=</span> <span class="no">Stripe</span><span class="o">::</span><span class="no">Charge</span><span class="o">.</span><span class="n">create</span><span class="p">({</span>
-</span></span><span class="line"><span class="cl">        <span class="ss">amount</span><span class="p">:</span> <span class="vi">@amount</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">        <span class="ss">card</span><span class="p">:</span> <span class="n">params</span><span class="o">[</span><span class="ss">:card_token</span><span class="o">]</span>
+</span></span><span class="line"><span class="cl">    <span class="vi">@charge</span> <span class=
+"o">=</span> <span class="no">Stripe</span><span class="o">::</span><span class=
+"no">Charge</span><span class="o">.</span><span class="n">create</span><span class="p">({</span>
+</span></span><span class="line"><span class="cl">        <span class=
+"ss">amount</span><span class="p">:</span> <span class="vi">@amount</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="ss">card</span><span class=
+"p">:</span> <span class="n">params</span><span class="o">[</span><span class=
+"ss">:card_token</span><span class="o">]</span>
 </span></span><span class="line"><span class="cl">      <span class="p">})</span>
-</span></span><span class="line"><span class="cl">  <span class="k">rescue</span> <span class="no">Stripe</span><span class="o">::</span><span class="no">CardError</span> <span class="o">=&gt;</span> <span class="n">e</span>
-</span></span><span class="line"><span class="cl">    <span class="n">render</span> <span class="ss">:error</span> <span class="ow">and</span> <span class="k">return</span>
+</span></span><span class="line"><span class="cl">  <span class="k">rescue</span> <span class=
+"no">Stripe</span><span class="o">::</span><span class="no">CardError</span> <span class=
+"o">=&gt;</span> <span class="n">e</span>
+</span></span><span class="line"><span class="cl">    <span class="n">render</span> <span class=
+"ss">:error</span> <span class="ow">and</span> <span class="k">return</span>
 </span></span><span class="line"><span class="cl">  <span class="k">end</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">  <span class="vi">@charge_response</span> <span class="o">=</span> <span class="no">StripeChargeResponse</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="ss">body</span><span class="p">:</span> <span class="vi">@charge</span><span class="o">.</span><span class="n">to_hash</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">  <span class="vi">@payment</span> <span class="o">=</span> <span class="no">Payment</span><span class="o">.</span><span class="n">new</span><span class="p">({</span>
-</span></span><span class="line"><span class="cl">    <span class="ss">stripe_charge_response</span><span class="p">:</span> <span class="n">charge_response</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">    <span class="ss">stripe_charge_id</span><span class="p">:</span> <span class="n">charge</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">    <span class="ss">amount</span><span class="p">:</span> <span class="n">charge</span><span class="o">.</span><span class="n">amount</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">    <span class="ss">currency</span><span class="p">:</span> <span class="n">charge</span><span class="o">.</span><span class="n">currency</span>
+</span></span><span class="line"><span class="cl">  <span class=
+"vi">@charge_response</span> <span class="o">=</span> <span class=
+"no">StripeChargeResponse</span><span class="o">.</span><span class="n">new</span><span class=
+"p">(</span><span class="ss">body</span><span class="p">:</span> <span class=
+"vi">@charge</span><span class="o">.</span><span class="n">to_hash</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="vi">@payment</span> <span class=
+"o">=</span> <span class="no">Payment</span><span class="o">.</span><span class=
+"n">new</span><span class="p">({</span>
+</span></span><span class="line"><span class="cl">    <span class=
+"ss">stripe_charge_response</span><span class="p">:</span> <span class=
+"n">charge_response</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class=
+"ss">stripe_charge_id</span><span class="p">:</span> <span class="n">charge</span><span class=
+"o">.</span><span class="n">id</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="ss">amount</span><span class=
+"p">:</span> <span class="n">charge</span><span class="o">.</span><span class=
+"n">amount</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="ss">currency</span><span class=
+"p">:</span> <span class="n">charge</span><span class="o">.</span><span class="n">currency</span>
 </span></span><span class="line"><span class="cl">  <span class="p">})</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">  <span class="k">begin</span>
-</span></span><span class="line"><span class="cl">    <span class="vi">@payment</span><span class="o">.</span><span class="n">save!</span>
-</span></span><span class="line"><span class="cl">  <span class="k">rescue</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">RecordInvalid</span> <span class="o">=&gt;</span> <span class="n">e</span>
-</span></span><span class="line"><span class="cl">    <span class="n">render</span> <span class="ss">:error</span> <span class="ow">and</span> <span class="k">return</span>
+</span></span><span class="line"><span class="cl">    <span class="vi">@payment</span><span class=
+"o">.</span><span class="n">save!</span>
+</span></span><span class="line"><span class="cl">  <span class="k">rescue</span> <span class=
+"no">ActiveRecord</span><span class="o">::</span><span class="no">RecordInvalid</span> <span class=
+"o">=&gt;</span> <span class="n">e</span>
+</span></span><span class="line"><span class="cl">    <span class="n">render</span> <span class=
+"ss">:error</span> <span class="ow">and</span> <span class="k">return</span>
 </span></span><span class="line"><span class="cl">  <span class="k">end</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">  <span class="no">ReceiptMailer</span><span class="o">.</span><span class="n">payment_receipt</span><span class="p">(</span><span class="vi">@payment</span><span class="p">)</span><span class="o">.</span><span class="n">deliver_later</span>
+</span></span><span class="line"><span class="cl">  <span class=
+"no">ReceiptMailer</span><span class="o">.</span><span class="n">payment_receipt</span><span class=
+"p">(</span><span class="vi">@payment</span><span class="p">)</span><span class=
+"o">.</span><span class="n">deliver_later</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">  <span class="n">redirect_to</span> <span class="n">receipt_path</span><span class="p">(</span><span class="vi">@payment</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="n">redirect_to</span> <span class=
+"n">receipt_path</span><span class="p">(</span><span class="vi">@payment</span><span class=
+"p">)</span>
 </span></span><span class="line"><span class="cl"><span class="k">end</span>
-</span></span></code></pre></div><p>After some work, I decided I should extract each step of the operation into it&rsquo;s own method:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-ruby" data-lang="ruby"><span class="line"><span class="cl"><span class="c1"># in a controller</span>
-</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">create</span>
-</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="n">grab_amount</span> <span class="o">&amp;&amp;</span>
-</span></span><span class="line"><span class="cl">     <span class="n">charge</span> <span class="o">&amp;&amp;</span>
-</span></span><span class="line"><span class="cl">     <span class="n">save_payment</span> <span class="o">&amp;&amp;</span>
+</span></span></code></pre>
+          </div>
+          <p>
+            After some work, I decided I should extract each step of the operation into it’s own
+            method:
+          </p>
+          <div class="highlight">
+            <pre class="chroma" tabindex="0"><code class="language-ruby" data-lang=
+            "ruby"><span class="line"><span class="cl"><span class="c1"># in a controller</span>
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class=
+"nf">create</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class=
+"n">grab_amount</span> <span class="o">&amp;&</span>
+</span></span><span class="line"><span class="cl">     <span class="n">charge</span> <span class=
+"o">&amp;&</span>
+</span></span><span class="line"><span class="cl">     <span class=
+"n">save_payment</span> <span class="o">&amp;&</span>
 </span></span><span class="line"><span class="cl">     <span class="n">send_email</span>
-</span></span><span class="line"><span class="cl">    <span class="n">redirect_to</span> <span class="n">receipt_path</span><span class="p">(</span><span class="vi">@payment</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class=
+"n">redirect_to</span> <span class="n">receipt_path</span><span class="p">(</span><span class=
+"vi">@payment</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">  <span class="k">else</span>
-</span></span><span class="line"><span class="cl">    <span class="n">render</span> <span class="ss">:error</span>
+</span></span><span class="line"><span class="cl">    <span class="n">render</span> <span class=
+"ss">:error</span>
 </span></span><span class="line"><span class="cl">  <span class="k">end</span>
 </span></span><span class="line"><span class="cl"><span class="k">end</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">grab_amount</span>
-</span></span><span class="line"><span class="cl">  <span class="vi">@amount</span> <span class="o">=</span> <span class="n">params</span><span class="o">[</span><span class="ss">:amount</span><span class="o">].</span><span class="n">to_i</span>
-</span></span><span class="line"><span class="cl">  <span class="vi">@amount</span> <span class="o">&gt;</span> <span class="mi">100</span>
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class=
+"nf">grab_amount</span>
+</span></span><span class="line"><span class="cl">  <span class="vi">@amount</span> <span class=
+"o">=</span> <span class="n">params</span><span class="o">[</span><span class=
+"ss">:amount</span><span class="o">].</span><span class="n">to_i</span>
+</span></span><span class="line"><span class="cl">  <span class="vi">@amount</span> <span class=
+"o">&gt;</span> <span class="mi">100</span>
 </span></span><span class="line"><span class="cl"><span class="k">end</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">charge</span>
-</span></span><span class="line"><span class="cl">  <span class="vi">@charge</span> <span class="o">=</span> <span class="no">Stripe</span><span class="o">::</span><span class="no">Charge</span><span class="o">.</span><span class="n">create</span><span class="p">({</span>
-</span></span><span class="line"><span class="cl">    <span class="ss">amount</span><span class="p">:</span> <span class="vi">@amount</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">    <span class="ss">card</span><span class="p">:</span> <span class="n">params</span><span class="o">[</span><span class="ss">:card_token</span><span class="o">]</span>
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class=
+"nf">charge</span>
+</span></span><span class="line"><span class="cl">  <span class="vi">@charge</span> <span class=
+"o">=</span> <span class="no">Stripe</span><span class="o">::</span><span class=
+"no">Charge</span><span class="o">.</span><span class="n">create</span><span class="p">({</span>
+</span></span><span class="line"><span class="cl">    <span class="ss">amount</span><span class=
+"p">:</span> <span class="vi">@amount</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="ss">card</span><span class=
+"p">:</span> <span class="n">params</span><span class="o">[</span><span class=
+"ss">:card_token</span><span class="o">]</span>
 </span></span><span class="line"><span class="cl">  <span class="p">})</span>
 </span></span><span class="line"><span class="cl">  <span class="kp">true</span>
-</span></span><span class="line"><span class="cl"><span class="k">rescue</span> <span class="no">Stripe</span><span class="o">::</span><span class="no">CardError</span> <span class="o">=&gt;</span> <span class="n">e</span>
+</span></span><span class="line"><span class="cl"><span class="k">rescue</span> <span class=
+"no">Stripe</span><span class="o">::</span><span class="no">CardError</span> <span class=
+"o">=&gt;</span> <span class="n">e</span>
 </span></span><span class="line"><span class="cl"><span class="k">end</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">save_payment</span>
-</span></span><span class="line"><span class="cl">  <span class="vi">@charge_response</span> <span class="o">=</span> <span class="no">StripeChargeResponse</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="ss">body</span><span class="p">:</span> <span class="vi">@charge</span><span class="o">.</span><span class="n">to_hash</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">  <span class="vi">@payment</span> <span class="o">=</span> <span class="no">Payment</span><span class="o">.</span><span class="n">new</span><span class="p">({</span>
-</span></span><span class="line"><span class="cl">    <span class="ss">stripe_charge_response</span><span class="p">:</span> <span class="n">charge_response</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">    <span class="ss">stripe_charge_id</span><span class="p">:</span> <span class="n">charge</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">    <span class="ss">amount</span><span class="p">:</span> <span class="n">charge</span><span class="o">.</span><span class="n">amount</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">    <span class="ss">currency</span><span class="p">:</span> <span class="n">charge</span><span class="o">.</span><span class="n">currency</span>
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class=
+"nf">save_payment</span>
+</span></span><span class="line"><span class="cl">  <span class=
+"vi">@charge_response</span> <span class="o">=</span> <span class=
+"no">StripeChargeResponse</span><span class="o">.</span><span class="n">new</span><span class=
+"p">(</span><span class="ss">body</span><span class="p">:</span> <span class=
+"vi">@charge</span><span class="o">.</span><span class="n">to_hash</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="vi">@payment</span> <span class=
+"o">=</span> <span class="no">Payment</span><span class="o">.</span><span class=
+"n">new</span><span class="p">({</span>
+</span></span><span class="line"><span class="cl">    <span class=
+"ss">stripe_charge_response</span><span class="p">:</span> <span class=
+"n">charge_response</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class=
+"ss">stripe_charge_id</span><span class="p">:</span> <span class="n">charge</span><span class=
+"o">.</span><span class="n">id</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="ss">amount</span><span class=
+"p">:</span> <span class="n">charge</span><span class="o">.</span><span class=
+"n">amount</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="ss">currency</span><span class=
+"p">:</span> <span class="n">charge</span><span class="o">.</span><span class="n">currency</span>
 </span></span><span class="line"><span class="cl">  <span class="p">})</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">  <span class="vi">@payment</span><span class="o">.</span><span class="n">save!</span>
-</span></span><span class="line"><span class="cl"><span class="k">rescue</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">RecordInvalid</span> <span class="o">=&gt;</span> <span class="n">e</span>
+</span></span><span class="line"><span class="cl">  <span class="vi">@payment</span><span class=
+"o">.</span><span class="n">save!</span>
+</span></span><span class="line"><span class="cl"><span class="k">rescue</span> <span class=
+"no">ActiveRecord</span><span class="o">::</span><span class="no">RecordInvalid</span> <span class=
+"o">=&gt;</span> <span class="n">e</span>
 </span></span><span class="line"><span class="cl"><span class="k">end</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">send_email</span>
-</span></span><span class="line"><span class="cl">  <span class="no">ReceiptMailer</span><span class="o">.</span><span class="n">payment_receipt</span><span class="p">(</span><span class="vi">@payment</span><span class="p">)</span><span class="o">.</span><span class="n">deliver_later</span>
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class=
+"nf">send_email</span>
+</span></span><span class="line"><span class="cl">  <span class=
+"no">ReceiptMailer</span><span class="o">.</span><span class="n">payment_receipt</span><span class=
+"p">(</span><span class="vi">@payment</span><span class="p">)</span><span class=
+"o">.</span><span class="n">deliver_later</span>
 </span></span><span class="line"><span class="cl">  <span class="kp">true</span>
 </span></span><span class="line"><span class="cl"><span class="k">end</span>
-</span></span></code></pre></div><p>After that, I realized if I had a method to wrap and capture failures I could cleanup things even more:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-ruby" data-lang="ruby"><span class="line"><span class="cl"><span class="c1"># in a controller</span>
-</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">create</span>
-</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="n">grab_amount</span> <span class="o">&amp;&amp;</span>
-</span></span><span class="line"><span class="cl">     <span class="n">charge</span> <span class="o">&amp;&amp;</span>
-</span></span><span class="line"><span class="cl">     <span class="n">save_payment</span> <span class="o">&amp;&amp;</span>
+</span></span></code></pre>
+          </div>
+          <p>
+            After that, I realized if I had a method to wrap and capture failures I could cleanup
+            things even more:
+          </p>
+          <div class="highlight">
+            <pre class="chroma" tabindex="0"><code class="language-ruby" data-lang=
+            "ruby"><span class="line"><span class="cl"><span class="c1"># in a controller</span>
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class=
+"nf">create</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class=
+"n">grab_amount</span> <span class="o">&amp;&</span>
+</span></span><span class="line"><span class="cl">     <span class="n">charge</span> <span class=
+"o">&amp;&</span>
+</span></span><span class="line"><span class="cl">     <span class=
+"n">save_payment</span> <span class="o">&amp;&</span>
 </span></span><span class="line"><span class="cl">     <span class="n">send_email</span>
-</span></span><span class="line"><span class="cl">    <span class="n">redirect_to</span> <span class="n">receipt_path</span><span class="p">(</span><span class="vi">@payment</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class=
+"n">redirect_to</span> <span class="n">receipt_path</span><span class="p">(</span><span class=
+"vi">@payment</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">  <span class="k">else</span>
-</span></span><span class="line"><span class="cl">    <span class="n">render</span> <span class="ss">:error</span>
+</span></span><span class="line"><span class="cl">    <span class="n">render</span> <span class=
+"ss">:error</span>
 </span></span><span class="line"><span class="cl">  <span class="k">end</span>
 </span></span><span class="line"><span class="cl"><span class="k">end</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">define_and_capture</span>
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class=
+"nf">define_and_capture</span>
 </span></span><span class="line"><span class="cl">  <span class="k">yield</span>
-</span></span><span class="line"><span class="cl"><span class="k">rescue</span> <span class="no">StandardError</span> <span class="o">=&gt;</span> <span class="n">e</span>
+</span></span><span class="line"><span class="cl"><span class="k">rescue</span> <span class=
+"no">StandardError</span> <span class="o">=&gt;</span> <span class="n">e</span>
 </span></span><span class="line"><span class="cl">  <span class="kp">false</span>
 </span></span><span class="line"><span class="cl"><span class="k">end</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">define_and_capture</span> <span class="ss">:grab_amount</span> <span class="k">do</span>
-</span></span><span class="line"><span class="cl">  <span class="vi">@amount</span> <span class="o">=</span> <span class="n">params</span><span class="o">[</span><span class="ss">:amount</span><span class="o">].</span><span class="n">to_i</span>
-</span></span><span class="line"><span class="cl">  <span class="vi">@amount</span> <span class="o">&gt;</span> <span class="mi">100</span>
+</span></span><span class="line"><span class="cl"><span class=
+"n">define_and_capture</span> <span class="ss">:grab_amount</span> <span class="k">do</span>
+</span></span><span class="line"><span class="cl">  <span class="vi">@amount</span> <span class=
+"o">=</span> <span class="n">params</span><span class="o">[</span><span class=
+"ss">:amount</span><span class="o">].</span><span class="n">to_i</span>
+</span></span><span class="line"><span class="cl">  <span class="vi">@amount</span> <span class=
+"o">&gt;</span> <span class="mi">100</span>
 </span></span><span class="line"><span class="cl"><span class="k">end</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">define_and_capture</span> <span class="ss">:charge</span> <span class="k">do</span>
-</span></span><span class="line"><span class="cl">  <span class="vi">@charge</span> <span class="o">=</span> <span class="no">Stripe</span><span class="o">::</span><span class="no">Charge</span><span class="o">.</span><span class="n">create</span><span class="p">({</span>
-</span></span><span class="line"><span class="cl">    <span class="ss">amount</span><span class="p">:</span> <span class="vi">@amount</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">    <span class="ss">card</span><span class="p">:</span> <span class="n">params</span><span class="o">[</span><span class="ss">:card_token</span><span class="o">]</span>
+</span></span><span class="line"><span class="cl"><span class=
+"n">define_and_capture</span> <span class="ss">:charge</span> <span class="k">do</span>
+</span></span><span class="line"><span class="cl">  <span class="vi">@charge</span> <span class=
+"o">=</span> <span class="no">Stripe</span><span class="o">::</span><span class=
+"no">Charge</span><span class="o">.</span><span class="n">create</span><span class="p">({</span>
+</span></span><span class="line"><span class="cl">    <span class="ss">amount</span><span class=
+"p">:</span> <span class="vi">@amount</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="ss">card</span><span class=
+"p">:</span> <span class="n">params</span><span class="o">[</span><span class=
+"ss">:card_token</span><span class="o">]</span>
 </span></span><span class="line"><span class="cl">  <span class="p">})</span>
 </span></span><span class="line"><span class="cl">  <span class="kp">true</span>
 </span></span><span class="line"><span class="cl"><span class="k">end</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">define_and_capture</span> <span class="ss">:save_payment</span> <span class="k">do</span>
-</span></span><span class="line"><span class="cl">  <span class="vi">@charge_response</span> <span class="o">=</span> <span class="no">StripeChargeResponse</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="ss">body</span><span class="p">:</span> <span class="vi">@charge</span><span class="o">.</span><span class="n">to_hash</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">  <span class="vi">@payment</span> <span class="o">=</span> <span class="no">Payment</span><span class="o">.</span><span class="n">new</span><span class="p">({</span>
-</span></span><span class="line"><span class="cl">    <span class="ss">stripe_charge_response</span><span class="p">:</span> <span class="n">charge_response</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">    <span class="ss">stripe_charge_id</span><span class="p">:</span> <span class="n">charge</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">    <span class="ss">amount</span><span class="p">:</span> <span class="n">charge</span><span class="o">.</span><span class="n">amount</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">    <span class="ss">currency</span><span class="p">:</span> <span class="n">charge</span><span class="o">.</span><span class="n">currency</span>
+</span></span><span class="line"><span class="cl"><span class=
+"n">define_and_capture</span> <span class="ss">:save_payment</span> <span class="k">do</span>
+</span></span><span class="line"><span class="cl">  <span class=
+"vi">@charge_response</span> <span class="o">=</span> <span class=
+"no">StripeChargeResponse</span><span class="o">.</span><span class="n">new</span><span class=
+"p">(</span><span class="ss">body</span><span class="p">:</span> <span class=
+"vi">@charge</span><span class="o">.</span><span class="n">to_hash</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="vi">@payment</span> <span class=
+"o">=</span> <span class="no">Payment</span><span class="o">.</span><span class=
+"n">new</span><span class="p">({</span>
+</span></span><span class="line"><span class="cl">    <span class=
+"ss">stripe_charge_response</span><span class="p">:</span> <span class=
+"n">charge_response</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class=
+"ss">stripe_charge_id</span><span class="p">:</span> <span class="n">charge</span><span class=
+"o">.</span><span class="n">id</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="ss">amount</span><span class=
+"p">:</span> <span class="n">charge</span><span class="o">.</span><span class=
+"n">amount</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="ss">currency</span><span class=
+"p">:</span> <span class="n">charge</span><span class="o">.</span><span class="n">currency</span>
 </span></span><span class="line"><span class="cl">  <span class="p">})</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">  <span class="vi">@payment</span><span class="o">.</span><span class="n">save!</span>
+</span></span><span class="line"><span class="cl">  <span class="vi">@payment</span><span class=
+"o">.</span><span class="n">save!</span>
 </span></span><span class="line"><span class="cl"><span class="k">end</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">define_and_capture</span> <span class="ss">:send_email</span> <span class="k">do</span>
-</span></span><span class="line"><span class="cl">  <span class="no">ReceiptMailer</span><span class="o">.</span><span class="n">payment_receipt</span><span class="p">(</span><span class="vi">@payment</span><span class="p">)</span><span class="o">.</span><span class="n">deliver_later</span>
+</span></span><span class="line"><span class="cl"><span class=
+"n">define_and_capture</span> <span class="ss">:send_email</span> <span class="k">do</span>
+</span></span><span class="line"><span class="cl">  <span class=
+"no">ReceiptMailer</span><span class="o">.</span><span class="n">payment_receipt</span><span class=
+"p">(</span><span class="vi">@payment</span><span class="p">)</span><span class=
+"o">.</span><span class="n">deliver_later</span>
 </span></span><span class="line"><span class="cl">  <span class="kp">true</span>
 </span></span><span class="line"><span class="cl"><span class="k">end</span>
-</span></span></code></pre></div><p>And this is way too much going on in the controller, IMHO. So making a service object for this is pretty simple:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-ruby" data-lang="ruby"><span class="line"><span class="cl"><span class="c1"># in a controller</span>
-</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">create</span>
-</span></span><span class="line"><span class="cl">  <span class="vi">@service</span> <span class="o">=</span> <span class="no">ChargeACard</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">params</span><span class="o">[</span><span class="ss">:amount</span><span class="o">]</span><span class="p">,</span> <span class="n">params</span><span class="o">[</span><span class="ss">:card_token</span><span class="o">]</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="vi">@service</span><span class="o">.</span><span class="n">call</span>
-</span></span><span class="line"><span class="cl">    <span class="n">redirect_to</span> <span class="n">receipt_path</span><span class="p">(</span><span class="vi">@service</span><span class="o">.</span><span class="n">payment</span><span class="p">)</span>
+</span></span></code></pre>
+          </div>
+          <p>
+            And this is way too much going on in the controller, IMHO. So making a service object
+            for this is pretty simple:
+          </p>
+          <div class="highlight">
+            <pre class="chroma" tabindex="0"><code class="language-ruby" data-lang=
+            "ruby"><span class="line"><span class="cl"><span class="c1"># in a controller</span>
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class=
+"nf">create</span>
+</span></span><span class="line"><span class="cl">  <span class="vi">@service</span> <span class=
+"o">=</span> <span class="no">ChargeACard</span><span class="o">.</span><span class=
+"n">new</span><span class="p">(</span><span class="n">params</span><span class=
+"o">[</span><span class="ss">:amount</span><span class="o">]</span><span class=
+"p">,</span> <span class="n">params</span><span class="o">[</span><span class=
+"ss">:card_token</span><span class="o">]</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class=
+"vi">@service</span><span class="o">.</span><span class="n">call</span>
+</span></span><span class="line"><span class="cl">    <span class=
+"n">redirect_to</span> <span class="n">receipt_path</span><span class="p">(</span><span class=
+"vi">@service</span><span class="o">.</span><span class="n">payment</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">  <span class="k">else</span>
-</span></span><span class="line"><span class="cl">    <span class="n">render</span> <span class="ss">:error</span>
+</span></span><span class="line"><span class="cl">    <span class="n">render</span> <span class=
+"ss">:error</span>
 </span></span><span class="line"><span class="cl">  <span class="k">end</span>
 </span></span><span class="line"><span class="cl"><span class="k">end</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># in it&#39;s own file</span>
-</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">ChargeACard</span>
-</span></span><span class="line"><span class="cl">  <span class="kp">attr_reader</span> <span class="ss">:payment</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># in it's own file</span>
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class=
+"nc">ChargeACard</span>
+</span></span><span class="line"><span class="cl">  <span class=
+"kp">attr_reader</span> <span class="ss">:payment</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">amount</span><span class="p">,</span> <span class="n">card_token</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">    <span class="vi">@amount</span> <span class="o">=</span> <span class="n">amount</span>
-</span></span><span class="line"><span class="cl">    <span class="vi">@card_token</span> <span class="o">=</span> <span class="n">card_token</span>
+</span></span><span class="line"><span class="cl">  <span class="k">def</span> <span class=
+"nf">initialize</span><span class="p">(</span><span class="n">amount</span><span class=
+"p">,</span> <span class="n">card_token</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="vi">@amount</span> <span class=
+"o">=</span> <span class="n">amount</span>
+</span></span><span class="line"><span class="cl">    <span class=
+"vi">@card_token</span> <span class="o">=</span> <span class="n">card_token</span>
 </span></span><span class="line"><span class="cl">  <span class="k">end</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">  <span class="k">def</span> <span class="nf">call</span>
-</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="n">grab_amount</span> <span class="o">&amp;&amp;</span>
-</span></span><span class="line"><span class="cl">       <span class="n">charge</span> <span class="o">&amp;&amp;</span>
-</span></span><span class="line"><span class="cl">       <span class="n">save_payment</span> <span class="o">&amp;&amp;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">def</span> <span class=
+"nf">call</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class=
+"n">grab_amount</span> <span class="o">&amp;&</span>
+</span></span><span class="line"><span class="cl">       <span class="n">charge</span> <span class=
+"o">&amp;&</span>
+</span></span><span class="line"><span class="cl">       <span class=
+"n">save_payment</span> <span class="o">&amp;&</span>
 </span></span><span class="line"><span class="cl">       <span class="n">send_email</span>
 </span></span><span class="line"><span class="cl">      <span class="kp">true</span>
 </span></span><span class="line"><span class="cl">    <span class="k">else</span>
@@ -217,72 +375,106 @@ or <a href="https://nathanherald.com/posts/rss.xml">subscribe with RSS</a>.
 </span></span><span class="line"><span class="cl">    <span class="k">end</span>
 </span></span><span class="line"><span class="cl">  <span class="k">end</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">  <span class="k">def</span> <span class="nf">define_and_capture</span>
+</span></span><span class="line"><span class="cl">  <span class="k">def</span> <span class=
+"nf">define_and_capture</span>
 </span></span><span class="line"><span class="cl">    <span class="k">yield</span>
-</span></span><span class="line"><span class="cl">  <span class="k">rescue</span> <span class="no">StandardError</span> <span class="o">=&gt;</span> <span class="n">e</span>
+</span></span><span class="line"><span class="cl">  <span class="k">rescue</span> <span class=
+"no">StandardError</span> <span class="o">=&gt;</span> <span class="n">e</span>
 </span></span><span class="line"><span class="cl">    <span class="kp">false</span>
 </span></span><span class="line"><span class="cl">  <span class="k">end</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">  <span class="n">define_and_capture</span> <span class="ss">:grab_amount</span> <span class="k">do</span>
-</span></span><span class="line"><span class="cl">    <span class="vi">@amount</span> <span class="o">=</span> <span class="n">params</span><span class="o">[</span><span class="ss">:amount</span><span class="o">].</span><span class="n">to_i</span>
-</span></span><span class="line"><span class="cl">    <span class="vi">@amount</span> <span class="o">&gt;</span> <span class="mi">100</span>
+</span></span><span class="line"><span class="cl">  <span class=
+"n">define_and_capture</span> <span class="ss">:grab_amount</span> <span class="k">do</span>
+</span></span><span class="line"><span class="cl">    <span class="vi">@amount</span> <span class=
+"o">=</span> <span class="n">params</span><span class="o">[</span><span class=
+"ss">:amount</span><span class="o">].</span><span class="n">to_i</span>
+</span></span><span class="line"><span class="cl">    <span class="vi">@amount</span> <span class=
+"o">&gt;</span> <span class="mi">100</span>
 </span></span><span class="line"><span class="cl">  <span class="k">end</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">  <span class="n">define_and_capture</span> <span class="ss">:charge</span> <span class="k">do</span>
-</span></span><span class="line"><span class="cl">    <span class="vi">@charge</span> <span class="o">=</span> <span class="no">Stripe</span><span class="o">::</span><span class="no">Charge</span><span class="o">.</span><span class="n">create</span><span class="p">({</span>
-</span></span><span class="line"><span class="cl">      <span class="ss">amount</span><span class="p">:</span> <span class="vi">@amount</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">      <span class="ss">card</span><span class="p">:</span> <span class="n">params</span><span class="o">[</span><span class="ss">:card_token</span><span class="o">]</span>
+</span></span><span class="line"><span class="cl">  <span class=
+"n">define_and_capture</span> <span class="ss">:charge</span> <span class="k">do</span>
+</span></span><span class="line"><span class="cl">    <span class="vi">@charge</span> <span class=
+"o">=</span> <span class="no">Stripe</span><span class="o">::</span><span class=
+"no">Charge</span><span class="o">.</span><span class="n">create</span><span class="p">({</span>
+</span></span><span class="line"><span class="cl">      <span class="ss">amount</span><span class=
+"p">:</span> <span class="vi">@amount</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="ss">card</span><span class=
+"p">:</span> <span class="n">params</span><span class="o">[</span><span class=
+"ss">:card_token</span><span class="o">]</span>
 </span></span><span class="line"><span class="cl">    <span class="p">})</span>
 </span></span><span class="line"><span class="cl">    <span class="kp">true</span>
 </span></span><span class="line"><span class="cl">  <span class="k">end</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">  <span class="n">define_and_capture</span> <span class="ss">:save_payment</span> <span class="k">do</span>
-</span></span><span class="line"><span class="cl">    <span class="vi">@charge_response</span> <span class="o">=</span> <span class="no">StripeChargeResponse</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="ss">body</span><span class="p">:</span> <span class="vi">@charge</span><span class="o">.</span><span class="n">to_hash</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">    <span class="vi">@payment</span> <span class="o">=</span> <span class="no">Payment</span><span class="o">.</span><span class="n">new</span><span class="p">({</span>
-</span></span><span class="line"><span class="cl">      <span class="ss">stripe_charge_response</span><span class="p">:</span> <span class="n">charge_response</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">      <span class="ss">stripe_charge_id</span><span class="p">:</span> <span class="n">charge</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">      <span class="ss">amount</span><span class="p">:</span> <span class="n">charge</span><span class="o">.</span><span class="n">amount</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">      <span class="ss">currency</span><span class="p">:</span> <span class="n">charge</span><span class="o">.</span><span class="n">currency</span>
+</span></span><span class="line"><span class="cl">  <span class=
+"n">define_and_capture</span> <span class="ss">:save_payment</span> <span class="k">do</span>
+</span></span><span class="line"><span class="cl">    <span class=
+"vi">@charge_response</span> <span class="o">=</span> <span class=
+"no">StripeChargeResponse</span><span class="o">.</span><span class="n">new</span><span class=
+"p">(</span><span class="ss">body</span><span class="p">:</span> <span class=
+"vi">@charge</span><span class="o">.</span><span class="n">to_hash</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="vi">@payment</span> <span class=
+"o">=</span> <span class="no">Payment</span><span class="o">.</span><span class=
+"n">new</span><span class="p">({</span>
+</span></span><span class="line"><span class="cl">      <span class=
+"ss">stripe_charge_response</span><span class="p">:</span> <span class=
+"n">charge_response</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class=
+"ss">stripe_charge_id</span><span class="p">:</span> <span class="n">charge</span><span class=
+"o">.</span><span class="n">id</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="ss">amount</span><span class=
+"p">:</span> <span class="n">charge</span><span class="o">.</span><span class=
+"n">amount</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class=
+"ss">currency</span><span class="p">:</span> <span class="n">charge</span><span class=
+"o">.</span><span class="n">currency</span>
 </span></span><span class="line"><span class="cl">    <span class="p">})</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">    <span class="vi">@payment</span><span class="o">.</span><span class="n">save!</span>
+</span></span><span class="line"><span class="cl">    <span class="vi">@payment</span><span class=
+"o">.</span><span class="n">save!</span>
 </span></span><span class="line"><span class="cl">  <span class="k">end</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">  <span class="n">define_and_capture</span> <span class="ss">:send_email</span> <span class="k">do</span>
-</span></span><span class="line"><span class="cl">    <span class="no">ReceiptMailer</span><span class="o">.</span><span class="n">payment_receipt</span><span class="p">(</span><span class="vi">@payment</span><span class="p">)</span><span class="o">.</span><span class="n">deliver_later</span>
+</span></span><span class="line"><span class="cl">  <span class=
+"n">define_and_capture</span> <span class="ss">:send_email</span> <span class="k">do</span>
+</span></span><span class="line"><span class="cl">    <span class=
+"no">ReceiptMailer</span><span class="o">.</span><span class="n">payment_receipt</span><span class=
+"p">(</span><span class="vi">@payment</span><span class="p">)</span><span class=
+"o">.</span><span class="n">deliver_later</span>
 </span></span><span class="line"><span class="cl">    <span class="kp">true</span>
 </span></span><span class="line"><span class="cl">  <span class="k">end</span>
 </span></span><span class="line"><span class="cl"><span class="k">end</span>
-</span></span></code></pre></div><p>I iterated on this more and then decided I should just package up the repeatable bits into a module which I am now publishing as a gem: <a href="https://github.com/myobie/workout">Workout</a>.</p>
-<p>Workout can help declare the steps needed to work through something. If any step fails then execution halts. A workflow instance knows if it&rsquo;s completed, valid, or successful. This means a lot of controller actions can return to the simple and amazing if success then render success, else render error.</p>
-<p>Most service object type libraries I see online accept their arguments into the call method, but I don&rsquo;t like this approach. I&rsquo;ve made the mistake of setting instance vars in methods and those might get carried over. To me, a better approach is to always <code>Thing.new(args).call</code> each time instead.</p>
-<p>I hope someone might also find this type of object useful.</p>
-
-      </div>
-
-      <footer>
-        
-        <p>
-          
-            Posted on
-          
-          <time datetime="2015-01-26T09:20:52Z">
-            26 Jan, 2015
-          </time>
-          
-          
-            onto
-            <a href="https://myobie.svbtle.com/make-workflows-for-complicated-tasks">Svbtle</a>
-          
-          
-        </p>
-      </footer>
-    </article>
-  </main>
-
-    
-    
-    <script async src="/behavior.js"></script>
-      <script defer data-domain="nathanherald.com" src="https://stats.myobie.wtf/script.js"></script>
+</span></span></code></pre>
+          </div>
+          <p>
+            I iterated on this more and then decided I should just package up the repeatable bits
+            into a module which I am now publishing as a gem: <a href=
+            "https://github.com/myobie/workout">Workout</a>.
+          </p>
+          <p>
+            Workout can help declare the steps needed to work through something. If any step fails
+            then execution halts. A workflow instance knows if it’s completed, valid, or
+            successful. This means a lot of controller actions can return to the simple and amazing
+            if success then render success, else render error.
+          </p>
+          <p>
+            Most service object type libraries I see online accept their arguments into the call
+            method, but I don’t like this approach. I’ve made the mistake of setting instance vars
+            in methods and those might get carried over. To me, a better approach is to always
+            <code>Thing.new(args).call</code> each time instead.
+          </p>
+          <p>
+            I hope someone might also find this type of object useful.
+          </p>
+        </div>
+        <footer>
+          <p>
+            Posted on <time datetime="2015-01-26T09:20:52Z">26 Jan, 2015</time> onto <a href=
+            "https://myobie.svbtle.com/make-workflows-for-complicated-tasks">Svbtle</a>
+          </p>
+        </footer>
+      </article>
+    </main>
+    <script async src="/behavior.js"></script> 
+    <script data-domain="nathanherald.com" defer src="https://stats.myobie.wtf/script.js"></script>
   </body>
 </html>

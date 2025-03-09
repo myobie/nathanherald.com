@@ -1,136 +1,192 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
   <head lang="en-us">
+    <meta content="HTML Tidy for HTML5 for Apple macOS version 5.8.0" name="generator">
     <meta charset="UTF-8">
-    <title>I‘m Nathan Herald → Refactor only when you have some sort of tests</title>
+    <title>
+      I‘m Nathan Herald → Refactor only when you have some sort of tests
+    </title>
     <script>
       if ((new URL(window.location.href)).host === 'myobie.com') { window.location.assign('https://nathanherald.com') }
     </script>
-    <link rel="canonical" href="https://nathanherald.com/posts/legacy/refactor-only-when-you-have-some-sort-of-tests/">
-    <link rel="stylesheet" type="text/css" href="https://cloud.typography.com/6836312/761366/css/fonts.css"><link rel="stylesheet" type="text/css" href="/styles.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="generator" content="Hugo 0.136.5">
-    <meta name="title" content="I‘m Nathan Herald  → Refactor only when you have some sort of tests">
-    <meta name="description" content="Refactor tractor, as Jess says">
-    <meta property="og:title" content="Refactor only when you have some sort of tests">
-    <meta property="og:type" content="website">
-    <meta property="og:description" content="Refactor tractor, as Jess says">
-    <meta property="og:url" content="https://nathanherald.com/posts/legacy/refactor-only-when-you-have-some-sort-of-tests/">
-    <meta property="og:image" content="/og.png">
-    <meta property="og:site_name" content="I‘m Nathan Herald">
-    
-  
-
-<link rel="alternate" type="application/rss+xml" href="/rss.xml" title="Feed of all the posts on nathanherald.com">
-
-
+    <link href=
+    "https://nathanherald.com/posts/legacy/refactor-only-when-you-have-some-sort-of-tests/" rel=
+    "canonical">
+    <link href="https://cloud.typography.com/6836312/761366/css/fonts.css" rel="stylesheet" type=
+    "text/css">
+    <link href="/styles.css" rel="stylesheet" type="text/css">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="Hugo 0.136.5" name="generator">
+    <meta content="I‘m Nathan Herald → Refactor only when you have some sort of tests" name=
+    "title">
+    <meta content="Refactor tractor, as Jess says" name="description">
+    <meta content="Refactor only when you have some sort of tests" property="og:title">
+    <meta content="website" property="og:type">
+    <meta content="Refactor tractor, as Jess says" property="og:description">
+    <meta content=
+    "https://nathanherald.com/posts/legacy/refactor-only-when-you-have-some-sort-of-tests/"
+    property="og:url">
+    <meta content="/og.png" property="og:image">
+    <meta content="I‘m Nathan Herald" property="og:site_name">
+    <link href="/rss.xml" rel="alternate" title="Feed of all the posts on nathanherald.com" type=
+    "application/rss+xml">
   </head>
   <body class="default">
-    
-  <header class="section-header">
-    <div class="section-nav">
-      <h1 class="home-link">
-        <a data-nospan href="/" class="never-underline"><abbr title="Hello">👋</abbr></a>
-        <a href="/">I&rsquo;m Nathan</a>
-      </h1>
-      <nav>
-        <p>
-          Find more in the <a href="https://nathanherald.com/posts/">archive of all the posts on this site</a>
-or <a href="https://nathanherald.com/posts/rss.xml">subscribe with RSS</a>.
-
-        </p>
-      </nav>
-    </div>
-  </header>
-
-    
-  <main class="single">
-    <article>
-      <header>
-        <h1>
-          
-          
-            Refactor only when you have some sort of tests
-            <p class="annotation">⭐️ a blog post</a>
-          
+    <header class="section-header">
+      <div class="section-nav">
+        <h1 class="home-link">
+          <a class="never-underline" data-nospan="" href="/"><abbr title="Hello">👋</abbr></a>
+          <a href="/">I’m Nathan</a>
         </h1>
-        
-          <h2>Refactor tractor, as Jess says</h2>
-        
-      </header>
-
-      <div class="content">
-        <figure>
-  <img
-    alt="John Deer tracker"
-    width="1024"
-    height="684"
-    src="https://nathanherald.com/posts/legacy/refactor-only-when-you-have-some-sort-of-tests/0-UhlBcENy99gkZ-dt_hu5793157229902638462.jpeg">
-  <figcaption>
-    via Odalaigh on flickr.com
-  </figcaption>
-</figure>
-
-<p><em>This is an exposition of point 2 from</em> <a href="/posts/legacy/be-a-good-programmer/"><em>Be a good programmer</em></a><em>.</em></p>
-<p>Most of my time as a programmer is spent reading and refactoring code. Very seldom am I just typing out lines and lines of new code - and even when I am, I usually end up refactoring that new code before it’s shipped out.</p>
-<p>By definition, you cannot refactor code without some sort of tests. That’s what refactoring is, changing code without changing the end result of it’s work.</p>
-<p>A simple example you probably think is stupid is CSS. Change some styles, refresh the page. The refresh is the test. You, the human, are verifying that you didn’t change the way things look. This even applies to developers refactoring scripts or application code, sometimes a human refreshing is how we know we didn’t change anything.</p>
-<p><strong>There are some key points to know:</strong></p>
-<ol>
-<li>
-<p>If a test has always passed, if it never failed in the beginning, then you don’t know if it’s testing anything</p>
-</li>
-<li>
-<p>If a test fails during a refactoring, it was too granular</p>
-</li>
-<li>
-<p>Your tests only try out your assumptions of how the system works</p>
-</li>
-</ol>
-<h3 id="tests-gottafail">Tests gotta fail</h3>
-<p>Writing tests first is good, because you know they will fail, then pass, then you are good. I don’t always do this, but it’s probably the best idea. TDD as they call it.</p>
-<p>If you write some code, then write a passing test for it, you don’t know anything from the test. Nothing.</p>
-<p>An example in ruby that I see often is using <code>assert</code> instead of <code>assert_equal</code>. Like this:</p>
-<pre tabindex="0"><code>assert &#34;foo&#34;, some_var 
-assert_equal &#34;foo&#34;, some_var
-</code></pre><p>The first assert will always pass because <code>&quot;foo&quot;</code> is truthy. <code>some_var</code> is actually being given as the <code>&quot;message&quot;</code> argument, which is shown if the assert fails.</p>
-<p>If you require a test to fail before it succeeds, this type of mistake wouldn’t happen.</p>
-<h3 id="tests-need-to-bestable">Tests need to be stable</h3>
-<p>Changing one line of code shouldn’t break a ton of tests. If it does, your tests are probably too granular to mean much. Trying to assert every little thing about a system is dangerous, because it can lead to only testing small interactions, but never knowing if the entire system even works. I’ve seen rails apps with decent coverage and all tests passing that raise errors all the time.</p>
-<p>Try to think about the ins and outs of the system, not the actual algorithms going on inside.</p>
-<h3 id="your-tests-areflawed">Your tests are flawed</h3>
-<p>Yeah, it kinda sucks, but your tests are not adequate. The problem is that you only test how you think the system works. It’s ok though, you can’t really help it.</p>
-<p>Applications or websites or whatever act in ways that we would never imagine or predict. It’s pretty cool to see someone use a tool you made for things you never thought of. It also means you didn’t write a test for that scenario.</p>
-<p>Honestly, you don’t need to test every scenario. But, if users get used to how something works, even if it’s working in a broken way, they will complain and possibly dissent when it changes.</p>
-<p><strong>The solution:</strong> have someone else look at it and/or use it.</p>
-<p>Most problems we work on <strong>are human problems</strong> anyway, the computer parts of things is most times figured out. I mean unless your Facebook and you have a bajillion users so you write your own php. Then you are solving problems no one else has. Then it’s whatever. However, more than likely, you are not Facebook.</p>
-
+        <nav>
+          <p>
+            Find more in the <a href="https://nathanherald.com/posts/">archive of all the posts on
+            this site</a> or <a href="https://nathanherald.com/posts/rss.xml">subscribe with
+            RSS</a>.
+          </p>
+        </nav>
       </div>
-
-      <footer>
-        
-        <p>
-          
-            Posted on
-          
-          <time datetime="2013-07-11T14:22:50Z">
-            11 Jul, 2013
-          </time>
-          
-            onto
-            <a href="https://medium.com/i-m-h-o/refactor-only-when-you-have-some-sort-of-tests-54ab8c4d13b0">Medium</a>
-          
-          
-          
-        </p>
-      </footer>
-    </article>
-  </main>
-
-    
-    
-    <script async src="/behavior.js"></script>
-      <script defer data-domain="nathanherald.com" src="https://stats.myobie.wtf/script.js"></script>
+    </header>
+    <main class="single">
+      <article>
+        <header>
+          <h1>
+            Refactor only when you have some sort of tests
+          </h1>
+          <p class="annotation">
+            ⭐️ a blog post
+          </p>
+          <h2>
+            Refactor tractor, as Jess says
+          </h2>
+        </header>
+        <div class="content">
+          <figure>
+            <img alt="John Deer tracker" height="684" src=
+            "https://nathanherald.com/posts/legacy/refactor-only-when-you-have-some-sort-of-tests/0-UhlBcENy99gkZ-dt_hu5793157229902638462.jpeg"
+            width="1024">
+            <figcaption>
+              via Odalaigh on flickr.com
+            </figcaption>
+          </figure>
+          <p>
+            <em>This is an exposition of point 2 from</em> <a href=
+            "/posts/legacy/be-a-good-programmer/"><em>Be a good programmer</em></a><em>.</em>
+          </p>
+          <p>
+            Most of my time as a programmer is spent reading and refactoring code. Very seldom am I
+            just typing out lines and lines of new code - and even when I am, I usually end up
+            refactoring that new code before it’s shipped out.
+          </p>
+          <p>
+            By definition, you cannot refactor code without some sort of tests. That’s what
+            refactoring is, changing code without changing the end result of it’s work.
+          </p>
+          <p>
+            A simple example you probably think is stupid is CSS. Change some styles, refresh the
+            page. The refresh is the test. You, the human, are verifying that you didn’t change the
+            way things look. This even applies to developers refactoring scripts or application
+            code, sometimes a human refreshing is how we know we didn’t change anything.
+          </p>
+          <p>
+            <strong>There are some key points to know:</strong>
+          </p>
+          <ol>
+            <li>
+              <p>
+                If a test has always passed, if it never failed in the beginning, then you don’t
+                know if it’s testing anything
+              </p>
+            </li>
+            <li>
+              <p>
+                If a test fails during a refactoring, it was too granular
+              </p>
+            </li>
+            <li>
+              <p>
+                Your tests only try out your assumptions of how the system works
+              </p>
+            </li>
+          </ol>
+          <h3 id="tests-gottafail">
+            Tests gotta&nbsp;fail
+          </h3>
+          <p>
+            Writing tests first is good, because you know they will fail, then pass, then you are
+            good. I don’t always do this, but it’s probably the best idea. TDD as they call it.
+          </p>
+          <p>
+            If you write some code, then write a passing test for it, you don’t know anything from
+            the test. Nothing.
+          </p>
+          <p>
+            An example in ruby that I see often is using <code>assert</code> instead of
+            <code>assert_equal</code>. Like this:
+          </p>
+          <pre tabindex="0"><code>assert "foo", some_var 
+assert_equal "foo", some_var
+</code></pre>
+          <p>
+            The first assert will always pass because <code>"foo"</code> is truthy.
+            <code>some_var</code> is actually being given as the <code>"message"</code> argument,
+            which is shown if the assert fails.
+          </p>
+          <p>
+            If you require a test to fail before it succeeds, this type of mistake wouldn’t happen.
+          </p>
+          <h3 id="tests-need-to-bestable">
+            Tests need to be&nbsp;stable
+          </h3>
+          <p>
+            Changing one line of code shouldn’t break a ton of tests. If it does, your tests are
+            probably too granular to mean much. Trying to assert every little thing about a system
+            is dangerous, because it can lead to only testing small interactions, but never knowing
+            if the entire system even works. I’ve seen rails apps with decent coverage and all
+            tests passing that raise errors all the time.
+          </p>
+          <p>
+            Try to think about the ins and outs of the system, not the actual algorithms going on
+            inside.
+          </p>
+          <h3 id="your-tests-areflawed">
+            Your tests are&nbsp;flawed
+          </h3>
+          <p>
+            Yeah, it kinda sucks, but your tests are not adequate. The problem is that you only
+            test how you think the system works. It’s ok though, you can’t really help it.
+          </p>
+          <p>
+            Applications or websites or whatever act in ways that we would never imagine or
+            predict. It’s pretty cool to see someone use a tool you made for things you never
+            thought of. It also means you didn’t write a test for that scenario.
+          </p>
+          <p>
+            Honestly, you don’t need to test every scenario. But, if users get used to how
+            something works, even if it’s working in a broken way, they will complain and possibly
+            dissent when it changes.
+          </p>
+          <p>
+            <strong>The solution:</strong> have someone else look at it and/or use it.
+          </p>
+          <p>
+            Most problems we work on <strong>are human problems</strong> anyway, the computer parts
+            of things is most times figured out. I mean unless your Facebook and you have a
+            bajillion users so you write your own php. Then you are solving problems no one else
+            has. Then it’s whatever. However, more than likely, you are not Facebook.
+          </p>
+        </div>
+        <footer>
+          <p>
+            Posted on <time datetime="2013-07-11T14:22:50Z">11 Jul, 2013</time> onto <a href=
+            "https://medium.com/i-m-h-o/refactor-only-when-you-have-some-sort-of-tests-54ab8c4d13b0">
+            Medium</a>
+          </p>
+        </footer>
+      </article>
+    </main>
+    <script async src="/behavior.js"></script> 
+    <script data-domain="nathanherald.com" defer src="https://stats.myobie.wtf/script.js"></script>
   </body>
 </html>

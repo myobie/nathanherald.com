@@ -1,119 +1,158 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
   <head lang="en-us">
+    <meta content="HTML Tidy for HTML5 for Apple macOS version 5.8.0" name="generator">
     <meta charset="UTF-8">
-    <title>I‘m Nathan Herald → CloudKit</title>
+    <title>
+      I‘m Nathan Herald → CloudKit
+    </title>
     <script>
       if ((new URL(window.location.href)).host === 'myobie.com') { window.location.assign('https://nathanherald.com') }
     </script>
-    <link rel="canonical" href="https://nathanherald.com/posts/legacy/cloudkit/">
-    <link rel="stylesheet" type="text/css" href="https://cloud.typography.com/6836312/761366/css/fonts.css"><link rel="stylesheet" type="text/css" href="/styles.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="generator" content="Hugo 0.136.5">
-    <meta name="title" content="I‘m Nathan Herald  → CloudKit">
-    <meta name="description" content="Serverless Collaboration">
-    <meta property="og:title" content="CloudKit">
-    <meta property="og:type" content="website">
-    <meta property="og:description" content="Serverless Collaboration">
-    <meta property="og:url" content="https://nathanherald.com/posts/legacy/cloudkit/">
-    <meta property="og:image" content="/og.png">
-    <meta property="og:site_name" content="I‘m Nathan Herald">
-    
-  
-
-<link rel="alternate" type="application/rss+xml" href="/rss.xml" title="Feed of all the posts on nathanherald.com">
-
-
+    <link href="https://nathanherald.com/posts/legacy/cloudkit/" rel="canonical">
+    <link href="https://cloud.typography.com/6836312/761366/css/fonts.css" rel="stylesheet" type=
+    "text/css">
+    <link href="/styles.css" rel="stylesheet" type="text/css">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="Hugo 0.136.5" name="generator">
+    <meta content="I‘m Nathan Herald → CloudKit" name="title">
+    <meta content="Serverless Collaboration" name="description">
+    <meta content="CloudKit" property="og:title">
+    <meta content="website" property="og:type">
+    <meta content="Serverless Collaboration" property="og:description">
+    <meta content="https://nathanherald.com/posts/legacy/cloudkit/" property="og:url">
+    <meta content="/og.png" property="og:image">
+    <meta content="I‘m Nathan Herald" property="og:site_name">
+    <link href="/rss.xml" rel="alternate" title="Feed of all the posts on nathanherald.com" type=
+    "application/rss+xml">
   </head>
   <body class="default">
-    
-  <header class="section-header">
-    <div class="section-nav">
-      <h1 class="home-link">
-        <a data-nospan href="/" class="never-underline"><abbr title="Hello">👋</abbr></a>
-        <a href="/">I&rsquo;m Nathan</a>
-      </h1>
-      <nav>
-        <p>
-          Find more in the <a href="https://nathanherald.com/posts/">archive of all the posts on this site</a>
-or <a href="https://nathanherald.com/posts/rss.xml">subscribe with RSS</a>.
-
-        </p>
-      </nav>
-    </div>
-  </header>
-
-    
-  <main class="single">
-    <article>
-      <header>
-        <h1>
-          
-          
-            CloudKit
-            <p class="annotation">⭐️ a blog post</a>
-          
+    <header class="section-header">
+      <div class="section-nav">
+        <h1 class="home-link">
+          <a class="never-underline" data-nospan="" href="/"><abbr title="Hello">👋</abbr></a>
+          <a href="/">I’m Nathan</a>
         </h1>
-        
-          <h2>Serverless Collaboration</h2>
-        
-      </header>
-
-      <div class="content">
-        <p>The new capabilities in CloudKit for iOS 10 and macOS Sierra are super encouraging. I have been convinced for some time that collaboration and sharing are incredibly important for the future of all mobile productivity software. Productivity software is all about managing data, people, and how they relate to each other. The new additions from Apple make this easier for a larger number of people. As <a href="http://www.nytimes.com/2016/08/08/technology/once-taunted-by-steve-jobs-companies-are-now-big-customers-of-apple.html?src=me&amp;_r=0">more enterprises buy iOS devices instead of Windows</a>, this could be even more important sooner.</p>
-<p>When beginning to build the realtime sync for Wunderlist we tried to setup our server architecture as a product which the native applications “consumed.” We have had some success with this approach, but we never truly made a generic “realtime storage and collaboration system.” Which is fine, we make a to-do manager and not a storage service. (Of course we talk sometimes about how fun it would be to make our stack generic and open.)</p>
-<p>We knew we were going to build a system that will be obsolete very quickly. Just how people choose between databases (MySQL or Postgres), in the future people will choose between their serverless realtime storage and collaboration products (<a href="https://en.wikipedia.org/wiki/CloudKit">CloudKit</a>, <a href="http://hood.ie">hoodie</a>, <a href="https://deepstream.io">deepstream</a>, …). <em>(We need a shorter name for serverless realtime storage and collaboration product. Also is it serverless or nobackend?)</em></p>
-<p>Apple has been very, very slowly evolving iCloud over time and now they have built a file/blob storage system, a record/object storage system, sharing and collaboration (ACLs), and basic conflict management. They are succeeding at a huge scale and I’m sure it will eventually be “realtime.” <em>(Realtime means: very fast. Like a few seconds or less to get updates anywhere in the world.)</em></p>
-<p>Already, when using an app that stores data in iCloud Drive: I edit on my iMac, move over to the couch to edit on my MacBook, changes are already there. And later when I’m on the go I make some edits on my iPhone which all syncs together fine. I am collaborating with myself. The next obvious step was to collaborate with any number of people and that is just what is coming soon.</p>
-<figure>
-  <img
-    alt="Notes’s new sharing screen"
-    width="311"
-    height="552"
-    src="https://nathanherald.com/posts/legacy/cloudkit/1-5_qp7e2QY6mjv1NfWP38Mw_hu7059793691416387993.png">
-  <figcaption>
-    Notes’s new sharing screen
-  </figcaption>
-</figure>
-
-<p>Wunderlist’s realtime sync won’t be a competitive advantage for long. Apple’s Notes is a great example of how one can use the new APIs to take an existing product and make it collaborative. I expect in a few years this will be a common service provided by all operating system makers.</p>
-<p>While Apple does provide a javascript CloudKit SDK, and it is already being used on the iCloud web version of Notes to provide sharing and collaboration, they don’t offer native SDKs for Android or Windows. (<a href="https://github.com/jaumecornado/DroidNubeKit">Someone did port the web service calls to Android</a>, which is amazing.)</p>
-<p>Some things you might want to look into:</p>
-<ul>
-<li><a href="https://en.wikipedia.org/wiki/CloudKit">CloudKit</a></li>
-<li><a href="https://pouchdb.com">pouchdb</a></li>
-<li><a href="http://hood.ie">hoodie</a></li>
-<li><a href="https://deepstream.io">deepstream</a></li>
-<li><a href="https://realm.io">realm</a></li>
-</ul>
-<p><em>Who is going to create the first good multi-platform serverless/nobackend realtime collaboration and storage system?</em></p>
-
+        <nav>
+          <p>
+            Find more in the <a href="https://nathanherald.com/posts/">archive of all the posts on
+            this site</a> or <a href="https://nathanherald.com/posts/rss.xml">subscribe with
+            RSS</a>.
+          </p>
+        </nav>
       </div>
-
-      <footer>
-        
-        <p>
-          
-            Posted on
-          
-          <time datetime="2016-08-12T17:45:48Z">
-            12 Aug, 2016
-          </time>
-          
-            onto
-            <a href="https://medium.com/@myobie/cloudkit-35f4fcb35f7">Medium</a>
-          
-          
-          
-        </p>
-      </footer>
-    </article>
-  </main>
-
-    
-    
-    <script async src="/behavior.js"></script>
-      <script defer data-domain="nathanherald.com" src="https://stats.myobie.wtf/script.js"></script>
+    </header>
+    <main class="single">
+      <article>
+        <header>
+          <h1>
+            CloudKit
+          </h1>
+          <p class="annotation">
+            ⭐️ a blog post
+          </p>
+          <h2>
+            Serverless Collaboration
+          </h2>
+        </header>
+        <div class="content">
+          <p>
+            The new capabilities in CloudKit for iOS 10 and macOS Sierra are super encouraging. I
+            have been convinced for some time that collaboration and sharing are incredibly
+            important for the future of all mobile productivity software. Productivity software is
+            all about managing data, people, and how they relate to each other. The new additions
+            from Apple make this easier for a larger number of people. As <a href=
+            "http://www.nytimes.com/2016/08/08/technology/once-taunted-by-steve-jobs-companies-are-now-big-customers-of-apple.html?src=me&amp;_r=0">
+            more enterprises buy iOS devices instead of Windows</a>, this could be even more
+            important sooner.
+          </p>
+          <p>
+            When beginning to build the realtime sync for Wunderlist we tried to setup our server
+            architecture as a product which the native applications “consumed.” We have had some
+            success with this approach, but we never truly made a generic “realtime storage and
+            collaboration system.” Which is fine, we make a to-do manager and not a storage
+            service. (Of course we talk sometimes about how fun it would be to make our stack
+            generic and open.)
+          </p>
+          <p>
+            We knew we were going to build a system that will be obsolete very quickly. Just how
+            people choose between databases (MySQL or Postgres), in the future people will choose
+            between their serverless realtime storage and collaboration products (<a href=
+            "https://en.wikipedia.org/wiki/CloudKit">CloudKit</a>, <a href=
+            "http://hood.ie">hoodie</a>, <a href="https://deepstream.io">deepstream</a>,&nbsp;…).
+            <em>(We need a shorter name for serverless realtime storage and collaboration product.
+            Also is it serverless or nobackend?)</em>
+          </p>
+          <p>
+            Apple has been very, very slowly evolving iCloud over time and now they have built a
+            file/blob storage system, a record/object storage system, sharing and collaboration
+            (ACLs), and basic conflict management. They are succeeding at a huge scale and I’m sure
+            it will eventually be “realtime.” <em>(Realtime means: very fast. Like a few seconds or
+            less to get updates anywhere in the world.)</em>
+          </p>
+          <p>
+            Already, when using an app that stores data in iCloud Drive: I edit on my iMac, move
+            over to the couch to edit on my MacBook, changes are already there. And later when I’m
+            on the go I make some edits on my iPhone which all syncs together fine. I am
+            collaborating with myself. The next obvious step was to collaborate with any number of
+            people and that is just what is coming soon.
+          </p>
+          <figure>
+            <img alt="Notes’s new sharing&nbsp;screen" height="552" src=
+            "https://nathanherald.com/posts/legacy/cloudkit/1-5_qp7e2QY6mjv1NfWP38Mw_hu7059793691416387993.png"
+            width="311">
+            <figcaption>
+              Notes’s new sharing&nbsp;screen
+            </figcaption>
+          </figure>
+          <p>
+            Wunderlist’s realtime sync won’t be a competitive advantage for long. Apple’s Notes is
+            a great example of how one can use the new APIs to take an existing product and make it
+            collaborative. I expect in a few years this will be a common service provided by all
+            operating system makers.
+          </p>
+          <p>
+            While Apple does provide a javascript CloudKit SDK, and it is already being used on the
+            iCloud web version of Notes to provide sharing and collaboration, they don’t offer
+            native SDKs for Android or Windows. (<a href=
+            "https://github.com/jaumecornado/DroidNubeKit">Someone did port the web service calls
+            to Android</a>, which is amazing.)
+          </p>
+          <p>
+            Some things you might want to look into:
+          </p>
+          <ul>
+            <li>
+              <a href="https://en.wikipedia.org/wiki/CloudKit">CloudKit</a>
+            </li>
+            <li>
+              <a href="https://pouchdb.com">pouchdb</a>
+            </li>
+            <li>
+              <a href="http://hood.ie">hoodie</a>
+            </li>
+            <li>
+              <a href="https://deepstream.io">deepstream</a>
+            </li>
+            <li>
+              <a href="https://realm.io">realm</a>
+            </li>
+          </ul>
+          <p>
+            <em>Who is going to create the first good multi-platform serverless/nobackend realtime
+            collaboration and storage system?</em>
+          </p>
+        </div>
+        <footer>
+          <p>
+            Posted on <time datetime="2016-08-12T17:45:48Z">12 Aug, 2016</time> onto <a href=
+            "https://medium.com/@myobie/cloudkit-35f4fcb35f7">Medium</a>
+          </p>
+        </footer>
+      </article>
+    </main>
+    <script async src="/behavior.js"></script> 
+    <script data-domain="nathanherald.com" defer src="https://stats.myobie.wtf/script.js"></script>
   </body>
 </html>

@@ -1,163 +1,320 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
   <head lang="en-us">
+    <meta content="HTML Tidy for HTML5 for Apple macOS version 5.8.0" name="generator">
     <meta charset="UTF-8">
-    <title>I‘m Nathan Herald → The disharmony between “web components” (custom elements) and react-like “framework components” is real</title>
+    <title>
+      I‘m Nathan Herald → The disharmony between “web components” (custom elements) and react-like
+      “framework components” is real
+    </title>
     <script>
       if ((new URL(window.location.href)).host === 'myobie.com') { window.location.assign('https://nathanherald.com') }
     </script>
-    <link rel="canonical" href="https://nathanherald.com/posts/disharmony-between-components/">
-    <link rel="stylesheet" type="text/css" href="https://cloud.typography.com/6836312/761366/css/fonts.css"><link rel="stylesheet" type="text/css" href="/styles.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="generator" content="Hugo 0.136.5">
-    <meta name="title" content="I‘m Nathan Herald  → The disharmony between “web components” (custom elements) and react-like “framework components” is real">
-    <meta name="description" content="">
-    <meta property="og:title" content="The disharmony between “web components” (custom elements) and react-like “framework components” is real">
-    <meta property="og:type" content="website">
-    <meta property="og:description" content="">
-    <meta property="og:url" content="https://nathanherald.com/posts/disharmony-between-components/">
-    <meta property="og:image" content="/og.png">
-    <meta property="og:site_name" content="I‘m Nathan Herald">
-    
-  
-
-<link rel="alternate" type="application/rss+xml" href="/rss.xml" title="Feed of all the posts on nathanherald.com">
-
-
+    <link href="https://nathanherald.com/posts/disharmony-between-components/" rel="canonical">
+    <link href="https://cloud.typography.com/6836312/761366/css/fonts.css" rel="stylesheet" type=
+    "text/css">
+    <link href="/styles.css" rel="stylesheet" type="text/css">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="Hugo 0.136.5" name="generator">
+    <meta content=
+    "I‘m Nathan Herald → The disharmony between “web components” (custom elements) and react-like “framework components” is real"
+    name="title">
+    <meta content="" name="description">
+    <meta content=
+    "The disharmony between “web components” (custom elements) and react-like “framework components” is real"
+    property="og:title">
+    <meta content="website" property="og:type">
+    <meta content="" property="og:description">
+    <meta content="https://nathanherald.com/posts/disharmony-between-components/" property=
+    "og:url">
+    <meta content="/og.png" property="og:image">
+    <meta content="I‘m Nathan Herald" property="og:site_name">
+    <link href="/rss.xml" rel="alternate" title="Feed of all the posts on nathanherald.com" type=
+    "application/rss+xml">
   </head>
   <body class="default">
-    
-  <header class="section-header">
-    <div class="section-nav">
-      <h1 class="home-link">
-        <a data-nospan href="/" class="never-underline"><abbr title="Hello">👋</abbr></a>
-        <a href="/">I&rsquo;m Nathan</a>
-      </h1>
-      <nav>
-        <p>
-          Find more in the <a href="https://nathanherald.com/posts/">archive of all the posts on this site</a>
-or <a href="https://nathanherald.com/posts/rss.xml">subscribe with RSS</a>.
-
-        </p>
-      </nav>
-    </div>
-  </header>
-
-    
-  <main class="single">
-    <article>
-      <header>
-        <h1>
-          
-          
-            The disharmony between “web components” (custom elements) and react-like “framework components” is real
-            <p class="annotation">⭐️ a blog post</a>
-          
+    <header class="section-header">
+      <div class="section-nav">
+        <h1 class="home-link">
+          <a class="never-underline" data-nospan="" href="/"><abbr title="Hello">👋</abbr></a>
+          <a href="/">I’m Nathan</a>
         </h1>
-        
-      </header>
-
-      <div class="content">
-        <p><em><strong>The primary difference is passing down data vs. passing down behavior, and this causes a ton of confusion.</strong></em></p>
-<p><a href="https://www.abeautifulsite.net/posts/web-components-are-not-the-future-they-re-the-present/">Recent</a> <a href="https://x.com/rich_harris/status/1839484645194277111?s=46&amp;t=5XjJH-Qs6-qiNabMDykXPg">discourse</a> about “web components” vs react-like “framework components” is continuing to highlight a fundamental disconnect between these two types of components.</p>
-<p>There is one main irreconcilable difference that many seem to forget to highlight:</p>
-<p><strong>The DOM is about passing data down and dispatching events up, while framework components are all about passing behavior down through “props.”</strong></p>
-<p>And this is why it’s sometimes difficult for framework authors to support custom elements – they are fundamentally incompatible models.</p>
-<p><a href="https://lit.dev">lit</a> tries to bridge the gap by making custom elements look like react, <a href="https://preactjs.com/guide/v10/web-components/">preact</a> does a pretty good best-effort to support custom elements, <a href="https://react.dev/reference/react-dom/components#custom-html-elements">react</a> is also trying, but in the end they can’t work well together because of these fundamental differences.</p>
-<h2 id="data-down-events-up-vs-passing-behavior-down">Data down, events up vs. passing behavior down</h2>
-<p>The DOM is an “object model” that is very <a href="https://www.enjoyalgorithms.com/blog/message-passing-oops">object oriented</a>. One of the tenets of most object oriented systems is to:</p>
-<ol>
-<li>Encapsulate behavior and state into objects, and</li>
-<li>Pass messages / data between those objects. The DOM pretty much works this way.</li>
-</ol>
-<p>The <code>HTMLParagraphElement</code> inside the <code>HTMLDIVElement</code> doesn’t share any state with its parent. It doesn’t need to.</p>
-<p>This is why custom elements are classes: classes are one of the things that can encapsulate state and behavior in javascript. <em>(Sure, they could have been plain objects and I do kinda wish they were, but I get why the spec writers made this choice.)</em></p>
-<p>Let’s say you want to <em>react</em> to a click of a button inside your custom element – you <strong>shouldn’t pass a function down</strong> to the button to provide to its <code>onclick</code> prop, nah you’d just implement <code>handleEvent</code> in the custom element which contains the button and listen for the event to bubble up. You don’t even need to know if there are any buttons inside your element, you can just be ready for when there are. And the button doesn’t have to know the custom element is a parent – it dispatches a click either way.</p>
-<p>The custom element encapsulates the behavior like this:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="kr">class</span> <span class="nx">CaptureClick</span> <span class="kr">extends</span> <span class="nx">HTMLElement</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">  <span class="kr">static</span> <span class="nx">define</span><span class="p">()</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="nx">customElements</span><span class="p">.</span><span class="nx">define</span><span class="p">(</span><span class="s1">&#39;capture-click&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">)</span>
+        <nav>
+          <p>
+            Find more in the <a href="https://nathanherald.com/posts/">archive of all the posts on
+            this site</a> or <a href="https://nathanherald.com/posts/rss.xml">subscribe with
+            RSS</a>.
+          </p>
+        </nav>
+      </div>
+    </header>
+    <main class="single">
+      <article>
+        <header>
+          <h1>
+            The disharmony between “web components” (custom elements) and react-like “framework
+            components” is real
+          </h1>
+          <p class="annotation">
+            ⭐️ a blog post
+          </p>
+        </header>
+        <div class="content">
+          <p>
+            <em><strong>The primary difference is passing down data vs. passing down behavior, and
+            this causes a ton of confusion.</strong></em>
+          </p>
+          <p>
+            <a href=
+            "https://www.abeautifulsite.net/posts/web-components-are-not-the-future-they-re-the-present/">
+            Recent</a> <a href=
+            "https://x.com/rich_harris/status/1839484645194277111?s=46&amp;t=5XjJH-Qs6-qiNabMDykXPg">
+            discourse</a> about “web components” vs react-like “framework components” is continuing
+            to highlight a fundamental disconnect between these two types of components.
+          </p>
+          <p>
+            There is one main irreconcilable difference that many seem to forget to highlight:
+          </p>
+          <p>
+            <strong>The DOM is about passing data down and dispatching events up, while framework
+            components are all about passing behavior down through “props.”</strong>
+          </p>
+          <p>
+            And this is why it’s sometimes difficult for framework authors to support custom
+            elements – they are fundamentally incompatible models.
+          </p>
+          <p>
+            <a href="https://lit.dev">lit</a> tries to bridge the gap by making custom elements
+            look like react, <a href="https://preactjs.com/guide/v10/web-components/">preact</a>
+            does a pretty good best-effort to support custom elements, <a href=
+            "https://react.dev/reference/react-dom/components#custom-html-elements">react</a> is
+            also trying, but in the end they can’t work well together because of these fundamental
+            differences.
+          </p>
+          <h2 id="data-down-events-up-vs-passing-behavior-down">
+            Data down, events up vs. passing behavior down
+          </h2>
+          <p>
+            The DOM is an “object model” that is very <a href=
+            "https://www.enjoyalgorithms.com/blog/message-passing-oops">object oriented</a>. One of
+            the tenets of most object oriented systems is to:
+          </p>
+          <ol>
+            <li>Encapsulate behavior and state into objects, and
+            </li>
+            <li>Pass messages / data between those objects. The DOM pretty much works this way.
+            </li>
+          </ol>
+          <p>
+            The <code>HTMLParagraphElement</code> inside the <code>HTMLDIVElement</code> doesn’t
+            share any state with its parent. It doesn’t need to.
+          </p>
+          <p>
+            This is why custom elements are classes: classes are one of the things that can
+            encapsulate state and behavior in javascript. <em>(Sure, they could have been plain
+            objects and I do kinda wish they were, but I get why the spec writers made this
+            choice.)</em>
+          </p>
+          <p>
+            Let’s say you want to <em>react</em> to a click of a button inside your custom element
+            – you <strong>shouldn’t pass a function down</strong> to the button to provide to its
+            <code>onclick</code> prop, nah you’d just implement <code>handleEvent</code> in the
+            custom element which contains the button and listen for the event to bubble up. You
+            don’t even need to know if there are any buttons inside your element, you can just be
+            ready for when there are. And the button doesn’t have to know the custom element is a
+            parent – it dispatches a click either way.
+          </p>
+          <p>
+            The custom element encapsulates the behavior like this:
+          </p>
+          <div class="highlight">
+            <pre class="chroma" tabindex="0"><code class="language-js" data-lang="js"><span class=
+            "line"><span class="cl"><span class="kr">class</span> <span class=
+            "nx">CaptureClick</span> <span class="kr">extends</span> <span class=
+            "nx">HTMLElement</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kr">static</span> <span class=
+"nx">define</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class=
+"nx">customElements</span><span class="p">.</span><span class="nx">define</span><span class=
+"p">(</span><span class="s1">'capture-click'</span><span class="p">,</span> <span class=
+"k">this</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">  <span class="p">}</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">  <span class="nx">constructor</span><span class="p">()</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="kr">super</span><span class="p">()</span>
-</span></span><span class="line"><span class="cl">    <span class="k">this</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">display</span> <span class="o">=</span> <span class="s1">&#39;contents&#39;</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">constructor</span><span class=
+"p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kr">super</span><span class=
+"p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="k">this</span><span class=
+"p">.</span><span class="nx">style</span><span class="p">.</span><span class=
+"nx">display</span> <span class="o">=</span> <span class="s1">'contents'</span>
 </span></span><span class="line"><span class="cl">  <span class="p">}</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">  <span class="nx">handleEvent</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">type</span> <span class="o">===</span> <span class="s1">&#39;click&#39;</span> <span class="o">&amp;&amp;</span> <span class="nx">e</span><span class="p">.</span><span class="nx">target</span><span class="p">.</span><span class="nx">tagName</span> <span class="o">===</span> <span class="s1">&#39;BUTTON&#39;</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">      <span class="nx">e</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">()</span>
-</span></span><span class="line"><span class="cl">      <span class="nx">e</span><span class="p">.</span><span class="nx">stopPropagation</span><span class="p">()</span>
-</span></span><span class="line"><span class="cl">      <span class="nx">console</span><span class="p">.</span><span class="nx">warn</span><span class="p">(</span><span class="s1">&#39;captured&#39;</span><span class="p">,</span> <span class="nx">e</span><span class="p">.</span><span class="nx">target</span><span class="p">.</span><span class="nx">innerText</span><span class="p">,</span> <span class="nx">e</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">handleEvent</span><span class=
+"p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class=
+"p">(</span><span class="nx">e</span><span class="p">.</span><span class=
+"nx">type</span> <span class="o">===</span> <span class="s1">'click'</span> <span class=
+"o">&amp;&</span> <span class="nx">e</span><span class="p">.</span><span class=
+"nx">target</span><span class="p">.</span><span class="nx">tagName</span> <span class=
+"o">===</span> <span class="s1">'BUTTON'</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nx">e</span><span class=
+"p">.</span><span class="nx">preventDefault</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">      <span class="nx">e</span><span class=
+"p">.</span><span class="nx">stopPropagation</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">      <span class="nx">console</span><span class=
+"p">.</span><span class="nx">warn</span><span class="p">(</span><span class=
+"s1">'captured'</span><span class="p">,</span> <span class="nx">e</span><span class=
+"p">.</span><span class="nx">target</span><span class="p">.</span><span class=
+"nx">innerText</span><span class="p">,</span> <span class="nx">e</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
 </span></span><span class="line"><span class="cl">  <span class="p">}</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">  <span class="nx">connectedCallback</span><span class="p">()</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="k">this</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class=
+"nx">connectedCallback</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">this</span><span class=
+"p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class=
+"s1">'click'</span><span class="p">,</span> <span class="k">this</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">  <span class="p">}</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">  <span class="nx">disconnectedCallback</span><span class="p">()</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="k">this</span><span class="p">.</span><span class="nx">removeEventListener</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class=
+"nx">disconnectedCallback</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">this</span><span class=
+"p">.</span><span class="nx">removeEventListener</span><span class="p">(</span><span class=
+"s1">'click'</span><span class="p">,</span> <span class="k">this</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">  <span class="p">}</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></div><p>And this can be used either in javascript with <code>document.createElement()</code> or in HTML like:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="line"><span class="cl"><span class="c">&lt;!-- assuming CustomClick.define() has been run --&gt;</span>
-</span></span><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">capture-click</span><span class="p">&gt;</span>
-</span></span><span class="line"><span class="cl">  <span class="p">&lt;</span><span class="nt">button</span><span class="p">&gt;</span>Yo!<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
-</span></span><span class="line"><span class="cl"><span class="p">&lt;/</span><span class="nt">capture-click</span><span class="p">&gt;</span>
-</span></span></code></pre></div><p>To someone who works mostly in react-like frameworks, this code is probably very surprising.</p>
-<blockquote>
-<p>Most framework components today are “functional” or at least <em>very function oriented</em>. If you created a class component today someone would ask you what you were doing… and functional components can be really useful if you want to unit test the output from them. You could provide the function some input and then assert on the virtual DOM nodes returned… although I bet you don’t do that. Have you ever unit tested the output of your function components?</p>
-<p>I bet your components need some sort of “context” to work at all, and I bet you need to setup a component hierarchy to provide that context… so not as functional as we hoped, but still pretty nice.</p>
-</blockquote>
-<p>To implement the above in <a href="https://preactjs.com/guide/v10/web-components/">preact</a>, I’d just do:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="c1">// assuming there is a Button component
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kr">export</span> <span class="kr">const</span> <span class="nx">App</span> <span class="o">=</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">  <span class="kr">const</span> <span class="nx">buttonValue</span> <span class="o">=</span> <span class="s1">&#39;Yo!&#39;</span>
-</span></span><span class="line"><span class="cl">  <span class="kr">const</span> <span class="nx">onClick</span> <span class="o">=</span> <span class="nx">e</span> <span class="p">=&gt;</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="nx">e</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">()</span>
-</span></span><span class="line"><span class="cl">    <span class="nx">e</span><span class="p">.</span><span class="nx">stopPropagation</span><span class="p">()</span>
-</span></span><span class="line"><span class="cl">    <span class="nx">console</span><span class="p">.</span><span class="nx">warn</span><span class="p">(</span><span class="s1">&#39;captured&#39;</span><span class="p">,</span> <span class="nx">buttonValue</span><span class="p">,</span> <span class="nx">e</span><span class="p">)</span>
+</span></span></code></pre>
+          </div>
+          <p>
+            And this can be used either in javascript with <code>document.createElement()</code> or
+            in HTML like:
+          </p>
+          <div class="highlight">
+            <pre class="chroma" tabindex="0"><code class="language-html" data-lang=
+            "html"><span class="line"><span class="cl"><span class=
+            "c">&lt;!-- assuming CustomClick.define() has been run --&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;</span><span class=
+"nt">capture-click</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">&lt;</span><span class=
+"nt">button</span><span class="p">&gt;</span>Yo!<span class="p">&lt;/</span><span class=
+"nt">button</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;/</span><span class=
+"nt">capture-click</span><span class="p">&gt;</span>
+</span></span></code></pre>
+          </div>
+          <p>
+            To someone who works mostly in react-like frameworks, this code is probably very
+            surprising.
+          </p>
+          <blockquote>
+            <p>
+              Most framework components today are “functional” or at least <em>very function
+              oriented</em>. If you created a class component today someone would ask you what you
+              were doing… and functional components can be really useful if you want to unit test
+              the output from them. You could provide the function some input and then assert on
+              the virtual DOM nodes returned… although I bet you don’t do that. Have you ever unit
+              tested the output of your function components?
+            </p>
+            <p>
+              I bet your components need some sort of “context” to work at all, and I bet you need
+              to setup a component hierarchy to provide that context… so not as functional as we
+              hoped, but still pretty nice.
+            </p>
+          </blockquote>
+          <p>
+            To implement the above in <a href=
+            "https://preactjs.com/guide/v10/web-components/">preact</a>, I’d just do:
+          </p>
+          <div class="highlight">
+            <pre class="chroma" tabindex="0"><code class="language-js" data-lang="js"><span class=
+            "line"><span class="cl"><span class="c1">// assuming there is a Button component
+</span></span></span><span class="line"><span class="cl"><span class=
+"kr">export</span> <span class="kr">const</span> <span class="nx">App</span> <span class=
+"o">=</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kr">const</span> <span class=
+"nx">buttonValue</span> <span class="o">=</span> <span class="s1">'Yo!'</span>
+</span></span><span class="line"><span class="cl">  <span class="kr">const</span> <span class=
+"nx">onClick</span> <span class="o">=</span> <span class="nx">e</span> <span class=
+"p">=&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">e</span><span class=
+"p">.</span><span class="nx">preventDefault</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">e</span><span class=
+"p">.</span><span class="nx">stopPropagation</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">console</span><span class=
+"p">.</span><span class="nx">warn</span><span class="p">(</span><span class=
+"s1">'captured'</span><span class="p">,</span> <span class="nx">buttonValue</span><span class=
+"p">,</span> <span class="nx">e</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">  <span class="p">}</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="p">(</span>
-</span></span><span class="line"><span class="cl">    <span class="o">&lt;</span><span class="nx">Button</span> <span class="nx">onClick</span><span class="o">=</span><span class="p">{</span><span class="nx">onClick</span><span class="p">}</span> <span class="nx">value</span><span class="o">=</span><span class="p">{</span><span class="nx">buttonValue</span><span class="p">}</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class=
+"p">(</span>
+</span></span><span class="line"><span class="cl">    <span class="o">&lt;</span><span class=
+"nx">Button</span> <span class="nx">onClick</span><span class="o">=</span><span class=
+"p">{</span><span class="nx">onClick</span><span class="p">}</span> <span class=
+"nx">value</span><span class="o">=</span><span class="p">{</span><span class=
+"nx">buttonValue</span><span class="p">}</span><span class="o">&gt;</span>
 </span></span><span class="line"><span class="cl">  <span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></div><p>I am <strong>passing behavior down,</strong> from <code>App</code> to <code>Button</code>. And you see this all over framework component code.</p>
-<p>And not just clicks. We pass down functions that query databases, we pass down databases themselves, we store things in a context and then pull it back out many levels down, we pass down callbacks or promises or both…</p>
-<p>And hooks aren’t helping – hooks are just hiding the implementation details of state to make things look functional, when they really aren’t.</p>
-<p>And listen, I love writing “function components” and I like building apps with preact. <a href="https://new.space/">new.space</a> is 100% written with preact, signals, and other great libraries. It’s a nice world to be in.</p>
-<p>JSX makes it easy to pass behavior down. HTML isn’t JSX tho: <strong>HTML is a serialization of a DOM we wish existed.</strong></p>
-<p>Serialized DOM (HTML) can only pass data as strings in attributes. I’m sure you’ve read something about “attributes vs. props” before and this is main conflict: html attributes are only data and only strings.</p>
-<h2 id="how-to-bridge-the-gap">How to bridge the gap?</h2>
-<p>If you are really motivated, then you can write your custom elements in a DOM-first style and write your react-like components in that style… but I don’t recommend it. It can be a pretty big context switch going back and forth. For existing apps, I recommend staying in that app’s current world. For new apps, build with custom elements… until you can’t.</p>
-<p>Custom elements are ready today, you can do anything you want with them. If you want to build a context element to hold some state and then query that state further down the DOM tree, do a quick <code>this.closest('parent-with-state')?.state</code> inside the <code>connectedCallback()</code> of the child element.</p>
-<p>What problems have you not been able to solve with custom elements? What would you love to know more about? <a href="https://indieweb.social/@myobie">Let me know</a> and I’ll write up some real examples.</p>
-
-      </div>
-
-      <footer>
-        
-        <p>
-          
-            Posted on
-          
-          <time datetime="2024-10-30T11:08:47&#43;01:00">
-            30 Oct, 2024
-          </time>
-          
-          
-          
-        </p>
-      </footer>
-    </article>
-  </main>
-
-    
-    
-    <script async src="/behavior.js"></script>
-      <script defer data-domain="nathanherald.com" src="https://stats.myobie.wtf/script.js"></script>
+</span></span></code></pre>
+          </div>
+          <p>
+            I am <strong>passing behavior down,</strong> from <code>App</code> to
+            <code>Button</code>. And you see this all over framework component code.
+          </p>
+          <p>
+            And not just clicks. We pass down functions that query databases, we pass down
+            databases themselves, we store things in a context and then pull it back out many
+            levels down, we pass down callbacks or promises or both…
+          </p>
+          <p>
+            And hooks aren’t helping – hooks are just hiding the implementation details of state to
+            make things look functional, when they really aren’t.
+          </p>
+          <p>
+            And listen, I love writing “function components” and I like building apps with preact.
+            <a href="https://new.space/">new.space</a> is 100% written with preact, signals, and
+            other great libraries. It’s a nice world to be in.
+          </p>
+          <p>
+            JSX makes it easy to pass behavior down. HTML isn’t JSX tho: <strong>HTML is a
+            serialization of a DOM we wish existed.</strong>
+          </p>
+          <p>
+            Serialized DOM (HTML) can only pass data as strings in attributes. I’m sure you’ve read
+            something about “attributes vs. props” before and this is main conflict: html
+            attributes are only data and only strings.
+          </p>
+          <h2 id="how-to-bridge-the-gap">
+            How to bridge the gap?
+          </h2>
+          <p>
+            If you are really motivated, then you can write your custom elements in a DOM-first
+            style and write your react-like components in that style… but I don’t recommend it. It
+            can be a pretty big context switch going back and forth. For existing apps, I recommend
+            staying in that app’s current world. For new apps, build with custom elements… until
+            you can’t.
+          </p>
+          <p>
+            Custom elements are ready today, you can do anything you want with them. If you want to
+            build a context element to hold some state and then query that state further down the
+            DOM tree, do a quick <code>this.closest('parent-with-state')?.state</code> inside the
+            <code>connectedCallback()</code> of the child element.
+          </p>
+          <p>
+            What problems have you not been able to solve with custom elements? What would you love
+            to know more about? <a href="https://indieweb.social/@myobie">Let me know</a> and I’ll
+            write up some real examples.
+          </p>
+        </div>
+        <footer>
+          <p>
+            Posted on <time datetime="2024-10-30T11:08:47+01:00">30 Oct, 2024</time>
+          </p>
+        </footer>
+      </article>
+    </main>
+    <script async src="/behavior.js"></script> 
+    <script data-domain="nathanherald.com" defer src="https://stats.myobie.wtf/script.js"></script>
   </body>
 </html>

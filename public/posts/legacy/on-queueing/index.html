@@ -1,126 +1,201 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
   <head lang="en-us">
+    <meta content="HTML Tidy for HTML5 for Apple macOS version 5.8.0" name="generator">
     <meta charset="UTF-8">
-    <title>I‘m Nathan Herald → On queueing</title>
+    <title>
+      I‘m Nathan Herald → On queueing
+    </title>
     <script>
       if ((new URL(window.location.href)).host === 'myobie.com') { window.location.assign('https://nathanherald.com') }
     </script>
-    <link rel="canonical" href="https://nathanherald.com/posts/legacy/on-queueing/">
-    <link rel="stylesheet" type="text/css" href="https://cloud.typography.com/6836312/761366/css/fonts.css"><link rel="stylesheet" type="text/css" href="/styles.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="generator" content="Hugo 0.136.5">
-    <meta name="title" content="I‘m Nathan Herald  → On queueing">
-    <meta name="description" content="Things can get backed up.">
-    <meta property="og:title" content="On queueing">
-    <meta property="og:type" content="website">
-    <meta property="og:description" content="Things can get backed up.">
-    <meta property="og:url" content="https://nathanherald.com/posts/legacy/on-queueing/">
-    <meta property="og:image" content="/og.png">
-    <meta property="og:site_name" content="I‘m Nathan Herald">
-    
-  
-
-<link rel="alternate" type="application/rss+xml" href="/rss.xml" title="Feed of all the posts on nathanherald.com">
-
-
+    <link href="https://nathanherald.com/posts/legacy/on-queueing/" rel="canonical">
+    <link href="https://cloud.typography.com/6836312/761366/css/fonts.css" rel="stylesheet" type=
+    "text/css">
+    <link href="/styles.css" rel="stylesheet" type="text/css">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="Hugo 0.136.5" name="generator">
+    <meta content="I‘m Nathan Herald → On queueing" name="title">
+    <meta content="Things can get backed up." name="description">
+    <meta content="On queueing" property="og:title">
+    <meta content="website" property="og:type">
+    <meta content="Things can get backed up." property="og:description">
+    <meta content="https://nathanherald.com/posts/legacy/on-queueing/" property="og:url">
+    <meta content="/og.png" property="og:image">
+    <meta content="I‘m Nathan Herald" property="og:site_name">
+    <link href="/rss.xml" rel="alternate" title="Feed of all the posts on nathanherald.com" type=
+    "application/rss+xml">
   </head>
   <body class="default">
-    
-  <header class="section-header">
-    <div class="section-nav">
-      <h1 class="home-link">
-        <a data-nospan href="/" class="never-underline"><abbr title="Hello">👋</abbr></a>
-        <a href="/">I&rsquo;m Nathan</a>
-      </h1>
-      <nav>
-        <p>
-          Find more in the <a href="https://nathanherald.com/posts/">archive of all the posts on this site</a>
-or <a href="https://nathanherald.com/posts/rss.xml">subscribe with RSS</a>.
-
-        </p>
-      </nav>
-    </div>
-  </header>
-
-    
-  <main class="single">
-    <article>
-      <header>
-        <h1>
-          
-          
-            On queueing
-            <p class="annotation">⭐️ a blog post</a>
-          
+    <header class="section-header">
+      <div class="section-nav">
+        <h1 class="home-link">
+          <a class="never-underline" data-nospan="" href="/"><abbr title="Hello">👋</abbr></a>
+          <a href="/">I’m Nathan</a>
         </h1>
-        
-          <h2>Things can get backed up.</h2>
-        
-      </header>
-
-      <div class="content">
-        
-
-    
-    <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
-      <iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/IPxBKxU8GIQ?autoplay=0&controls=1&end=0&loop=0&mute=0&start=0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video"
-      ></iframe>
-    </div>
-
-<p>When building a web app, or any kind of distributed system, things will probably get backed up. Most people I’ve worked with are surprised if/when this happens the first time. I know I was surprised when I first dealt with it. So remember: <em>if you use a queue for something, it will queue up eventually.</em></p>
-<p>You might be queueing stuff and not realize it. If you are making HTTP requests from your code then you probably have a request pool. Making a database call probably checks out a connection from a pool or waits in a queue for the next available connection.</p>
-<p>At Wunderlist we saw a seemingly simple change have big repercussions when it came to request queueing. Originally most of the Wunderlist backend apps were written in rails and used <a href="https://rubygems.org/gems/unicorn/versions/4.9.0">unicorn</a>. We really wanted to use <a href="https://rubygems.org/gems/puma/versions/3.9.1">puma</a> to use less memory from forking fewer processes.</p>
-<p>According the unicorn documentation:</p>
-<blockquote>
-<p>Load balancing is done entirely by the operating system kernel. Requests never pile up behind a busy worker process.</p>
-</blockquote>
-<p>This sounds fine. We <em>assumed</em> that’s just how people make HTTP servers. It’s not. A subtle detail about puma is that it queues requests <a href="https://github.com/puma/puma/blob/master/lib/puma/thread_pool.rb#L26">inside ruby code</a>, which means it’s up to the ruby code to manage timeouts and stuff like that. It’s incoming queue is basically unbounded: if you ask it to take a connection, then it will. So it’s up to you to not give it a connection if it’s extremely busy or backed up. <em>Puma is an extremely well written ruby library and you should read through it’s source sometime.</em></p>
-<p>This reminded me of this article about <a href="http://devblog.thinkthroughmath.com/blog/2013/02/27/managing-request-queuing-with-rails-on-heroku/">queueing with rails on heroku</a> and it’s worth a read. It pays to have data, graphs, etc to be able to really know what is happening.</p>
-<p>We did transition some less critical apps to use puma, but in the end almost all the critical path apps were rewritten in scala (using <a href="https://playframework.com">play</a>) and so we traded one set of problems for another.</p>
-<p><a href="https://unsplash.com/search/line?photo=VY1EDHABTDE"><img src="1-eGTetytn3pVJh6BwfbHrlQ.jpeg" alt="People waiting in a line"></a></p>
-<h3 id="backing-up-abit">Backing up a bit</h3>
-<p>Recently I read this amazing article by <a href="https://twitter.com/mononcqc/">Fred Hérbert</a> about <a href="http://ferd.ca/handling-overload.html">Handling Overload</a>. <strong>You should read it too.</strong> The amount of information in that post is overwhelming.</p>
-<p>The basic rule at the beginning is what you need to know: <a href="https://en.wikipedia.org/wiki/Little%27s_law">Little’s Law</a>. From the article:</p>
-<blockquote>
-<p>[T]he capacity of your system is going to be how long a task takes to go through it, [multiplied] with how many can be handled at once…</p>
-</blockquote>
-<p>If we can answer 100 requests “simultaneously” and a request takes 200ms on average to complete, then any time there are over 500 requests per second we either queue up, need to apply back-pressure, or drop some requests.</p>
-<p>Queueing up is the worst of the three choices IMO. Sitting in a queue means that the average time to process one item is increasing, even though we are not taking longer to do the real work. Every time this happens we start losing capacity slowly. As the average time to handle a request goes up, our ability to answer the newest incoming request before it times out becomes less likely. I believe it’s better to fail fast and let the requester retry later then to let capacity take a dive.</p>
-<p>One thing we used to do at LivingSocial during challenging days was to decrease the average time of a request by shutting down expensive operations. Some features had a “feature flag” around them (an if statement) and we could turn off all expensive operations in the critical path to make sure our capacity didn’t drop. This sounds really simple, and that is because it is.</p>
-<h3 id="take-aways">Take aways</h3>
-<p><strong>First:</strong> always be fast. Spending less time on each work item means it’s easier to maintain capacity. Granular work is easier to scale than monolithic work.</p>
-<p><strong>Second:</strong> understand the queues in your system as much as possible. Where can things back up? What are the limits on those queues? Are they unbounded in size? Are there timeouts on the work items? If a work item times out while it’s in a queue, is it removed from the queue or does it persist? Go looking for settings, limits, etc of everything and compile a list of possible capacity killers.</p>
-<p><strong>Third:</strong> collect timing metrics everywhere. Everything is worth measuring. Sometimes you’ll learn that writing to your logs on <code>stdout</code> is slowing down your request processing because someone accidentally changed <code>syslog</code> to use synchronous <code>tcp</code> and not <code>udp</code>. It would be easy to think “I don’t need to know how long it takes to write a line of text to the log stream,” but yeah you might need to know that someday.</p>
-<p>Have fun. Build cool stuff. Don’t back up if you can help it.</p>
-<p><em>Any feedback? Did I make a mistake? Am I wrong on the internet?</em> <a href="mailto:me@nathanherald.com"><em>Send me an email</em></a><em>.</em></p>
-
+        <nav>
+          <p>
+            Find more in the <a href="https://nathanherald.com/posts/">archive of all the posts on
+            this site</a> or <a href="https://nathanherald.com/posts/rss.xml">subscribe with
+            RSS</a>.
+          </p>
+        </nav>
       </div>
-
-      <footer>
-        
-        <p>
-          
-            Posted on
-          
-          <time datetime="2017-06-29T10:28:44Z">
-            29 Jun, 2017
-          </time>
-          
-            onto
-            <a href="https://medium.com/@myobie/on-queueing-460bc14cd6b3">Medium</a>
-          
-          
-          
-        </p>
-      </footer>
-    </article>
-  </main>
-
-    
-    
-    <script async src="/behavior.js"></script>
-      <script defer data-domain="nathanherald.com" src="https://stats.myobie.wtf/script.js"></script>
+    </header>
+    <main class="single">
+      <article>
+        <header>
+          <h1>
+            On queueing
+          </h1>
+          <p class="annotation">
+            ⭐️ a blog post
+          </p>
+          <h2>
+            Things can get backed up.
+          </h2>
+        </header>
+        <div class="content">
+          <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+            <iframe allow=
+            "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen="allowfullscreen" loading="eager" referrerpolicy=
+            "strict-origin-when-cross-origin" src=
+            "https://www.youtube.com/embed/IPxBKxU8GIQ?autoplay=0&amp;controls=1&amp;end=0&amp;loop=0&amp;mute=0&amp;start=0"
+            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;"
+            title="YouTube video"></iframe>
+          </div>
+          <p>
+            When building a web app, or any kind of distributed system, things will probably get
+            backed up. Most people I’ve worked with are surprised if/when this happens the first
+            time. I know I was surprised when I first dealt with it. So remember: <em>if you use a
+            queue for something, it will queue up eventually.</em>
+          </p>
+          <p>
+            You might be queueing stuff and not realize it. If you are making HTTP requests from
+            your code then you probably have a request pool. Making a database call probably checks
+            out a connection from a pool or waits in a queue for the next available connection.
+          </p>
+          <p>
+            At Wunderlist we saw a seemingly simple change have big repercussions when it came to
+            request queueing. Originally most of the Wunderlist backend apps were written in rails
+            and used <a href="https://rubygems.org/gems/unicorn/versions/4.9.0">unicorn</a>. We
+            really wanted to use <a href="https://rubygems.org/gems/puma/versions/3.9.1">puma</a>
+            to use less memory from forking fewer processes.
+          </p>
+          <p>
+            According the unicorn documentation:
+          </p>
+          <blockquote>
+            <p>
+              Load balancing is done entirely by the operating system kernel. Requests never pile
+              up behind a busy worker process.
+            </p>
+          </blockquote>
+          <p>
+            This sounds fine. We <em>assumed</em> that’s just how people make HTTP servers. It’s
+            not. A subtle detail about puma is that it queues requests <a href=
+            "https://github.com/puma/puma/blob/master/lib/puma/thread_pool.rb#L26">inside ruby
+            code</a>, which means it’s up to the ruby code to manage timeouts and stuff like that.
+            It’s incoming queue is basically unbounded: if you ask it to take a connection, then it
+            will. So it’s up to you to not give it a connection if it’s extremely busy or backed
+            up. <em>Puma is an extremely well written ruby library and you should read through it’s
+            source sometime.</em>
+          </p>
+          <p>
+            This reminded me of this article about <a href=
+            "http://devblog.thinkthroughmath.com/blog/2013/02/27/managing-request-queuing-with-rails-on-heroku/">
+            queueing with rails on heroku</a> and it’s worth a read. It pays to have data, graphs,
+            etc to be able to really know what is happening.
+          </p>
+          <p>
+            We did transition some less critical apps to use puma, but in the end almost all the
+            critical path apps were rewritten in scala (using <a href=
+            "https://playframework.com">play</a>) and so we traded one set of problems for another.
+          </p>
+          <p>
+            <a href="https://unsplash.com/search/line?photo=VY1EDHABTDE"><img alt=
+            "People waiting in a line" src="1-eGTetytn3pVJh6BwfbHrlQ.jpeg"></a>
+          </p>
+          <h3 id="backing-up-abit">
+            Backing up a&nbsp;bit
+          </h3>
+          <p>
+            Recently I read this amazing article by <a href="https://twitter.com/mononcqc/">Fred
+            Hérbert</a> about <a href="http://ferd.ca/handling-overload.html">Handling
+            Overload</a>. <strong>You should read it too.</strong> The amount of information in
+            that post is overwhelming.
+          </p>
+          <p>
+            The basic rule at the beginning is what you need to know: <a href=
+            "https://en.wikipedia.org/wiki/Little%27s_law">Little’s Law</a>. From the article:
+          </p>
+          <blockquote>
+            <p>
+              [T]he capacity of your system is going to be how long a task takes to go through it,
+              [multiplied] with how many can be handled at once…
+            </p>
+          </blockquote>
+          <p>
+            If we can answer 100 requests “simultaneously” and a request takes 200ms on average to
+            complete, then any time there are over 500 requests per second we either queue up, need
+            to apply back-pressure, or drop some requests.
+          </p>
+          <p>
+            Queueing up is the worst of the three choices IMO. Sitting in a queue means that the
+            average time to process one item is increasing, even though we are not taking longer to
+            do the real work. Every time this happens we start losing capacity slowly. As the
+            average time to handle a request goes up, our ability to answer the newest incoming
+            request before it times out becomes less likely. I believe it’s better to fail fast and
+            let the requester retry later then to let capacity take a dive.
+          </p>
+          <p>
+            One thing we used to do at LivingSocial during challenging days was to decrease the
+            average time of a request by shutting down expensive operations. Some features had a
+            “feature flag” around them (an if statement) and we could turn off all expensive
+            operations in the critical path to make sure our capacity didn’t drop. This sounds
+            really simple, and that is because it is.
+          </p>
+          <h3 id="take-aways">
+            Take aways
+          </h3>
+          <p>
+            <strong>First:</strong> always be fast. Spending less time on each work item means it’s
+            easier to maintain capacity. Granular work is easier to scale than monolithic work.
+          </p>
+          <p>
+            <strong>Second:</strong> understand the queues in your system as much as possible.
+            Where can things back up? What are the limits on those queues? Are they unbounded in
+            size? Are there timeouts on the work items? If a work item times out while it’s in a
+            queue, is it removed from the queue or does it persist? Go looking for settings,
+            limits, etc of everything and compile a list of possible capacity killers.
+          </p>
+          <p>
+            <strong>Third:</strong> collect timing metrics everywhere. Everything is worth
+            measuring. Sometimes you’ll learn that writing to your logs on <code>stdout</code> is
+            slowing down your request processing because someone accidentally changed
+            <code>syslog</code> to use synchronous <code>tcp</code> and not <code>udp</code>. It
+            would be easy to think “I don’t need to know how long it takes to write a line of text
+            to the log stream,” but yeah you might need to know that someday.
+          </p>
+          <p>
+            Have fun. Build cool stuff. Don’t back up if you can help it.
+          </p>
+          <p>
+            <em>Any feedback? Did I make a mistake? Am I wrong on the internet?</em> <a href=
+            "mailto:me@nathanherald.com"><em>Send me an email</em></a><em>.</em>
+          </p>
+        </div>
+        <footer>
+          <p>
+            Posted on <time datetime="2017-06-29T10:28:44Z">29 Jun, 2017</time> onto <a href=
+            "https://medium.com/@myobie/on-queueing-460bc14cd6b3">Medium</a>
+          </p>
+        </footer>
+      </article>
+    </main>
+    <script async src="/behavior.js"></script> 
+    <script data-domain="nathanherald.com" defer src="https://stats.myobie.wtf/script.js"></script>
   </body>
 </html>

@@ -1,103 +1,180 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
   <head lang="en-us">
+    <meta content="HTML Tidy for HTML5 for Apple macOS version 5.8.0" name="generator">
     <meta charset="UTF-8">
-    <title>I‘m Nathan Herald → The Network Is Never There for You</title>
+    <title>
+      I‘m Nathan Herald → The Network Is Never There for You
+    </title>
     <script>
       if ((new URL(window.location.href)).host === 'myobie.com') { window.location.assign('https://nathanherald.com') }
     </script>
-    <link rel="canonical" href="https://nathanherald.com/posts/legacy/the-network-is-never-there-for-you/">
-    <link rel="stylesheet" type="text/css" href="https://cloud.typography.com/6836312/761366/css/fonts.css"><link rel="stylesheet" type="text/css" href="/styles.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="generator" content="Hugo 0.136.5">
-    <meta name="title" content="I‘m Nathan Herald  → The Network Is Never There for You">
-    <meta name="description" content="">
-    <meta property="og:title" content="The Network Is Never There for You">
-    <meta property="og:type" content="website">
-    <meta property="og:description" content="">
-    <meta property="og:url" content="https://nathanherald.com/posts/legacy/the-network-is-never-there-for-you/">
-    <meta property="og:image" content="/og.png">
-    <meta property="og:site_name" content="I‘m Nathan Herald">
-    
-  
-
-<link rel="alternate" type="application/rss+xml" href="/rss.xml" title="Feed of all the posts on nathanherald.com">
-
-
+    <link href="https://nathanherald.com/posts/legacy/the-network-is-never-there-for-you/" rel=
+    "canonical">
+    <link href="https://cloud.typography.com/6836312/761366/css/fonts.css" rel="stylesheet" type=
+    "text/css">
+    <link href="/styles.css" rel="stylesheet" type="text/css">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="Hugo 0.136.5" name="generator">
+    <meta content="I‘m Nathan Herald → The Network Is Never There for You" name="title">
+    <meta content="" name="description">
+    <meta content="The Network Is Never There for You" property="og:title">
+    <meta content="website" property="og:type">
+    <meta content="" property="og:description">
+    <meta content="https://nathanherald.com/posts/legacy/the-network-is-never-there-for-you/"
+    property="og:url">
+    <meta content="/og.png" property="og:image">
+    <meta content="I‘m Nathan Herald" property="og:site_name">
+    <link href="/rss.xml" rel="alternate" title="Feed of all the posts on nathanherald.com" type=
+    "application/rss+xml">
   </head>
   <body class="default">
-    
-  <header class="section-header">
-    <div class="section-nav">
-      <h1 class="home-link">
-        <a data-nospan href="/" class="never-underline"><abbr title="Hello">👋</abbr></a>
-        <a href="/">I&rsquo;m Nathan</a>
-      </h1>
-      <nav>
-        <p>
-          Find more in the <a href="https://nathanherald.com/posts/">archive of all the posts on this site</a>
-or <a href="https://nathanherald.com/posts/rss.xml">subscribe with RSS</a>.
-
-        </p>
-      </nav>
-    </div>
-  </header>
-
-    
-  <main class="single">
-    <article>
-      <header>
-        <h1>
-          
-          
-            The Network Is Never There for You
-            <p class="annotation">⭐️ a blog post</a>
-          
+    <header class="section-header">
+      <div class="section-nav">
+        <h1 class="home-link">
+          <a class="never-underline" data-nospan="" href="/"><abbr title="Hello">👋</abbr></a>
+          <a href="/">I’m Nathan</a>
         </h1>
-        
-      </header>
-
-      <div class="content">
-        <p><em>This started as documention for some of the things that are hard about building a distributed system like Wunderlist. The goal is to clarify some assumptions about distributed systems and come up with possible solutions. Mostly: how can one persist data to a database while also notifying others of those changes in a reliable way. Real-time™ is hard.</em></p>
-<p><em>Also, there is some pseudo code in this post which is basically javascript. Don’t comment on code style. If there are mistakes, then please let me know. But it’s not really javascript, so don’t worry about it.</em></p>
-<p><img src="1-pVZMTMxNNaoFDBdL2N32aA.jpeg" alt="A broken road with a sign reading &lsquo;computer error&rsquo;"></p>
-<p>It’s tempting to imagine that distributed systems are “simple” or “easy.” I’d like to describe a simple system and go through a few issues that turn out to be a bear. The goal here is to force to the front some basic assumptions one should have when building a distributed system:</p>
-<ul>
-<li>Adjacent lines of code do not represent an atomic unit of work</li>
-<li>When network calls fail, it’s impossible to know what happened</li>
-<li>Transactions and mutexes are only useful inside one process on one computer</li>
-</ul>
-<p>The simple system I want to build is this:</p>
-<p>A database (<a href="http://www.postgresql.org">postgres</a>) will hold a value. The value can be updated atomically and the rest of the system wants to be notified about the change in a reliable way. Every change should be queued up so some other part of the system can read and process each one, possibly sending it to other parts of the system like a phone or something. These phones want to know about changes as fast as possible!</p>
-<p>This is actually a very complicated problem, so let’s size it down some at first: instead of notifying the system of every change, let’s just publish the latest value to <a href="http://redis.io">redis</a>. A phone can poll frequently for the new value from redis. And let’s just increment a counter in the database. Much simpler.</p>
-<p>The value in redis should never be different from the value in the database. (Which is impossible, but still let’s walk through it and see. Also, if you disagree that it’s impossible, then please keep reading and don’t build anything until you’re done :)</p>
-<p>There are a lot of ways to increment a counter in postgres. The best ways are to either use a sequence (a built in feature of the database) or to issue a SQL statement similar to:</p>
-<pre tabindex="0"><code>UPDATE counters SET value = value + 1 where counter\_id = 1
-</code></pre><p>Let’s assume we have a function updateCounter which performs that SQL and then a function <code>updateRedis</code> which does a</p>
-<pre tabindex="0"><code>SET counter:last 2
-</code></pre><p>where 2 is the return value from <code>updateCounter</code>.</p>
-<p>So our code is now:</p>
-<pre tabindex="0"><code>function receiveConnection() {  
+        <nav>
+          <p>
+            Find more in the <a href="https://nathanherald.com/posts/">archive of all the posts on
+            this site</a> or <a href="https://nathanherald.com/posts/rss.xml">subscribe with
+            RSS</a>.
+          </p>
+        </nav>
+      </div>
+    </header>
+    <main class="single">
+      <article>
+        <header>
+          <h1>
+            The Network Is Never There for You
+          </h1>
+          <p class="annotation">
+            ⭐️ a blog post
+          </p>
+        </header>
+        <div class="content">
+          <p>
+            <em>This started as documention for some of the things that are hard about building a
+            distributed system like Wunderlist. The goal is to clarify some assumptions about
+            distributed systems and come up with possible solutions. Mostly: how can one persist
+            data to a database while also notifying others of those changes in a reliable way.
+            Real-time™ is hard.</em>
+          </p>
+          <p>
+            <em>Also, there is some pseudo code in this post which is basically javascript. Don’t
+            comment on code style. If there are mistakes, then please let me know. But it’s not
+            really javascript, so don’t worry about it.</em>
+          </p>
+          <p>
+            <img alt="A broken road with a sign reading ‘computer error’" src=
+            "1-pVZMTMxNNaoFDBdL2N32aA.jpeg">
+          </p>
+          <p>
+            It’s tempting to imagine that distributed systems are “simple” or “easy.” I’d like to
+            describe a simple system and go through a few issues that turn out to be a bear. The
+            goal here is to force to the front some basic assumptions one should have when building
+            a distributed system:
+          </p>
+          <ul>
+            <li>Adjacent lines of code do not represent an atomic unit of work
+            </li>
+            <li>When network calls fail, it’s impossible to know what happened
+            </li>
+            <li>Transactions and mutexes are only useful inside one process on one computer
+            </li>
+          </ul>
+          <p>
+            The simple system I want to build is this:
+          </p>
+          <p>
+            A database (<a href="http://www.postgresql.org">postgres</a>) will hold a value. The
+            value can be updated atomically and the rest of the system wants to be notified about
+            the change in a reliable way. Every change should be queued up so some other part of
+            the system can read and process each one, possibly sending it to other parts of the
+            system like a phone or something. These phones want to know about changes as fast as
+            possible!
+          </p>
+          <p>
+            This is actually a very complicated problem, so let’s size it down some at first:
+            instead of notifying the system of every change, let’s just publish the latest value to
+            <a href="http://redis.io">redis</a>. A phone can poll frequently for the new value from
+            redis. And let’s just increment a counter in the database. Much simpler.
+          </p>
+          <p>
+            The value in redis should never be different from the value in the database. (Which is
+            impossible, but still let’s walk through it and see. Also, if you disagree that it’s
+            impossible, then please keep reading and don’t build anything until you’re done&nbsp;:)
+          </p>
+          <p>
+            There are a lot of ways to increment a counter in postgres. The best ways are to either
+            use a sequence (a built in feature of the database) or to issue a SQL statement similar
+            to:
+          </p>
+          <pre tabindex="0"><code>UPDATE counters SET value = value + 1 where counter\_id = 1
+</code></pre>
+          <p>
+            Let’s assume we have a function updateCounter which performs that SQL and then a
+            function <code>updateRedis</code> which does a
+          </p>
+          <pre tabindex="0"><code>SET counter:last 2
+</code></pre>
+          <p>
+            where 2 is the return value from <code>updateCounter</code>.
+          </p>
+          <p>
+            So our code is now:
+          </p>
+          <pre tabindex="0"><code>function receiveConnection() {  
     let latest = updateCounter()  
     updateRedis(latest)  
 }
-</code></pre><p>And this falls down in every way. Let’s go through the problems one by one.</p>
-<h4 id="adjacent-lines-of-code-are-notatomic">Adjacent Lines of Code Are Not Atomic</h4>
-<p>In our simple two line function, it’s entirely possible that <code>updateRedis</code> never gets called. Here is an ASCII diagram of the places this function can fail:</p>
-<pre tabindex="0"><code>function receiveConnection() {  
+</code></pre>
+          <p>
+            And this falls down in every way. Let’s go through the problems one by one.
+          </p>
+          <h4 id="adjacent-lines-of-code-are-notatomic">
+            Adjacent Lines of Code Are Not&nbsp;Atomic
+          </h4>
+          <p>
+            In our simple two line function, it’s entirely possible that <code>updateRedis</code>
+            never gets called. Here is an ASCII diagram of the places this function can fail:
+          </p>
+          <pre tabindex="0"><code>function receiveConnection() {  
 ---&gt;  
 ---&gt;let latest = updateCounter()  
 ---&gt;  
 ---&gt;updateRedis(latest)  
 ---&gt;  
 }
-</code></pre><p>While it’s easy to predict where execution of this program starts, it’s impossible to predict where it will end. A simple reason is your process could be killed at any moment. But there are other reasons: memory starvation, hardware failure, CPU load is too high, etc. It’s also impossible to predict how much time this program will spend at any one of the five marked points. There could be slow GC, scheduling issues, CPU load again, etc.</p>
-<p>The time it takes to get from updateCounter to <code>updateRedis</code> is indeterminate and so our system is inconsistent for an indeterminate amount of time: it’s possible to read a value from redis that is old.</p>
-<p>It’s also possible that updateCounter succeeds, but <code>updateRedis</code> fails or the program never even makes it that far.</p>
-<p>This simple program doesn’t solve our problem and isn’t a very good component in a distributed system.</p>
-<p>So let’s add some error checking:</p>
-<pre tabindex="0"><code>function receiveConnection() {  
+</code></pre>
+          <p>
+            While it’s easy to predict where execution of this program starts, it’s impossible to
+            predict where it will end. A simple reason is your process could be killed at any
+            moment. But there are other reasons: memory starvation, hardware failure, CPU load is
+            too high, etc. It’s also impossible to predict how much time this program will spend at
+            any one of the five marked points. There could be slow GC, scheduling issues, CPU load
+            again, etc.
+          </p>
+          <p>
+            The time it takes to get from updateCounter to <code>updateRedis</code> is
+            indeterminate and so our system is inconsistent for an indeterminate amount of time:
+            it’s possible to read a value from redis that is old.
+          </p>
+          <p>
+            It’s also possible that updateCounter succeeds, but <code>updateRedis</code> fails or
+            the program never even makes it that far.
+          </p>
+          <p>
+            This simple program doesn’t solve our problem and isn’t a very good component in a
+            distributed system.
+          </p>
+          <p>
+            So let’s add some error checking:
+          </p>
+          <pre tabindex="0"><code>function receiveConnection() {  
     var latest
 
     try {  
@@ -112,15 +189,47 @@ or <a href="https://nathanherald.com/posts/rss.xml">subscribe with RSS</a>.
         }  
     }  
 }
-</code></pre><p>This might at first seem great, but it’s actually worse. The <code>updateRedis</code> call could succeed and yet appear to fail, so we would rollback the counter. Now the value in redis is greater than the value in the database.</p>
-<p>It’s just a futile effort to try to add enough error checking for a simple reason: the errors are mostly meaningless.</p>
-<h4 id="when-networks-fail-its-impossible-to-knowwhy">When Networks Fail, It’s Impossible to Know Why</h4>
-<p>Network timeouts, writing to the socket failure, reading from the socket failure, packet loss, and any other number of things are the types of failures where the caller has no idea what the callee did. Without a response to inspect we are stuck with Schrödinger’s request. The callee might have succeeded, but the network between the caller might have had a blip.</p>
-<p>No amount of rescuing or catching errors can fix this issue. The only real way to take care of this is to make the program (and the request to trigger it) idempotent. Either the program needs to operate in a truly atomic way or it needs to not matter if any one part fails.</p>
-<p>We are basically screwed now with what we have. Since the increment is not directly tied to the redis call, this function is not idempotent. Let’s try to make it work that way.</p>
-<p>One rule we could add is that the caller needs to let us know what its current view of the world is (the current counter’s value) so we can make sure it’s up to date. If you are not up to date, then you don’t get to make changes. It’s a simple rule, but I find it helps a ton in a lot of cases. I also stole this idea from couchdb.</p>
-<p>Our code can now look like:</p>
-<pre tabindex="0"><code>function receiveConnection(remoteValue) {  
+</code></pre>
+          <p>
+            This might at first seem great, but it’s actually worse. The <code>updateRedis</code>
+            call could succeed and yet appear to fail, so we would rollback the counter. Now the
+            value in redis is greater than the value in the database.
+          </p>
+          <p>
+            It’s just a futile effort to try to add enough error checking for a simple reason: the
+            errors are mostly meaningless.
+          </p>
+          <h4 id="when-networks-fail-its-impossible-to-knowwhy">
+            When Networks Fail, It’s Impossible to Know&nbsp;Why
+          </h4>
+          <p>
+            Network timeouts, writing to the socket failure, reading from the socket failure,
+            packet loss, and any other number of things are the types of failures where the caller
+            has no idea what the callee did. Without a response to inspect we are stuck with
+            Schrödinger’s request. The callee might have succeeded, but the network between the
+            caller might have had a blip.
+          </p>
+          <p>
+            No amount of rescuing or catching errors can fix this issue. The only real way to take
+            care of this is to make the program (and the request to trigger it) idempotent. Either
+            the program needs to operate in a truly atomic way or it needs to not matter if any one
+            part fails.
+          </p>
+          <p>
+            We are basically screwed now with what we have. Since the increment is not directly
+            tied to the redis call, this function is not idempotent. Let’s try to make it work that
+            way.
+          </p>
+          <p>
+            One rule we could add is that the caller needs to let us know what its current view of
+            the world is (the current counter’s value) so we can make sure it’s up to date. If you
+            are not up to date, then you don’t get to make changes. It’s a simple rule, but I find
+            it helps a ton in a lot of cases. I also stole this idea from couchdb.
+          </p>
+          <p>
+            Our code can now look like:
+          </p>
+          <pre tabindex="0"><code>function receiveConnection(remoteValue) {  
     var latest  
     let current = getCounter()  
     if (current == remoteValue) {  
@@ -129,8 +238,15 @@ or <a href="https://nathanherald.com/posts/rss.xml">subscribe with RSS</a>.
     }  
     return latest  
 }
-</code></pre><p>Of course, we will have the issue with network failures hiding successful sets from us. This method is not fully idempotent, it just won’t increment the value twice until the caller is updated. But it does only update the counter once per remoteValue instead of over and over again. It would be nice to try to rollback the increment if something goes wrong:</p>
-<pre tabindex="0"><code>function receiveConnection(db, remoteValue) {  
+</code></pre>
+          <p>
+            Of course, we will have the issue with network failures hiding successful sets from us.
+            This method is not fully idempotent, it just won’t increment the value twice until the
+            caller is updated. But it does only update the counter once per remoteValue instead of
+            over and over again. It would be nice to try to rollback the increment if something
+            goes wrong:
+          </p>
+          <pre tabindex="0"><code>function receiveConnection(db, remoteValue) {  
     try {  
         var latest  
         let current = getCounter()  
@@ -143,13 +259,24 @@ or <a href="https://nathanherald.com/posts/rss.xml">subscribe with RSS</a>.
         return latest  
     } catch {  
         db.rollbackTransaction()  
-        throw(&#34;crap&#34;)  
+        throw("crap")  
     }  
 }
-</code></pre><p>So now if the <code>updateRedis</code> call throws we can be sure the database value is rolled back. This is a repeatable function since it only works once and is a noop if called again. This seems great.</p>
-<p>But, we know that network errors can be false negatives — the call to redis could succeed even if we get an error, the value in redis is then a higher number than the value in the database again. Redis and the database would be out of sync.</p>
-<p>And we have another problem. Let me illustrate it with another amazing ASCII diagram:</p>
-<pre tabindex="0"><code>function receiveConnection(db, remoteValue) {  
+</code></pre>
+          <p>
+            So now if the <code>updateRedis</code> call throws we can be sure the database value is
+            rolled back. This is a repeatable function since it only works once and is a noop if
+            called again. This seems great.
+          </p>
+          <p>
+            But, we know that network errors can be false negatives — the call to redis could
+            succeed even if we get an error, the value in redis is then a higher number than the
+            value in the database again. Redis and the database would be out of sync.
+          </p>
+          <p>
+            And we have another problem. Let me illustrate it with another amazing ASCII diagram:
+          </p>
+          <pre tabindex="0"><code>function receiveConnection(db, remoteValue) {  
     try {  
         var latest  
         let current = getCounter()  
@@ -166,18 +293,63 @@ or <a href="https://nathanherald.com/posts/rss.xml">subscribe with RSS</a>.
         throw(e)  
     }  
 }
-</code></pre><p>There are two things that are wrong at the marked point:</p>
-<ol>
-<li>It’s impossible to know how long it takes to jump over this point in the program: from updating redis to committing the transaction. It’s also impossible to know how long it will take to fully commit the transaction. So there is some amount of time between updating redis and the transaction committing that we read a value from redis from the future. Until the transaction commits, only this caller with this transaction can read the correct value from both places. <strong>We can’t be consistent even with great error handling.</strong></li>
-<li>The program can terminate at this point. It’s possible that updateRedis fully succeeds and receives a response, but the program is terminated and the transaction is never committed. The database would eventually notice this and rollback the changes. No one except this caller would have ever seen the new value in the database, yet the new value would be present in redis. There is no way to be 100% sure our process will never die at this point.</li>
-</ol>
-<p>So it seems impossible to reliable do anything across more than one computer.</p>
-<h4 id="transactions-and-mutexes-are-only-useful-inside-one-process-on-onecomputer">Transactions and Mutexes Are Only Useful Inside One Process on One Computer</h4>
-<p>Transactions work for postgres because it’s a single process on a single machine. It’s able to use mutexes and global transaction ids to prevent concurrent updates of rows while also knowing what order to apply changes. The postgres team has done a lot of work over the years to make sure things work how they should. Sure, there are <a href="http://www.postgresql.org/docs/devel/static/runtime-config-wal.html#GUC-SYNCHRONOUS-COMMIT">options for systems that can synchronously commit a transaction across multiple machines</a>, but these are daunting solutions with heavy prices to pay in performance and operating costs. And <a href="http://michael.otacoo.com/postgresql-2/track-commit-synchronous/">it’s difficult to get right</a>.</p>
-<p>Once the distance between things is more than inside a single computer (or virtual computer) things get hinky. It’s no longer possible to reliably protect against concurrent actions. And since network errors sometimes make it impossible to infer what happened on the other side: it just isn’t possible to reliably commit or rollback something.</p>
-<p>Even with more error handling, more rollbacks, more verification, it’s basically impossible to build this system with the given constraints in a simple way.</p>
-<p>With this example, we are really just caching the current value in redis. This could also be done with a simple read-through cache. In the middle of the database transaction one can clear the cache and then the next time a read comes in it will repopulate. Here is a code example:</p>
-<pre tabindex="0"><code>function getValue(cache, db) {  
+</code></pre>
+          <p>
+            There are two things that are wrong at the marked point:
+          </p>
+          <ol>
+            <li>It’s impossible to know how long it takes to jump over this point in the program:
+            from updating redis to committing the transaction. It’s also impossible to know how
+            long it will take to fully commit the transaction. So there is some amount of time
+            between updating redis and the transaction committing that we read a value from redis
+            from the future. Until the transaction commits, only this caller with this transaction
+            can read the correct value from both places. <strong>We can’t be consistent even with
+            great error handling.</strong>
+            </li>
+            <li>The program can terminate at this point. It’s possible that updateRedis fully
+            succeeds and receives a response, but the program is terminated and the transaction is
+            never committed. The database would eventually notice this and rollback the changes. No
+            one except this caller would have ever seen the new value in the database, yet the new
+            value would be present in redis. There is no way to be 100% sure our process will never
+            die at this point.
+            </li>
+          </ol>
+          <p>
+            So it seems impossible to reliable do anything across more than one computer.
+          </p>
+          <h4 id="transactions-and-mutexes-are-only-useful-inside-one-process-on-onecomputer">
+            Transactions and Mutexes Are Only Useful Inside One Process on One&nbsp;Computer
+          </h4>
+          <p>
+            Transactions work for postgres because it’s a single process on a single machine. It’s
+            able to use mutexes and global transaction ids to prevent concurrent updates of rows
+            while also knowing what order to apply changes. The postgres team has done a lot of
+            work over the years to make sure things work how they should. Sure, there are <a href=
+            "http://www.postgresql.org/docs/devel/static/runtime-config-wal.html#GUC-SYNCHRONOUS-COMMIT">
+            options for systems that can synchronously commit a transaction across multiple
+            machines</a>, but these are daunting solutions with heavy prices to pay in performance
+            and operating costs. And <a href=
+            "http://michael.otacoo.com/postgresql-2/track-commit-synchronous/">it’s difficult to
+            get right</a>.
+          </p>
+          <p>
+            Once the distance between things is more than inside a single computer (or virtual
+            computer) things get hinky. It’s no longer possible to reliably protect against
+            concurrent actions. And since network errors sometimes make it impossible to infer what
+            happened on the other side: it just isn’t possible to reliably commit or rollback
+            something.
+          </p>
+          <p>
+            Even with more error handling, more rollbacks, more verification, it’s basically
+            impossible to build this system with the given constraints in a simple way.
+          </p>
+          <p>
+            With this example, we are really just caching the current value in redis. This could
+            also be done with a simple read-through cache. In the middle of the database
+            transaction one can clear the cache and then the next time a read comes in it will
+            repopulate. Here is a code example:
+          </p>
+          <pre tabindex="0"><code>function getValue(cache, db) {  
     let cachedValue = cache.get()
 
     if (cachedValue !=== null) { return cachedValue }
@@ -186,14 +358,28 @@ or <a href="https://nathanherald.com/posts/rss.xml">subscribe with RSS</a>.
     cache.set(currentValue)  
     return currentValue  
 }
-</code></pre><p>This works all right: if the value is missing we just set it and return it. There is a strange thing that can happen, where if <a href="https://en.wikipedia.org/wiki/Cache_stampede">multiple concurrent <code>getValues</code> are run there might be multiple processes trying to <code>cache.set</code> at the same time</a>. This is odd, but it’s not that big of a deal. This is a problem with all read-through caches — when the cache is missing all the running processes might all try to update it.</p>
-<p>What does the setValue look like in this case? (Here we are also making sure <a href="http://www.postgresql.org/docs/9.0/static/sql-select.html#SQL-FOR-UPDATE-SHARE">to lock the value for updating while reading it</a>, so we know we have the truly latest value and it can’t change by anyone else during this transaction.)</p>
-<pre tabindex="0"><code>function setValue(cache, db, currentValue) {  
+</code></pre>
+          <p>
+            This works all right: if the value is missing we just set it and return it. There is a
+            strange thing that can happen, where if <a href=
+            "https://en.wikipedia.org/wiki/Cache_stampede">multiple concurrent
+            <code>getValues</code> are run there might be multiple processes trying to
+            <code>cache.set</code> at the same time</a>. This is odd, but it’s not that big of a
+            deal. This is a problem with all read-through caches — when the cache is missing all
+            the running processes might all try to update it.
+          </p>
+          <p>
+            What does the setValue look like in this case? (Here we are also making sure <a href=
+            "http://www.postgresql.org/docs/9.0/static/sql-select.html#SQL-FOR-UPDATE-SHARE">to
+            lock the value for updating while reading it</a>, so we know we have the truly latest
+            value and it can’t change by anyone else during this transaction.)
+          </p>
+          <pre tabindex="0"><code>function setValue(cache, db, currentValue) {  
     try {  
         db.startTransaction()  
         let current = db.selectAndLockForUpdate()  
         if (current != currentValue) {  
-            throw(&#34;crap&#34;)  
+            throw("crap")  
         }  
         db.incrementValue()  
         cache.clear()  
@@ -202,14 +388,17 @@ or <a href="https://nathanherald.com/posts/rss.xml">subscribe with RSS</a>.
         db.rollbackTransaction()  
     }  
 }
-</code></pre><p>This is looking pretty good, but another ASCII diagram is in order:</p>
-<pre tabindex="0"><code>function setValue(cache, db, currentValue) {  
+</code></pre>
+          <p>
+            This is looking pretty good, but another ASCII diagram is in order:
+          </p>
+          <pre tabindex="0"><code>function setValue(cache, db, currentValue) {  
     try {  
         db.startTransaction()  
         let current = db.selectAndLockForUpdate()  
         if (current != currentValue) {  
             db.cancelTransaction()  
-            throw(&#34;crap&#34;)  
+            throw("crap")  
         }  
         db.incrementValue()  
         cache.clear()  
@@ -219,15 +408,26 @@ or <a href="https://nathanherald.com/posts/rss.xml">subscribe with RSS</a>.
         db.rollbackTransaction()  
     }  
 }
-</code></pre><p>How long does the program stay at the marked point in the code? The answer is: <strong>there is no way to know</strong>.</p>
-<p>We clear the cache, but then we don’t know how long it will take to actually commit the transaction. If a read were to come in to a different process during that window of time, the old value would be cached in getValue— since no one else can read the new value until this transaction is committed.</p>
-<p>We can change the code to this:</p>
-<pre tabindex="0"><code>function setValue(cache, db, currentValue) {  
+</code></pre>
+          <p>
+            How long does the program stay at the marked point in the code? The answer is:
+            <strong>there is no way to know</strong>.
+          </p>
+          <p>
+            We clear the cache, but then we don’t know how long it will take to actually commit the
+            transaction. If a read were to come in to a different process during that window of
+            time, the old value would be cached in getValue— since no one else can read the new
+            value until this transaction is committed.
+          </p>
+          <p>
+            We can change the code to this:
+          </p>
+          <pre tabindex="0"><code>function setValue(cache, db, currentValue) {  
     try {  
         db.startTransaction()  
         let current = db.selectAndLockForUpdate()  
         if (current != currentValue) {  
-            throw(&#34;crap&#34;)  
+            throw("crap")  
         }  
         db.incrementValue()  
         db.commitTransaction()  
@@ -236,14 +436,24 @@ or <a href="https://nathanherald.com/posts/rss.xml">subscribe with RSS</a>.
         db.rollbackTransaction()  
     }  
 }
-</code></pre><p>And now we have the old problem: there is a time window where a new value is committed to the database, but not present in the cache. There also is the possibility that the database transaction completes successfully, but the <code>cache.clear()</code> line is never run or has a network failure. It’s also possible that the committing of the transaction only appears to fail (yet another network failure) and we don’t know what to do. Maybe we should just clear the cache everywhere.</p>
-<p>I’ve seen things like this before:</p>
-<pre tabindex="0"><code>function setValue(cache, db, currentValue) {  
+</code></pre>
+          <p>
+            And now we have the old problem: there is a time window where a new value is committed
+            to the database, but not present in the cache. There also is the possibility that the
+            database transaction completes successfully, but the <code>cache.clear()</code> line is
+            never run or has a network failure. It’s also possible that the committing of the
+            transaction only appears to fail (yet another network failure) and we don’t know what
+            to do. Maybe we should just clear the cache everywhere.
+          </p>
+          <p>
+            I’ve seen things like this before:
+          </p>
+          <pre tabindex="0"><code>function setValue(cache, db, currentValue) {  
     try {  
         db.startTransaction()  
         let current = db.selectAndLockForUpdate()  
         if (current != currentValue) {  
-            throw(&#34;crap&#34;)  
+            throw("crap")  
         }  
         db.incrementValue()  
         cache.clear()  
@@ -256,26 +466,79 @@ or <a href="https://nathanherald.com/posts/rss.xml">subscribe with RSS</a>.
         db.rollbackTransaction()  
     }  
 }
-</code></pre><p>This has all the same issues. It’s possible a too early <code>getValue</code> makes the first clearing of the cache useless and it’s possible the cache never gets cleared after the transaction finishes. It’s also pretty ugly.</p>
-<p>We could change the type of transaction we are using to block all access to the row until we are done with it. This means no one can read the row until we either commit or rollback our transaction. Since every getValue would freeze at the point where the query happens until we are done updating the database, they would have the best current value. Or so it would seem.</p>
-<p>A possible order of events is (assume the cache is currently empty, process A is about to execute getValue, and process B is about to execute setValue):</p>
-<ol>
-<li>Process A begins and retrieves the current value successfully from the database (value in memory is 3)</li>
-<li>Process B fully begins and completes running setValue, updates the database row (value in the database is 4), and clears the cache (a noop, it’s currently empty)</li>
-<li>Process A proceeds to set the cache to it’s current in memory value (cache is now at 3)</li>
-</ol>
-<p>So now the read-through cache set the value to 3 even though the last successful database query updated it to 4. Great.</p>
-<p>How often will this happen? That depends on scale, network topology, and a whole host of things that are probably out of your control. If they are within your control then good for you. But most of us can’t control time. Unless you’re google. Then you can. (I mean seriously, <a href="http://thetechjournal.com/tech-news/google-uses-atomic-clocks-to-synchronize-its-global-spanner-database.xhtml">google found a way to synchronize clocks</a> so anything is “possible.”)</p>
-<p>Now, most people would call this good enough. And at small scale, this is probably good to go. The likelihood of edge cases might be low. But it turns out at even at moderate scale things happen.</p>
-<p>How important is it for your application that your data is consistent? If it can be stale for some period of time then you are fine to just set a TTL on the caches and call it done.</p>
-<p>Don’t people use caching all the time? What can we do? Can we build a truly reliable system?</p>
-<p>Let’s keep going and find out. (Also search for <a href="https://signalvnoise.com/posts/3113-how-key-based-cache-expiration-works">russian doll caching</a> if you want to have a reliable read-through cache.)</p>
-<p>What about the original idea?</p>
-<blockquote>
-<p>A database that supports transactions will hold a value. The value is updated atomically and the rest of the system wants to be notified about the change in a reliable way.</p>
-</blockquote>
-<p>This sounds like we should just:</p>
-<pre tabindex="0"><code>function receiveConnection(db, currentValue, newValue) {  
+</code></pre>
+          <p>
+            This has all the same issues. It’s possible a too early <code>getValue</code> makes the
+            first clearing of the cache useless and it’s possible the cache never gets cleared
+            after the transaction finishes. It’s also pretty ugly.
+          </p>
+          <p>
+            We could change the type of transaction we are using to block all access to the row
+            until we are done with it. This means no one can read the row until we either commit or
+            rollback our transaction. Since every getValue would freeze at the point where the
+            query happens until we are done updating the database, they would have the best current
+            value. Or so it would seem.
+          </p>
+          <p>
+            A possible order of events is (assume the cache is currently empty, process A is about
+            to execute getValue, and process B is about to execute setValue):
+          </p>
+          <ol>
+            <li>Process A begins and retrieves the current value successfully from the database
+            (value in memory is 3)
+            </li>
+            <li>Process B fully begins and completes running setValue, updates the database row
+            (value in the database is 4), and clears the cache (a noop, it’s currently empty)
+            </li>
+            <li>Process A proceeds to set the cache to it’s current in memory value (cache is now
+            at 3)
+            </li>
+          </ol>
+          <p>
+            So now the read-through cache set the value to 3 even though the last successful
+            database query updated it to 4. Great.
+          </p>
+          <p>
+            How often will this happen? That depends on scale, network topology, and a whole host
+            of things that are probably out of your control. If they are within your control then
+            good for you. But most of us can’t control time. Unless you’re google. Then you can. (I
+            mean seriously, <a href=
+            "http://thetechjournal.com/tech-news/google-uses-atomic-clocks-to-synchronize-its-global-spanner-database.xhtml">
+            google found a way to synchronize clocks</a> so anything is “possible.”)
+          </p>
+          <p>
+            Now, most people would call this good enough. And at small scale, this is probably good
+            to go. The likelihood of edge cases might be low. But it turns out at even at moderate
+            scale things happen.
+          </p>
+          <p>
+            How important is it for your application that your data is consistent? If it can be
+            stale for some period of time then you are fine to just set a TTL on the caches and
+            call it done.
+          </p>
+          <p>
+            Don’t people use caching all the time? What can we do? Can we build a truly reliable
+            system?
+          </p>
+          <p>
+            Let’s keep going and find out. (Also search for <a href=
+            "https://signalvnoise.com/posts/3113-how-key-based-cache-expiration-works">russian doll
+            caching</a> if you want to have a reliable read-through cache.)
+          </p>
+          <p>
+            What about the original idea?
+          </p>
+          <blockquote>
+            <p>
+              A database that supports transactions will hold a value. The value is updated
+              atomically and the rest of the system wants to be notified about the change in a
+              reliable way.
+            </p>
+          </blockquote>
+          <p>
+            This sounds like we should just:
+          </p>
+          <pre tabindex="0"><code>function receiveConnection(db, currentValue, newValue) {  
     try {  
         db.startTransaction()  
         let current = db.selectAndLockForUpdate()  
@@ -290,9 +553,16 @@ or <a href="https://nathanherald.com/posts/rss.xml">subscribe with RSS</a>.
         db.rollbackTransaction()  
     }  
 }
-</code></pre><p>But this has all the problems discussed above. The worse case for this function is we could publish a value that never gets committed: a value from an alternate future, where it almost made it as the newest version of the value.</p>
-<p>If we move things around, it just changes the worst case scenario:</p>
-<pre tabindex="0"><code>function receiveConnection(db, currentValue, newValue) {  
+</code></pre>
+          <p>
+            But this has all the problems discussed above. The worse case for this function is we
+            could publish a value that never gets committed: a value from an alternate future,
+            where it almost made it as the newest version of the value.
+          </p>
+          <p>
+            If we move things around, it just changes the worst case scenario:
+          </p>
+          <pre tabindex="0"><code>function receiveConnection(db, currentValue, newValue) {  
     try {  
         db.startTransaction()  
         let current = db.selectAndLockForUpdate()  
@@ -307,9 +577,16 @@ or <a href="https://nathanherald.com/posts/rss.xml">subscribe with RSS</a>.
         db.rollbackTransaction()  
     }  
 }
-</code></pre><p>Now we might commit something to the database that never gets published. While it’s very unlikely that the process will crash right before trying to publish the change: publishing is a network call. It will fail. And it will fail often.</p>
-<p>Even if one got really paranoid and tried to revert upon a publishing fail:</p>
-<pre tabindex="0"><code>function receiveConnection(db, originalValue, newValue) {  
+</code></pre>
+          <p>
+            Now we might commit something to the database that never gets published. While it’s
+            very unlikely that the process will crash right before trying to publish the change:
+            publishing is a network call. It will fail. And it will fail often.
+          </p>
+          <p>
+            Even if one got really paranoid and tried to revert upon a publishing fail:
+          </p>
+          <pre tabindex="0"><code>function receiveConnection(db, originalValue, newValue) {  
     try {  
         db.startTransaction()  
         let current = db.selectAndLockForUpdate()  
@@ -328,25 +605,73 @@ or <a href="https://nathanherald.com/posts/rss.xml">subscribe with RSS</a>.
         db.rollbackTransaction()  
     }  
 }
-</code></pre><p>This is now even worse. We don’t know the timing between the publishing failure and the revert, so it’s possible that another process just finished updating the value again and we would revert that update (we are outside the row-lock at this point). Trying to plug holes like this is an endless game and doesn’t end well.</p>
-<p>How can we make it possible to be sure that every published change is also committed? And that every committed change is also published?</p>
-<p>We need to:</p>
-<ul>
-<li>Make this truly idempotent</li>
-<li>Make sure to retry after any type of failure</li>
-<li>Make it possible to know if it fully succeeded</li>
-</ul>
-<h3 id="ok-make-things-reliableplease">OK, Make Things Reliable Please</h3>
-<p>The first thing one should consider is “does this really need to be reliable”? What if once a month one screen might show slightly out of date information? Is that acceptable? Maybe it is. Maybe if it saves hundreds of thousands or millions of dollars then it’s fine. It might even be possible to be aware of when that happens, give that customer a coupon for a month of free service, and just move on.</p>
-<p>However, if things must be reliable and consistent, then there is only one thing you can do: <strong>plan for failure.</strong></p>
-<p>The rest of this is going to be about how to plan for things to suck.</p>
-<h4 id="consistency">Consistency</h4>
-<p>The easiest (and usually only) way to have consistency in a system is to localize something down to one processor on one computer. This is the basic idea behind sharding, single-threaded-ness (redis), and even actors in something like Akka or Service Fabric.</p>
-<p>If we can get things down to that level, then things will work out. This is one way to plan for failure: to make sure that when things fail they are localized to one process so we know we can rollback its changes.</p>
-<h4 id="use-thedatabase">Use the Database</h4>
-<p>The easiest way to protect against network failure is to not hit the network. Instead of trying to notify every one of every change right when it happens, maybe we just try to store the changes where we are. Periodically we can just send whatever changes are stored to everyone. This isn’t “real-time” per-se, but maybe that’s all right.</p>
-<p>Since we are already using a database transaction in our pseudo code, we could just do more work there.</p>
-<pre tabindex="0"><code>function receiveConnection(db, currentValue, newValue) {  
+</code></pre>
+          <p>
+            This is now even worse. We don’t know the timing between the publishing failure and the
+            revert, so it’s possible that another process just finished updating the value again
+            and we would revert that update (we are outside the row-lock at this point). Trying to
+            plug holes like this is an endless game and doesn’t end well.
+          </p>
+          <p>
+            How can we make it possible to be sure that every published change is also committed?
+            And that every committed change is also published?
+          </p>
+          <p>
+            We need to:
+          </p>
+          <ul>
+            <li>Make this truly idempotent
+            </li>
+            <li>Make sure to retry after any type of failure
+            </li>
+            <li>Make it possible to know if it fully succeeded
+            </li>
+          </ul>
+          <h3 id="ok-make-things-reliableplease">
+            OK, Make Things Reliable&nbsp;Please
+          </h3>
+          <p>
+            The first thing one should consider is “does this really need to be reliable”? What if
+            once a month one screen might show slightly out of date information? Is that
+            acceptable? Maybe it is. Maybe if it saves hundreds of thousands or millions of dollars
+            then it’s fine. It might even be possible to be aware of when that happens, give that
+            customer a coupon for a month of free service, and just move on.
+          </p>
+          <p>
+            However, if things must be reliable and consistent, then there is only one thing you
+            can do: <strong>plan for failure.</strong>
+          </p>
+          <p>
+            The rest of this is going to be about how to plan for things to suck.
+          </p>
+          <h4 id="consistency">
+            Consistency
+          </h4>
+          <p>
+            The easiest (and usually only) way to have consistency in a system is to localize
+            something down to one processor on one computer. This is the basic idea behind
+            sharding, single-threaded-ness (redis), and even actors in something like Akka or
+            Service Fabric.
+          </p>
+          <p>
+            If we can get things down to that level, then things will work out. This is one way to
+            plan for failure: to make sure that when things fail they are localized to one process
+            so we know we can rollback its changes.
+          </p>
+          <h4 id="use-thedatabase">
+            Use the&nbsp;Database
+          </h4>
+          <p>
+            The easiest way to protect against network failure is to not hit the network. Instead
+            of trying to notify every one of every change right when it happens, maybe we just try
+            to store the changes where we are. Periodically we can just send whatever changes are
+            stored to everyone. This isn’t “real-time” per-se, but maybe that’s all right.
+          </p>
+          <p>
+            Since we are already using a database transaction in our pseudo code, we could just do
+            more work there.
+          </p>
+          <pre tabindex="0"><code>function receiveConnection(db, currentValue, newValue) {  
     try {  
         db.startTransaction()  
         let current = db.selectAndLockForUpdate()  
@@ -361,13 +686,25 @@ or <a href="https://nathanherald.com/posts/rss.xml">subscribe with RSS</a>.
         db.rollbackTransaction()  
     }  
 }
-</code></pre><p>With this code we now know the value update and the change record will either both succeed or both fail. This is now idempotent.</p>
-<p>This could put a lot more strain on the database and possibly create scaling issues, but it does fix our consistency problem. Except it doesn’t actually notify others of changes. For that, we now need another process to regularly check for changes to send:</p>
-<pre tabindex="0"><code>function checkForChanges(db) {  
+</code></pre>
+          <p>
+            With this code we now know the value update and the change record will either both
+            succeed or both fail. This is now idempotent.
+          </p>
+          <p>
+            This could put a lot more strain on the database and possibly create scaling issues,
+            but it does fix our consistency problem. Except it doesn’t actually notify others of
+            changes. For that, we now need another process to regularly check for changes to send:
+          </p>
+          <pre tabindex="0"><code>function checkForChanges(db) {  
     db.forEachChange(change =&gt; publishChange(change))  
 }
-</code></pre><p>One thing that could happen now is notifying everyone could fail, so it’s best if the fetchChanges works kinda like:</p>
-<pre tabindex="0"><code>function forEachChange(cb) {  
+</code></pre>
+          <p>
+            One thing that could happen now is notifying everyone could fail, so it’s best if the
+            fetchChanges works kinda like:
+          </p>
+          <pre tabindex="0"><code>function forEachChange(cb) {  
     let changes = db.allChanges()  
     for change in changes {  
         try {  
@@ -379,20 +716,62 @@ or <a href="https://nathanherald.com/posts/rss.xml">subscribe with RSS</a>.
         }  
     }  
 }
-</code></pre><p>This way if anything fails, then the whole process will just start over. A change is only deleted when we know it’s been sent to everyone successfully. Of course this could be made much better in a lot of ways, but this is the minimum to get it working.</p>
-<p>This leads to a scenario where it’s possible a notification appears to have failed, but succeeded–since notifying everyone is a network call. If this happens, the process will the start over and the same change will be sent a second time. <strong>It turns out this is fine, because this was already possible.</strong></p>
-<p>When dealing with sending asynchronous messages (using a message queue or something) one has to choose between at-least-once delivery or at-most-once. There really aren’t other options (unless you can control time or something like that).</p>
-<p>At-most-once isn’t acceptable for us, because that means a notification is delivered 0 or 1 times. We wanted to <strong>reliably</strong> send notifications to all connected clients. So we would have to choose at-least-once. And at-least-once means 1 or more (so 2 or 3 or 1,000 times).</p>
-<p>So our app would already have to be ok with duplicates. We now have two ways duplicates could happen:</p>
-<ol>
-<li><code>publishChange</code> falsely appears to have failed, and we retry</li>
-<li>Our message bus has some network issues and delivers a message twice</li>
-</ol>
-<p>This is all right. We’ll have to deal with duplicate messages if we are sending messages over a network. It’s just another type of failure we plan for. (Putting a UUID on every message or something like that means we could match up ones we’ve already received; it’s a pretty “easy” problem to take care of.)</p>
-<p>So, now we have a reliable way to notify everyone of every change to the value in the database. We can setup cron or have a process with a time run checkForChanges regularly and let it run.</p>
-<p>It’s also worth considering some metrics and alerting for how often the <code>checkForChanges</code> is run. If it’s not run within a certain time then notifications are not being sent out. It’s worth investing some time in <a href="https://deadmanssnitch.com/">setting up some monitoring</a>.</p>
-<p>If we did want things to be more real-time, we could setup a pubsub channel to throw changes down:</p>
-<pre tabindex="0"><code>function receiveConnection(db, currentValue, newValue) {  
+</code></pre>
+          <p>
+            This way if anything fails, then the whole process will just start over. A change is
+            only deleted when we know it’s been sent to everyone successfully. Of course this could
+            be made much better in a lot of ways, but this is the minimum to get it working.
+          </p>
+          <p>
+            This leads to a scenario where it’s possible a notification appears to have failed, but
+            succeeded–since notifying everyone is a network call. If this happens, the process will
+            the start over and the same change will be sent a second time. <strong>It turns out
+            this is fine, because this was already possible.</strong>
+          </p>
+          <p>
+            When dealing with sending asynchronous messages (using a message queue or something)
+            one has to choose between at-least-once delivery or at-most-once. There really aren’t
+            other options (unless you can control time or something like that).
+          </p>
+          <p>
+            At-most-once isn’t acceptable for us, because that means a notification is delivered 0
+            or 1 times. We wanted to <strong>reliably</strong> send notifications to all connected
+            clients. So we would have to choose at-least-once. And at-least-once means 1 or more
+            (so 2 or 3 or 1,000 times).
+          </p>
+          <p>
+            So our app would already have to be ok with duplicates. We now have two ways duplicates
+            could happen:
+          </p>
+          <ol>
+            <li>
+              <code>publishChange</code> falsely appears to have failed, and we retry
+            </li>
+            <li>Our message bus has some network issues and delivers a message twice
+            </li>
+          </ol>
+          <p>
+            This is all right. We’ll have to deal with duplicate messages if we are sending
+            messages over a network. It’s just another type of failure we plan for. (Putting a UUID
+            on every message or something like that means we could match up ones we’ve already
+            received; it’s a pretty “easy” problem to take care of.)
+          </p>
+          <p>
+            So, now we have a reliable way to notify everyone of every change to the value in the
+            database. We can setup cron or have a process with a time run checkForChanges regularly
+            and let it run.
+          </p>
+          <p>
+            It’s also worth considering some metrics and alerting for how often the
+            <code>checkForChanges</code> is run. If it’s not run within a certain time then
+            notifications are not being sent out. It’s worth investing some time in <a href=
+            "https://deadmanssnitch.com/">setting up some monitoring</a>.
+          </p>
+          <p>
+            If we did want things to be more real-time, we could setup a pubsub channel to throw
+            changes down:
+          </p>
+          <pre tabindex="0"><code>function receiveConnection(db, currentValue, newValue) {  
     var change
 
     try {  
@@ -410,19 +789,47 @@ or <a href="https://nathanherald.com/posts/rss.xml">subscribe with RSS</a>.
     }  
     tryToPublishChange(change)  
 }
-</code></pre><p><code>tryToPublishChange</code> can lock the row, try to publish, and then delete the row if successful. If it fails, no worries–there is a process running that will eventually pickup the change and send it on it’s way. Since we lock each change while we try to publish it, there is no way someone else can read or delete it.</p>
-<p>Our system has more components, but it’s simpler. We don’t need as much error checking and we managed to just use what we had in front of us. But there is a real problem with databases: at scale, they are usually a bottleneck. Don’t worry about that until it’s a problem.</p>
-<p>We are planning for things to fail and we’ve isolated each part to it’s own process on it’s own computer. So each tiny part can be atomic, which is a huge win!</p>
-<h3 id="write-twice-thenverify">Write Twice, Then Verify</h3>
-<p><em>If the database is going to be a problem, then we gotta go a different route.</em> It’s possible we are already maxing out the queries per second we can handle and we don’t want to add even more and longer locks to our write queries.</p>
-<p>If that is the case, then we could go down the route of having three things at play:</p>
-<ol>
-<li>Write to primary storage</li>
-<li>Write the change notification to a secondary storage place</li>
-<li>Periodically (hopefully very often or immediately) take a change, verify the update is in-fact in primary storage, then publish it</li>
-</ol>
-<p>This could look something like what we’ve seen before:</p>
-<pre tabindex="0"><code>function receiveConnection(db, currentValue, newValue) {  
+</code></pre>
+          <p>
+            <code>tryToPublishChange</code> can lock the row, try to publish, and then delete the
+            row if successful. If it fails, no worries–there is a process running that will
+            eventually pickup the change and send it on it’s way. Since we lock each change while
+            we try to publish it, there is no way someone else can read or delete it.
+          </p>
+          <p>
+            Our system has more components, but it’s simpler. We don’t need as much error checking
+            and we managed to just use what we had in front of us. But there is a real problem with
+            databases: at scale, they are usually a bottleneck. Don’t worry about that until it’s a
+            problem.
+          </p>
+          <p>
+            We are planning for things to fail and we’ve isolated each part to it’s own process on
+            it’s own computer. So each tiny part can be atomic, which is a huge win!
+          </p>
+          <h3 id="write-twice-thenverify">
+            Write Twice, Then&nbsp;Verify
+          </h3>
+          <p>
+            <em>If the database is going to be a problem, then we gotta go a different route.</em>
+            It’s possible we are already maxing out the queries per second we can handle and we
+            don’t want to add even more and longer locks to our write queries.
+          </p>
+          <p>
+            If that is the case, then we could go down the route of having three things at play:
+          </p>
+          <ol>
+            <li>Write to primary storage
+            </li>
+            <li>Write the change notification to a secondary storage place
+            </li>
+            <li>Periodically (hopefully very often or immediately) take a change, verify the update
+            is in-fact in primary storage, then publish it
+            </li>
+          </ol>
+          <p>
+            This could look something like what we’ve seen before:
+          </p>
+          <pre tabindex="0"><code>function receiveConnection(db, currentValue, newValue) {  
     try {  
         db.startTransaction()  
         let current = db.selectAndLockForUpdate()  
@@ -437,16 +844,55 @@ or <a href="https://nathanherald.com/posts/rss.xml">subscribe with RSS</a>.
         db.rollbackTransaction()  
     }  
 }
-</code></pre><p>We already know that it’s possible for us to save a change that doesn’t actually get committed: our program could fail after <code>saveChange</code> and before or during <code>commitTransaction</code>. But the third process that regularly (or constantly) checks each change to make sure that the database reflects the potential truth means we can discard changes that didn’t actually get written.</p>
-<p>It’s actually a little more complicated than that. If the external change processor is slow, it’s possible changes pile up. And with our current schema of just storing a value we could accept two writes to the value before the first change is processed. At that point we have no way of knowing if the first change really was persisted–we only know that it’s not the current value in the database.</p>
-<p>We could fix this by keeping a history somewhere, by adding some sort of clock or UUID to each change, or by just accepting that overwritten changes don’t need to be sent out as notifications. Append-only storage might be a very good option for this. Maybe we don’t care if phones get all the in-between changes, we only care that they get the final good one. If that’s the case then when things calm down and changes are processed, then everyone will find out about it.</p>
-<p>This is a much more complicated system. It involves even more components, but it also spreads the work out which might be important if our primary database is not having the best time.</p>
-<p>We are planning for some of the writes to fail and have processes in place to take that into account. There are tradeoffs, for sure, but it _will work–_for some definition of work.</p>
-<h3 id="just-make-everything-async">Just Make Everything Async</h3>
-<p>And finally, as a third (and possibly way overboard) idea: just change the entire application and it’s API.</p>
-<p>Maybe what you want is a way to submit changes, perform them one by one, and only move on to the next one when you know the first has succeeded.</p>
-<p>Our API could become a simple ordered list of operations, each wanting to change the value. We could have a function like:</p>
-<pre tabindex="0"><code>function performOperation(q, db, newValue) {  
+</code></pre>
+          <p>
+            We already know that it’s possible for us to save a change that doesn’t actually get
+            committed: our program could fail after <code>saveChange</code> and before or during
+            <code>commitTransaction</code>. But the third process that regularly (or constantly)
+            checks each change to make sure that the database reflects the potential truth means we
+            can discard changes that didn’t actually get written.
+          </p>
+          <p>
+            It’s actually a little more complicated than that. If the external change processor is
+            slow, it’s possible changes pile up. And with our current schema of just storing a
+            value we could accept two writes to the value before the first change is processed. At
+            that point we have no way of knowing if the first change really was persisted–we only
+            know that it’s not the current value in the database.
+          </p>
+          <p>
+            We could fix this by keeping a history somewhere, by adding some sort of clock or UUID
+            to each change, or by just accepting that overwritten changes don’t need to be sent out
+            as notifications. Append-only storage might be a very good option for this. Maybe we
+            don’t care if phones get all the in-between changes, we only care that they get the
+            final good one. If that’s the case then when things calm down and changes are
+            processed, then everyone will find out about it.
+          </p>
+          <p>
+            This is a much more complicated system. It involves even more components, but it also
+            spreads the work out which might be important if our primary database is not having the
+            best time.
+          </p>
+          <p>
+            We are planning for some of the writes to fail and have processes in place to take that
+            into account. There are tradeoffs, for sure, but it _will work–_for some definition of
+            work.
+          </p>
+          <h3 id="just-make-everything-async">
+            Just Make Everything Async
+          </h3>
+          <p>
+            And finally, as a third (and possibly way overboard) idea: just change the entire
+            application and it’s API.
+          </p>
+          <p>
+            Maybe what you want is a way to submit changes, perform them one by one, and only move
+            on to the next one when you know the first has succeeded.
+          </p>
+          <p>
+            Our API could become a simple ordered list of operations, each wanting to change the
+            value. We could have a function like:
+          </p>
+          <pre tabindex="0"><code>function performOperation(q, db, newValue) {  
     try {  
         let current = db.getValue()  
         db.setValue(newValue)  
@@ -457,39 +903,57 @@ or <a href="https://nathanherald.com/posts/rss.xml">subscribe with RSS</a>.
         q.retryCurrentOperation()  
     }  
 }
-</code></pre><p>This is a very simple system which needs a rule: in the event of any failure in an operation, retry the whole thing. This means it’s possible that if the publishChange function were constantly erring we would write the same value into the db over and over, but maybe that’s fine. The other changes would queue up and only progress after we’ve gotten through the current one.</p>
-<p>This makes our function atomic and idempotent. Sure, the database will allow reads to the new value for some amount of time before the change notification is sent, but it’s not an incorrect value. We haven’t sent the change notification yet, but we will eventually. There was already some indeterminate amount of time between when we saved and when we sent the notification anyway. And we won’t have any other values until it’s sent.</p>
-<p>We are planning for <code>publishChange</code> to fail and we are OK with the tradeoffs.</p>
-<h3 id="conclusion">Conclusion</h3>
-<p>I’ve detailed lots of issues with the types of code I see in the wild, I’ve listed some options to make things reliable, and I’ve probably made some mistakes along the way. Please comment or send me a note with any feedback or fixes.</p>
-<p>Also, don’t build a distributed system if you don’t think your code or network or computer or something will fail. It will fail. Instead, just plan for it. It’s possible to consider lots of angles and just put things in place to either fix the issue or to just document it. Sometimes failure is fine, but don’t be surprised by it if possible.</p>
-<p>Whether you’re building an iOS app or deploying some code to heroku, you are working with a distributed system. Two components talking over a network are not near each other and they will eventually act like that is the case. Just be aware. Don’t let anyone tell you something is impossible. Maybe it is, but that doesn’t really matter. What matters is documenting what happens in response to failures.</p>
-
-      </div>
-
-      <footer>
-        
-        <p>
-          
-            Posted on
-          
-          <time datetime="2016-02-26T12:33:36Z">
-            26 Feb, 2016
-          </time>
-          
-            onto
-            <a href="https://medium.com/@myobie/the-network-is-never-there-for-you-950db56be2a4">Medium</a>
-          
-          
-          
-        </p>
-      </footer>
-    </article>
-  </main>
-
-    
-    
-    <script async src="/behavior.js"></script>
-      <script defer data-domain="nathanherald.com" src="https://stats.myobie.wtf/script.js"></script>
+</code></pre>
+          <p>
+            This is a very simple system which needs a rule: in the event of any failure in an
+            operation, retry the whole thing. This means it’s possible that if the publishChange
+            function were constantly erring we would write the same value into the db over and
+            over, but maybe that’s fine. The other changes would queue up and only progress after
+            we’ve gotten through the current one.
+          </p>
+          <p>
+            This makes our function atomic and idempotent. Sure, the database will allow reads to
+            the new value for some amount of time before the change notification is sent, but it’s
+            not an incorrect value. We haven’t sent the change notification yet, but we will
+            eventually. There was already some indeterminate amount of time between when we saved
+            and when we sent the notification anyway. And we won’t have any other values until it’s
+            sent.
+          </p>
+          <p>
+            We are planning for <code>publishChange</code> to fail and we are OK with the
+            tradeoffs.
+          </p>
+          <h3 id="conclusion">
+            Conclusion
+          </h3>
+          <p>
+            I’ve detailed lots of issues with the types of code I see in the wild, I’ve listed some
+            options to make things reliable, and I’ve probably made some mistakes along the way.
+            Please comment or send me a note with any feedback or fixes.
+          </p>
+          <p>
+            Also, don’t build a distributed system if you don’t think your code or network or
+            computer or something will fail. It will fail. Instead, just plan for it. It’s possible
+            to consider lots of angles and just put things in place to either fix the issue or to
+            just document it. Sometimes failure is fine, but don’t be surprised by it if possible.
+          </p>
+          <p>
+            Whether you’re building an iOS app or deploying some code to heroku, you are working
+            with a distributed system. Two components talking over a network are not near each
+            other and they will eventually act like that is the case. Just be aware. Don’t let
+            anyone tell you something is impossible. Maybe it is, but that doesn’t really matter.
+            What matters is documenting what happens in response to failures.
+          </p>
+        </div>
+        <footer>
+          <p>
+            Posted on <time datetime="2016-02-26T12:33:36Z">26 Feb, 2016</time> onto <a href=
+            "https://medium.com/@myobie/the-network-is-never-there-for-you-950db56be2a4">Medium</a>
+          </p>
+        </footer>
+      </article>
+    </main>
+    <script async src="/behavior.js"></script> 
+    <script data-domain="nathanherald.com" defer src="https://stats.myobie.wtf/script.js"></script>
   </body>
 </html>

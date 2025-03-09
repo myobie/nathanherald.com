@@ -1,115 +1,176 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
   <head lang="en-us">
+    <meta content="HTML Tidy for HTML5 for Apple macOS version 5.8.0" name="generator">
     <meta charset="UTF-8">
-    <title>I‘m Nathan Herald → Always use a CDN</title>
+    <title>
+      I‘m Nathan Herald → Always use a CDN
+    </title>
     <script>
       if ((new URL(window.location.href)).host === 'myobie.com') { window.location.assign('https://nathanherald.com') }
     </script>
-    <link rel="canonical" href="https://nathanherald.com/posts/legacy/use-a-cdn-for-every-site-you-build/">
-    <link rel="stylesheet" type="text/css" href="https://cloud.typography.com/6836312/761366/css/fonts.css"><link rel="stylesheet" type="text/css" href="/styles.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="generator" content="Hugo 0.136.5">
-    <meta name="title" content="I‘m Nathan Herald  → Always use a CDN">
-    <meta name="description" content="">
-    <meta property="og:title" content="Always use a CDN">
-    <meta property="og:type" content="website">
-    <meta property="og:description" content="">
-    <meta property="og:url" content="https://nathanherald.com/posts/legacy/use-a-cdn-for-every-site-you-build/">
-    <meta property="og:image" content="/og.png">
-    <meta property="og:site_name" content="I‘m Nathan Herald">
-    
-  
-
-<link rel="alternate" type="application/rss+xml" href="/rss.xml" title="Feed of all the posts on nathanherald.com">
-
-
+    <link href="https://nathanherald.com/posts/legacy/use-a-cdn-for-every-site-you-build/" rel=
+    "canonical">
+    <link href="https://cloud.typography.com/6836312/761366/css/fonts.css" rel="stylesheet" type=
+    "text/css">
+    <link href="/styles.css" rel="stylesheet" type="text/css">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="Hugo 0.136.5" name="generator">
+    <meta content="I‘m Nathan Herald → Always use a CDN" name="title">
+    <meta content="" name="description">
+    <meta content="Always use a CDN" property="og:title">
+    <meta content="website" property="og:type">
+    <meta content="" property="og:description">
+    <meta content="https://nathanherald.com/posts/legacy/use-a-cdn-for-every-site-you-build/"
+    property="og:url">
+    <meta content="/og.png" property="og:image">
+    <meta content="I‘m Nathan Herald" property="og:site_name">
+    <link href="/rss.xml" rel="alternate" title="Feed of all the posts on nathanherald.com" type=
+    "application/rss+xml">
   </head>
   <body class="default">
-    
-  <header class="section-header">
-    <div class="section-nav">
-      <h1 class="home-link">
-        <a data-nospan href="/" class="never-underline"><abbr title="Hello">👋</abbr></a>
-        <a href="/">I&rsquo;m Nathan</a>
-      </h1>
-      <nav>
-        <p>
-          Find more in the <a href="https://nathanherald.com/posts/">archive of all the posts on this site</a>
-or <a href="https://nathanherald.com/posts/rss.xml">subscribe with RSS</a>.
-
-        </p>
-      </nav>
-    </div>
-  </header>
-
-    
-  <main class="single">
-    <article>
-      <header>
-        <h1>
-          
-          
-            Always use a CDN
-            <p class="annotation">⭐️ a blog post</a>
-          
+    <header class="section-header">
+      <div class="section-nav">
+        <h1 class="home-link">
+          <a class="never-underline" data-nospan="" href="/"><abbr title="Hello">👋</abbr></a>
+          <a href="/">I’m Nathan</a>
         </h1>
-        
-      </header>
-
-      <div class="content">
-        <p>Doing maintenance on a 6 year old project today that &ldquo;didn&rsquo;t have the budget&rdquo; for a <a href="(https://en.wikipedia.org/wiki/Content_delivery_network)">CDN</a> reminded me how important one can be. I&rsquo;m writing this to remind myself to stick to my guns and always make time for the important things: one of which is using <a href="https://aws.amazon.com/cloudfront/">Cloudfront</a> or <a href="https://www.cloudflare.com">Cloudflare</a> every time.</p>
-<p>Not every site needs to &ldquo;scale&rdquo; (whatever that means), but it&rsquo;s a complete waste of resources to keep answering requests for the same files over and over again. If a project is hosted on heroku, then there is <a href="https://devcenter.heroku.com/articles/http-caching">no web server in front of the application</a> to intercept requests for files. The application has to answer and handle the same requests over and over again. Even if an app is behind a reverse proxy like apache or nginx, the proxy is still answering and streaming files when it doesn&rsquo;t need to.</p>
-<p>Don&rsquo;t under estimate just how easy and useful it is to save money by reducing the requests per second hitting the application boxes. While your site is keeping up fine now, when a spike happens it can deal with more traffic if it only has to serve the dynamic bits. If a page has 4 assets, then a 100% increase is page views could mean a 400% increase in requests per second. A page with lots of logos or icons or whatever might have 100s of assets and every page view is multiplied that much. The simple math is: don&rsquo;t serve assets yourself.</p>
-<p>If you&rsquo;re willing to repoint the primary domain&rsquo;s DNS then using Cloudflare is super simple. Sign up, then change DNS settings. Sadly, <a href="https://support.cloudflare.com/hc/en-us/articles/203689034-Does-CloudFlare-provide-me-with-a-CDN-subdomain-or-hostname-">Cloudflare does not provide a hostname</a> to use, so letting them proxy the entire domain is the only way.</p>
-<p>My favorite CDN is Amazon&rsquo;s Cloudfront and it&rsquo;s amazingly simple to setup. All CDN&rsquo;s work the same: the <strong>origin</strong> server is the application&rsquo;s primary domain. Amazon provides a unique hostname to use, just append the original file&rsquo;s path. When Amazon doesn&rsquo;t have a file in it&rsquo;s cache it will ask the origin domain for a fresh copy at that path. All one has to do is prepend the hostname like: <code>https://abcdefg123.cloudfront.net/images/cats.gif</code>. Another great thing is Amazon provides SSL for all Cloudfront subdomains, so no mixed content warnings or anything like that.</p>
-<p>I just recently set this up for a rails project hosted on heroku by simply making this change to <code>config/production.rb</code>:</p>
-<pre><code>config.action_controller.asset_host = 
-  &quot;https://abcdefg123.cloudfront.net&quot;
+        <nav>
+          <p>
+            Find more in the <a href="https://nathanherald.com/posts/">archive of all the posts on
+            this site</a> or <a href="https://nathanherald.com/posts/rss.xml">subscribe with
+            RSS</a>.
+          </p>
+        </nav>
+      </div>
+    </header>
+    <main class="single">
+      <article>
+        <header>
+          <h1>
+            Always use a CDN
+          </h1>
+          <p class="annotation">
+            ⭐️ a blog post
+          </p>
+        </header>
+        <div class="content">
+          <p>
+            Doing maintenance on a 6 year old project today that “didn’t have the budget” for a
+            <a href="(https://en.wikipedia.org/wiki/Content_delivery_network)">CDN</a> reminded me
+            how important one can be. I’m writing this to remind myself to stick to my guns and
+            always make time for the important things: one of which is using <a href=
+            "https://aws.amazon.com/cloudfront/">Cloudfront</a> or <a href=
+            "https://www.cloudflare.com">Cloudflare</a> every time.
+          </p>
+          <p>
+            Not every site needs to “scale” (whatever that means), but it’s a complete waste of
+            resources to keep answering requests for the same files over and over again. If a
+            project is hosted on heroku, then there is <a href=
+            "https://devcenter.heroku.com/articles/http-caching">no web server in front of the
+            application</a> to intercept requests for files. The application has to answer and
+            handle the same requests over and over again. Even if an app is behind a reverse proxy
+            like apache or nginx, the proxy is still answering and streaming files when it doesn’t
+            need to.
+          </p>
+          <p>
+            Don’t under estimate just how easy and useful it is to save money by reducing the
+            requests per second hitting the application boxes. While your site is keeping up fine
+            now, when a spike happens it can deal with more traffic if it only has to serve the
+            dynamic bits. If a page has 4 assets, then a 100% increase is page views could mean a
+            400% increase in requests per second. A page with lots of logos or icons or whatever
+            might have 100s of assets and every page view is multiplied that much. The simple math
+            is: don’t serve assets yourself.
+          </p>
+          <p>
+            If you’re willing to repoint the primary domain’s DNS then using Cloudflare is super
+            simple. Sign up, then change DNS settings. Sadly, <a href=
+            "https://support.cloudflare.com/hc/en-us/articles/203689034-Does-CloudFlare-provide-me-with-a-CDN-subdomain-or-hostname-">
+            Cloudflare does not provide a hostname</a> to use, so letting them proxy the entire
+            domain is the only way.
+          </p>
+          <p>
+            My favorite CDN is Amazon’s Cloudfront and it’s amazingly simple to setup. All CDN’s
+            work the same: the <strong>origin</strong> server is the application’s primary domain.
+            Amazon provides a unique hostname to use, just append the original file’s path. When
+            Amazon doesn’t have a file in it’s cache it will ask the origin domain for a fresh copy
+            at that path. All one has to do is prepend the hostname like:
+            <code>https://abcdefg123.cloudfront.net/images/cats.gif</code>. Another great thing is
+            Amazon provides SSL for all Cloudfront subdomains, so no mixed content warnings or
+            anything like that.
+          </p>
+          <p>
+            I just recently set this up for a rails project hosted on heroku by simply making this
+            change to <code>config/production.rb</code>:
+          </p>
+          <pre><code>config.action_controller.asset_host = 
+  "https://abcdefg123.cloudfront.net"
 </code></pre>
-<p>To make things easier for myself I just set it to always use <code>https</code> even if the page including the asset is <code>http</code>. It&rsquo;s possible to use URLs like <code>//abcdefg123.cloudfront.net/images/cats.gif</code> without the protocol which tells the browser &ldquo;use the same protocol as the base document&rdquo; kinda sorta. Try it out if you haven&rsquo;t.</p>
-<p>For any other type of application or framework it&rsquo;s pretty simple to do something like this pseudo code:</p>
-<pre><code>module.exports = function asset_path(path) {
-  if ($application.env === &quot;production&quot;) {
+          <p>
+            To make things easier for myself I just set it to always use <code>https</code> even if
+            the page including the asset is <code>http</code>. It’s possible to use URLs like
+            <code>//abcdefg123.cloudfront.net/images/cats.gif</code> without the protocol which
+            tells the browser “use the same protocol as the base document” kinda sorta. Try it out
+            if you haven’t.
+          </p>
+          <p>
+            For any other type of application or framework it’s pretty simple to do something like
+            this pseudo code:
+          </p>
+          <pre><code>module.exports = function asset_path(path) {
+  if ($application.env === "production") {
     return $application.config.asset_host + path;
   } else {
     return path;
 }
 </code></pre>
-<p>(Yeah, that&rsquo;s javascript referencing a global named <code>$application</code>. Sorry.) The basic idea is to make sure every time the path is output for an asset that it is &ldquo;rendered&rdquo; so in production it can use a different host.</p>
-<p>Since Cloudflare takes over the DNS they let any request for a file not currently cached to pass through. This means less configuration up front, but it <em>can</em> lead to confusion if it&rsquo;s a person&rsquo;s first time using a CDN. It&rsquo;s possible to configure Cloudfront to take over the origin domain as well, but it&rsquo;s not required with Amazon&rsquo;s setup.</p>
-<p>After setting up a CDN and making sure all assets have the correct hostname in the URLs, it&rsquo;s important to set the correct headers so the CDN knows how long to keep the files. <a href="https://devcenter.heroku.com/articles/increasing-application-performance-with-http-cache-headers">Heroku has a great overview of HTTP caching</a> and you should read it. The simplest thing to do is to add a <code>Cache-Control</code> header for every asset requested by the CDN backend:</p>
-<pre><code>Cache-Control:public, max-age=31536000
+          <p>
+            (Yeah, that’s javascript referencing a global named <code>$application</code>. Sorry.)
+            The basic idea is to make sure every time the path is output for an asset that it is
+            “rendered” so in production it can use a different host.
+          </p>
+          <p>
+            Since Cloudflare takes over the DNS they let any request for a file not currently
+            cached to pass through. This means less configuration up front, but it <em>can</em>
+            lead to confusion if it’s a person’s first time using a CDN. It’s possible to configure
+            Cloudfront to take over the origin domain as well, but it’s not required with Amazon’s
+            setup.
+          </p>
+          <p>
+            After setting up a CDN and making sure all assets have the correct hostname in the
+            URLs, it’s important to set the correct headers so the CDN knows how long to keep the
+            files. <a href=
+            "https://devcenter.heroku.com/articles/increasing-application-performance-with-http-cache-headers">
+            Heroku has a great overview of HTTP caching</a> and you should read it. The simplest
+            thing to do is to add a <code>Cache-Control</code> header for every asset requested by
+            the CDN backend:
+          </p>
+          <pre><code>Cache-Control:public, max-age=31536000
 </code></pre>
-<p>This is precisely what rails does when it serves an asset in production, so I got pretty lucky there. All good web frameworks will do the same thing. If you&rsquo;re project is framework-less or using some new-awesome-hipster-cool-thing-framework then it should be simple to add this header when an asset is requested: if it&rsquo;s not then provide a patch or module or re-consider your choice.</p>
-<p>Finally, <strong>check the server access logs to see the new found amazingness!</strong> Offloading traffic can get way more money out of the application boxes and might even allow one to scale down. Not enough writing online talks about scaling down instead of up.</p>
-
-      </div>
-
-      <footer>
-        
-        <p>
-          
-            Posted on
-          
-          <time datetime="2015-01-17T16:11:09Z">
-            17 Jan, 2015
-          </time>
-          
-          
-            onto
-            <a href="https://myobie.svbtle.com/use-a-cdn-for-every-site-you-build">Svbtle</a>
-          
-          
-        </p>
-      </footer>
-    </article>
-  </main>
-
-    
-    
-    <script async src="/behavior.js"></script>
-      <script defer data-domain="nathanherald.com" src="https://stats.myobie.wtf/script.js"></script>
+          <p>
+            This is precisely what rails does when it serves an asset in production, so I got
+            pretty lucky there. All good web frameworks will do the same thing. If you’re project
+            is framework-less or using some new-awesome-hipster-cool-thing-framework then it should
+            be simple to add this header when an asset is requested: if it’s not then provide a
+            patch or module or re-consider your choice.
+          </p>
+          <p>
+            Finally, <strong>check the server access logs to see the new found
+            amazingness!</strong> Offloading traffic can get way more money out of the application
+            boxes and might even allow one to scale down. Not enough writing online talks about
+            scaling down instead of up.
+          </p>
+        </div>
+        <footer>
+          <p>
+            Posted on <time datetime="2015-01-17T16:11:09Z">17 Jan, 2015</time> onto <a href=
+            "https://myobie.svbtle.com/use-a-cdn-for-every-site-you-build">Svbtle</a>
+          </p>
+        </footer>
+      </article>
+    </main>
+    <script async src="/behavior.js"></script> 
+    <script data-domain="nathanherald.com" defer src="https://stats.myobie.wtf/script.js"></script>
   </body>
 </html>
