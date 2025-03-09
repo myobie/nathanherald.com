@@ -4,11 +4,12 @@
 - [x] `rm public/keybase.txt` I don’t need that anymore
 - [x] Implement redirect from `/writing/*` to `/posts/*` and `rm public/writing`
 - [x] Remove hash from css and js, etags should be good enough (find and replace)
-- [ ] Copy all the original markdown files into the folders to sit next to the `index.html`s and then `rm ./content`
-    - [ ] `rm ./layouts`
+- [x] Copy all the original markdown files into the folders to sit next to the `index.html`s and then `rm ./content`
+    - [x] `rm ./layouts`
 - [x] How do I do local links? They are all nathanherald.com after hugo did it’s thing
 - [x] Is there an automated way to soft wrap the text in long paragraphs in every page?
 - [x] Why is it `/posts/rss.xml` and not just `/rss.xml`? Move it?
+- [x] How we going to handle the fonts? GitHub Action?
 - [ ] What are the steps to adding a new post?
     - [ ] Write in markdown
     - [ ] Convert to html
@@ -17,6 +18,6 @@
     - [ ] Add link to `public/posts/index.html`
     - [ ] Add link to `public/index.html`
     - [ ] Add to `public/rss.xml` – can this be automated, at least the generation of the escaped content? Maybe a Shortcut?
-- [ ] How we going to handle the fonts? GitHub Action?
 - [ ] Where will this live long term? CF Worker?
+    - [ ] How we going to handle the fonts in the future?
 - [ ] SSD?

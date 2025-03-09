@@ -1,5 +1,0 @@
-{{/* Expects to be provided a Section page as context */}}
-{{ $page := . }}
-{{ with .OutputFormats.Get "rss" -}}
-    {{ printf `<link rel="%s" type="%s" href="%s" title="%s on nathanherald.com">` .Rel .MediaType.Type .Permalink $page.Title | safeHTML }}
-{{ end -}}

@@ -1,7 +1,0 @@
-{{- $original := .Page.Resources.GetMatch (printf "*%s*" (.Get "src")) -}}
-
-<video controls src="{{ $original.Permalink }}" type="{{ .Get "type" }}">
-  {{- with .Inner }}
-    {{ . | markdownify }}
-  {{- end }}
-</video>
