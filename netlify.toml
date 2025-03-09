@@ -1,5 +1,6 @@
 [build]
 publish = "public"
+command = "bin/install"
 
 [[redirects]]
 from = "/writing/rss.xml"

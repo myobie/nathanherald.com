@@ -3,9 +3,10 @@
 - [x] `rm public/links`
 - [x] `rm public/keybase.txt` I don’t need that anymore
 - [x] Implement redirect from `/writing/*` to `/posts/*` and `rm public/writing`
-- [ ] How do I do local links? They are all nathanherald.com after hugo did it’s thing
 - [ ] Remove hash from css and js, etags should be good enough (find and replace)
 - [ ] Copy all the original markdown files into the folders to sit next to the `index.html`s and then `rm ./content`
+    - [ ] `rm ./layouts`
+- [ ] How do I do local links? They are all nathanherald.com after hugo did it’s thing
 - [ ] Is there an automated way to soft wrap the text in long paragraphs in every page?
 - [ ] Why is it `/posts/rss.xml` and not just `/rss.xml`? Move it?
 - [ ] What are the steps to adding a new post?
