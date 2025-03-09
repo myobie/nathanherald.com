@@ -6,6 +6,30 @@
     <description>Recent posts from nathanherald.com</description>
     <lastBuildDate>Fri, 28 Feb 2025 01:02:20 +0100</lastBuildDate>
 
+    <item>
+      <title>Removing Hugo</title>
+      <link>https://nathanherald.com/posts/removing-hugo/</link>
+      <pubDate>2025-03-09T21:45:21+01:00</pubDate>
+      
+      <guid isPermaLink="true">https://nathanherald.com/posts/removing-hugo/</guid>
+      <description>
+        &lt;p&gt;
+          &lt;strong&gt;A new experiment:&lt;/strong&gt; I have completely removed my build tool. It’s just me and HTML now.
+        &lt;/p&gt;
+        &lt;p&gt;
+          I‘ve had an itch for a while to dump hugo and just go straight html for a while… and I've finally done it. You can see &lt;a href="https://github.com/myobie/nathanherald.com/tree/main/public"&gt;in the repo for this website&lt;/a&gt;.
+        &lt;/p&gt;
+        &lt;p&gt;
+          No more hugo, no more build tool, no more having to deal with new versions, deprecations, weird shortcodes, weird markdown things…
+        &lt;/p&gt;
+        &lt;p&gt;
+          &lt;a href="#"&gt;I created this page in a PR,&lt;/a&gt; added it to the &lt;a href="/posts"&gt;/posts&lt;/a&gt; index, to the homepage recent links, and to the &lt;a href="/rss.xml"&gt;rss feed.&lt;/a&gt;
+        &lt;/p&gt;
+        &lt;p&gt;
+          My intention is to build up some custom elements to help build new pages more quickly. We‘ll see how that goes. For now, this isn't too bad.
+        &lt;/p&gt;
+      </description>
+    </item>
     
     <item>
       <title>Before the BF, there was the T – my first mirrorless camera 🖤</title>
