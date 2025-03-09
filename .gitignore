@@ -4,6 +4,7 @@ node_modules/*
 vendor/*
 resources/*
 static/fonts/*
+infra/variables.tfvars.local
 
 .now
 .vercel
