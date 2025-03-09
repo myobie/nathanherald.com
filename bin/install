@@ -8,6 +8,8 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
   export AWS_ACCESS_KEY=$(cat infra/variables.tfvars.local | grep -m 1 aws_access_key | awk '{ v=$3; gsub(/"/, "", v); print v }')
   export AWS_SECRET_KEY=$(cat infra/variables.tfvars.local | grep -m 1 aws_secret_key | awk '{ v=$3; gsub(/"/, "", v); print v }')
 else
+  export PATH="$PATH:$(python3 -m site --user-base)/bin"
+  pip install --upgrade pip
   pip install s3cmd
 fi
 
