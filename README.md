@@ -15,12 +15,11 @@ I use the book weight for normal text, the bold weight for, uh, bold, and the bl
 ## Local setup
 
 ```sh
-git-crypt unlock
 bin/install
 ```
 
 ### Development server
 
 ```sh
-deno run --allow-net --allow-read jsr:@std/http/file-server
+bin/serve
 ```

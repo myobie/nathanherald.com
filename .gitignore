@@ -5,6 +5,7 @@ vendor/*
 resources/*
 static/fonts/*
 infra/variables.tfvars.local
+public/fonts/*
 
 .now
 .vercel

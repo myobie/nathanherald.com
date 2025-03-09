@@ -10,12 +10,6 @@ if $force or not $?.success?
   system "brew install terraform"
 end
 
-`which git-crypt`
-
-if $force or not $?.success?
-  system "brew install git-crypt"
-end
-
 `which s3cmd`
 
 if $force or not $?.success?

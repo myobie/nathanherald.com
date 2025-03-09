@@ -13,14 +13,14 @@ else
   pip install s3cmd
 fi
 
-if [[ ! -f static/fonts/webfont.zip ]]; then
+if [[ ! -f public/fonts/webfont.zip ]]; then
   s3cmd get \
     --access_key="${AWS_ACCESS_KEY}" \
     --secret_key="${AWS_SECRET_KEY}" \
     s3://nathanheraldcom-font-bucket/webfont.zip \
-    static/fonts/webfont.zip
+    public/fonts/webfont.zip
 
-  cd static/fonts &&
+  cd public/fonts &&
     unzip webfont.zip &&
     cd -
 fi
