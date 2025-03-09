@@ -2,10 +2,8 @@
 <rss version="2.0">
   <channel>
     <title>nathanherald.com feed</title>
-    <link>https://nathanherald.com/posts/</link>
+    <link>https://nathanherald.com/</link>
     <description>Recent posts from nathanherald.com</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
     <lastBuildDate>Fri, 28 Feb 2025 01:02:20 +0100</lastBuildDate>
 
     
