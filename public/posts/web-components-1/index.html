@@ -1,0 +1,117 @@
+<!doctype html>
+<html>
+  <head lang="en-us">
+    <meta charset="UTF-8">
+    <title>I‘m Nathan Herald → Learning about Web Components: Part 1 – Getting Started</title>
+    <script>
+      if ((new URL(window.location.href)).host === 'myobie.com') { window.location.assign('https://nathanherald.com') }
+    </script>
+    <link rel="canonical" href="https://nathanherald.com/posts/web-components-1/">
+    <link rel="stylesheet" type="text/css" href="https://cloud.typography.com/6836312/761366/css/fonts.css"><link rel="stylesheet" type="text/css" href="https://nathanherald.com/combined.min.31312963d9b6322f358005bab4cfc1a3a286b0ec67f5df6e22434de51d71c004.css" integrity="sha256-MTEpY9m2Mi81gAW6tM/Bo6KGsOxn9d9uIkNN5R1xwAQ=">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="generator" content="Hugo 0.136.5">
+    <meta name="title" content="I‘m Nathan Herald  → Learning about Web Components: Part 1 – Getting Started">
+    <meta name="description" content="">
+    <meta property="og:title" content="Learning about Web Components: Part 1 – Getting Started">
+    <meta property="og:type" content="website">
+    <meta property="og:description" content="">
+    <meta property="og:url" content="https://nathanherald.com/posts/web-components-1/">
+    <meta property="og:image" content="/og.png">
+    <meta property="og:site_name" content="I‘m Nathan Herald">
+    
+  
+
+<link rel="alternate" type="application/rss+xml" href="https://nathanherald.com/posts/rss.xml" title="Archive of all the posts on this site on nathanherald.com">
+
+
+  </head>
+  <body class="default">
+    
+  <header class="section-header">
+    <div class="section-nav">
+      <h1 class="home-link">
+        <a data-nospan href="/" class="never-underline"><abbr title="Hello">👋</abbr></a>
+        <a href="/">I&rsquo;m Nathan</a>
+      </h1>
+      <nav>
+        <p>
+          Find more in the <a href="https://nathanherald.com/posts/">archive of all the posts on this site</a>
+or <a href="https://nathanherald.com/posts/rss.xml">subscribe with RSS</a>.
+
+        </p>
+      </nav>
+    </div>
+  </header>
+
+    
+  <main class="single">
+    <article>
+      <header>
+        <h1>
+          
+          
+            Learning about Web Components: Part 1 – Getting Started
+            <p class="annotation">⭐️ a blog post</a>
+          
+        </h1>
+        
+      </header>
+
+      <div class="content">
+        <p>I’ve become interested in <a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_components">Web Components</a> again. I’ve kept up with the smattering of standards that make up “Web Components” over the years, but since they were client-only and couldn’t really be server-rendered, they weren’t as interesting to me. Things have changed. <a href="https://webkit.org/blog/13851/declarative-shadow-dom/">declaritive shadow DOM</a> makes server rendering possible and <a href="https://github.com/11ty/webc">webc</a> seems like a neat way to do single file components (since <a href="https://developer.chrome.com/blog/chrome-70-deps-rems/">html imports</a> didn’t make it, which was super sad).</p>
+<p>I have a good understanding of how to make <em>a</em> web component, but I don’t really understand yet: how to compose a tree of web components, how to pass state changes down, is it easy and intuitive to bubble events up the tree, and how to do something similar to preact’s “render loop” or even if that type of loop would be desirable.</p>
+<p>I learn best by doing, so today I want to ease back into web components by making a simple grid of images. <em>Over time I’d like to enhance the grid to be reorderable, editable (add/remove images), and maybe even provide a custom name for each image… but that’s for another day.</em></p>
+<p>I’ve written this part out before I started on the actual components, and we’ll see how far I get in 20 or so minutes…</p>
+<hr>
+<p>I managed to create an <code>image-grid</code> component with <code>image-cell</code> children which can load and show images in a nice grid.</p>
+<p><a href="./demo.html">View the demo.html page here</a>.</p>
+<p>The html looks like:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">image-grid</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">&lt;</span><span class="nt">image-cell</span> <span class="na">src</span><span class="o">=</span><span class="s">&#34;./one.jpg&#34;</span>   <span class="na">width</span><span class="o">=</span><span class="s">&#34;3607&#34;</span> <span class="na">height</span><span class="o">=</span><span class="s">&#34;3024&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">image-cell</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">&lt;</span><span class="nt">image-cell</span> <span class="na">src</span><span class="o">=</span><span class="s">&#34;./two.jpg&#34;</span>   <span class="na">width</span><span class="o">=</span><span class="s">&#34;3448&#34;</span> <span class="na">height</span><span class="o">=</span><span class="s">&#34;4592&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">image-cell</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">&lt;</span><span class="nt">image-cell</span> <span class="na">src</span><span class="o">=</span><span class="s">&#34;./three.jpg&#34;</span> <span class="na">width</span><span class="o">=</span><span class="s">&#34;4592&#34;</span> <span class="na">height</span><span class="o">=</span><span class="s">&#34;3448&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">image-cell</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">&lt;</span><span class="nt">image-cell</span> <span class="na">src</span><span class="o">=</span><span class="s">&#34;./four.jpg&#34;</span>  <span class="na">width</span><span class="o">=</span><span class="s">&#34;3264&#34;</span> <span class="na">height</span><span class="o">=</span><span class="s">&#34;4928&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">image-cell</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">&lt;</span><span class="nt">image-cell</span> <span class="na">src</span><span class="o">=</span><span class="s">&#34;./five.jpg&#34;</span>  <span class="na">width</span><span class="o">=</span><span class="s">&#34;4225&#34;</span> <span class="na">height</span><span class="o">=</span><span class="s">&#34;2798&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">image-cell</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">&lt;</span><span class="nt">image-cell</span> <span class="na">src</span><span class="o">=</span><span class="s">&#34;./six.jpg&#34;</span>   <span class="na">width</span><span class="o">=</span><span class="s">&#34;4928&#34;</span> <span class="na">height</span><span class="o">=</span><span class="s">&#34;3264&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">image-cell</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;/</span><span class="nt">image-grid</span><span class="p">&gt;</span>
+</span></span></code></pre></div><p>This is a good start and I learned a few things:</p>
+<ul>
+<li>Using <code>&lt;slot&gt;&lt;/slot&gt;</code> to mean what <code>children</code> means in preact works fine I think</li>
+<li><code>:host {}</code> in the CSS is how to style the custom element itself, which is very handy</li>
+<li>The styles seem truly isolated. I tried to add <code>body { background-color: pink; }</code> inside the custom element’s template and it had no affect. I also tried to style <code>img { outline: 5px solid purple; }</code> in the parent <code>image-grid</code> template and it didn’t affect the images inside the child <code>image-cell</code> template. This is what I expected, but it’s the first time I’ve proven it to myself with a working example.</li>
+</ul>
+<p>Some notes for myself for next time:</p>
+<ul>
+<li>I think I need to break the <code>&lt;style&gt;</code> in the template out into a <code>.css</code> file. If I server render this thing it’s going to duplicate the entire <code>&lt;template&gt;</code> for each invocation, including all the <code>&lt;style&gt;</code>s.</li>
+<li>I don’t like how separate and indirect the <code>&lt;template&gt;</code> is from the <code>customElements.define(…)</code> call.</li>
+<li>I don’t like how I’m cascading the <code>height</code>, <code>src</code>, <code>width</code> attributes from the <code>image-cell</code> to the <code>img</code> tag right now. I’m not sure how to make it better, but it just feels weird to me.</li>
+<li>I always forget how to use css grid to layout images and keep their aspect ratios correct. It’s a battle.</li>
+</ul>
+<p>OK, that’s all for today. We’ll see when I take time to make the components more dynamic along with being server rendered.</p>
+
+      </div>
+
+      <footer>
+        
+        <p>
+          
+            Posted on
+          
+          <time datetime="2023-05-06T15:35:45&#43;02:00">
+            6 May, 2023
+          </time>
+          
+          
+          
+        </p>
+      </footer>
+    </article>
+  </main>
+
+    
+    
+    <script async src="https://nathanherald.com/behavior.min.e41a74d07fee42e04abe287c617e80b67998e06c69d3d3c07c6cd91f272bc0bc.js" integrity="sha256-5Bp00H/uQuBKvih8YX6AtnmY4Gxp09PAfGzZHycrwLw="></script>
+      <script defer data-domain="nathanherald.com" src="https://stats.myobie.wtf/script.js"></script>
+  </body>
+</html>

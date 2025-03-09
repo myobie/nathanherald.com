@@ -1,0 +1,101 @@
+<!doctype html>
+<html>
+  <head lang="en-us">
+    <meta charset="UTF-8">
+    <title>I‘m Nathan Herald → TIL about vim’s spellcheck</title>
+    <script>
+      if ((new URL(window.location.href)).host === 'myobie.com') { window.location.assign('https://nathanherald.com') }
+    </script>
+    <link rel="canonical" href="https://nathanherald.com/posts/til/vim-spellcheck/">
+    <link rel="stylesheet" type="text/css" href="https://cloud.typography.com/6836312/761366/css/fonts.css"><link rel="stylesheet" type="text/css" href="https://nathanherald.com/combined.min.31312963d9b6322f358005bab4cfc1a3a286b0ec67f5df6e22434de51d71c004.css" integrity="sha256-MTEpY9m2Mi81gAW6tM/Bo6KGsOxn9d9uIkNN5R1xwAQ=">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="generator" content="Hugo 0.136.5">
+    <meta name="title" content="I‘m Nathan Herald  → TIL about vim’s spellcheck">
+    <meta name="description" content="">
+    <meta property="og:title" content="TIL about vim’s spellcheck">
+    <meta property="og:type" content="website">
+    <meta property="og:description" content="">
+    <meta property="og:url" content="https://nathanherald.com/posts/til/vim-spellcheck/">
+    <meta property="og:image" content="/og.png">
+    <meta property="og:site_name" content="I‘m Nathan Herald">
+    
+  
+
+<link rel="alternate" type="application/rss+xml" href="https://nathanherald.com/posts/rss.xml" title="Archive of all the posts on this site on nathanherald.com">
+
+
+  </head>
+  <body class="default">
+    
+  <header class="section-header">
+    <div class="section-nav">
+      <h1 class="home-link">
+        <a data-nospan href="/" class="never-underline"><abbr title="Hello">👋</abbr></a>
+        <a href="/">I&rsquo;m Nathan</a>
+      </h1>
+      <nav>
+        <p>
+          Find more in the <a href="https://nathanherald.com/posts/">archive of all the posts on this site</a>
+or <a href="https://nathanherald.com/posts/rss.xml">subscribe with RSS</a>.
+
+        </p>
+      </nav>
+    </div>
+  </header>
+
+    
+  <main class="single">
+    <article>
+      <header>
+        <h1>
+          
+          
+            TIL about vim’s spellcheck
+            <p class="annotation">⭐️ a blog post</a>
+          
+        </h1>
+        
+      </header>
+
+      <div class="content">
+        <p>I’ve been using vim for years, but I’ve never took the time to learn how to do spellcheck. Instead I always open [iA Writer][] if I need spellcheck. However, I have made way too many spelling errors in code comments or quick files and today I decided to learn how to check the spelling of a document.</p>
+<p>Today I added this to my <code>.vimrc</code>:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-vim" data-lang="vim"><span class="line"><span class="cl"><span class="c">&#34; spellcheck</span>
+</span></span><span class="line"><span class="cl"><span class="nx">command</span> <span class="nx">Sp</span> <span class="nx">setlocal</span> <span class="nx">spell</span> <span class="nx">spelllang</span><span class="p">=</span><span class="nx">en_us</span>
+</span></span><span class="line"><span class="cl"><span class="nx">command</span> <span class="nx">Spoff</span> <span class="nx">setlocal</span> <span class="nx">nospell</span>
+</span></span></code></pre></div><p>I only want spellcheck to be on in a single buffer at a time and not by default. After it’s enabled one uses <code>]s</code> and <code>[s</code> to navigate to the next and previous spelling error. With the cursor inside a problem one can use <code>z=</code> to bring up a list of suggestions for replacement. It’s been great. Below is a screenshot of this file for example.</p>
+<figure>
+  <img
+    alt="Screenshot of this document in vim with spellcheck turned on"
+    width="828"
+    height="549"
+    src="https://nathanherald.com/posts/til/vim-spellcheck/screenshot@2x_hu209515097893001497.png">
+</figure>
+
+
+      </div>
+
+      <footer>
+        
+        <p>
+          
+            Posted on
+          
+          <time datetime="2020-05-21T16:05:13&#43;02:00">
+            21 May, 2020
+          </time>
+          
+          
+          
+        </p>
+      </footer>
+    </article>
+  </main>
+
+    
+    
+    <script async src="https://nathanherald.com/behavior.min.e41a74d07fee42e04abe287c617e80b67998e06c69d3d3c07c6cd91f272bc0bc.js" integrity="sha256-5Bp00H/uQuBKvih8YX6AtnmY4Gxp09PAfGzZHycrwLw="></script>
+      <script defer data-domain="nathanherald.com" src="https://stats.myobie.wtf/script.js"></script>
+  </body>
+</html>

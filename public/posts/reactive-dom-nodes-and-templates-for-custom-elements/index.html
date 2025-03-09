@@ -1,0 +1,239 @@
+<!doctype html>
+<html>
+  <head lang="en-us">
+    <meta charset="UTF-8">
+    <title>I‘m Nathan Herald → Reactive DOM nodes &#43; reactive templates for custom elements (web components)</title>
+    <script>
+      if ((new URL(window.location.href)).host === 'myobie.com') { window.location.assign('https://nathanherald.com') }
+    </script>
+    <link rel="canonical" href="https://nathanherald.com/posts/reactive-dom-nodes-and-templates-for-custom-elements/">
+    <link rel="stylesheet" type="text/css" href="https://cloud.typography.com/6836312/761366/css/fonts.css"><link rel="stylesheet" type="text/css" href="https://nathanherald.com/combined.min.31312963d9b6322f358005bab4cfc1a3a286b0ec67f5df6e22434de51d71c004.css" integrity="sha256-MTEpY9m2Mi81gAW6tM/Bo6KGsOxn9d9uIkNN5R1xwAQ=">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="generator" content="Hugo 0.136.5">
+    <meta name="title" content="I‘m Nathan Herald  → Reactive DOM nodes &#43; reactive templates for custom elements (web components)">
+    <meta name="description" content="">
+    <meta property="og:title" content="Reactive DOM nodes &#43; reactive templates for custom elements (web components)">
+    <meta property="og:type" content="website">
+    <meta property="og:description" content="">
+    <meta property="og:url" content="https://nathanherald.com/posts/reactive-dom-nodes-and-templates-for-custom-elements/">
+    <meta property="og:image" content="/og.png">
+    <meta property="og:site_name" content="I‘m Nathan Herald">
+    
+  
+
+<link rel="alternate" type="application/rss+xml" href="https://nathanherald.com/posts/rss.xml" title="Archive of all the posts on this site on nathanherald.com">
+
+
+  </head>
+  <body class="default">
+    
+  <header class="section-header">
+    <div class="section-nav">
+      <h1 class="home-link">
+        <a data-nospan href="/" class="never-underline"><abbr title="Hello">👋</abbr></a>
+        <a href="/">I&rsquo;m Nathan</a>
+      </h1>
+      <nav>
+        <p>
+          Find more in the <a href="https://nathanherald.com/posts/">archive of all the posts on this site</a>
+or <a href="https://nathanherald.com/posts/rss.xml">subscribe with RSS</a>.
+
+        </p>
+      </nav>
+    </div>
+  </header>
+
+    
+  <main class="single">
+    <article>
+      <header>
+        <h1>
+          
+          
+            Reactive DOM nodes &#43; reactive templates for custom elements (web components)
+            <p class="annotation">⭐️ a blog post</a>
+          
+        </h1>
+        
+      </header>
+
+      <div class="content">
+        <p><a href="https://github.com/preactjs/signals">Signals</a> are now my go-to tool to model my reactive state for my apps in the browser. However, the hard part, for me, has been figuring out how I would prefer to bring that reactivity to the DOM. I think I’ve finally landed on a solution that I like using <code>&lt;template&gt;</code>.</p>
+<p><em>For an explainer on <code>&lt;template&gt;</code>, <a href="https://nathanherald.com/posts/building-templates/">checkout my previous post abut building templates for custom elements</a>. This post builds on that one.</em></p>
+<h2 id="bring-the-signal-to-the-dom">Bring the signal to the DOM</h2>
+<p>The basic way to know when a signal is updated is to <code>subscrbe()</code> to it:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">number</span> <span class="o">=</span> <span class="nx">signal</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nx">number</span><span class="p">.</span><span class="nx">subscribe</span><span class="p">(</span><span class="nx">newNumber</span> <span class="p">=&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;new number!&#39;</span><span class="p">,</span> <span class="nx">newNumber</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">})</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nx">number</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// log: new number! 1
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">number</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="mi">2</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// log: new number! 1
+</span></span></span></code></pre></div><p>One can also use an effect to achieve the same thing:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">number</span> <span class="o">=</span> <span class="nx">signal</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nx">effect</span><span class="p">(()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// using number.value will auto-subscribe this effect to number
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;new number!&#39;</span><span class="p">,</span> <span class="nx">number</span><span class="p">.</span><span class="nx">value</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">})</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nx">number</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// log: new number! 1
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">number</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="mi">2</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// log: new number! 1
+</span></span></span></code></pre></div><h4 id="dispose">Dispose</h4>
+<p><em>Both <code>subscribe()</code> and <code>effect()</code> return a “disposal function” which “turns them off”… basically they stop watching / tracking any signals. You have to manually dispose of these subscriptions. It is annoying to me that one cannot provide an <code>AbortSignal</code> to the subscription 😠 Either way, this is what you have to do:</em></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">number</span> <span class="o">=</span> <span class="nx">signal</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">dispose</span> <span class="o">=</span> <span class="nx">effect</span><span class="p">(()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;yay&#39;</span><span class="p">,</span> <span class="nx">number</span><span class="p">.</span><span class="nx">value</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">})</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nx">number</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// log: yay 1
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">dispose</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="nx">number</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="mi">2</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// no log
+</span></span></span></code></pre></div><h3 id="text"><code>Text</code></h3>
+<p>The easiest way to “bind” a signal to the DOM is to update a <code>Text</code> node anytime a signal’s value changes. Assuming the signal (or computed) contains a string, this would work:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="kd">function</span> <span class="nx">reactiveTextNode</span><span class="p">(</span><span class="nx">signal</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kr">const</span> <span class="nx">node</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createTextNode</span><span class="p">(</span><span class="nx">signal</span><span class="p">.</span><span class="nx">value</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="nx">effect</span><span class="p">(()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">node</span><span class="p">.</span><span class="nx">textContent</span> <span class="o">=</span> <span class="nx">signal</span><span class="p">.</span><span class="nx">value</span>
+</span></span><span class="line"><span class="cl">  <span class="p">})</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="nx">node</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>And that’s it. Now we have a <code>Text</code> node that can be inserted anywhere in the DOM + it will update anytime it’s signal is updated 💪</p>
+<p>Try this in your browser console for a full example:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="c1">// paste this on it&#39;s own line by itself or else safari will complain
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">preactSignals</span> <span class="o">=</span> <span class="kr">await</span> <span class="kr">import</span><span class="p">(</span><span class="s1">&#39;https://esm.sh/@preact/signals-core&#39;</span><span class="p">)</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="c1">// then paste all this at once
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kr">const</span> <span class="p">{</span> <span class="nx">computed</span><span class="p">,</span> <span class="nx">effect</span><span class="p">,</span> <span class="nx">signal</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">preactSignals</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">function</span> <span class="nx">reactiveTextNode</span><span class="p">(</span><span class="nx">signal</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kr">const</span> <span class="nx">node</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createTextNode</span><span class="p">(</span><span class="nx">signal</span><span class="p">.</span><span class="nx">value</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="nx">effect</span><span class="p">(()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">node</span><span class="p">.</span><span class="nx">textContent</span> <span class="o">=</span> <span class="nx">signal</span><span class="p">.</span><span class="nx">value</span>
+</span></span><span class="line"><span class="cl">  <span class="p">})</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="nx">node</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">name</span> <span class="o">=</span> <span class="nx">signal</span><span class="p">(</span><span class="s1">&#39;James&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">hello</span> <span class="o">=</span> <span class="nx">computed</span><span class="p">(()</span> <span class="p">=&gt;</span> <span class="sb">`Hello </span><span class="si">${</span><span class="nx">name</span><span class="p">.</span><span class="nx">value</span><span class="si">}</span><span class="sb">`</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">node</span> <span class="o">=</span> <span class="nx">reactiveTextNode</span><span class="p">(</span><span class="nx">hello</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">node</span><span class="p">)</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="c1">// and now you can update the name, which will update the DOM
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">name</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="s1">&#39;Alice&#39;</span> <span class="c1">// updates!
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">name</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="s1">&#39;Bob&#39;</span> <span class="c1">// updates again!
+</span></span></span></code></pre></div><h2 id="inserting-signals-into-a-template">Inserting signals into a template</h2>
+<p>I’d like to be able to directly interpolate a signal like this:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">template</span> <span class="o">=</span> <span class="nx">html</span><span class="sb">`
+</span></span></span><span class="line"><span class="cl"><span class="sb">  &lt;p&gt;Hello &lt;strong&gt;</span><span class="si">${</span><span class="nx">name</span><span class="si">}</span><span class="sb">&lt;/strong&gt;&lt;/p&gt;
+</span></span></span><span class="line"><span class="cl"><span class="sb">`</span>
+</span></span></code></pre></div><p>And it would auto-create the reactive <code>Text</code> node.</p>
+<p>In my <a href="https://nathanherald.com/posts/building-templates/">previous post</a> I made it possible to nest template by looking through all the interpolated objects looking for a template object, and using a small custom element as a stand-in inside the template’s content.</p>
+<p>I’ll do the same for a signal inside my <code>Template</code> class:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="c1">// when pre-processing the values in the template string...
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">if</span> <span class="p">(</span><span class="nx">v</span> <span class="k">instanceof</span> <span class="nx">Signal</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">this</span><span class="p">.</span><span class="err">#</span><span class="nx">signals</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span> <span class="nx">v</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="sb">`&lt;s- data-i=&#34;</span><span class="si">${</span><span class="nx">i</span><span class="si">}</span><span class="sb">&#34;&gt;&lt;/s-&gt;`</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="c1">// then later in cloneNode()...
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kr">const</span> <span class="nx">signals</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">querySelectorAll</span><span class="p">(</span><span class="s1">&#39;s-&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// for each custom element, replace it with a reactive text node
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">signals</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="nx">t</span> <span class="p">=&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kr">const</span> <span class="nx">i</span> <span class="o">=</span> <span class="nx">t</span><span class="p">.</span><span class="nx">dataset</span><span class="p">.</span><span class="nx">i</span>
+</span></span><span class="line"><span class="cl">  <span class="kr">const</span> <span class="nx">sig</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="err">#</span><span class="nx">signals</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">i</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">t</span><span class="p">.</span><span class="nx">replaceWith</span><span class="p">(</span><span class="nx">reactiveTextNode</span><span class="p">(</span><span class="nx">sig</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="p">})</span>
+</span></span></code></pre></div><p>This would take care of it. Don’t worry if this feels out of place, it is. <em>Checkout <a href="https://codepen.io/myobie/pen/qEWZYYv?editors=0010">this new codepen for a full example with an updated <code>Template</code> class and everything else I’m about to write about below</a>.</em></p>
+<h3 id="updating-the-signal-in-response-to-user-input">Updating the signal in response to user input</h3>
+<p>I’d like to be able to update the name, so I can see it <em>react</em>. So I’m going to expand the template to include an input and a custom element which will listen for <code>input</code> events and update the signal in response:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">template</span> <span class="o">=</span> <span class="nx">html</span><span class="sb">`
+</span></span></span><span class="line"><span class="cl"><span class="sb">  &lt;update-name&gt;
+</span></span></span><span class="line"><span class="cl"><span class="sb">    &lt;input value=</span><span class="si">${</span><span class="nx">name</span><span class="p">.</span><span class="nx">value</span><span class="si">}</span><span class="sb">&gt;&lt;br&gt;
+</span></span></span><span class="line"><span class="cl"><span class="sb">    &lt;p&gt;Hello &lt;strong&gt;</span><span class="si">${</span><span class="nx">name</span><span class="si">}</span><span class="sb">&lt;/strong&gt;&lt;/p&gt;
+</span></span></span><span class="line"><span class="cl"><span class="sb">  &lt;/update-name&gt;
+</span></span></span><span class="line"><span class="cl"><span class="sb">`</span>
+</span></span></code></pre></div><p>And the custom element class:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="kr">class</span> <span class="nx">UpdateName</span> <span class="kr">extends</span> <span class="nx">HTMLElement</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">constructor</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kr">super</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="k">this</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">display</span> <span class="o">=</span> <span class="s1">&#39;contents&#39;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="nx">handleEvent</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">name</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">target</span><span class="p">.</span><span class="nx">value</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="nx">connectedCallback</span><span class="p">()</span> <span class="p">{</span> <span class="k">this</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;input&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">)</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">disconnectedCallback</span><span class="p">()</span> <span class="p">{</span> <span class="k">this</span><span class="p">.</span><span class="nx">removeEventListener</span><span class="p">(</span><span class="s1">&#39;input&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">)</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nx">customElements</span><span class="p">.</span><span class="nx">define</span><span class="p">(</span><span class="s1">&#39;update-name&#39;</span><span class="p">,</span> <span class="nx">UpdateName</span><span class="p">)</span>
+</span></span></code></pre></div><p>And this now is a complete app. I’ll embed the codepen right here so you can try it out and explore the full source altogether:</p>
+
+<p class="codepen" data-height="300" data-default-tab="html,result" data-slug-hash="qEWZYYv" data-pen-title="Reactive DOM nodes + reactive templates for custom elements (web components)" data-user="myobie" style="height: 300px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid; margin: 1em 0; padding: 1em;">
+  <span>See the Pen <a href="https://codepen.io/myobie/pen/qEWZYYv">
+  Reactive DOM nodes + reactive templates for custom elements (web components)</a> by Nathan Herald (<a href="https://codepen.io/myobie">@myobie</a>)
+  on <a href="https://codepen.io">CodePen</a>.</span>
+</p>
+<script async src="https://cpwebassets.codepen.io/assets/embed/ei.js"></script>
+
+
+<hr>
+<h2 id="alternate-ways-to-build-reactive-templates">Alternate ways to build reactive templates</h2>
+<p><a href="https://indieweb.social/@mb21@hachyderm.io">mb21</a> <a href="https://indieweb.social/@mb21@hachyderm.io/113616192332556127">replied</a> to my <a href="https://nathanherald.com/posts/building-templates/">previous post</a> with a link to <a href="https://github.com/mb21/mastro/tree/main/src/reactive#reactive-mastro">github.com/mb21/mastro/tree/main/src/reactive#reactive-mastro</a> which is a very cool way to handle this.</p>
+<p>What I like about it is it shows how you can very quickly <em>hydrate</em> server-side generated markup using their custom element subclass.</p>
+<p>I, personally, am not a fan of putting things like <em>bindings</em> or <em>handlers</em> in the html directly. In my journey I’ve arrived at the above <em>reactive text node</em> primitive from which I can build up fairly complex web apps. And DOM elements already bubble up their events, so if I want to handle a click I’ll create a custom element like I showed above to listen for and handle it. I prefer that style.</p>
+<p>And this is why the web is great: the tools we have in the browser are incredibly flexible, there isn’t a right way to use them.</p>
+<p>If it works, if it meets your customers / readers / viewers needs, if it’s as standard and accessible as it can be, then you did it correctly 🫡</p>
+<h2 id="open-questions">Open questions</h2>
+<p>While this is great to see how quickly one can put together some reactive templates, there are still a lot of questions to answer:</p>
+<ul>
+<li>What about a reactive list? (oh don’t get me started 😵‍💫)</li>
+<li>What about template slots? (sure)</li>
+<li>What about server-side rendering? (a very big topic indeed)</li>
+<li>Isn’t this making a template for every single DOM node? (it’s worse than you think)</li>
+<li>Shadow DOM? (they who shall not be named)</li>
+<li>What about effect disposal? (yeah, it’s not easy)</li>
+</ul>
+<p>And I’m sure many more. What questions do you have about custom elements that haven’t been answered yet?</p>
+<p>I am on a journey to answer these questions, and more, for myself. I think we can build highly-sophisticated web apps with only custom elements today, and I’m going to learn how.</p>
+<p>Find me on <a href="https://indieweb.social/@myobie">mastodon</a> and let me know what you think.</p>
+
+      </div>
+
+      <footer>
+        
+        <p>
+          
+            Posted on
+          
+          <time datetime="2024-12-08T11:15:20&#43;01:00">
+            8 Dec, 2024
+          </time>
+          
+          
+          
+        </p>
+      </footer>
+    </article>
+  </main>
+
+    
+    
+    <script async src="https://nathanherald.com/behavior.min.e41a74d07fee42e04abe287c617e80b67998e06c69d3d3c07c6cd91f272bc0bc.js" integrity="sha256-5Bp00H/uQuBKvih8YX6AtnmY4Gxp09PAfGzZHycrwLw="></script>
+      <script defer data-domain="nathanherald.com" src="https://stats.myobie.wtf/script.js"></script>
+  </body>
+</html>

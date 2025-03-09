@@ -1,0 +1,285 @@
+<!doctype html>
+<html>
+  <head lang="en-us">
+    <meta charset="UTF-8">
+    <title>I‘m Nathan Herald → Going public</title>
+    <script>
+      if ((new URL(window.location.href)).host === 'myobie.com') { window.location.assign('https://nathanherald.com') }
+    </script>
+    <link rel="canonical" href="https://nathanherald.com/posts/going-public/">
+    <link rel="stylesheet" type="text/css" href="https://cloud.typography.com/6836312/761366/css/fonts.css"><link rel="stylesheet" type="text/css" href="https://nathanherald.com/combined.min.31312963d9b6322f358005bab4cfc1a3a286b0ec67f5df6e22434de51d71c004.css" integrity="sha256-MTEpY9m2Mi81gAW6tM/Bo6KGsOxn9d9uIkNN5R1xwAQ=">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="generator" content="Hugo 0.136.5">
+    <meta name="title" content="I‘m Nathan Herald  → Going public">
+    <meta name="description" content="">
+    <meta property="og:title" content="Going public">
+    <meta property="og:type" content="website">
+    <meta property="og:description" content="">
+    <meta property="og:url" content="https://nathanherald.com/posts/going-public/">
+    <meta property="og:image" content="/og.png">
+    <meta property="og:site_name" content="I‘m Nathan Herald">
+    
+  
+
+<link rel="alternate" type="application/rss+xml" href="https://nathanherald.com/posts/rss.xml" title="Archive of all the posts on this site on nathanherald.com">
+
+
+  </head>
+  <body class="default">
+    
+  <header class="section-header">
+    <div class="section-nav">
+      <h1 class="home-link">
+        <a data-nospan href="/" class="never-underline"><abbr title="Hello">👋</abbr></a>
+        <a href="/">I&rsquo;m Nathan</a>
+      </h1>
+      <nav>
+        <p>
+          Find more in the <a href="https://nathanherald.com/posts/">archive of all the posts on this site</a>
+or <a href="https://nathanherald.com/posts/rss.xml">subscribe with RSS</a>.
+
+        </p>
+      </nav>
+    </div>
+  </header>
+
+    
+  <main class="single">
+    <article>
+      <header>
+        <h1>
+          
+          
+            Going public
+            <p class="annotation">⭐️ a blog post</a>
+          
+        </h1>
+        
+      </header>
+
+      <div class="content">
+        <p>Today I&rsquo;ve done something that I&rsquo;ve wanted to do for some time: <strong>I&rsquo;ve made the source code for my website public on <a href="https://github.com/myobie/nathanherald.com">github.com</a> and you can see how the website is built and deployed.</strong></p>
+<p>I&rsquo;m starting a new work journey, founding a new thing named <a href="https://shareup.app">Shareup</a> with <a href="https://anthonydrendel.com">a colleague</a>, and I&rsquo;ve spent the past week working on a new website for it. I want to use a few specific programs and services:</p>
+<ol>
+<li>Assemble the website with <a href="https://gohugo.io">hugo</a></li>
+<li>Host the website using <a href="https://zeit.co/now">zeit&rsquo;s now</a> service</li>
+<li>Keep the website up to date by deploying every change with a <a href="https://github.com/features/actions">GitHub Actions</a> workflow</li>
+</ol>
+<p>I also want to use the exact same setup for <a href="https://nathanherald.com">this here website</a> and so I&rsquo;ve been using my website as a test area to figure out how best to work with <a href="https://gohugo.io">hugo</a>, <a href="https://zeit.co/now">now</a>, and <a href="https://github.com/features/actions">actions</a>. After struggling at this for a week, I&rsquo;ve gotten it working and I wanted to document what I&rsquo;ve learned so I remember (and maybe it&rsquo;s helpful to you too).</p>
+<p>You can see the complete source for everything over on GitHub at <a href="https://github.com/myobie/nathanherald.com">github.com/myobie/nathanherald.com</a>.</p>
+<h2 id="tldr">TL;DR</h2>
+<ul>
+<li>I def recommend <a href="https://gohugo.io">hugo</a> for building static websites</li>
+<li>I def recommend <a href="https://zeit.co/now">now</a> for hosting static websites</li>
+<li>I think <a href="https://github.com/features/actions">GitHub Actions</a> are great and promising, but they are confusing and not always fully documented</li>
+<li>I spend way too much time making concessions so I can use <a href="https://www.typography.com/fonts/whitney/overview">this font</a></li>
+</ul>
+<p>This post is pretty long, so here are links to the different sections:</p>
+<ul>
+<li><a href="#using-hugo">Using hugo</a></li>
+<li><a href="#using-now">Using now</a></li>
+<li><a href="#hosting-the-font-somewhere-else">Hosting the font somewhere else</a></li>
+<li><a href="#generating-predictable-preview-urls">Generating predictable preview URLs</a></li>
+<li><a href="#building-a-workflow-with-github-actions">Building a workflow with GitHub Actions</a></li>
+<li><a href="#putting-it-all-together">Putting it all together</a></li>
+</ul>
+<h2 id="using-hugo">Using hugo</h2>
+<p>I&rsquo;ve been making websites with <a href="https://gohugo.io">hugo</a> for a while now so I can quickly setup and <a href="https://github.com/myobie/nathanherald.com/blob/9f7b8e22b1876ab775d4c1e6e67b059121f60b35/config.toml">configure</a> a new hugo website pretty quickly. <strong>The feature of hugo I like the most is its speed.</strong> It&rsquo;s important to me that assembling my website is super quick. I also like that it&rsquo;s a single binary which means I don&rsquo;t have to figure out how to &ldquo;install&rdquo; anything.</p>
+<h2 id="using-now">Using <a href="https://zeit.co/now">now</a></h2>
+<p><a href="https://zeit.co/now">zeit&rsquo;s now</a> is a fantastic way to host a static website. Getting started with <a href="https://zeit.co/now">now</a> is super easy, one simply runs <code>now</code> in the terminal and it creates a project, deploys, and even copies the resulting URL to your clipboard. It&rsquo;s almost too easy: I&rsquo;ve accidentally created a new project a couple times by renaming a directory and zeit deciding &ldquo;this is a new website&rdquo; instead of &ldquo;this is the same website in a new folder.&rdquo;</p>
+<h2 id="hosting-the-font-somewhere-else">Hosting the font somewhere else</h2>
+<p>I have a strange and specific requirement for my website because of my <a href="https://www.typography.com/fonts/whitney/overview">font</a>: <strong>the font I&rsquo;ve chosen can only be loaded from certain URLs that I need to know ahead of time.</strong> I also don&rsquo;t have permission to &ldquo;host the font&rdquo; anywhere publicly (<a href="https://github.com/myobie/nathanherald.com">like this repo</a>) and those two things meant I needed to do some extra work before I could make the source code for my website publicly viewable.</p>
+<h3 id="putting-the-font-on-s3">Putting the font on S3</h3>
+<p>I decided to zip up the fonts and put them in an S3 bucket. Then, when now is building the website, it can retrieve them using <a href="https://s3tools.org/s3cmd">s3cmd</a>.</p>
+<p>Also, I learned a valuable lesson a while back: <strong>never create AWS resources using the UI.</strong> Creating through the UI means it&rsquo;s easy to forget how or what is setup.</p>
+<p>Instead, <strong>I use <a href="https://www.terraform.io">terraform</a> for everything I need.</strong> There is a pretty big upfront cost because I can never remember how exactly to create the terraform files.</p>
+<blockquote>
+<p><em>I do create users in the UI because if one uses terraform then it&rsquo;s easy to accidentally store their secret key in a <code>.tfstate</code> file or something similar and I don&rsquo;t want to risk it.</em>
+I created a user with zero permissions.</p>
+</blockquote>
+<p>I put some terraform <a href="https://github.com/myobie/nathanherald.com/tree/9f7b8e22b1876ab775d4c1e6e67b059121f60b35/infra">in a directory named infra</a> which creates a bucket and gives it a policy where one user can only read from it. Then I <a href="https://github.com/myobie/nathanherald.com/blob/9f7b8e22b1876ab775d4c1e6e67b059121f60b35/bin/install#L26-L36">added some code to use <code>s3cmd</code></a> to retrieve and unzip the font during the install step.</p>
+<h2 id="generating-predictable-preview-urls">Generating predictable preview URLs</h2>
+<p>When I&rsquo;m writing a new blog post (<a href="https://github.com/myobie/nathanherald.com/pulls/1">like this one</a>) I want to be able to see a &ldquo;preview version&rdquo; in my browser so I can make sure all the images look right, the font is working, etc, so I deploy a &ldquo;preview site&rdquo; for every <a href="https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/about-pull-requests">pull request</a> I make.</p>
+<p>Since I want to preview before everyone else sees it, I need to deploy the site somewhere other than <code>nathanherald.com</code> which can break my font from loading if I can&rsquo;t predict exactly what the URL of the preview site will be. To make this work I override the &ldquo;base URL&rdquo; for hugo to something I call the <code>PREVIEW_URL</code>. I can dictate <a href="https://github.com/myobie/nathanherald.com/blob/9f7b8e22b1876ab775d4c1e6e67b059121f60b35/.github/workflows/deploy.yml#L65">the exact format of the URL</a> and I can clear those URLs with my font provider.</p>
+<h2 id="building-a-workflow-with-github-actions">Building a workflow with GitHub Actions</h2>
+<p>The most difficult part when setting up my website was getting a workflow that works to deploy for every change. I knew exactly what I wanted to happen:</p>
+<ol>
+<li>Create a deployment through the GitHub API to indicate a deploy is happening</li>
+<li>Mark the GitHub deployment as in progress</li>
+<li>Run <code>now</code> passing in a <code>PREVIEW_URL</code> so I can preview the site</li>
+<li>&ldquo;Alias&rdquo; the now deployment to the <code>PREVIEW_URL</code></li>
+<li>Mark the GitHub deployment as complete</li>
+<li>Post a comment that says &ldquo;🚀 your changes are deployed&rdquo; linking to the <code>PREVIEW_URL</code></li>
+</ol>
+<p>I thought this wouldn&rsquo;t be too difficult. <em>I was wrong.</em></p>
+<p>You can see my final <a href="https://github.com/myobie/nathanherald.com/blob/d1ceec83d68a835b2aa423141a4214a5877f9292/.github/workflows/deploy.yml#L1">deploy.yml</a> workflow in the repo.</p>
+<h3 id="build-one-action-to-perform-all-the-steps-which-didnt-work-out">Build one action to perform all the steps (which didn&rsquo;t work out)</h3>
+<p>My first attempt was to make one action that performs all these steps and I started that here: <a href="https://github.com/myobie/deploy-now">github.com/myobie/deploy-now</a>. I found a javascript module named <code>now-client</code> (which the <code>now</code> program itself uses internally) and it exposes <a href="https://github.com/zeit/now/blob/5872114c8734adfef61634eac026434b5a7c7be1/packages/now-client/src/index.ts#L9">a <code>createDeployment</code> function</a> so it seemed like it was going to be easy.</p>
+<p><strong>The biggest problem I had creating a GitHub Action is there is no local dev environment I know of to test the workflow on my computer.</strong> Sure, there is a <a href="https://github.com/actions/javascript-action/blob/c4da6cbeb333147c98df489667fb8849e97d7dd3/index.test.js#L19">small test example</a>, but it leaves <strong>a lot</strong> to be desired.</p>
+<p>It&rsquo;s also sometimes lacking documentation: like how are arguments passed into your action? It turns out any &ldquo;inputs&rdquo; are passed in as ENV vars that begin with <code>INPUT_</code> like <code>INPUT_TOKEN</code> would be passed in for a step that has <code>with:</code> followed by <code>token: abc</code>.</p>
+<p>The <a href="https://github.com/actions/toolkit/blob/e69833ed16500afaa7d137a9cf6da76fb8fb54da/packages/core/src/core.ts#L69">javascript toolkit reads in these variables for you</a>, so I decided that I was going to write everything in javascript because there might be other undocumented things I don&rsquo;t know about that <a href="https://github.com/actions/toolkit">the toolkit</a> is magically taking care of.</p>
+<h4 id="using-ncc-to-package-everything-into-one-file">Using ncc to package everything into one file</h4>
+<p>After deciding to use javascript I ran into my first roadblock: GitHub Actions doesn&rsquo;t install your npm dependencies before running your code. Instead we are expected to pre-compile our javascript into one, dependency-free <code>.js</code> file before pushing. <strong>This is super surprising.</strong> The tool recommended to package up one&rsquo;s javascript is <a href="https://github.com/zeit/ncc"><code>ncc</code></a> (which is apparently a play on acronyms with <code>gcc</code>).</p>
+<p><a href="https://github.com/zeit/ncc">ncc</a> is easy to use and it natively supports <a href="https://www.typescriptlang.org">typescript</a>, so I then decided that I&rsquo;d consider using typescript. I setup a <a href="https://github.com/myobie/deploy-now/blob/master/package.json#L16">&ldquo;package script task&rdquo;</a> and I made sure to setup <a href="https://github.com/myobie/deploy-now/blob/master/pre-commit.sample">a <code>pre-commit</code> hook</a> to package my javascript before I push any changes because I will forget.</p>
+<h3 id="separating-the-steps-out-into-individual-actions">Separating the steps out into individual actions</h3>
+<p>The <code>now-client</code> ended up not working the same as just running <code>now</code> (for example: rewrites in the <code>now.json</code> file weren&rsquo;t sent to zeit) and without being able to easily and quickly test changes locally, <strong>having a single big action ended up being too frustrating.</strong></p>
+<p>I decided to make smaller, focused actions where each one was small enough that I could more easily understand it and less easily break it. I&rsquo;ve ended up with a little <a href="https://github.com/shareup?utf8=%E2%9C%93&amp;q=-action&amp;type=&amp;language=#org-repositories">suite of actions</a>.</p>
+<h3 id="getting-the-name-of-the-current-branch">Getting the name of the current branch</h3>
+<p>When GitHub triggers an Action it provides <a href="https://help.github.com/en/actions/automating-your-workflow-with-github-actions/contexts-and-expression-syntax-for-github-actions">a bunch of information</a>, but none of that information reliably includes just the branch name. I want my preview site to include the branch name in its URL (so each branch has it&rsquo;s own preview URL) so I wanted a way to find out just the branch name and have it set as an &ldquo;output&rdquo; so I could interpolate it later into the arguments to other actions.</p>
+<p>So, I made <a href="https://github.com/shareup/output-git-metadata-action">output-git-metadata-action</a> which does exactly that: it &ldquo;outputs&rdquo; some git metadata, including the current branch name.</p>
+<blockquote>
+<p><strong>Note:</strong> one has to give the &ldquo;step&rdquo; an <code>id:</code> in the yaml to be able to reference it later as <code>${{ steps.id.outputs.output_name }}</code>. A step can have both an <code>id</code> and a <code>name</code>; <code>name</code> is optional.</p>
+</blockquote>
+<p>This action can be used like this:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yml" data-lang="yml"><span class="line"><span class="cl"><span class="nt">jobs</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">yo</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l">ubuntu-latest</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">steps</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l">meta</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l">shareup/output-git-metadata-action@master</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">print debugging info</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p">|</span><span class="sd">
+</span></span></span><span class="line"><span class="cl"><span class="sd">          echo &#34;branch: ${BRANCH}&#34;</span><span class="w">          
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">env</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">BRANCH</span><span class="p">:</span><span class="w"> </span><span class="l">${{ steps.meta.outputs.branch }}</span><span class="w">
+</span></span></span></code></pre></div><h3 id="creating-the-github-deployment">Creating the GitHub deployment</h3>
+<p><a href="https://developer.github.com/v3/repos/deployments/">Deployments</a> in the GitHub API are very confusing to me. The documentation says &ldquo;will trigger a <code>deploy</code> event&rdquo; but I am already doing the deployment, I just want the deployments UI of a pull request to light up and show what happened, like this:</p>
+<figure>
+  <img
+    alt="Screenshot of the GitHub Actions bot timeline entry for a deployment"
+    width="733"
+    height="63"
+    src="https://nathanherald.com/posts/going-public/github-actions-bot-timeline@2x_hu934874437331434408.png">
+</figure>
+
+<p>I assume when I create a deployment through the API it does emit some <code>deploy</code> event that no one is paying attention to. Seems wasteful. It would probably make more sense to separate the concept of &ldquo;creating the deployment record&rdquo; and &ldquo;triggering the <code>deploy</code> event.&rdquo; It&rsquo;s also very possible (likely) that I just don&rsquo;t understand what I&rsquo;m doing. <code>&lt;/rant&gt;</code></p>
+<p>I made <a href="https://github.com/shareup/create-deployment-action">create-deployment-action</a> to do what it says: create a deployment. It outputs the deployment&rsquo;s id in case one need&rsquo;s to reference it sometime later.</p>
+<p>And it <strong>doesn&rsquo;t need one to generate a token</strong> or anything: GitHub already provides a default token to every action which has read/write access to the current repository so I just use that inside the action code. I honestly don&rsquo;t know where this is documented or how I found it, I think I might have found it while reading through the source of the <a href="https://github.com/actions/checkout/blob/db41740e12847bb616a339b75eb9414e711417df/action.yml#L18">checkout action</a>.</p>
+<h4 id="octokit"><code>octokit</code></h4>
+<p>I found <a href="https://github.com/octokit/rest.js"><code>@octokit/rest</code></a> confusing (and it not always having all it&rsquo;s types for typescript working perfectly) and switched to <a href="https://github.com/octokit/request.js"><code>@octokit/request</code></a> which I hadn&rsquo;t really seen mentioned in any official docs. The request library is much simpler, has better <code>typescript</code> types (since it&rsquo;s written in typescript), and one can simply copy the documentation line like <code>POST /repos/:owner/:repo/issues/:number/labels</code> <a href="https://developer.github.com/v3/issues/labels/#add-labels-to-an-issue">straight from the GitHub API docs</a>.</p>
+<h3 id="updating-the-status-of-the-github-deployment">Updating the status of the GitHub deployment</h3>
+<p>Creating a deployment is kinda meaningless and empty on its own: one has to &ldquo;create a deployment status&rdquo; to mark it as &ldquo;in progress&rdquo; or &ldquo;success&rdquo; or <a href="https://developer.github.com/v3/repos/deployments/#parameters-2">something else</a>.</p>
+<p>I made <a href="https://github.com/shareup/create-deployment-status-action">create-deployment-status-action</a> for this purpose.</p>
+<p>At this point, I could see that I was on my way to creating my own little framework of actions and could write a <code>yml</code> file like:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yml" data-lang="yml"><span class="line"><span class="cl"><span class="nt">jobs</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">deploy</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l">ubuntu-latest</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">steps</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">output metadata</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l">meta</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l">shareup/output-git-metadata-action@master</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">create deployment</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l">deployment</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l">shareup/create-deployment-action@master</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">with</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">ref</span><span class="p">:</span><span class="w"> </span><span class="l">${{ steps.meta.outputs.sha }}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">set deployment status to in_progress</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l">shareup/create-deployment-status-action@master</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">with</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">deployment_id</span><span class="p">:</span><span class="w"> </span><span class="l">${{ steps.deployment.outputs.id }}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l">in_progress</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">echo example preview url</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p">|</span><span class="sd">
+</span></span></span><span class="line"><span class="cl"><span class="sd">          echo https://preview-for-branch-${{ steps.meta.outputs.branch }}.example.com</span><span class="w">          
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">set deployment status to success</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l">shareup/create-deployment-status-action@master</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">with</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">deployment_id</span><span class="p">:</span><span class="w"> </span><span class="l">${{ steps.deployment.outputs.id }}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l">success</span><span class="w">
+</span></span></span></code></pre></div><p>I like these super small and granular steps.</p>
+<h3 id="deploying-with-now">Deploying with <code>now</code></h3>
+<p>When I want to deploy with <code>now</code> locally I just run <code>now</code>. I wanted to make an action that does the same. There is a tool in the toolkit named <a href="https://github.com/actions/toolkit/tree/e69833ed16500afaa7d137a9cf6da76fb8fb54da/packages/exec">exec</a> to run processes and I could use a <code>Dockerfile</code> to make sure <code>now</code> is pre-installed.</p>
+<p>So, I made <a href="https://github.com/shareup/now-action">now-action</a> which executes <code>now</code> and accepts inputs for almost every cli flag now accepts.</p>
+<p>Using <a href="https://github.com/shareup/now-action/blob/7312114e9ea8610c160e005ed7d47d171f1c575c/Dockerfile">a <code>Dockerfile</code></a> took me a bit to understand because there are three paths I needed to keep track of: the path we are building the docker image from (the action&rsquo;s repo), the path we are executing the action into (the website&rsquo;s repo), and where the action&rsquo;s files are stored inside the docker image (?).</p>
+<p>I built <code>FROM node:12</code> so I knew node was already present and I used <code>npm</code> to install <code>now</code> globally during the build step.</p>
+<p>I decided to just make my own place to store stuff as <code>/now-action/</code> and since I was already using <code>ncc</code> for the other actions I kept that so I only needed to move <code>dist/index.js</code> into the docker image for everything to work by then executing <code>/now-action/dist/index.js</code> with <code>node</code>.</p>
+<p>Since this action is completely isolated from the others, it can be used on it&rsquo;s own like so:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yml" data-lang="yml"><span class="line"><span class="cl"><span class="nt">jobs</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">now</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l">ubuntu-latest</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">steps</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">checkout</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l">actions/checkout@v2</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">now</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l">shareup/now-action@master</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">with</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">token</span><span class="p">:</span><span class="w"> </span><span class="l">${{ secrets.zeit_token }}</span><span class="w">
+</span></span></span></code></pre></div><p>One has to set a secret on their repo to <a href="https://zeit.co/account/tokens">a token from zeit</a> so it can use <code>now</code> on your behalf.</p>
+<h4 id="force-deploy">Force deploy</h4>
+<p>now tries to be smart and doesn&rsquo;t regenerate a website if it doesn&rsquo;t see any changes, instead it will attempt to re-use a previous build. This caused me issues when deploying to production because it would re-use a build I had created for a preview website and then all my fonts stopped working because it expected the wrong URL. 😞</p>
+<p>I <a href="https://github.com/myobie/nathanherald.com/blob/d1ceec83d68a835b2aa423141a4214a5877f9292/.github/workflows/deploy.yml#L63">always pass <code>force: true</code></a> to the <a href="https://github.com/shareup/now-action">now-action</a> which tells now to always rebuild no matter what.</p>
+<p><em>Honestly, I&rsquo;ve done a lot of work for this font…</em></p>
+<h3 id="assigning-an-alias-to-a-now-deployment">Assigning an alias to a now deployment</h3>
+<p>Running <code>now</code> will create a new &ldquo;deployment&rdquo; and give it an autogenerated URL, which isn&rsquo;t enough for me: I was to use my custom <code>PREVIEW_URL</code>. now allows one to point a domain at a deployment and calls those &ldquo;aliases.&rdquo;</p>
+<p>So, I made <a href="https://github.com/shareup/now-alias-assign-action">now-alias-assign-action</a> which does exactly that.</p>
+<p>To alias a deployment with a preview URL including the branch name, I could now make a yaml like:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yml" data-lang="yml"><span class="line"><span class="cl"><span class="nt">jobs</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">now</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l">ubuntu-latest</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">steps</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">checkout</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l">actions/checkout@v2</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l">meta</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l">shareup/output-git-metadata-action@master</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">now</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l">now</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l">shareup/now-action@master</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">with</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">token</span><span class="p">:</span><span class="w"> </span><span class="l">${{ secrets.zeit_token }}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">alias</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l">shareup/now-alias-assign-action@master</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">with</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">token</span><span class="p">:</span><span class="w"> </span><span class="l">${{ secrets.zeit_token }}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">deployment</span><span class="p">:</span><span class="w"> </span><span class="l">${{ steps.now.outputs.deployment_url }}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">alias</span><span class="p">:</span><span class="w"> </span><span class="l">https://preview-for-${{ steps.meta.outputs.branch }}.example.now.sh</span><span class="w">
+</span></span></span></code></pre></div><p>Aliases should end with <code>${your-now-username}.now.sh</code>.</p>
+<h3 id="posting-a-comment">Posting a comment</h3>
+<p>The last thing I wanted to do was to post a comment after a deployment with the URL so I could easily click it to see the preview website.</p>
+<p>I made <a href="https://github.com/shareup/create-comment-action">create-comment-action</a> which will either:</p>
+<ul>
+<li>If a pull request is open, post a comment there</li>
+<li>Else, comment directly on the commit that triggered the action</li>
+</ul>
+<p>At this point I felt <em>good at making actions</em> and I&rsquo;m not sure if that is a good thing.</p>
+<h2 id="putting-it-all-together">Putting it all together</h2>
+<p>The <a href="https://github.com/myobie/nathanherald.com/blob/9f7b8e22b1876ab775d4c1e6e67b059121f60b35/.github/workflows/deploy.yml">full yaml workflow</a> in <a href="https://github.com/myobie/nathanherald.com">my website&rsquo;s repo</a> has some tricks to differentiate between production and staging.</p>
+<p>I can open a PR, preview my changes, and when I merge the PR the production website is deployed. A list of all the actions I created in the past week are:</p>
+<ul>
+<li><a href="https://github.com/shareup/output-git-metadata-action">shareup/output-git-metadata-action</a></li>
+<li><a href="https://github.com/shareup/create-deployment-action">shareup/create-deployment-action</a></li>
+<li><a href="https://github.com/shareup/create-deployment-status-action">shareup/create-deployment-status-action</a></li>
+<li><a href="https://github.com/shareup/now-action">shareup/now-action</a></li>
+<li><a href="https://github.com/shareup/now-alias-assign-action">shareup/now-alias-assign-action</a></li>
+<li><a href="https://github.com/shareup/create-comment-action">shareup/create-comment-action</a></li>
+</ul>
+<p><a href="https://github.com/features/actions">GitHub Actions</a> are very powerful, but also super mysterious. Since I cannot execute workflows on my computer the feedback loop of pushing, waiting, checking the logs is way too slow. It&rsquo;s still amazing and I am super happy now that it works, but getting there was way too difficult. I haven&rsquo;t submitted these actions to &ldquo;the marketplace&rdquo; yet because I have to make an icon and a few other things to submit.</p>
+<p><a href="https://zeit.co/now">now</a> is great. I really like it. It&rsquo;s super simple and I will be using it more and more for static website hosting as well as <a href="https://zeit.co/docs/v2/serverless-functions/introduction/">serverless functions</a>.</p>
+<p><a href="https://gohugo.io">hugo</a> is still my favorite way to build websites. It&rsquo;s super fast and the way it organizes content is <em>alright</em>. I love making websites and hugo mostly gets out of my way.</p>
+<p>While I spent way too much time on this setup, I now feel more confident to make changes, preview the change, and merge to deploy.</p>
+
+      </div>
+
+      <footer>
+        
+        <p>
+          
+            Posted on
+          
+          <time datetime="2020-01-15T14:08:05&#43;01:00">
+            15 Jan, 2020
+          </time>
+          
+          
+          
+        </p>
+      </footer>
+    </article>
+  </main>
+
+    
+    
+    <script async src="https://nathanherald.com/behavior.min.e41a74d07fee42e04abe287c617e80b67998e06c69d3d3c07c6cd91f272bc0bc.js" integrity="sha256-5Bp00H/uQuBKvih8YX6AtnmY4Gxp09PAfGzZHycrwLw="></script>
+      <script defer data-domain="nathanherald.com" src="https://stats.myobie.wtf/script.js"></script>
+  </body>
+</html>

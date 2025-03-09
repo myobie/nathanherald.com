@@ -1,0 +1,106 @@
+<!doctype html>
+<html>
+  <head lang="en-us">
+    <meta charset="UTF-8">
+    <title>I‘m Nathan Herald → I still don’t know how to use a debugger</title>
+    <script>
+      if ((new URL(window.location.href)).host === 'myobie.com') { window.location.assign('https://nathanherald.com') }
+    </script>
+    <link rel="canonical" href="https://nathanherald.com/posts/legacy/i-still-dont-know-how-to-use-a-debugger/">
+    <link rel="stylesheet" type="text/css" href="https://cloud.typography.com/6836312/761366/css/fonts.css"><link rel="stylesheet" type="text/css" href="https://nathanherald.com/combined.min.31312963d9b6322f358005bab4cfc1a3a286b0ec67f5df6e22434de51d71c004.css" integrity="sha256-MTEpY9m2Mi81gAW6tM/Bo6KGsOxn9d9uIkNN5R1xwAQ=">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="generator" content="Hugo 0.136.5">
+    <meta name="title" content="I‘m Nathan Herald  → I still don’t know how to use a debugger">
+    <meta name="description" content="">
+    <meta property="og:title" content="I still don’t know how to use a debugger">
+    <meta property="og:type" content="website">
+    <meta property="og:description" content="">
+    <meta property="og:url" content="https://nathanherald.com/posts/legacy/i-still-dont-know-how-to-use-a-debugger/">
+    <meta property="og:image" content="/og.png">
+    <meta property="og:site_name" content="I‘m Nathan Herald">
+    
+  
+
+<link rel="alternate" type="application/rss+xml" href="https://nathanherald.com/posts/rss.xml" title="Archive of all the posts on this site on nathanherald.com">
+
+
+  </head>
+  <body class="default">
+    
+  <header class="section-header">
+    <div class="section-nav">
+      <h1 class="home-link">
+        <a data-nospan href="/" class="never-underline"><abbr title="Hello">👋</abbr></a>
+        <a href="/">I&rsquo;m Nathan</a>
+      </h1>
+      <nav>
+        <p>
+          Find more in the <a href="https://nathanherald.com/posts/">archive of all the posts on this site</a>
+or <a href="https://nathanherald.com/posts/rss.xml">subscribe with RSS</a>.
+
+        </p>
+      </nav>
+    </div>
+  </header>
+
+    
+  <main class="single">
+    <article>
+      <header>
+        <h1>
+          
+          
+            I still don’t know how to use a debugger
+            <p class="annotation">⭐️ a blog post</a>
+          
+        </h1>
+        
+      </header>
+
+      <div class="content">
+        <figure>
+  <img
+    alt="Illustration of plants and a bug with a little sign reading &#39;no bugs&#39;"
+    width="1200"
+    height="915"
+    src="https://nathanherald.com/posts/legacy/i-still-dont-know-how-to-use-a-debugger/1-1t7U5wQWkmueYNUO3o3CXA_hu10941954861293773891.jpeg">
+</figure>
+
+<p>Since I wrote my first javascript in the computer lab at my High School in VA using Windows 95, I’ve subscribed to the <strong>println debugging standard practice</strong>. Of course then it was <code>alert</code>. Either way, if there is a problem, add print statements everywhere.</p>
+<p>Well, <strong>it’s time I finally learn how to use a debugger.</strong> The reason: <em>I wasted two entire days</em>.</p>
+<p><em>Do you use a debugger? Do you have any tips or tricks? How can I break the habit of <code>console.log</code> or <code>IO.inspect</code> or <code>println</code> or whatever?</em></p>
+<h3 id="why-now">Why now?</h3>
+<p>You see, I really like <a href="https://www.erlang.org">erlang</a> and <a href="https://elixir-lang.org">elixir</a>. I am playing around with spawning processes and communicating with them for a bit. Erlang has an insane concept called “<a href="http://erlang.org/doc/tutorial/c_port.html">ports</a>” (nope, not those <a href="https://en.wikipedia.org/wiki/Port_%28computer_networking%29">ports</a>) and after learning more about it I really like them. You use <code>stdout</code> and <code>stdin</code> as binary pipes to communicate back and forth. If anyone breaks either pipe, then everyone shuts everything down. It’s a great way to <em>know™</em> you won’t have zombie processes.</p>
+<p>Well. <code>console.log</code> writes to <code>stdout</code>. Of course, right.</p>
+<p>I broke my binary communication protocol by attempting to debug a problem. Because I don’t know how to use a debugger. And, honestly, I <em>fixed</em> this problem by continuing to be ignorant and appending log lines to a file instead.</p>
+<p>So yeah, I’m frustrated. Again, my lack of CS skills has caused me problems. Very rarely do I wish I were a “traditionally trained” programmer, but this is one of those times. I am going to finally learn this. Eventually. <em>When I get time.</em></p>
+
+      </div>
+
+      <footer>
+        
+        <p>
+          
+            Posted on
+          
+          <time datetime="2018-05-14T21:59:16Z">
+            14 May, 2018
+          </time>
+          
+            onto
+            <a href="https://medium.com/@myobie/i-still-dont-know-how-to-use-a-debugger-345d1246a641">Medium</a>
+          
+          
+          
+        </p>
+      </footer>
+    </article>
+  </main>
+
+    
+    
+    <script async src="https://nathanherald.com/behavior.min.e41a74d07fee42e04abe287c617e80b67998e06c69d3d3c07c6cd91f272bc0bc.js" integrity="sha256-5Bp00H/uQuBKvih8YX6AtnmY4Gxp09PAfGzZHycrwLw="></script>
+      <script defer data-domain="nathanherald.com" src="https://stats.myobie.wtf/script.js"></script>
+  </body>
+</html>

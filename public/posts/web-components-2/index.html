@@ -1,0 +1,213 @@
+<!doctype html>
+<html>
+  <head lang="en-us">
+    <meta charset="UTF-8">
+    <title>I‘m Nathan Herald → Learning about Web Components: Part 2 – Data access and UI updates</title>
+    <script>
+      if ((new URL(window.location.href)).host === 'myobie.com') { window.location.assign('https://nathanherald.com') }
+    </script>
+    <link rel="canonical" href="https://nathanherald.com/posts/web-components-2/">
+    <link rel="stylesheet" type="text/css" href="https://cloud.typography.com/6836312/761366/css/fonts.css"><link rel="stylesheet" type="text/css" href="https://nathanherald.com/combined.min.31312963d9b6322f358005bab4cfc1a3a286b0ec67f5df6e22434de51d71c004.css" integrity="sha256-MTEpY9m2Mi81gAW6tM/Bo6KGsOxn9d9uIkNN5R1xwAQ=">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="generator" content="Hugo 0.136.5">
+    <meta name="title" content="I‘m Nathan Herald  → Learning about Web Components: Part 2 – Data access and UI updates">
+    <meta name="description" content="">
+    <meta property="og:title" content="Learning about Web Components: Part 2 – Data access and UI updates">
+    <meta property="og:type" content="website">
+    <meta property="og:description" content="">
+    <meta property="og:url" content="https://nathanherald.com/posts/web-components-2/">
+    <meta property="og:image" content="/og.png">
+    <meta property="og:site_name" content="I‘m Nathan Herald">
+    
+  
+
+<link rel="alternate" type="application/rss+xml" href="https://nathanherald.com/posts/rss.xml" title="Archive of all the posts on this site on nathanherald.com">
+
+
+  </head>
+  <body class="default">
+    
+  <header class="section-header">
+    <div class="section-nav">
+      <h1 class="home-link">
+        <a data-nospan href="/" class="never-underline"><abbr title="Hello">👋</abbr></a>
+        <a href="/">I&rsquo;m Nathan</a>
+      </h1>
+      <nav>
+        <p>
+          Find more in the <a href="https://nathanherald.com/posts/">archive of all the posts on this site</a>
+or <a href="https://nathanherald.com/posts/rss.xml">subscribe with RSS</a>.
+
+        </p>
+      </nav>
+    </div>
+  </header>
+
+    
+  <main class="single">
+    <article>
+      <header>
+        <h1>
+          
+          
+            Learning about Web Components: Part 2 – Data access and UI updates
+            <p class="annotation">⭐️ a blog post</a>
+          
+        </h1>
+        
+      </header>
+
+      <div class="content">
+        <p>I’ve finally spent a little more time learning enough to write a second post about <a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_components">Web Components</a>. You can read <a href="/posts/web-components-1/">Part 1 here</a>.</p>
+<p>This time I focused on two questions:</p>
+<ol>
+<li>Sometimes the data I work with it local-only in a database in the browser – so how do I pass the database state down through the tree?</li>
+<li>When sorting or filtering items, how can I do that without completely re-rendering the items from scratch every time?</li>
+</ol>
+<p>I have a new <a href="./demo.html">demo page</a> for this post where you can see the working code: <a href="./demo.html"><code>demo.html</code></a></p>
+<blockquote>
+<p>It’s all in one HTML file, so view source and you’ll see everything there.</p>
+</blockquote>
+<h2 id="modeling-the-database-state">Modeling the database state</h2>
+<p>I didn’t want to actually setup a full <code>indexedDB</code> database, so I made a fake <code>db</code> variable and “query function” with a fake delay. Querying <code>indexedDB</code> is always <code>async</code> (annoying) so I wanted to model that.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">db</span> <span class="o">=</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">freeze</span><span class="p">([</span>
+</span></span><span class="line"><span class="cl">  <span class="p">{</span> <span class="nx">id</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">src</span><span class="o">:</span> <span class="s2">&#34;./one.jpg&#34;</span><span class="p">,</span> <span class="p">...</span> <span class="p">},</span>
+</span></span><span class="line"><span class="cl">  <span class="p">...</span>
+</span></span><span class="line"><span class="cl"><span class="p">].</span><span class="nx">map</span><span class="p">(</span><span class="nx">i</span> <span class="p">=&gt;</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">freeze</span><span class="p">(</span><span class="nx">i</span><span class="p">)))</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kr">async</span> <span class="kd">function</span> <span class="nx">simulatedSlowDBQuery</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kr">await</span> <span class="k">new</span> <span class="nb">Promise</span><span class="p">(</span><span class="nx">res</span> <span class="p">=&gt;</span> <span class="nx">setTimeout</span><span class="p">(</span><span class="nx">res</span><span class="p">,</span> <span class="mi">200</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="nx">shuffle</span><span class="p">(</span><span class="nb">Array</span><span class="p">.</span><span class="nx">from</span><span class="p">(</span><span class="nx">db</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>I decided that the <code>&lt;image-grid&gt;</code> custom element can “contain” the list of image IDs it’s displaying. And then each <code>&lt;image-cell&gt;</code> can “contain” the ID of the database record it represents. So this means each “component” requires a local database to render, which is fine for my use-case for this post.</p>
+<p>For this <a href="./demo.html">demo page</a>, the page’s HTML just includes an empty <code>&lt;image-grid&gt;&lt;/image-grid&gt;</code>. There is an “outside function” which will query the DB and provide the record IDs to the empty grid:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">grid</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">&#39;image-grid&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kr">async</span> <span class="kd">function</span> <span class="nx">queryThenRenderImages</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kr">const</span> <span class="nx">records</span> <span class="o">=</span> <span class="kr">await</span> <span class="nx">simulatedSlowDBQuery</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">grid</span><span class="p">.</span><span class="nx">recordIds</span> <span class="o">=</span> <span class="nx">records</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">i</span> <span class="p">=&gt;</span> <span class="nx">i</span><span class="p">.</span><span class="nx">id</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// start with a query at boot
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">queryThenRenderImages</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// query + shuffle every 10s
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">setInterval</span><span class="p">(</span><span class="nx">queryThenRenderImages</span><span class="p">,</span> <span class="mi">10000</span><span class="p">)</span>
+</span></span></code></pre></div><p>I also like that it would be pretty easy to consume an <code>AsyncIteratable</code> to do a similar thing:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="k">for</span> <span class="kr">await</span> <span class="p">(</span><span class="kr">const</span> <span class="nx">records</span> <span class="nx">from</span> <span class="nx">dbIterable</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">grid</span><span class="p">.</span><span class="nx">recordIds</span> <span class="o">=</span> <span class="nx">records</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">i</span> <span class="p">=&gt;</span> <span class="nx">i</span><span class="p">.</span><span class="nx">id</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p><em>I do want to try to “server render” the grid and then hydrate it in the browser, that’s just too much for this blog post.</em></p>
+<h2 id="reusing-image-cells-when-sorting">Reusing <code>&lt;image-cell&gt;</code>s when sorting</h2>
+<p>I’ve added a <code>shuffle()</code> to the database query so I can emulate sorting and filtering. One of the things I wanted to solve was how to easily handle sorting with these custom elements. It turns out the secret is the <code>&lt;slot&gt;&lt;/slot&gt;</code> element.</p>
+<blockquote>
+<p><a href="https://indieweb.social/@keithamus/110327619515521232"><code>@keithamus</code> tipped me off to this over on Mastodon</a> <em>(sheesh, back on May 7, it certainly took me a while to act on his advice 😂)</em>.</p>
+</blockquote>
+<p>A <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLSlotElement/assign">slot is assignable</a>, with something like: <code>slot.assign(...nodes)</code></p>
+<p>Two things that took me a bit to figure out:</p>
+<ol>
+<li>
+<p>The shadow DOM needs to have its <code>slotAssignment</code> set to <code>'manual'</code>. This is how I’ve done that:</p>
+<pre tabindex="0"><code>this.attachShadow({ mode: &#39;open&#39;, slotAssignment: &#39;manual&#39; })
+</code></pre></li>
+<li>
+<p>A slot can only be assigned nodes that are children of the shadow DOM’s host. <em>Yep, that sentence is very specific, wordy, and was hard to be to fully parse and understand at first.</em></p>
+</li>
+</ol>
+<p>Here is a visual example from Firefox that really helped me get it:</p>
+<figure>
+  <img
+    alt="Screenshot of Firefox showing the DOM setup with the image-grid, it’s shadow-root with a slot filled with references to image-cells"
+    width="988"
+    height="913"
+    src="https://nathanherald.com/posts/web-components-2/firefox-screenshot@2x_hu10780048639828017216.png">
+</figure>
+
+<p>In the above you can see a few things:</p>
+<ul>
+<li>The <code>&lt;slot&gt;</code> is a child of the <code>#shadow-root</code> element of the <code>&lt;image-grid&gt;</code> element</li>
+<li>The <code>&lt;image-cell&gt;</code> elements are all children of the <code>&lt;image-grid&gt;</code> element, and not children of the <code>#shadow-root</code> or <code>&lt;slot&gt;</code></li>
+<li>The <code>&lt;slot&gt;</code> shows that it has been “assigned” references to the <code>&lt;image-cell&gt;</code> elements</li>
+</ul>
+<p>Since the <code>slot</code> only holds references to <code>&lt;image-cell&gt;</code>s, I can sort those references and re-assign without triggering a full re-paint of those <code>&lt;image-cell&gt;</code> elements.</p>
+<blockquote>
+<p><em>At least, I think that is true.</em> I haven’t been able to confirm that yet. I’ve tried profiling the page a few times, but I can’t seem to get <em>proof</em> about what is exactly happening. If you know, please <a href="mailto:myobie@duck.com">email</a> or <a href="https://indieweb.social/@myobie">@ me on mastodon</a>.</p>
+</blockquote>
+<p>A super nice thing is <code>slot.assignedNodes()</code> will return the currently assigned nodes, so I don’t need to remember those inside the custom element and can just get them anytime I need them.</p>
+<h2 id="attributechangedcallback"><code>attributeChangedCallback</code></h2>
+<p>While the <code>recordIds</code> of the <code>&lt;image-grid&gt;</code> are entirely “private” to the class, I decided to implement the <code>record-id</code> attribute of the <code>&lt;image-cell&gt;</code> element and actually wire it up to fully work (I think).</p>
+<p>I can change the <code>record-id=&quot;4&quot;</code> in the devtools and the element updates, which is pretty darn cool. But I’m not sure if this really is worth it or not. When passing data down through custom elements with attributes, everything has to be a string and I kinda hate that. So I’m not sure if trying to deal with serialization of these attributes is worth it to not yet.</p>
+<p>The “update function” for <code>&lt;image-cell&gt;</code> reminds me of a <code>configureCell()</code> function when using <code>UICollectionView</code> or <code>UITableView</code> in iOS apps:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="nx">updateTemplate</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// “query” for the record
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="kr">const</span> <span class="nx">record</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="err">#</span><span class="nx">recordId</span> <span class="o">&amp;&amp;</span> <span class="nx">db</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="nx">r</span> <span class="p">=&gt;</span> <span class="nx">r</span><span class="p">.</span><span class="nx">id</span> <span class="o">==</span> <span class="k">this</span><span class="p">.</span><span class="err">#</span><span class="nx">recordId</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="c1">// only update if it’s a different recordId
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="k">if</span> <span class="p">(</span><span class="nx">record</span><span class="o">?</span><span class="p">.</span><span class="nx">id</span> <span class="o">!==</span> <span class="k">this</span><span class="p">.</span><span class="err">#</span><span class="nx">lastRenderedRecordId</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">this</span><span class="p">.</span><span class="nx">shadowRoot</span><span class="p">.</span><span class="nx">replaceChildren</span><span class="p">()</span> <span class="c1">// clear
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="nx">record</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="kr">const</span> <span class="nx">template</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">&#39;template[data-name=&#34;image-cell&#34;]&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">      <span class="k">this</span><span class="p">.</span><span class="nx">shadowRoot</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">template</span><span class="p">.</span><span class="nx">content</span><span class="p">.</span><span class="nx">cloneNode</span><span class="p">(</span><span class="kc">true</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="kr">const</span> <span class="nx">img</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">shadowRoot</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">&#39;img&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">      <span class="kr">const</span> <span class="nx">pName</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">shadowRoot</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">&#39;p.name&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="nx">img</span><span class="p">.</span><span class="nx">alt</span> <span class="o">=</span> <span class="nx">record</span><span class="p">.</span><span class="nx">description</span>
+</span></span><span class="line"><span class="cl">      <span class="nx">img</span><span class="p">.</span><span class="nx">src</span> <span class="o">=</span> <span class="nx">record</span><span class="p">.</span><span class="nx">src</span>
+</span></span><span class="line"><span class="cl">      <span class="nx">img</span><span class="p">.</span><span class="nx">width</span> <span class="o">=</span> <span class="nx">record</span><span class="p">.</span><span class="nx">width</span>
+</span></span><span class="line"><span class="cl">      <span class="nx">img</span><span class="p">.</span><span class="nx">height</span> <span class="o">=</span> <span class="nx">record</span><span class="p">.</span><span class="nx">height</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="kr">const</span> <span class="nx">nameParts</span> <span class="o">=</span> <span class="nx">record</span><span class="p">.</span><span class="nx">src</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">      <span class="nx">pName</span><span class="p">.</span><span class="nx">innerText</span> <span class="o">=</span> <span class="nx">nameParts</span><span class="p">.</span><span class="nx">at</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="k">this</span><span class="p">.</span><span class="err">#</span><span class="nx">lastRenderedRecordId</span> <span class="o">=</span> <span class="nx">record</span><span class="o">?</span><span class="p">.</span><span class="nx">id</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>I’d say I’m 80% happy with that function. I feel like there is still something I’m missing though 🤔</p>
+<h2 id="use-cases">Use cases</h2>
+<p>I could see this being useful for lots of situations:</p>
+<ul>
+<li>Search suggestions</li>
+<li>Search results</li>
+<li>Filtering any kind of list or grid</li>
+<li>Navigating between tabs</li>
+<li>Swapping out a page template by slotting in a header, sidebar/aside, and/or main content area with named slots</li>
+<li>What else can you think of?</li>
+</ul>
+<h2 id="questions-still-to-answer">Questions still to answer</h2>
+<ul>
+<li>Is it common to support attributes with string serialization, or do most people leave those out and rely on javascript properties instead?</li>
+<li>What examples are there online of Web Components + IndexedDB?</li>
+<li>What are the accessibility implications of having elements in the DOM that are not slotted?</li>
+<li>Passing data down two levels is fine, but how do things look when there are many many levels?</li>
+</ul>
+<p>🫡</p>
+
+      </div>
+
+      <footer>
+        
+        <p>
+          
+            Posted on
+          
+          <time datetime="2023-08-27T13:02:22&#43;02:00">
+            27 Aug, 2023
+          </time>
+          
+          
+          
+        </p>
+      </footer>
+    </article>
+  </main>
+
+    
+    
+    <script async src="https://nathanherald.com/behavior.min.e41a74d07fee42e04abe287c617e80b67998e06c69d3d3c07c6cd91f272bc0bc.js" integrity="sha256-5Bp00H/uQuBKvih8YX6AtnmY4Gxp09PAfGzZHycrwLw="></script>
+      <script defer data-domain="nathanherald.com" src="https://stats.myobie.wtf/script.js"></script>
+  </body>
+</html>

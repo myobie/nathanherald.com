@@ -1,0 +1,3 @@
+# terraform IAM user
+aws_access_key = "{{ op://Private/font-s3-bucket-aws-creds/aws_access_key }}"
+aws_secret_key = "{{ op://Private/font-s3-bucket-aws-creds/aws_secret_key }}"

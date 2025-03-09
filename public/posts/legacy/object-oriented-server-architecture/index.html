@@ -1,0 +1,107 @@
+<!doctype html>
+<html>
+  <head lang="en-us">
+    <meta charset="UTF-8">
+    <title>I‘m Nathan Herald → Object Oriented System Architecture</title>
+    <script>
+      if ((new URL(window.location.href)).host === 'myobie.com') { window.location.assign('https://nathanherald.com') }
+    </script>
+    <link rel="canonical" href="https://nathanherald.com/posts/legacy/object-oriented-server-architecture/">
+    <link rel="stylesheet" type="text/css" href="https://cloud.typography.com/6836312/761366/css/fonts.css"><link rel="stylesheet" type="text/css" href="https://nathanherald.com/combined.min.31312963d9b6322f358005bab4cfc1a3a286b0ec67f5df6e22434de51d71c004.css" integrity="sha256-MTEpY9m2Mi81gAW6tM/Bo6KGsOxn9d9uIkNN5R1xwAQ=">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="generator" content="Hugo 0.136.5">
+    <meta name="title" content="I‘m Nathan Herald  → Object Oriented System Architecture">
+    <meta name="description" content="">
+    <meta property="og:title" content="Object Oriented System Architecture">
+    <meta property="og:type" content="website">
+    <meta property="og:description" content="">
+    <meta property="og:url" content="https://nathanherald.com/posts/legacy/object-oriented-server-architecture/">
+    <meta property="og:image" content="/og.png">
+    <meta property="og:site_name" content="I‘m Nathan Herald">
+    
+  
+
+<link rel="alternate" type="application/rss+xml" href="https://nathanherald.com/posts/rss.xml" title="Archive of all the posts on this site on nathanherald.com">
+
+
+  </head>
+  <body class="default">
+    
+  <header class="section-header">
+    <div class="section-nav">
+      <h1 class="home-link">
+        <a data-nospan href="/" class="never-underline"><abbr title="Hello">👋</abbr></a>
+        <a href="/">I&rsquo;m Nathan</a>
+      </h1>
+      <nav>
+        <p>
+          Find more in the <a href="https://nathanherald.com/posts/">archive of all the posts on this site</a>
+or <a href="https://nathanherald.com/posts/rss.xml">subscribe with RSS</a>.
+
+        </p>
+      </nav>
+    </div>
+  </header>
+
+    
+  <main class="single">
+    <article>
+      <header>
+        <h1>
+          
+          
+            Object Oriented System Architecture
+            <p class="annotation">⭐️ a blog post</a>
+          
+        </h1>
+        
+      </header>
+
+      <div class="content">
+        <p>Building large systems to process web requests, work jobs, and do other things can be daunting without a plan of attack or a system-of-thought. How many components to build, how to separate responsibilities, and when to build small or big are questions that come up over and over again. Having a framework to answer questions is a huge help and keeps things consistent, especially when working on a team.</p>
+<p>The best way I’ve found to describe my system-of-thought for building large systems is object oriented system architecture. This means to loosely apply object oriented software design principles to the macro-level of a system&rsquo;s architecture. Basically: micro-services. The term micro-service is pretty vague now-a-days, so I feel it’s important to be more specific.</p>
+<p>Over the next few months I plan to take the time to describe different principles, scenarios, and ideas about how to build large systems. The basics are:</p>
+<ul>
+<li>An object is a service</li>
+<li>Build small, well-defined objects</li>
+<li>Objects collaborate by passing messages</li>
+<li>Model different problem domains for the system as discrete objects</li>
+<li>Expose well-defined attributes and methods</li>
+<li>Document and distinguish query and command methods</li>
+<li>Objects own their data, which includes their data-store</li>
+</ul>
+<p>A simple example would be a to-do list (I know, I know). There would need to be a lists service and a tasks service at a minimum. The lists service cannot talk to the tasks data-store, instead it must query the tasks service by passing a message to a query method. Things can be broken down even further by separating task reads, task writes, and tasks storage. It is not unthinkable to have a TasksGet, TasksSave, and TasksRepository object in a class based programming language, therefore it’s not unthinkable to have a tasks-get, tasks-save, and tasks-repository service as part of the system architecture.</p>
+<p>If I built a service like this then the tasks service would expose an HTTP JSON api for all queries and commands. I would also have an asynchronous queue to facilitate cleanup work, cascade deletes, etc. The tasks service might message itself to cascade a change from one set of tasks to another by enqueuing a message onto a queue for a worker to later pickup.</p>
+<p>By thinking on the macro-level about objects, one is free to think about the micro-level more simply. Most small, well-defined services don’t need large software object hierarchies. Each query and command could be defined as a single function, possibly in a very functional language, as long as it’s exposed in a well defined way to the rest of the system.</p>
+<p>Inheritance is even possible by delegating calls from one service to another. A completed-tasks-get service might proxy every message to the tasks-get service, then filter out all non-completed tasks before returning results. Deciding if completed tasks are another service or a method on an existing service is similar to deciding if one should add a method to a class or object or to write a simple delegate object wrapper.</p>
+<p>Code is supposed to express the intent of the program and this is more easily achieved if the service has one clearly defined purpose. A service might need sophisticated permissions rules so one might choose a language better at expressing lists of rules or logic programming. Some services might just read and return data with minimal transformation and be represented as a simple function conceptually as well as in code.</p>
+
+      </div>
+
+      <footer>
+        
+        <p>
+          
+            Posted on
+          
+          <time datetime="2015-01-23T15:41:30Z">
+            23 Jan, 2015
+          </time>
+          
+          
+            onto
+            <a href="https://myobie.svbtle.com/object-oriented-server-architecture-1">Svbtle</a>
+          
+          
+        </p>
+      </footer>
+    </article>
+  </main>
+
+    
+    
+    <script async src="https://nathanherald.com/behavior.min.e41a74d07fee42e04abe287c617e80b67998e06c69d3d3c07c6cd91f272bc0bc.js" integrity="sha256-5Bp00H/uQuBKvih8YX6AtnmY4Gxp09PAfGzZHycrwLw="></script>
+      <script defer data-domain="nathanherald.com" src="https://stats.myobie.wtf/script.js"></script>
+  </body>
+</html>

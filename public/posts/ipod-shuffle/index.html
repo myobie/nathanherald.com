@@ -1,0 +1,207 @@
+<!doctype html>
+<html>
+  <head lang="en-us">
+    <meta charset="UTF-8">
+    <title>I‘m Nathan Herald → How I restored and setup my new (to me) $10 iPod shuffle (2nd Gen) with my M1 Mac running Sonoma</title>
+    <script>
+      if ((new URL(window.location.href)).host === 'myobie.com') { window.location.assign('https://nathanherald.com') }
+    </script>
+    <link rel="canonical" href="https://nathanherald.com/posts/ipod-shuffle/">
+    <link rel="stylesheet" type="text/css" href="https://cloud.typography.com/6836312/761366/css/fonts.css"><link rel="stylesheet" type="text/css" href="https://nathanherald.com/combined.min.31312963d9b6322f358005bab4cfc1a3a286b0ec67f5df6e22434de51d71c004.css" integrity="sha256-MTEpY9m2Mi81gAW6tM/Bo6KGsOxn9d9uIkNN5R1xwAQ=">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="generator" content="Hugo 0.136.5">
+    <meta name="title" content="I‘m Nathan Herald  → How I restored and setup my new (to me) $10 iPod shuffle (2nd Gen) with my M1 Mac running Sonoma">
+    <meta name="description" content="">
+    <meta property="og:title" content="How I restored and setup my new (to me) $10 iPod shuffle (2nd Gen) with my M1 Mac running Sonoma">
+    <meta property="og:type" content="website">
+    <meta property="og:description" content="">
+    <meta property="og:url" content="https://nathanherald.com/posts/ipod-shuffle/">
+    <meta property="og:image" content="/og.png">
+    <meta property="og:site_name" content="I‘m Nathan Herald">
+    
+  
+
+<link rel="alternate" type="application/rss+xml" href="https://nathanherald.com/posts/rss.xml" title="Archive of all the posts on this site on nathanherald.com">
+
+
+  </head>
+  <body class="default">
+    
+  <header class="section-header">
+    <div class="section-nav">
+      <h1 class="home-link">
+        <a data-nospan href="/" class="never-underline"><abbr title="Hello">👋</abbr></a>
+        <a href="/">I&rsquo;m Nathan</a>
+      </h1>
+      <nav>
+        <p>
+          Find more in the <a href="https://nathanherald.com/posts/">archive of all the posts on this site</a>
+or <a href="https://nathanherald.com/posts/rss.xml">subscribe with RSS</a>.
+
+        </p>
+      </nav>
+    </div>
+  </header>
+
+    
+  <main class="single">
+    <article>
+      <header>
+        <h1>
+          
+          
+            How I restored and setup my new (to me) $10 iPod shuffle (2nd Gen) with my M1 Mac running Sonoma
+            <p class="annotation">⭐️ a blog post</a>
+          
+        </h1>
+        
+      </header>
+
+      <div class="content">
+        <p>I’ve had a hankering for an iPod for a while, so I decided to take the plunge and get a shuffle to try it out. My phone is too important now! And I don’t really want to drain the battery all the time when I’m out and about… I already have a camera, now a music player, if I buy a physical map then I’ll have my own App Store in my backpack 🤦</p>
+<p>Getting the iPod shuffle setup wasn’t straightforward… so here is how I got it all working.</p>
+<p>I bought mine on <a href="https://www.kleinanzeigen.de">Kleinanzeigen</a> for 10 bucks. The person was very prompt. They let me use the in-app purchase system – which I prefer and recommend, don’t “send PayPal friends and family” to people. Not too scary, it all Just Worked™</p>
+<h2 id="1-restore">1) Restore…</h2>
+<p>Restoring on macOS isn’t as easy anymore. The parts of iTunes that used to sync with iPods is now in the Finder! And my Finder crashed when I tried to restore the iPod. When I tried again, it hung forever and never finished. <em>(If your Finder allows you to restore the iPod then you can skip right to step 2!)</em></p>
+<p>What I learned is: <strong>iTunes still works and you can still download iTunes on Windows</strong> 💪</p>
+<p>Running Windows is actually pretty easy these days with <a href="https://mac.getutm.app">UTM</a>. I had remembered companies like Parallels and VM Ware, but those cannot emulate x86 Windows on my M1 (ARM) Mac and we need the x86 version of iTunes… so UTM is it.</p>
+<h3 id="utm-is-a-whole-deal">UTM is a whole deal</h3>
+<p>While UTM is free and it works well, it is not easy to figure out how to get it all working correctly.</p>
+<p>And sadly, the best info I found is all glommed up in this YouTube video: <a href="https://www.youtube.com/watch?v=KsNoGPczavw">How to install Windows 10 on M1 Mac – Full Tutorial using UTM app</a>. Now <em>I am very grateful that this video exists,</em> but I prefer to not need to pause, back up, go forward, etc for an hour…</p>
+<p>Here are the important steps in text:</p>
+<ol>
+<li>Install <a href="https://mac.getutm.app">UTM</a></li>
+<li>Download a Windows 10 ISO from here: <a href="https://www.microsoft.com/en-us/software-download/windows10ISO">https://www.microsoft.com/en-us/software-download/windows10ISO</a> (an ISO is a virtual CD, so this is basically the install CD)</li>
+<li>Download the drivers you need from here: <a href="https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/archive-virtio/virtio-win-0.1.190-1/">https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/archive-virtio/virtio-win-0.1.190-1/</a> (these are the Fedora drivers and they will help UTM know how to get Windows 10 working well, these are also on a virtual CD)
+<ul>
+<li>Do not get the latest version of these drivers, only use this specific 190 version linked above. It’s tempting to use a version in the 200s, it feels like we should use the newest ones, but don’t do it. Use this 190 version.</li>
+</ul>
+</li>
+<li>Download the “Guest Tools” from here: <a href="https://github.com/utmapp/qemu/releases/download/v7.0.0-utm/spice-guest-tools-0.164.4.iso">https://github.com/utmapp/qemu/releases/download/v7.0.0-utm/spice-guest-tools-0.164.4.iso</a> (you can read more about the “Guest Tools” here <a href="https://docs.getutm.app/guest-support/windows/">https://docs.getutm.app/guest-support/windows/</a>, they just make UTM work better with macOS…)</li>
+<li>Download and open a UTM VM template: <a href="https://web.archive.org/web/20230218145944/https://chrisp.cafe/UTM/Windows_10_x64.utm.zip">https://web.archive.org/web/20230218145944/https://chrisp.cafe/UTM/Windows_10_x64.utm.zip</a> (this is an archived copy of a template which used to be on chrisp.cafe’s website 🤷)
+<ul>
+<li>Move the template to where you want to keep your virtual Windows 10 machine. Don’t keep it in Downloads or put it in your iCloud Drive or anything like that. Your Windows VM will eventually be multiple GB in size and I ended up with many GBs of stuff in my Downloads folder, which I didn’t want.</li>
+<li>Double click the template file to open UTM and you’ll see it in the UTM sidebar and a play button to start it up. <strong>Click play to run it.</strong></li>
+<li>Using this UTM template is important because it’s already setup to prevent you from having weird network issues during the Windows install.</li>
+</ul>
+</li>
+<li>Use the CD icon in the toolbar to change to the windows 10 ISO as the disk</li>
+<li>Reboot, and make sure to hit space so it boots from a CD or DVD
+<ul>
+<li>If you pay attention when the computer is booting up, you’ll see it says “press any key to boot from CD or DVD” and that’s why we hit a key – we want to boot from our Windows 10 ISO</li>
+<li>This will boot into the Windows installer 🙌 we are getting there</li>
+</ul>
+</li>
+<li>Choose your language and tell it you don’t have a product key
+<ul>
+<li>You won’t have to pay for Windows. You can use Windows for a short time without entering a product key and we will be done before that time is over. And we can always start over with a fresh VM in UTM if it starts to complain.</li>
+</ul>
+</li>
+<li>Choose Windows 10 Pro. Choose Custom Install (advanced).</li>
+<li>When you get to the “choose a disk” screen, there won’t be any disks visible. We need to install the drivers so Windows can see them.
+<ol>
+<li>Use the CD icon to change to the virtio ISO file, the drivers virtual disk we downloaded. We are going to load 3 drivers.</li>
+<li>Click “Load driver”</li>
+<li>Navigate into the CD’s directories with “Browse”</li>
+<li><code>smbus &gt; 2k8 &gt; amd64</code>, “Next”</li>
+<li>“Load driver” again, “Browse”</li>
+<li><code>qxldod &gt; w10 &gt; amd64</code>, “Next”</li>
+<li>“Load driver” one last time, “Browse”</li>
+<li><code>viostor &gt; w10 &gt; amd64</code>, “Next”</li>
+<li>Now the Drive shows up and can be chosen to install Windows onto it, but you can’t proceed with “Next” yet…</li>
+<li>Use the CD icon to change back to the Windows 10 ISO</li>
+<li>Click “Refresh”</li>
+<li>Now you can click “Next”, and now it will take a very long time… until it asks you to provide a username</li>
+</ol>
+</li>
+<li>Provide a username, leave the password blank, “Next”, and it boots into Windows 🎉</li>
+<li>Use the CD icon to change to the Guest Tools ISO
+<ol>
+<li>Open the CD in the Explorer</li>
+<li>Run the spice guest tools application on the CD</li>
+<li>Eject the CD once it’s done</li>
+</ol>
+</li>
+<li>Shutdown Windows
+<ul>
+<li>If the screen is black for a long time, the VM doesn’t know that windows has quit so you can just power it off yourself (it’s like having a real, old computer…)</li>
+</ul>
+</li>
+<li>Click the icon to edit the VM’s options</li>
+<li>Add a Network where the Disk stuff is
+<ul>
+<li>Make sure it’s a <code>virtio-net-pci</code> one</li>
+</ul>
+</li>
+<li>Change the Display graphics to <code>virtio-gpu-cpi</code>
+<ul>
+<li>Don’t choose Retina, it will be sloooooow</li>
+</ul>
+</li>
+<li>Now download and install an old iTunes version that still works
+<ul>
+<li>Download and install iTunes from this page: <a href="https://support.apple.com/en-us/106372">https://support.apple.com/en-us/106372</a></li>
+<li>Don’t download iTunes from the Microsoft Store it can’t deal with iPods</li>
+<li>You’ll need to restart Windows after installing it</li>
+</ul>
+</li>
+<li>Plug in your iPod and UTM will try to grab the USB device from macOS, you’ll need to say “OK” or “Allow” twice for it to work. The iPod will now show up in Windows.</li>
+<li>iTunes should now be able to restore it just fine, it might be slow though</li>
+<li>Choose to use it as a disk in iTunes and apply that change</li>
+</ol>
+<p>Now you can put music on there from your Mac, but only if UTM is not running, so shutdown Windows and completely quit UTM.</p>
+<h2 id="2-adding-music">2) Adding Music…</h2>
+<p>I don’t want to deal with iTunes on Windows or Mac day-to-day… and it turns out one can just use the Finder to put music files on the iPod, run a python script in the Terminal and it will jam all those files into the iPod’s internal database.</p>
+<p>The python script is from: <a href="https://github.com/andrewfowlie/shuffle-db3">https://github.com/andrewfowlie/shuffle-db3</a></p>
+<p><strong>First,</strong> you’ll need to install python and then install one package:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># if you don&#39;t have brew installed, then that is a whole deal and you can read more over at https://brew.sh</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">brew install python
+</span></span><span class="line"><span class="cl">pip3 install --break-system-packages eyed3
+</span></span></code></pre></div><p>Then we can download the python script directly from the code repository.</p>
+<pre tabindex="0"><code>cd ~/Downloads &amp;&amp; curl -O &#34;https://raw.githubusercontent.com/andrewfowlie/shuffle-db3/master/src/python/rebuild_db3.py&#34;
+</code></pre><p>In the Finder, drag the <code>rebuild_db3.py</code> file from your Downloads folder to the iPod’s drive that is mounted there. It needs to be at the root.</p>
+<p>Now, <strong>second,</strong> make a folder on the iPod’s drive named “Music” – put your mp3’s and m4a’s in there. You can even do nested folders. The iPod will play things in file order by default, so you can name stuff to get them into the order you want like <code>01</code>, <code>02</code>, …</p>
+<p>After you have them all in there, <strong>third,</strong> you can run this so the iPod will recognize and play those files:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># Make sure to replace iPod with the name of your iPod. If you don&#39;t know the name of your iPod, then you can type &#34;cd &#34; and then drag the iPod&#39;s drive from the Finder into the Terminal window and it will insert the path to it.</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> /Volumes/iPod/
+</span></span><span class="line"><span class="cl">python3 rebuild_db3.py Music/
+</span></span></code></pre></div><p>So you’re telling python “rebuild the database using this Music folder.”</p>
+<blockquote>
+<p>Or, if you’re like me and you will definitely forget all that, you can download my <code>rebuild.command</code> file and just double click that to run the rebuild script.</p>
+<pre><code>cd ~/Downloads &amp;&amp; curl -O &quot;https://gist.githubusercontent.com/myobie/5c0c25cc867420ba15885e53a9a3e133/raw/ac91f695f02c5c2b0b1e8a0c5a6398830eeddd08/rebuild.command&quot;
+cd ~/Downloads &amp;&amp; chmod +x rebuild.command
+</code></pre>
+<p>Drag the <code>rebuild.command</code> file onto the iPod’s drive, and now you can double click that to run the python script for you. You can look here and see that <code>rebuild.command</code> file is just that one line that starts with <code>python</code>: <a href="https://gist.github.com/myobie/5c0c25cc867420ba15885e53a9a3e133">https://gist.github.com/myobie/5c0c25cc867420ba15885e53a9a3e133</a></p>
+</blockquote>
+<p>Tada 🎉</p>
+<p>Now you have working iPod shuffle that can clip on your shirt and provide you music and happiness for 4–8 hours (ᵔᵕᵔ)/</p>
+<p><em>(If I get time, I’ll try to update this with screenshots… we’ll see…)</em></p>
+
+      </div>
+
+      <footer>
+        
+        <p>
+          
+            Posted on
+          
+          <time datetime="2024-04-30T00:21:41&#43;02:00">
+            30 Apr, 2024
+          </time>
+          
+          
+          
+        </p>
+      </footer>
+    </article>
+  </main>
+
+    
+    
+    <script async src="https://nathanherald.com/behavior.min.e41a74d07fee42e04abe287c617e80b67998e06c69d3d3c07c6cd91f272bc0bc.js" integrity="sha256-5Bp00H/uQuBKvih8YX6AtnmY4Gxp09PAfGzZHycrwLw="></script>
+      <script defer data-domain="nathanherald.com" src="https://stats.myobie.wtf/script.js"></script>
+  </body>
+</html>

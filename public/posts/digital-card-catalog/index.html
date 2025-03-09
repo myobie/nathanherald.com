@@ -1,0 +1,138 @@
+<!doctype html>
+<html>
+  <head lang="en-us">
+    <meta charset="UTF-8">
+    <title>I‘m Nathan Herald → Collaboration through software: digital paper and card catalogs</title>
+    <script>
+      if ((new URL(window.location.href)).host === 'myobie.com') { window.location.assign('https://nathanherald.com') }
+    </script>
+    <link rel="canonical" href="https://nathanherald.com/posts/digital-card-catalog/">
+    <link rel="stylesheet" type="text/css" href="https://cloud.typography.com/6836312/761366/css/fonts.css"><link rel="stylesheet" type="text/css" href="https://nathanherald.com/combined.min.31312963d9b6322f358005bab4cfc1a3a286b0ec67f5df6e22434de51d71c004.css" integrity="sha256-MTEpY9m2Mi81gAW6tM/Bo6KGsOxn9d9uIkNN5R1xwAQ=">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="generator" content="Hugo 0.136.5">
+    <meta name="title" content="I‘m Nathan Herald  → Collaboration through software: digital paper and card catalogs">
+    <meta name="description" content="">
+    <meta property="og:title" content="Collaboration through software: digital paper and card catalogs">
+    <meta property="og:type" content="website">
+    <meta property="og:description" content="">
+    <meta property="og:url" content="https://nathanherald.com/posts/digital-card-catalog/">
+    <meta property="og:image" content="/og.png">
+    <meta property="og:site_name" content="I‘m Nathan Herald">
+    
+  
+
+<link rel="alternate" type="application/rss+xml" href="https://nathanherald.com/posts/rss.xml" title="Archive of all the posts on this site on nathanherald.com">
+
+
+  </head>
+  <body class="default">
+    
+  <header class="section-header">
+    <div class="section-nav">
+      <h1 class="home-link">
+        <a data-nospan href="/" class="never-underline"><abbr title="Hello">👋</abbr></a>
+        <a href="/">I&rsquo;m Nathan</a>
+      </h1>
+      <nav>
+        <p>
+          Find more in the <a href="https://nathanherald.com/posts/">archive of all the posts on this site</a>
+or <a href="https://nathanherald.com/posts/rss.xml">subscribe with RSS</a>.
+
+        </p>
+      </nav>
+    </div>
+  </header>
+
+    
+  <main class="single">
+    <article>
+      <header>
+        <h1>
+          
+          
+            Collaboration through software: digital paper and card catalogs
+            <p class="annotation">⭐️ a blog post</a>
+          
+        </h1>
+        
+      </header>
+
+      <div class="content">
+        <p>Recently, as we work on completing our proof-of-concept version of <a href="https://shareup.app">Shareup</a>, we’ve often been talking about different ways we can best help people work together through our software. I’ve never taken the time to write down how I think about collaborative software, so in this post I’ll attempt to. These concepts are how Adam, Anthony, and I are approaching building our new product and drive a lot of our conversations about how it will work.</p>
+<p>Over the past couple decades, while working on different distributed software and systems, I’ve been able to refine my thoughts about how to categorize and talk about collaborating through software. Also, I enjoy reading about software history and the many HCI research papers one can find about collaboration, like: <a href="https://www.billbuxton.com/3sCompany.pdf">AR video conferencing</a>, <a href="https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.589.7276&amp;rep=rep1&amp;type=pdf">Telehealth</a>, and <a href="https://www.tandfonline.com/doi/pdf/10.1080/10447318.2019.1619259">related topics</a>.</p>
+<p><a href="https://en.wikipedia.org/wiki/PARC_(company)">Xerox PARC</a>, from way back when, are responsible for so many different technologies: <a href="https://en.wikipedia.org/wiki/Ethernet">Ethernet</a>, <a href="https://en.wikipedia.org/wiki/Videotelephony">“video links”</a> and <a href="https://www.researchgate.net/publication/2688342_Personal_Distributed_Computing_The_Alto_and_Ethernet_Software">distributed software</a> (called “ethernet software” at the time) to help people work with <a href="http://www.dlib.org/dlib/june96/hearst/06hearst.html">“digital paper.”</a> This concept of <strong>digital paper</strong> really resonates with me most in my experience building software and has impacted how I think about designing a space for collaboration.</p>
+<h2 id="digital-paper">Digital paper</h2>
+<p>I like to always start thinking about a piece of software or a system as a group of people sitting around a table with a sheet of paper and some markers. Everyone can clearly see each other, can easily see when someone is writing or drawing, and it’s not possible to make a mark that cannot be seen by everyone else. Also, everything is spatially arranged: when I make a mark to the left of yours, you also see that it’s to the left of the mark you previously made.</p>
+<p><a href="https://miro.com">Miro</a>, <a href="https://www.figma.com">Figma</a> (and now <a href="https://www.figma.com/figjam/">FigJam</a>), <a href="https://www.google.com/docs/about/">Google Docs</a>, and <a href="https://www.craft.do">Craft</a> pages are examples of “digital paper.” <em>(I also sometimes call them “digital whiteboards.”)</em> They work like a magic, digitally replicated piece of paper that everyone can see and write on together. Everything is spatially arranged, we can see each other’s “fingers” (cursors), and all changes are immediately visible to everyone.</p>
+<p>Digital whiteboards are the easiest collaborative software to talk about because they are both extremely immediate and give everyone 100% visibility. I cannot insert a circle into a Figma doc that you cannot see. The rules or “physics” of the software can be talked through very quickly and everyone “gets it.”</p>
+<p>I recently read <a href="https://www.billbuxton.com/3sCompany.pdf">a Microsoft Research paper titled <em>“Three&rsquo;s Company: Understanding Communication Channels in Three-way Distributed Collaboration”</em></a> where each participant could see “shadow images” of the other participants arms and hands as they would attempt to work together to accomplish a task like moving a block. Everyone also had audio and video feeds from the others. It seemed like everyone got it and the “additional arms” didn’t seem to bother anyone:</p>
+<blockquote>
+<p>Despite the fact that we regularly saw three, and occasionally saw six arm shadows (two per person) in the task space, users did not seem to be distracted by this additional clutter.</p>
+</blockquote>
+<p><em>(I also found the feedback from participants that the video feed was only really useful when preparing for a task, but not during it, super interesting.)</em></p>
+<p>I also really liked <a href="https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.589.7276&amp;rep=rep1&amp;type=pdf">another paper by Bill Buxton titled <em>“Telepresence: Integrating Shared Task and Person Spaces”</em></a> which has a great part which says (emphasis mine):</p>
+<blockquote>
+<p>… the interaction breaks out of being like watching TV, into a direct engagement of the participants. <strong>They meet each other, not the system.</strong></p>
+</blockquote>
+<h2 id="what-about-email">What about email?</h2>
+<p>Email can also be considered a “digital paper” product, however its immutability and the slow cycle of feedback make it less useful for a lot of tasks. Now, people love email. It’s the most successful distributed technology ever created.</p>
+<p>The rules are understandable: I write something in a place that only I can see, then I hit “send” which will transfer a copy over to another person’s inbox (where I cannot see) for them to read sometime in the future. I can’t “unsend” an email and I can’t modify an email after it’s been sent.</p>
+<p>For tasks which don’t need immediacy or really resemble letter writing, then email is the right choice. Personally, email doesn’t interest me much as something to work on. I wish the email protocols could be updated to allow for easy end-to-end encryption, auto-rejection of unknown senders, etc to make it more private and less overwhelming – but I also really get why it’s hard to change something so old and so successful.</p>
+<h2 id="what-about-chat">What about chat?</h2>
+<p>Chat software can be a little fuzzy to pin down. While it might seem like a Slack channel is both fully immediate and fully visible, it turns out there are things one can do that are not shared and Slack tries to make this clear by labelling those messages “Only visible to you”.</p>
+
+<figure>
+<img src="slack-screenshot.png" width="468" height="148">
+</figure>
+
+
+<p>By making it less clear if everything is fully shared, <strong>it adds stress</strong> for users who feel uneasy about trying something because “what if everyone sees me make a mistake” or “what if I send this to the wrong place.” <em>(The old <a href="https://en.wikipedia.org/wiki/Internet_Relay_Chat">IRC</a> software also had ways for “the system” to message you that were only visible to you, so this is not a problem unique to Slack.)</em></p>
+<p>Using Apple’s Messages can also be confusing: if I delete a message, then does it delete it for the other person? <em>(No, it doesn’t.)</em></p>
+<p>I prefer software that is immediate: I would almost always rather use chat over email. But I also prefer software that is visible: I don’t like to be confused about who can see what.</p>
+<h2 id="digital-paper-isnt-enough">Digital paper isn’t enough</h2>
+<p>Digital paper (or a digital whiteboard) is not enough.  Arranging everything spatially can make it very difficult to find or remember where something was placed. As a canvas for a document grows it becomes harder and harder to keep up. Changes can happen over in an area one is not currently paying attention to. And searching for a note or comment from a month ago is almost impossible.</p>
+<p><em>Both Miro and Figma continue to add features to try to help mitigate some of these issues (like <a href="https://help.figma.com/hc/en-us/articles/360040322673-Follow-Along-with-Observation-Mode">following a person’s viewpoint</a>) which is great. Google Docs can have the table of contents to the left which can help some as well.</em></p>
+<p>The metaphor I use to talk about solving this issue is a digital card catalog.</p>
+<h2 id="digital-card-catalog">Digital card catalog</h2>
+<p>When I design collaborative software, the metaphor I use the most is a digital card deck or digital card catalog, depending on the size and scope of the software.</p>
+<p>If we each have a <a href="https://deck.of.cards">deck of playing cards</a>, and we shuffle them in different ways, we know we still have the same “set of cards” despite the orders being different. I might have the ace of diamonds as my first card and you might have the queen of hearts, but we are not confused by that in any way. I can always search through and find any card you can. Also, if I decide to filter through and make a pile of only hearts, we understand that I am not filtering any cards in your deck.</p>
+<p>For a “digital deck of cards” system: the card is like a little shared document. When we draw on the shared ace of clubs, we can all see the updated design immediately. I can also choose to put that card away in the deck and start working on another card. Then I won’t see your updates immediately because I’m on a different piece of digital paper. Everything inside the card is shared and everything outside is personal.</p>
+<p>Sometimes we need a shared way to organize lots of cards which is what I call the “digital card catalog” system: not only is the card a shared digital document, the way the cards are organized is also shared. This is analogous to the <a href="https://www.infobloom.com/what-is-a-card-catalog.htm">card catalogs found in libraries</a>.</p>
+<p><em>Aside: a long time ago I learned from a few designers that if one wants inspiration for how to design information or software for people then always look at maps and libraries. They are ways to structure and organize lots of information, they are designed to be heavily used, and they try to work for a large number of people with as little required training as possible. Also, <a href="https://www.library.wisc.edu/gwslibrarian/bibliographies/disrupting-whiteness-in-libraries/">be aware that there are systemic biases inside libraries and the libarary science field</a> that are important to know about and not replicate.</em></p>
+<p>While a “deck of cards” is a nice and easy analogy, almost all types of software that I have helped design or helped build have become larger “card catalog” systems.</p>
+<p><a href="https://en.wikipedia.org/wiki/Wunderlist">Wunderlist</a> was one: each task was like a little shared document. Any change you make to task is visible to every member of the shared list. And the list itself is the “catalog.” We all see the same tasks in the list at all times.</p>
+<p><em>One contentious argument we had was whether sorting a list alphabetically was a “shared action” or not. IMO, using the physical analogy to card catalogs, sorting or filtering is not a shared action. However, I lost this argument, and when someone sorted a list it actually sorted those tasks for everyone. I still feel this was a mistake and wish I could have done a better job making the case for personal-only sorting.</em></p>
+<p>People prefer <a href="https://uxdesign.cc/design-principle-consistency-6b0cf7e7339f">consistent rules</a> or “physics.” When we are crafting the “universe” of a software product it’s important the physics and “gravity” are consistent and feel good. The rules of physical card catalog systems are already well documented and understood, so one can leverage that to help make our digital card catalog systems easier to use.</p>
+<p>One can also look to libraries for how to “announce updates” since it is really impossible for a human to keep track of all the “new cards” in a busy catalog. There are “new releases” or “librarian picks” which try to help guide a person to relevant topics and places. There are many methods to search, filter, and arrange the cards to make it easier to find a specific one.</p>
+<p>One could make “topic drawers” which include only the cards relevant to that topic. There is no reason why the same card cannot be present in more than one drawer if it were relevant to many topics. A card could helpfully indicate which other topic drawers it could be found in. This would make sense and be welcomed by library visitors.</p>
+<p>Sometimes, in physical libraries, there are cards in the catalog which reference books over at other libraries: a <a href="https://en.wikipedia.org/wiki/Union_catalog">union card catalog.</a> Digitally, it’s possible to have a system to not just work with information inside your group or organization, but also with other groups and organizations which could be a huge win. 🙌</p>
+<h2 id="quick-summary">Quick summary</h2>
+<p>So that’s what I wanted to write about: when I design or build distributed software to help people work together, I almost always think about <em>digital paper</em> organized in a <em>digital card catalog.</em> I prefer software to be <em>extremely immediate</em> and it to be clear <em>what is shared?</em> and what is not.</p>
+<p>I’m curious though, how do you think about collaborative distributed software? How do you think through the rules or <em>physics</em> of the system? <a href="mailto:myobie@hey.com">Send me an email</a>, I am very curious to hear what you think.</p>
+
+      </div>
+
+      <footer>
+        
+        <p>
+          
+            Posted on
+          
+          <time datetime="2021-05-04T08:22:42&#43;02:00">
+            4 May, 2021
+          </time>
+          
+          
+          
+        </p>
+      </footer>
+    </article>
+  </main>
+
+    
+    
+    <script async src="https://nathanherald.com/behavior.min.e41a74d07fee42e04abe287c617e80b67998e06c69d3d3c07c6cd91f272bc0bc.js" integrity="sha256-5Bp00H/uQuBKvih8YX6AtnmY4Gxp09PAfGzZHycrwLw="></script>
+      <script defer data-domain="nathanherald.com" src="https://stats.myobie.wtf/script.js"></script>
+  </body>
+</html>

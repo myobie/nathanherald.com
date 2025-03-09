@@ -1,6 +1,6 @@
 # [nathanherald.com](https://nathanherald.com)
 
-I'm using [Netlify](https://app.netlify.com/sites/flamboyant-northcutt-4eefaf/overview) and [hugo](https://gohugo.io/).
+I'm using [Netlify](https://app.netlify.com/sites/flamboyant-northcutt-4eefaf/overview) to host this website.
 
 ## Flow
 
@@ -15,13 +15,12 @@ I use the book weight for normal text, the bold weight for, uh, bold, and the bl
 ## Local setup
 
 ```sh
-$ git-crypt unlock
-$ bin/install
+git-crypt unlock
+bin/install
 ```
 
 ### Development server
 
 ```sh
-$ yarn dev
-# visit http://localhost:8080
+deno run --allow-net --allow-read jsr:@std/http/file-server
 ```

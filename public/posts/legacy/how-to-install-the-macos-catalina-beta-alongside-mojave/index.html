@@ -1,0 +1,203 @@
+<!doctype html>
+<html>
+  <head lang="en-us">
+    <meta charset="UTF-8">
+    <title>I‘m Nathan Herald → How to install the macOS Catalina Beta alongside Mojave</title>
+    <script>
+      if ((new URL(window.location.href)).host === 'myobie.com') { window.location.assign('https://nathanherald.com') }
+    </script>
+    <link rel="canonical" href="https://nathanherald.com/posts/legacy/how-to-install-the-macos-catalina-beta-alongside-mojave/">
+    <link rel="stylesheet" type="text/css" href="https://cloud.typography.com/6836312/761366/css/fonts.css"><link rel="stylesheet" type="text/css" href="https://nathanherald.com/combined.min.31312963d9b6322f358005bab4cfc1a3a286b0ec67f5df6e22434de51d71c004.css" integrity="sha256-MTEpY9m2Mi81gAW6tM/Bo6KGsOxn9d9uIkNN5R1xwAQ=">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="generator" content="Hugo 0.136.5">
+    <meta name="title" content="I‘m Nathan Herald  → How to install the macOS Catalina Beta alongside Mojave">
+    <meta name="description" content="">
+    <meta property="og:title" content="How to install the macOS Catalina Beta alongside Mojave">
+    <meta property="og:type" content="website">
+    <meta property="og:description" content="">
+    <meta property="og:url" content="https://nathanherald.com/posts/legacy/how-to-install-the-macos-catalina-beta-alongside-mojave/">
+    <meta property="og:image" content="/og.png">
+    <meta property="og:site_name" content="I‘m Nathan Herald">
+    
+  
+
+<link rel="alternate" type="application/rss+xml" href="https://nathanherald.com/posts/rss.xml" title="Archive of all the posts on this site on nathanherald.com">
+
+
+  </head>
+  <body class="default">
+    
+  <header class="section-header">
+    <div class="section-nav">
+      <h1 class="home-link">
+        <a data-nospan href="/" class="never-underline"><abbr title="Hello">👋</abbr></a>
+        <a href="/">I&rsquo;m Nathan</a>
+      </h1>
+      <nav>
+        <p>
+          Find more in the <a href="https://nathanherald.com/posts/">archive of all the posts on this site</a>
+or <a href="https://nathanherald.com/posts/rss.xml">subscribe with RSS</a>.
+
+        </p>
+      </nav>
+    </div>
+  </header>
+
+    
+  <main class="single">
+    <article>
+      <header>
+        <h1>
+          
+          
+            How to install the macOS Catalina Beta alongside Mojave
+            <p class="annotation">⭐️ a blog post</a>
+          
+        </h1>
+        
+      </header>
+
+      <div class="content">
+        <p>I’m sure you are interested in playing with <a href="https://developer.apple.com/documentation/swiftui">SwiftUI</a> just like I am, but you are also hesitant to install the <a href="https://www.apple.com/macos/catalina-preview/">latest macOS Beta</a> because it will surely mess up homebrew and generally cause inconvenience.  Even more, the live UI previews in XCode only work when running XCode inside the beta macOS…</p>
+<p><strong>If you have a recent Mac with an APFS formatted drive then you can easily create a little area for the Beta without changing anything about your current setup.</strong></p>
+<p><a href="https://www.macobserver.com/tips/deep-dive/apfs-faq-partitions-volumes-afps-containers/">APFS supports multiple “volumes” in the same “container.</a>” A new volume can be created super quick on the fly, can be flexible in it’s size (with min/max settings on the GB reserved/used), and a “container” (think drive) shares all it’s space with all it’s volumes so you don’t have to know ahead of time how much space each volume really needs.</p>
+<p><em>Below are the simple steps to create a volume, install macOS Mojave on it, then upgrade that volume’s OS to Catalina.</em></p>
+<h3 id="1-create-avolume">1. Create a volume</h3>
+<p>Search using Spotlight (⌘ space) for <em>Disk Utility</em> and open it. Make sure your primary hard drive is selected in the left sidebar, then click the Plus icon in the toolbar to add a volume.</p>
+<figure>
+  <img
+    alt="Screenshot of Disk Utility showing a sheet to Add APFS volume to container"
+    width="1200"
+    height="789"
+    src="https://nathanherald.com/posts/legacy/how-to-install-the-macos-catalina-beta-alongside-mojave/1-XDH849DbmTwKvr5SON076A_hu16129875002253549815.png">
+  <figcaption>
+    I named my new volume Beta
+  </figcaption>
+</figure>
+
+<p>You can choose to set <em>Size Options…</em> to set a minimum reserve and a maximum usage for the volume. <strong>You will need at least 30 GB of space</strong> to get the macOS beta + XCode Beta installed with some wiggle room. I set my Beta volume to reserve at least 20GB and restrict to a maximum of 100GB.</p>
+<h3 id="2-install-macosmojave">2. Install macOS Mojave</h3>
+<p><strong>One cannot install macOS Catalina directly</strong>: instead, one must upgrade from Mojave. Even if you are currently running macOS Mojave, you will need to download the macOS installer to use with the new volume.</p>
+<p>Using Spotlight (⌘ space) again, search for <em>App Store</em> and open it. Search the App Store for <em>macOS</em> and find the page for Mojave.</p>
+<figure>
+  <img
+    alt="Screenshot of the macOS App Store app listing for macOS Mojave"
+    width="1200"
+    height="776"
+    src="https://nathanherald.com/posts/legacy/how-to-install-the-macos-catalina-beta-alongside-mojave/1-lbKgsosyxa7B6EmXbQdtqQ_hu2319844088406406738.png">
+  <figcaption>
+    Use the App Store to “Get” macOS Mojave
+  </figcaption>
+</figure>
+
+<p>Click <em>Get</em> and it will open the <em>Software Update</em> preference pane in <em>System Preferences</em>. Let it download the huge installer and it will eventually present you with the below Installer window. This will take a while…</p>
+<figure>
+  <img
+    alt="Screenshot of the macOS installer with the ability to select the destination volume"
+    width="1200"
+    height="966"
+    src="https://nathanherald.com/posts/legacy/how-to-install-the-macos-catalina-beta-alongside-mojave/1-Qbxuad8OQl6CjgB9YCnZaA_hu12122219858016592551.png">
+  <figcaption>
+    Choose the new volume
+  </figcaption>
+</figure>
+
+<p>Be sure to choose the new volume and proceed to install. <br>
+This will take a while…</p>
+<h3 id="3-install-macoscatalina">3. Install macOS Catalina</h3>
+<p>After installation is done and you’ve setup your new “computer” you will need to navigate to the <a href="https://developer.apple.com/download/">Apple Developer Downloads</a> page to install the beta.</p>
+<figure>
+  <img
+    alt="Screenshot of Apple&#39;s Beta Software Downloads webpage"
+    width="1200"
+    height="1004"
+    src="https://nathanherald.com/posts/legacy/how-to-install-the-macos-catalina-beta-alongside-mojave/1-UJ8lu3LY-vtBAL0mf6IEGQ_hu13295092284855961205.png">
+  <figcaption>
+    Apple’s developer downloads page
+  </figcaption>
+</figure>
+
+<p>Choose <em>Install Profile</em> which will open the <em>Software Update</em> preference pane of <em>System Preferences</em> again. This time, it will offer to download an installed for the macOS 10.15 Beta (which is Catalina).</p>
+<p>Install (download) it and it will eventually present an installation window.</p>
+<figure>
+  <img
+    alt="Screenshot of the macOS installer"
+    width="1200"
+    height="966"
+    src="https://nathanherald.com/posts/legacy/how-to-install-the-macos-catalina-beta-alongside-mojave/1-5PSZ8X5F2F_KXuMe-MhGDw_hu17154490859232484135.png">
+  <figcaption>
+    Install macOS Catalina just like Mojave before
+  </figcaption>
+</figure>
+
+<p>This will also take a while…</p>
+<p>You can still access your other volume from inside the macOS Catalina beta, so there isn’t any reason to copy over all your files or anything. This is great if you have an XCode project you want to work on or test out from the beta, but don’t want to have to transfer files all the time.</p>
+<p><strong>I recommend installing applications separately onto Catalina and not trying to run applications from the Applications directory of the other volume.</strong></p>
+<p>Download the <a href="https://developer.apple.com/download/#app">XCode Beta</a> and go create a new macOS or iOS project using SwiftUI. You choose to use SwiftUI either as a checkbox or dropdown in the <em>New Project sheet</em>.</p>
+<figure>
+  <img
+    alt="Screenshot of Xcode with a panel for creating a new project"
+    width="1200"
+    height="803"
+    src="https://nathanherald.com/posts/legacy/how-to-install-the-macos-catalina-beta-alongside-mojave/1-qT-FmZHbCJfnYXSD4ueEkw_hu12862293458974461000.png">
+  <figcaption>
+    One can choose SwiftUI when creating a new project
+  </figcaption>
+</figure>
+
+<h3 id="4-learn-aboutswiftui">4. Learn about SwiftUI</h3>
+<p>I recommend going through the wonderful <a href="https://developer.apple.com/tutorials/swiftui/tutorials">SwiftUI Tutorials</a> published by Apple. They walk through a ton of good stuff and cover a lot more than the basics. I really enjoyed going through it.</p>
+<figure>
+  <img
+    alt="Screenshot of the Learn to Make Apps with SwiftUI webpage"
+    width="1200"
+    height="778"
+    src="https://nathanherald.com/posts/legacy/how-to-install-the-macos-catalina-beta-alongside-mojave/1-3b9HsS6TTn1kDt7AnGiOBA_hu13867472054840095176.png">
+</figure>
+
+<h3 id="5-restart-intomojave">5. Restart into Mojave</h3>
+<p>You can restart back and forth between the OS’s anytime using the <em>Startup Disk</em> preference pane in <em>System Preferences</em>.</p>
+<figure>
+  <img
+    alt="Screenshot of the Startup Disk preference pane"
+    width="1200"
+    height="792"
+    src="https://nathanherald.com/posts/legacy/how-to-install-the-macos-catalina-beta-alongside-mojave/1-BS9gN8E59TmcumZPRxxlrg_hu11964701652829882729.png">
+  <figcaption>
+    You will need to “unlock” the Startup Disk preference pane by clicking the lock in the bottom left corner
+  </figcaption>
+</figure>
+
+<p><em>You can also keep</em> <strong><em>⌥ option</em></strong> <em>pressed when the computer is booting which will tell the computer to enumerate the bootable volumes and let you click which one to boot into.</em></p>
+<h3 id="thats-it">That’s it</h3>
+<p>Good luck. Comment if I got anything wrong. And have fun with SwiftUI, <a href="https://developer.apple.com/documentation/combine">Combine</a>, and the new live UI previews in XCode. 🤖</p>
+
+      </div>
+
+      <footer>
+        
+        <p>
+          
+            Posted on
+          
+          <time datetime="2019-06-17T11:21:13Z">
+            17 Jun, 2019
+          </time>
+          
+            onto
+            <a href="https://medium.com/@myobie/how-to-install-the-macos-catalina-beta-alongside-mojave-818a97d38c9">Medium</a>
+          
+          
+          
+        </p>
+      </footer>
+    </article>
+  </main>
+
+    
+    
+    <script async src="https://nathanherald.com/behavior.min.e41a74d07fee42e04abe287c617e80b67998e06c69d3d3c07c6cd91f272bc0bc.js" integrity="sha256-5Bp00H/uQuBKvih8YX6AtnmY4Gxp09PAfGzZHycrwLw="></script>
+      <script defer data-domain="nathanherald.com" src="https://stats.myobie.wtf/script.js"></script>
+  </body>
+</html>
