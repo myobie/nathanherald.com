@@ -8,8 +8,6 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
   export AWS_ACCESS_KEY=$(cat infra/variables.tfvars.local | grep -m 1 aws_access_key | awk '{ v=$3; gsub(/"/, "", v); print v }')
   export AWS_SECRET_KEY=$(cat infra/variables.tfvars.local | grep -m 1 aws_secret_key | awk '{ v=$3; gsub(/"/, "", v); print v }')
 else
-  wget https://bootstrap.pypa.io/pip/3.6/get-pip.py
-  python get-pip.py
   pip install s3cmd
 fi
 
