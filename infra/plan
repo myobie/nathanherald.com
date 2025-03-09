@@ -1,3 +1,5 @@
 #!/bin/bash
 
+op inject --account=FO2JAHI4AJBQTIDUJXFNBYVYPM -i variables-unrendered.tfvars.local > variables.tfvars.local
+
 exec terraform plan -var-file="variables.tfvars.local" $@
