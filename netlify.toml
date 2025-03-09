@@ -7,6 +7,10 @@ from = "/writing/rss.xml"
 to = "/posts/rss.xml"
 
 [[redirects]]
+from = "/posts/rss.xml"
+to = "/rss.xml"
+
+[[redirects]]
 from = "/writing/"
 to = "/posts/"
 
