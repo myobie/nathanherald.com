@@ -8,17 +8,14 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
   export AWS_ACCESS_KEY=$(cat infra/variables.tfvars.local | grep -m 1 aws_access_key | awk '{ v=$3; gsub(/"/, "", v); print v }')
   export AWS_SECRET_KEY=$(cat infra/variables.tfvars.local | grep -m 1 aws_secret_key | awk '{ v=$3; gsub(/"/, "", v); print v }')
 else
-  export PATH="$PATH:/opt/build/.local/bin"
+  export PATH="$PATH:/opt/buildhome/.local/share/mise/installs/python/3.8.20/bin"
   echo $PATH
   pip install --upgrade pip
   pip install s3cmd
 
   sleep 5
 
-  ls "/opt"
-  ls "/opt/build"
-  ls "/opt/build/.local"
-  ls "/opt/build/.local/bin"
+  ls "/opt/buildhome/.local/share/mise/installs/python/3.8.20/bin"
 fi
 
 if [[ ! -f public/fonts/webfont.zip ]]; then
