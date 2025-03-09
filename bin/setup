@@ -2,38 +2,7 @@
 
 require 'pathname'
 
-version_file = Pathname.new(__FILE__).dirname.join("../MINIMUM_HUGO_VERSION")
-MINIMUM_HUGO_VERSION = Gem::Version.new(File.read(version_file))
-
 $force = ARGV.include?("-f")
-
-version =
-  `brew ls --versions hugo`.
-    chomp.
-    split(" ").
-    tap { |arr| arr.delete("hugo") }.
-    map { |s| Gem::Version.new(s) }.
-    max
-
-if version.nil?
-  system "brew install hugo"
-elsif version < MINIMUM_HUGO_VERSION
-  system "brew upgrade hugo"
-elsif $force
-  system "brew upgrade hugo"
-end
-
-`which npm`
-
-if $force or not $?.success?
-  system "brew install node"
-end
-
-`which yarn`
-
-if $force or not $?.success?
-  system "npm i -g yarn"
-end
 
 `which terraform`
 

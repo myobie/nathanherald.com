@@ -1,0 +1,185 @@
+<!doctype html>
+<html>
+  <head lang="en-us">
+    <meta charset="UTF-8">
+    <title>I‘m Nathan Herald → Swift already has a Result type</title>
+    <script>
+      if ((new URL(window.location.href)).host === 'myobie.com') { window.location.assign('https://nathanherald.com') }
+    </script>
+    <link rel="canonical" href="https://nathanherald.com/posts/legacy/swift-already-has-a-result-type/">
+    <link rel="stylesheet" type="text/css" href="https://cloud.typography.com/6836312/761366/css/fonts.css"><link rel="stylesheet" type="text/css" href="https://nathanherald.com/combined.min.31312963d9b6322f358005bab4cfc1a3a286b0ec67f5df6e22434de51d71c004.css" integrity="sha256-MTEpY9m2Mi81gAW6tM/Bo6KGsOxn9d9uIkNN5R1xwAQ=">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="generator" content="Hugo 0.136.5">
+    <meta name="title" content="I‘m Nathan Herald  → Swift already has a Result type">
+    <meta name="description" content="Maybe.">
+    <meta property="og:title" content="Swift already has a Result type">
+    <meta property="og:type" content="website">
+    <meta property="og:description" content="Maybe.">
+    <meta property="og:url" content="https://nathanherald.com/posts/legacy/swift-already-has-a-result-type/">
+    <meta property="og:image" content="/og.png">
+    <meta property="og:site_name" content="I‘m Nathan Herald">
+    
+  
+
+<link rel="alternate" type="application/rss+xml" href="https://nathanherald.com/posts/rss.xml" title="Archive of all the posts on this site on nathanherald.com">
+
+
+  </head>
+  <body class="default">
+    
+  <header class="section-header">
+    <div class="section-nav">
+      <h1 class="home-link">
+        <a data-nospan href="/" class="never-underline"><abbr title="Hello">👋</abbr></a>
+        <a href="/">I&rsquo;m Nathan</a>
+      </h1>
+      <nav>
+        <p>
+          Find more in the <a href="https://nathanherald.com/posts/">archive of all the posts on this site</a>
+or <a href="https://nathanherald.com/posts/rss.xml">subscribe with RSS</a>.
+
+        </p>
+      </nav>
+    </div>
+  </header>
+
+    
+  <main class="single">
+    <article>
+      <header>
+        <h1>
+          
+          
+            Swift already has a Result type
+            <p class="annotation">⭐️ a blog post</a>
+          
+        </h1>
+        
+          <h2>Maybe.</h2>
+        
+      </header>
+
+      <div class="content">
+        <figure>
+  <a href="https://unsplash.com/@jdsimcoe">
+  <img
+    alt="Photo of a poster reading &#39;Ask more questions&#39;"
+    width="1200"
+    height="1200"
+    src="https://nathanherald.com/posts/legacy/swift-already-has-a-result-type/1-X6Bjvc5hU9Z0PaTeQMpNGQ_hu3002587424486339008.jpeg">
+  </a>
+  <figcaption>
+    Photo by <a href="https://medium.com/u/a833450b230">JD Simcoe</a> @ <a href="https://unsplash.com/@jdsimcoe">https://unsplash.com/@jdsimcoe</a>
+  </figcaption>
+</figure>
+
+<p>Over the last few years I’ve had the privilege of writing and deploying applications using a myriad of languages. Scala, ruby, javascript, haskell, clojure, etc. Every time I pick up a tool, especially if it’s new to me, I try to learn <a href="http://frankchimero.com/writing/the-webs-grain/">the grain of it</a>. A programming language is a toolbox of ideas and concepts that anyone can use to build stuff. Yet, I see a lot of dissatisfaction from my colleagues and peeps online with the tools currently available.</p>
+<p>There is a great talk about how <a href="https://realm.io/news/tryswift-rob-napier-swift-legacy-functional-programming/">swift is not a functional language</a> by Rob Napier and you should watch it. It’s a great lesson about how one should use a language how it’s made and not how one wishes it were. However, I was really disappointed that Rob made the case that swift should add a <code>Result</code> enum. Swift already has this feature, but I guess a lot of people don’t like it.</p>
+<p>Swift has an <code>Optional</code> type, but you don’t normally see it directly. You interact with optionals through language constructs. An example:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kd">struct</span> <span class="nc">Person</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">let</span> <span class="nv">name</span><span class="p">:</span> <span class="nb">String</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">let</span> <span class="nv">bio</span><span class="p">:</span> <span class="nb">String</span><span class="p">?</span> <span class="p">=</span> <span class="kc">nil</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">let</span> <span class="nv">person</span> <span class="p">=</span> <span class="n">Person</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="s">&#34;Nathan&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="kd">let</span> <span class="nv">bio</span> <span class="p">=</span> <span class="n">person</span><span class="p">.</span><span class="n">bio</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="bp">print</span><span class="p">(</span><span class="s">&#34;</span><span class="si">\(</span><span class="n">person</span><span class="p">.</span><span class="n">name</span><span class="si">)</span><span class="s">’s bio: </span><span class="si">\(</span><span class="n">bio</span><span class="si">)</span><span class="s">&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="bp">print</span><span class="p">(</span><span class="s">&#34;</span><span class="si">\(</span><span class="n">person</span><span class="p">.</span><span class="n">name</span><span class="si">)</span><span class="s"> doesn&#39;t have a bio.&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>The words optional, some, and none are nowhere to be found in the above example.</p>
+<p><code>Optional</code> is basically a “maybe” type and it’s really nice to have support directly in the language for it. Instead of writing a bunch of <code>case .some</code> and other similar statements, we can just use <code>let</code> and other language constructs to work through detecting if anything is in there.</p>
+<p>This example below is similar to a lot of examples I’ve seen for a <code>Result</code> type:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kd">enum</span> <span class="nc">Result</span><span class="p">&lt;</span><span class="n">T</span><span class="p">&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="n">success</span><span class="p">(</span><span class="n">T</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="n">error</span><span class="p">(</span><span class="nb">String</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">isLowerHalf</span><span class="p">(</span><span class="kc">_</span> <span class="n">number</span><span class="p">:</span> <span class="nb">Int</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="n">Result</span><span class="p">&lt;</span><span class="nb">Int</span><span class="p">&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="n">number</span> <span class="o">&lt;</span> <span class="mi">50</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="p">.</span><span class="n">success</span><span class="p">(</span><span class="n">number</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="p">.</span><span class="n">error</span><span class="p">(</span><span class="s">&#34;Sorry.&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">isLowerHalf</span><span class="p">(</span><span class="mi">70</span><span class="p">)</span> <span class="c1">// error(&#34;Sorry.&#34;)</span>
+</span></span><span class="line"><span class="cl"><span class="n">isLowerHalf</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span> <span class="c1">// success(20)</span>
+</span></span></code></pre></div><p>At first glance, this seems pretty nice. I’ve added enums like this to a lot of my swift projects. However, recently I’ve noticed that I always end up having to perform a lot of ceremony to extract the values from the enum:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kd">let</span> <span class="nv">result</span> <span class="p">=</span> <span class="n">isLowerHalf</span><span class="p">(</span><span class="mi">40</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">switch</span> <span class="n">result</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="p">.</span><span class="n">success</span><span class="p">(</span><span class="kd">let</span> <span class="nv">value</span><span class="p">):</span> <span class="bp">print</span><span class="p">(</span><span class="s">&#34;Yes, </span><span class="si">\(</span><span class="n">value</span><span class="si">)</span><span class="s"> is in the lower half!&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="p">.</span><span class="n">error</span><span class="p">(</span><span class="kd">let</span> <span class="nv">value</span><span class="p">):</span> <span class="bp">print</span><span class="p">(</span><span class="s">&#34;</span><span class="si">\(</span><span class="n">value</span><span class="si">)</span><span class="s"> Not in the lower half.&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>Or one can try to only extract and use the success case:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="k">if</span> <span class="k">case</span> <span class="kd">let</span> <span class="p">.</span><span class="n">success</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="p">=</span> <span class="n">isLowerHalf</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="bp">print</span><span class="p">(</span><span class="s">&#34;OK, that worked, but it&#39;s pretty weird.&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>This is a lot of work to fight against the tools that are already in the language. Swift already has a way of marking a function as returning one of two types, one is a success and the other is an <code>Error</code>, and it’s <code>throws</code>.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kd">struct</span> <span class="nc">NotLowerHalf</span><span class="p">:</span> <span class="n">Error</span> <span class="p">{}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">isLowerHalf</span><span class="p">(</span><span class="kc">_</span> <span class="n">number</span><span class="p">:</span> <span class="nb">Int</span><span class="p">)</span> <span class="kr">throws</span> <span class="p">-&gt;</span> <span class="nb">Int</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="n">number</span> <span class="o">&lt;</span> <span class="mi">50</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">number</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">throw</span> <span class="n">NotLowerHalf</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>Now we can use the built in facilities of the language to call the function:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="k">try</span><span class="p">?</span> <span class="n">isLowerHalf</span><span class="p">(</span><span class="mi">70</span><span class="p">)</span> <span class="c1">// nil</span>
+</span></span><span class="line"><span class="cl"><span class="k">try</span><span class="p">?</span> <span class="n">isLowerHalf</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span> <span class="c1">// 20</span>
+</span></span><span class="line"><span class="cl"><span class="k">do</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">let</span> <span class="nv">value</span> <span class="p">=</span> <span class="k">try</span> <span class="n">isLowerHalf</span><span class="p">(</span><span class="mi">70</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="bp">print</span><span class="p">(</span><span class="s">&#34;Yes, </span><span class="si">\(</span><span class="n">value</span><span class="si">)</span><span class="s"> is in the lower half!&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span> <span class="k">catch</span> <span class="k">is</span> <span class="n">NotLowerHalf</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="bp">print</span><span class="p">(</span><span class="s">&#34;Not in the lower half.&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="kd">let</span> <span class="nv">value</span> <span class="p">=</span> <span class="k">try</span><span class="p">?</span> <span class="n">isLowerHalf</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="bp">print</span><span class="p">(</span><span class="s">&#34;OK, that worked, and it&#39;s not _too_ weird.&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">let</span> <span class="nv">result</span> <span class="p">=</span> <span class="k">try</span><span class="p">!</span> <span class="n">isLowerHalf</span><span class="p">(</span><span class="mi">40</span><span class="p">)</span> <span class="c1">// would cause a crash if it failed</span>
+</span></span></code></pre></div><p>Many people I’ve talked to say they avoid <code>throws</code> because they believe using exceptions for control flow is bad. I agree, exceptions are not reasonable for control flow most of the time.</p>
+<p><code>throw</code> does not raise an exception. From <a href="https://developer.apple.com/library/content/documentation/Swift/Conceptual/Swift_Programming_Language/ErrorHandling.html">the swift docs</a>:</p>
+<blockquote>
+<p>Swift provides first-class support for throwing, catching, propagating, and manipulating recoverable errors at runtime.</p>
+</blockquote>
+<p>Errors are not exceptional circumstances. Recoverable errors are expected and should be planned for.</p>
+<p>A function marked as <code>throws</code> returns an unsuccessful result of type <code>Error</code> and the compiler forces the programmer to handle both the success and error cases. <code>do</code> and <code>catch</code> are like specialized <code>switch</code> and <code>case</code> keywords for when a function might return a success or error value and offer the pattern matching features one expects.</p>
+<p>And yes, there is <code>rethrows</code> to propagate an error up the function stack. I’ve done the exact same thing in scala to “slipstream” an error from a <code>Result</code> up during things like a web request. This is control flow using types and pattern matching and I am very glad that it’s built into the language and not something I have to build on my own each time.</p>
+<p>The word <code>try</code> is the perfect way to explain what I’m trying to accomplish: <em>try this and if it doesn’t work out then I’ll handle it this other way.</em> <code>do</code> isn’t my favorite word for the start of the try/catch situation, but I can’t think of anything better.</p>
+<p>I’m not a swift expert, I don’t use it everyday, and I’d like to hear what you think about this subject. Should swift add a <code>Result</code> enum anyway and let the programmer choose between <code>throws</code> and <code>Result</code>? Or would that fragment libraries where some throw while others are all enums all the way?</p>
+<p>Thanks for reading.</p>
+
+      </div>
+
+      <footer>
+        
+        <p>
+          
+            Posted on
+          
+          <time datetime="2017-01-23T11:13:32Z">
+            23 Jan, 2017
+          </time>
+          
+            onto
+            <a href="https://medium.com/@myobie/swift-already-has-a-result-type-d4ca300429f1">Medium</a>
+          
+          
+          
+        </p>
+      </footer>
+    </article>
+  </main>
+
+    
+    
+    <script async src="https://nathanherald.com/behavior.min.e41a74d07fee42e04abe287c617e80b67998e06c69d3d3c07c6cd91f272bc0bc.js" integrity="sha256-5Bp00H/uQuBKvih8YX6AtnmY4Gxp09PAfGzZHycrwLw="></script>
+      <script defer data-domain="nathanherald.com" src="https://stats.myobie.wtf/script.js"></script>
+  </body>
+</html>

@@ -1,0 +1,215 @@
+<!doctype html>
+<html>
+  <head lang="en-us">
+    <meta charset="UTF-8">
+    <title>I‘m Nathan Herald → How to build custom elements that work no matter what order things are loaded</title>
+    <script>
+      if ((new URL(window.location.href)).host === 'myobie.com') { window.location.assign('https://nathanherald.com') }
+    </script>
+    <link rel="canonical" href="https://nathanherald.com/posts/how-to-build-custom-elements-that-work-no-matter-what-order-things-are-loaded/">
+    <link rel="stylesheet" type="text/css" href="https://cloud.typography.com/6836312/761366/css/fonts.css"><link rel="stylesheet" type="text/css" href="https://nathanherald.com/combined.min.31312963d9b6322f358005bab4cfc1a3a286b0ec67f5df6e22434de51d71c004.css" integrity="sha256-MTEpY9m2Mi81gAW6tM/Bo6KGsOxn9d9uIkNN5R1xwAQ=">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="generator" content="Hugo 0.136.5">
+    <meta name="title" content="I‘m Nathan Herald  → How to build custom elements that work no matter what order things are loaded">
+    <meta name="description" content="">
+    <meta property="og:title" content="How to build custom elements that work no matter what order things are loaded">
+    <meta property="og:type" content="website">
+    <meta property="og:description" content="">
+    <meta property="og:url" content="https://nathanherald.com/posts/how-to-build-custom-elements-that-work-no-matter-what-order-things-are-loaded/">
+    <meta property="og:image" content="/og.png">
+    <meta property="og:site_name" content="I‘m Nathan Herald">
+    
+  
+
+<link rel="alternate" type="application/rss+xml" href="https://nathanherald.com/posts/rss.xml" title="Archive of all the posts on this site on nathanherald.com">
+
+
+  </head>
+  <body class="default">
+    
+  <header class="section-header">
+    <div class="section-nav">
+      <h1 class="home-link">
+        <a data-nospan href="/" class="never-underline"><abbr title="Hello">👋</abbr></a>
+        <a href="/">I&rsquo;m Nathan</a>
+      </h1>
+      <nav>
+        <p>
+          Find more in the <a href="https://nathanherald.com/posts/">archive of all the posts on this site</a>
+or <a href="https://nathanherald.com/posts/rss.xml">subscribe with RSS</a>.
+
+        </p>
+      </nav>
+    </div>
+  </header>
+
+    
+  <main class="single">
+    <article>
+      <header>
+        <h1>
+          
+          
+            How to build custom elements that work no matter what order things are loaded
+            <p class="annotation">⭐️ a blog post</a>
+          
+        </h1>
+        
+      </header>
+
+      <div class="content">
+        <blockquote>
+<p>TL;DR:</p>
+<ul>
+<li>Put all the important code in <code>connectedCallback</code></li>
+<li>Either don’t depend on any specific DOM parent being pre-defined, or <code>await customElements.whenDefined(...)</code></li>
+<li>Cleanup any listeners, etc in the <code>disconnectedCallback</code> for good hygiene</li>
+</ul>
+</blockquote>
+<p>Custom elements are seemingly created in three steps:</p>
+<ol>
+<li>Subclass HTMLElement</li>
+<li>Define the tag name</li>
+<li>Element is constructed</li>
+</ol>
+<p>Which seems simple and complete, but it turns out things can happen in a lot of different orders and aren’t nearly that simple.</p>
+<p>I’ve done some testing for different scenarios to see when are an elements attributes set, when are the element’s children reachable, and when is the element’s parent reachable? I’m trying to document what I’ve learned below.</p>
+<p>Example html I will use to work through this:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">one-</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">&lt;</span><span class="nt">two-</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">&lt;/</span><span class="nt">two-</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;/</span><span class="nt">one-</span><span class="p">&gt;</span>
+</span></span></code></pre></div><blockquote>
+<p><code>&lt;one-&gt;</code> is a valid custom element name. The only rules are: 1) must start with a letter and 2) must have at least one hyphen (-). <code>&lt;t-&gt;</code> is a valid custom element name, for example.</p>
+</blockquote>
+<blockquote>
+<p>Also, just in case you don’t know, a custom element’s class can have a <code>constructor</code> and it can have a <code>connectedCallback</code> method which will be called when the element is attached to a document. It’s similar to “on mount” in the react and related world.</p>
+</blockquote>
+<p>There are a few scenarios or orders that custom elements might be defined and discovered:</p>
+<ol>
+<li>A tag’s name might be in the HTML returned from the server, but the subclass might not be defined yet in the custom elements registry</li>
+<li>A tag name might show up in the html only after the subclass is defined</li>
+<li>The element class might be constructed in javascript, unrelated to html parsing</li>
+<li>Elements might be defined in a non-deterministic order</li>
+</ol>
+<h2 id="a-tags-name-might-be-in-the-html-returned-from-the-server-but-the-subclass-might-not-be-defined-yet-in-the-custom-elements-registry">A tag’s name might be in the HTML returned from the server, but the subclass might not be defined yet in the custom elements registry</h2>
+<p><em>If you normally put your <code>&lt;script&gt;</code>s at the bottom of the <code>&lt;body&gt;</code>, the this is your scenario.</em></p>
+<p>The HTML parser will first construct a generic <code>HTMLElement</code> since the tag’s name isn’t in the <code>customElements</code> registry. The element is style-able by CSS and the CSS can even see if the element is <code>:defined</code> or not (if it’s in the <code>customElements</code> registry). This can cause a flash of undefined custom elements depending on how you implement the CSS and HTML for the component. Some devs choose to hide <code>not(:defined)</code> elements to avoid this.</p>
+<p>After some Javascript is loaded and defines the tag name to be a subclass of HTMLElement, the generic HTMLElement will automatically be upgraded and replaced. <code>customElements.define('one-', OneElement)</code> will cause the DOM to look for any existing <code>one-</code> elements and upgrade them right then.</p>
+<p>When an element is upgraded from a generic one to a custom one, the elements <code>children</code> are accessible in the class’s <code>constructor</code>, <code>connectedCallback</code>, etc – it’s a leaf-first situation. So <code>this.children</code> will be accurate anywhere, anytime for this scenario.</p>
+<p>This is not the end of the story, though. Because of how HTML is parsed and because scripts are run inline, it’s possible that there is more HTML to go through after the <code>&lt;script&gt;</code> which defined <code>OneElement</code>.</p>
+<p>As the HTML parser encounters new <code>&lt;one-&gt;</code> elements, it will directly instantiate the <code>OneElement</code> class right then. So half the page might work one way, the other half might work another way. <em>(I recommend never letting this happen, it’s just confusing 😅)</em></p>
+<p>This is identical to the next scenario…</p>
+<h2 id="a-tag-name-might-show-up-in-the-html-only-after-the-subclass-is-defined">A tag name might show up in the html only after the subclass is defined</h2>
+<p><em>If you put your <code>&lt;script&gt;</code>s in the <code>&lt;head&gt;</code> and you do not use <code>defer</code>, then this is your scenario.</em></p>
+<p>Since the <code>OneElement</code> is already registered into <code>customElement</code>, the HTML parser will directly instantiate a new <code>OneElement</code> for each <code>&lt;one-&gt;</code> it encounters. There won’t be a time where the CSS selector <code>not(:defined)</code> would match, there is not <em>upgrade</em>, and so there is not flash of undefined custom elements.</p>
+<p>And the access to <code>this.children</code> is the same; whether your code is in the <code>constructor</code>, <code>connectedCallback</code>, or anywhere else, <code>this.children</code> should be what you expect.</p>
+<p>However, there is one more scenario that isn’t related to HTML parsing…</p>
+<h2 id="the-element-class-might-be-constructed-in-javascript-unrelated-to-html-parsing">The element class might be constructed in javascript, unrelated to html parsing</h2>
+<p>I’m sure you’ve had to write code like:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">div</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;div&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nx">div</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="s1">&#39;some-id&#39;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">paragraph</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;p&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nx">paragraph</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s1">&#39;Hello 👋&#39;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nx">div</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">paragraph</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// etc, etc... 
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">return</span> <span class="nx">div</span>
+</span></span></code></pre></div><p>And it feels very tedious… well this can happen for custom elements as well.</p>
+<p>One can use <code>document.createElement('one-')</code> or <code>new OneElement()</code> to make a new instance of the custom element… and it doesn’t have its children yet.</p>
+<p>So in this scenario, it is not safe to look at <code>this.children</code> or <code>this.parentNode</code> in the <code>constructor</code>… It also doesn’t have any of it’s attributes set… so you can’t really look for those attributes in the <code>constructor</code> either… which can be really annoying.</p>
+<p>However, there is good news, you can trust <code>this.children</code> and all the other stuff in the <code>connectedCallback</code>.</p>
+<p>Try this to prove it to yourself (just try this in the console at any URL):</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="kr">class</span> <span class="nx">A</span> <span class="kr">extends</span> <span class="nx">HTMLElement</span> <span class="p">{</span> <span class="nx">connectedCallback</span><span class="p">()</span> <span class="p">{</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;connected!&#39;</span><span class="p">)</span> <span class="p">}</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// if you try `new A()` right now, you will get an error. A custom element can be instantiated until it is defined in the registry.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">customElements</span><span class="p">.</span><span class="nx">define</span><span class="p">(</span><span class="s1">&#39;a-&#39;</span><span class="p">,</span> <span class="nx">A</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">let</span> <span class="nx">a</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">A</span><span class="p">()</span> <span class="c1">// yay!
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kd">let</span> <span class="nx">div</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;div&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// luckily, this does not call the connectedCallback yet!
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">div</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">a</span><span class="p">)</span> 
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">div</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// &#34;connected!&#34; will be logged, the connectedCallback was finally called
+</span></span></span></code></pre></div><p>As long as custom elements are instantiated, fully prepared, and then added to a document things will probably work out just fine for any code in the <code>connectedCallback</code>.</p>
+<p>One way I work around this sometimes is to accept attributes and children as optional arguments to the constructor, like this:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="kr">class</span> <span class="nx">FancyElement</span> <span class="kr">extends</span> <span class="nx">HTMLElement</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">constructor</span><span class="p">(</span><span class="nx">attributes</span><span class="p">,</span> <span class="p">...</span><span class="nx">children</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kr">super</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="nx">attributes</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="k">for</span> <span class="p">(</span><span class="kr">const</span> <span class="p">[</span><span class="nx">key</span><span class="p">,</span> <span class="nx">value</span><span class="p">]</span> <span class="k">of</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">entries</span><span class="p">(</span><span class="nx">attributes</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">this</span><span class="p">.</span><span class="nx">setAttribute</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="nx">children</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="k">this</span><span class="p">.</span><span class="nx">replaceChildren</span><span class="p">(...</span><span class="nx">children</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="c1">// OH yeah!
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>So now I can safely put setup code in the constructor, as long as every dev knows this is how this custom element needs to be used… I don’t do this often, but sometimes this is the easiest way to move forward. <em>Really tho, just try to only ever put important code in the <code>connectedCallback</code> if at all possible.</em></p>
+<p>This is all fine for one custom element, but what if there are many custom elements and they are all defined at different times 🤔</p>
+<h2 id="elements-might-be-defined-in-a-non-deterministic-order">Elements might be defined in a non-deterministic order</h2>
+<p>Using the same example from above, assuming none of the subclasses have been defined during HTML parsing:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">one-</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">&lt;</span><span class="nt">two-</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">&lt;/</span><span class="nt">two-</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;/</span><span class="nt">one-</span><span class="p">&gt;</span>
+</span></span></code></pre></div><p>The order the subclasses are defined really matters. If, for some reason, OneElement was going to do something that TwoElement depends on (like setup a database or something), then you better make sure to define OneElement first.</p>
+<p>Having a direct dependency on a parent in the DOM is an anti-pattern, try not to do it unless absolutely necessary.</p>
+<p>And, well, if you really want to make sure, then you can wait for the other custom element to be defined inside the connected callback:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="kr">export</span> <span class="kr">class</span> <span class="nx">TwoElement</span> <span class="kr">extends</span> <span class="nx">HTMLElement</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kr">static</span> <span class="nx">define</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">customElements</span><span class="p">.</span><span class="nx">define</span><span class="p">(</span><span class="s1">&#39;two-&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="kr">async</span> <span class="nx">connectedCallback</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kr">await</span> <span class="nx">customElements</span><span class="p">.</span><span class="nx">whenDefined</span><span class="p">(</span><span class="s1">&#39;one-&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// now the parent is fully there 💪
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>This might look like it could end up in a deadlock if two tags were waiting on each other, but it won’t. connectedCallback() is not actually async and the DOM runtime will not await the promise this example returns, so things can work out concurrently just fine.</p>
+<p>(You can also use this trick the other way: wait until you know all the custom elements that might be children are defined.)</p>
+<p>Still, you can also just make sure things are defined in an outside-in order in your code. That is what I prefer since it’s less code for me to write and I need this rarely.</p>
+<h2 id="is-this-all-a-mess">Is this all a mess?</h2>
+<p>Kinda, but I’m OK with it. Custom elements are, IMHO, not a easy as react-like components because they are alive, living in the DOM, and dealing with the real built-in HTML parser and renderer which have to deal with a lot more than just JSX… If you embrace a few conventions, then it normally all works out fine:</p>
+<ul>
+<li>Put all the important code in <code>connectedCallback</code></li>
+<li>Either don’t depend on any specific DOM parent being pre-defined, or <code>await customElements.whenDefined(...)</code></li>
+<li>Cleanup any listeners, etc in the <code>disconnectedCallback</code> for good hygiene</li>
+</ul>
+<p>Good luck. <a href="https://indieweb.social/@myobie">Let me know</a> if I made any mistakes or missed any other scenarios that are tricky with custom elements.</p>
+
+      </div>
+
+      <footer>
+        
+        <p>
+          
+            Posted on
+          
+          <time datetime="2024-11-26T19:28:55&#43;01:00">
+            26 Nov, 2024
+          </time>
+          
+          
+          
+        </p>
+      </footer>
+    </article>
+  </main>
+
+    
+    
+    <script async src="https://nathanherald.com/behavior.min.e41a74d07fee42e04abe287c617e80b67998e06c69d3d3c07c6cd91f272bc0bc.js" integrity="sha256-5Bp00H/uQuBKvih8YX6AtnmY4Gxp09PAfGzZHycrwLw="></script>
+      <script defer data-domain="nathanherald.com" src="https://stats.myobie.wtf/script.js"></script>
+  </body>
+</html>

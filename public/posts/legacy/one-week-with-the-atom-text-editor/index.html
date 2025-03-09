@@ -1,0 +1,144 @@
+<!doctype html>
+<html>
+  <head lang="en-us">
+    <meta charset="UTF-8">
+    <title>I‘m Nathan Herald → One week with the Atom text editor</title>
+    <script>
+      if ((new URL(window.location.href)).host === 'myobie.com') { window.location.assign('https://nathanherald.com') }
+    </script>
+    <link rel="canonical" href="https://nathanherald.com/posts/legacy/one-week-with-the-atom-text-editor/">
+    <link rel="stylesheet" type="text/css" href="https://cloud.typography.com/6836312/761366/css/fonts.css"><link rel="stylesheet" type="text/css" href="https://nathanherald.com/combined.min.31312963d9b6322f358005bab4cfc1a3a286b0ec67f5df6e22434de51d71c004.css" integrity="sha256-MTEpY9m2Mi81gAW6tM/Bo6KGsOxn9d9uIkNN5R1xwAQ=">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="generator" content="Hugo 0.136.5">
+    <meta name="title" content="I‘m Nathan Herald  → One week with the Atom text editor">
+    <meta name="description" content="">
+    <meta property="og:title" content="One week with the Atom text editor">
+    <meta property="og:type" content="website">
+    <meta property="og:description" content="">
+    <meta property="og:url" content="https://nathanherald.com/posts/legacy/one-week-with-the-atom-text-editor/">
+    <meta property="og:image" content="/og.png">
+    <meta property="og:site_name" content="I‘m Nathan Herald">
+    
+  
+
+<link rel="alternate" type="application/rss+xml" href="https://nathanherald.com/posts/rss.xml" title="Archive of all the posts on this site on nathanherald.com">
+
+
+  </head>
+  <body class="default">
+    
+  <header class="section-header">
+    <div class="section-nav">
+      <h1 class="home-link">
+        <a data-nospan href="/" class="never-underline"><abbr title="Hello">👋</abbr></a>
+        <a href="/">I&rsquo;m Nathan</a>
+      </h1>
+      <nav>
+        <p>
+          Find more in the <a href="https://nathanherald.com/posts/">archive of all the posts on this site</a>
+or <a href="https://nathanherald.com/posts/rss.xml">subscribe with RSS</a>.
+
+        </p>
+      </nav>
+    </div>
+  </header>
+
+    
+  <main class="single">
+    <article>
+      <header>
+        <h1>
+          
+          
+            One week with the Atom text editor
+            <p class="annotation">⭐️ a blog post</a>
+          
+        </h1>
+        
+      </header>
+
+      <div class="content">
+        <p>Every time I sit down to work I like things to be as similar as possible to the last. However, I do know that there are new tools, techniques, and ideas out there that would pass me by if I didn’t change things up every now and then. So this past week I’ve been using a different text editor.</p>
+<p>I normally use <a href="https://www.vim.org">vim</a>. Well, I actually use <a href="http://neovim.io">neovim</a>, which is a fork of vim. Well, really vim was a fork of <a href="https://en.wikipedia.org/wiki/Vi">vi</a> long ago. The complexity of vim is so high, it’s even hard to explain it’s name, which version I use, etc. Vim is so confusing there is a question on Stack Overflow about it that has been viewed over 1.4 million times: “<a href="https://stackoverflow.com/questions/11828270/how-to-exit-the-vim-editor">How to exit the Vim editor?</a>”</p>
+<p>There is <a href="https://qz.com/990214/a-million-people-have-visited-this-web-page-explaining-how-to-close-vim-a-notoriously-difficult-text-editing-program/">a Quartz article</a> about that question and the history of vim being difficult. It’s over 30 years old, depending on which version you count. I never recommend vim to people. You really shouldn’t use it unless you want to be super unproductive for six months while you learn it.</p>
+<p>Either way, this past week I didn’t vim. Instead I used <a href="https://atom.io">Atom</a>, which was created by <a href="https://github.com">GitHub</a> and is based on their open source <a href="https://electronjs.org">Electron</a> framework.</p>
+<figure>
+  <img
+    alt="Screentshot of the Atom editor Welcome Guide"
+    width="1200"
+    height="828"
+    src="https://nathanherald.com/posts/legacy/one-week-with-the-atom-text-editor/1-7muQ9MmmrJ8q2DnrQVZTZQ_hu3478855026856733488.png">
+</figure>
+
+<h3 id="the-good">The Good</h3>
+<p>Atom has been around long enough to have plugins for everything. It is very unlikely that there isn’t a plugin for your favorite language. One can also customize the UI a lot: you can see above that I’ve hidden the normal title bar and file drawer and it looks really slick.</p>
+<p>There is an official plugin for editing concurrently with others named <a href="https://teletype.atom.io">Teletype</a>. This was what really intrigued me to download and give Atom a spin: <strong>built in collaboration.</strong> It works and I really like it. Every other real-time text editing plugin I’ve used has been awful to setup and not really worked well for long periods of time. This really seems to be done right.</p>
+<p>It’s super easy to install plugins and packages. The available color schemes are very good as well. The editor defaults are great: it’s the best default setup I’ve ever seen for a text editor. One can download this thing and get working immediately.</p>
+<figure>
+  <img
+    alt="Screenshot of source code in Atom"
+    width="1200"
+    height="849"
+    src="https://nathanherald.com/posts/legacy/one-week-with-the-atom-text-editor/1-7b7JphTAKxI9XJJQaxL0pg_hu6759178435835261097.png">
+</figure>
+
+<h3 id="the-bad">The Bad</h3>
+<p>It can be slow.</p>
+<p>Electon (which Atom is built on top of) is a version of <a href="https://www.chromium.org">Chromium</a> (the open source browser Chrome is built on) and the UI is all web technologies. Something about those super old text editors that is hard to beat is <em>when you type it shows up immediately.</em> I’m not saying Atom is too slow for me: I have used it for an entire week and I enjoyed it. However, it really is noticeable sometimes.</p>
+<p>It also uses a ton of RAM. This doesn’t matter on my iMac, but on my MacBook this can be a problem. Last week I ended up running Slack (also Electron, so also a Chrome), Atom (another Electron), Microsoft Teams (also Electron, believe it or not), some docker containers, and then Mail and some websites in Safari and I noticed a big difference. Sure, just Atom alone isn’t really a problem. But having a lot of apps that each need the more RAM that most programs hurts my sad little laptop.</p>
+<h3 id="the-ugly">The Ugly</h3>
+<p>It just doesn’t work sometimes. When I try to find a file by typing a few characters, Atom will tell me that it is still indexing or that my project contains zero files. A restart of the app normally fixes the issue. This was a problem on my super fast iMac as well, so it’s not a performance issue. I took some screenshots.</p>
+<p><figure>
+  <img
+    alt="Screenshot of panel reading &#39;Indexing project…&#39;"
+    width="1200"
+    height="234"
+    src="https://nathanherald.com/posts/legacy/one-week-with-the-atom-text-editor/1-8j9R2Nfm8svRDxPdzUYosg_hu17259847707321534028.png">
+</figure>
+
+<figure>
+  <img
+    alt="Screenshot of panel reading &#39;Project is empty&#39;"
+    width="1200"
+    height="219"
+    src="https://nathanherald.com/posts/legacy/one-week-with-the-atom-text-editor/1-hUkAEyrUnIcsZwPIlrHg6A_hu15035327600462303676.png">
+</figure>
+</p>
+<p>When I use vim I have <a href="https://github.com/BurntSushi/ripgrep">ripgrep</a> feed a file list into <a href="https://github.com/junegunn/fzf">fzf</a> and it works every time and works immediately. There is no caching: it just is able to scan the entire project very quickly every time. It’s easy to get spoiled by things working so fast and it’s really frustrating that Atom doesn’t work at least similarly fast (and sometimes not at all).</p>
+<h3 id="so-whats-the-verdictthen">So, what’s the verdict then?</h3>
+<p><strong>Atom is really great.</strong></p>
+<p>Just the statement “I have ripgrep feed a file list into fzf” is super complex and confusing and that’s what it’s like using vim. I deal with configuring stuff like that all the time and it does get tiring.</p>
+<p>Atom is a single thing to install and it generally works. It includes collaboration features, it has plugins for anything that are easily installed from inside the program, and it has the best defaults of any text editor I’ve ever used.</p>
+<p><strong>I recommend trying it out.</strong></p>
+<p>What do you think of Atom? How often do you try other editors or tools?</p>
+<p>I’m going to back to vim. Vim is a problem: once you get into it it’s hard to ever use anything else. I’m glad I tried Atom and next time I need to collaborate on some code with someone I will fire it up immediately.</p>
+
+      </div>
+
+      <footer>
+        
+        <p>
+          
+            Posted on
+          
+          <time datetime="2018-03-26T21:09:16Z">
+            26 Mar, 2018
+          </time>
+          
+            onto
+            <a href="https://medium.com/@myobie/one-week-with-the-atom-text-editor-1134aa0320fe">Medium</a>
+          
+          
+          
+        </p>
+      </footer>
+    </article>
+  </main>
+
+    
+    
+    <script async src="https://nathanherald.com/behavior.min.e41a74d07fee42e04abe287c617e80b67998e06c69d3d3c07c6cd91f272bc0bc.js" integrity="sha256-5Bp00H/uQuBKvih8YX6AtnmY4Gxp09PAfGzZHycrwLw="></script>
+      <script defer data-domain="nathanherald.com" src="https://stats.myobie.wtf/script.js"></script>
+  </body>
+</html>

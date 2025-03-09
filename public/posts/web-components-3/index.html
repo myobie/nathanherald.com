@@ -1,0 +1,111 @@
+<!doctype html>
+<html>
+  <head lang="en-us">
+    <meta charset="UTF-8">
+    <title>I‘m Nathan Herald → Learning about Web Components: Part 3 – Define in a static initialization block</title>
+    <script>
+      if ((new URL(window.location.href)).host === 'myobie.com') { window.location.assign('https://nathanherald.com') }
+    </script>
+    <link rel="canonical" href="https://nathanherald.com/posts/web-components-3/">
+    <link rel="stylesheet" type="text/css" href="https://cloud.typography.com/6836312/761366/css/fonts.css"><link rel="stylesheet" type="text/css" href="https://nathanherald.com/combined.min.31312963d9b6322f358005bab4cfc1a3a286b0ec67f5df6e22434de51d71c004.css" integrity="sha256-MTEpY9m2Mi81gAW6tM/Bo6KGsOxn9d9uIkNN5R1xwAQ=">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="generator" content="Hugo 0.136.5">
+    <meta name="title" content="I‘m Nathan Herald  → Learning about Web Components: Part 3 – Define in a static initialization block">
+    <meta name="description" content="">
+    <meta property="og:title" content="Learning about Web Components: Part 3 – Define in a static initialization block">
+    <meta property="og:type" content="website">
+    <meta property="og:description" content="">
+    <meta property="og:url" content="https://nathanherald.com/posts/web-components-3/">
+    <meta property="og:image" content="/og.png">
+    <meta property="og:site_name" content="I‘m Nathan Herald">
+    
+  
+
+<link rel="alternate" type="application/rss+xml" href="https://nathanherald.com/posts/rss.xml" title="Archive of all the posts on this site on nathanherald.com">
+
+
+  </head>
+  <body class="default">
+    
+  <header class="section-header">
+    <div class="section-nav">
+      <h1 class="home-link">
+        <a data-nospan href="/" class="never-underline"><abbr title="Hello">👋</abbr></a>
+        <a href="/">I&rsquo;m Nathan</a>
+      </h1>
+      <nav>
+        <p>
+          Find more in the <a href="https://nathanherald.com/posts/">archive of all the posts on this site</a>
+or <a href="https://nathanherald.com/posts/rss.xml">subscribe with RSS</a>.
+
+        </p>
+      </nav>
+    </div>
+  </header>
+
+    
+  <main class="single">
+    <article>
+      <header>
+        <h1>
+          
+          
+            Learning about Web Components: Part 3 – Define in a static initialization block
+            <p class="annotation">⭐️ a blog post</a>
+          
+        </h1>
+        
+      </header>
+
+      <div class="content">
+        <p><!-- raw HTML omitted -->TIL<!-- raw HTML omitted --> about: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/Static_initialization_blocks">static initialization blocks</a> and how this is useful when defining a <a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_custom_elements">custom element</a>.</p>
+<p>I knew about <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/static">static properties</a>, but I never noticed one can do a <code>static {}</code> block directly in a <code>class</code> in javascript. Here is an example:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="kr">class</span> <span class="nx">A</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kr">static</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;This output in the console immediately on page load&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="k">this</span><span class="p">)</span> <span class="c1">// same as console.log(A)
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>The static block is run when the class itself is initialized, not when a new instance is constructed.</p>
+<p>Custom elements are defined as classes and need to also register themselves into the custom element registry, and static initialization blocks can help keep that registration code contained within the class:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="kr">class</span> <span class="nx">ImageGrid</span> <span class="kr">extends</span> <span class="nx">HTMLElement</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kr">static</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">customElements</span><span class="p">.</span><span class="nx">define</span><span class="p">(</span><span class="s1">&#39;image-grid&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="nx">constructor</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kr">super</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="k">this</span><span class="p">.</span><span class="nx">attachShadow</span><span class="p">({</span> <span class="nx">mode</span><span class="o">:</span> <span class="s1">&#39;open&#39;</span><span class="p">,</span> <span class="nx">slotAssignment</span><span class="o">:</span> <span class="s1">&#39;manual&#39;</span> <span class="p">})</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="c1">// …
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>
+</span></span></code></pre></div><p>Super cool 😎</p>
+<p>I’ve updated the <a href="./demo.html">demo page</a> to use this technique and it works in all the modern browsers I’ve tried 💪</p>
+
+      </div>
+
+      <footer>
+        
+        <p>
+          
+            Posted on
+          
+          <time datetime="2023-09-13T09:50:09&#43;02:00">
+            13 Sep, 2023
+          </time>
+          
+          
+          
+        </p>
+      </footer>
+    </article>
+  </main>
+
+    
+    
+    <script async src="https://nathanherald.com/behavior.min.e41a74d07fee42e04abe287c617e80b67998e06c69d3d3c07c6cd91f272bc0bc.js" integrity="sha256-5Bp00H/uQuBKvih8YX6AtnmY4Gxp09PAfGzZHycrwLw="></script>
+      <script defer data-domain="nathanherald.com" src="https://stats.myobie.wtf/script.js"></script>
+  </body>
+</html>

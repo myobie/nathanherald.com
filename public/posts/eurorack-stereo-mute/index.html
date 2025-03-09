@@ -1,0 +1,141 @@
+<!doctype html>
+<html>
+  <head lang="en-us">
+    <meta charset="UTF-8">
+    <title>I‘m Nathan Herald → Creating an immediate stereo mute in Eurorack 🤔</title>
+    <script>
+      if ((new URL(window.location.href)).host === 'myobie.com') { window.location.assign('https://nathanherald.com') }
+    </script>
+    <link rel="canonical" href="https://nathanherald.com/posts/eurorack-stereo-mute/">
+    <link rel="stylesheet" type="text/css" href="https://cloud.typography.com/6836312/761366/css/fonts.css"><link rel="stylesheet" type="text/css" href="https://nathanherald.com/combined.min.31312963d9b6322f358005bab4cfc1a3a286b0ec67f5df6e22434de51d71c004.css" integrity="sha256-MTEpY9m2Mi81gAW6tM/Bo6KGsOxn9d9uIkNN5R1xwAQ=">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="generator" content="Hugo 0.136.5">
+    <meta name="title" content="I‘m Nathan Herald  → Creating an immediate stereo mute in Eurorack 🤔">
+    <meta name="description" content="">
+    <meta property="og:title" content="Creating an immediate stereo mute in Eurorack 🤔">
+    <meta property="og:type" content="website">
+    <meta property="og:description" content="">
+    <meta property="og:url" content="https://nathanherald.com/posts/eurorack-stereo-mute/">
+    <meta property="og:image" content="/og.png">
+    <meta property="og:site_name" content="I‘m Nathan Herald">
+    
+  
+
+<link rel="alternate" type="application/rss+xml" href="https://nathanherald.com/posts/rss.xml" title="Archive of all the posts on this site on nathanherald.com">
+
+
+  </head>
+  <body class="default">
+    
+  <header class="section-header">
+    <div class="section-nav">
+      <h1 class="home-link">
+        <a data-nospan href="/" class="never-underline"><abbr title="Hello">👋</abbr></a>
+        <a href="/">I&rsquo;m Nathan</a>
+      </h1>
+      <nav>
+        <p>
+          Find more in the <a href="https://nathanherald.com/posts/">archive of all the posts on this site</a>
+or <a href="https://nathanherald.com/posts/rss.xml">subscribe with RSS</a>.
+
+        </p>
+      </nav>
+    </div>
+  </header>
+
+    
+  <main class="single">
+    <article>
+      <header>
+        <h1>
+          
+          
+            Creating an immediate stereo mute in Eurorack 🤔
+            <p class="annotation">⭐️ a blog post</a>
+          
+        </h1>
+        
+      </header>
+
+      <div class="content">
+        <p>I’m just starting to learn about <a href="https://en.wikipedia.org/wiki/Eurorack">Eurorack</a> and <a href="https://en.wikipedia.org/wiki/Modular_synthesizer">modular synthesizers</a>, so I think I’m definitely missing quite a bit here, but I couldn’t find an existing module or an online post for how to push a button to mute two voltages at once…</p>
+<p>So, and I suppose this is a normal feeling when working with modular, <strong>I had to invent my own mute.</strong></p>
+<p>I’m learning about Eurorack using <a href="https://vcvrack.com/">VCV Rack</a>, the incredible program which emulates voltage controlled modules in a very nice, visual rack. Here is the patch I was working on yesterday (a “patch” just means “I wired things up this way”):</p>
+<figure>
+  <img
+    alt="Screenshot of the entire patch in VCV Rack"
+    width="1200"
+    height="780"
+    src="https://nathanherald.com/posts/eurorack-stereo-mute/patch@2x_hu7116186660945088593.png">
+</figure>
+
+<p>I’ve patched <a href="https://www.modulargrid.net/e/mutable-instruments-plaits">Plaits</a> into <a href="https://www.modulargrid.net/e/mutable-instruments-beads">Beads</a>, and I wanted to be able to quickly mute the stereo output of Beads with a single click.</p>
+<p>There is a built-in Mutes module, but it only lets me mute one thing at a time. I want to mute both the left and right output from Beads at exactly the same time with one click. So it’s a no-go.</p>
+<figure>
+  <img
+    alt="Screenshot of the Mutes module in VCV Rack"
+    width="333"
+    height="462"
+    src="https://nathanherald.com/posts/eurorack-stereo-mute/mutes@2x_hu8169051763161869598.png">
+</figure>
+
+<p>In the short time I’ve been learning about modular I’ve learned that anytime I want to control the volume of something I want to reach for a VCA (voltage controlled amplifier). So I pulled two VCAs out into the rack and just starred for a bit…</p>
+<figure>
+  <img
+    alt="Screenshot of two VCAs turned down to 0% wired up to a scope module"
+    width="320"
+    height="409"
+    src="https://nathanherald.com/posts/eurorack-stereo-mute/two-vcas@2x_hu2420747990855550486.png">
+</figure>
+
+<p>I browsed through all the modules I have in my library in VCV Rack and saw a “Push” module, which is just a push button to go from 0V to 10V when pushed, and then back to 0V when
+released. <strong>That is close!</strong></p>
+
+<figure>
+<img
+  src="push-button@2x.mov"
+  width="331"
+  alt="Screen recording of pushing the Push button which opens the VCAs while held down">
+</figure>
+
+
+<p>What I want is a toggle tho, I don’t want to have to hold the button down. I want to toggle between 0V and 10V.</p>
+<p>Well, after just clicking around for quite a while, I accidentally learned that the “Hold” button in the Push module will “push and hold” the button, so it’s effectively a toggle for on vs. off. 🙌 So I already had all the modules I needed in place.</p>
+
+<figure>
+<img
+  src="hold-button@2x.mov"
+  width="331"
+  alt="Screen recording of pushing the Hold button which toggles the VCAs on and off">
+</figure>
+
+
+<p>It was super fun to have to look at the tools available and reason out how to accomplish my goal. I may have chosen a long or difficult path, but I ended up where I wanted to be 💪</p>
+<p>I bet this is why a lot of people get into and enjoy modular and Eurorack… solving problems and puzzles which result in sounds and music is super addictive.</p>
+
+      </div>
+
+      <footer>
+        
+        <p>
+          
+            Posted on
+          
+          <time datetime="2023-11-13T13:40:55&#43;01:00">
+            13 Nov, 2023
+          </time>
+          
+          
+          
+        </p>
+      </footer>
+    </article>
+  </main>
+
+    
+    
+    <script async src="https://nathanherald.com/behavior.min.e41a74d07fee42e04abe287c617e80b67998e06c69d3d3c07c6cd91f272bc0bc.js" integrity="sha256-5Bp00H/uQuBKvih8YX6AtnmY4Gxp09PAfGzZHycrwLw="></script>
+      <script defer data-domain="nathanherald.com" src="https://stats.myobie.wtf/script.js"></script>
+  </body>
+</html>

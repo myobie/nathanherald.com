@@ -1,0 +1,126 @@
+<!doctype html>
+<html>
+  <head lang="en-us">
+    <meta charset="UTF-8">
+    <title>I‘m Nathan Herald → Document semi-wacky — wacky things</title>
+    <script>
+      if ((new URL(window.location.href)).host === 'myobie.com') { window.location.assign('https://nathanherald.com') }
+    </script>
+    <link rel="canonical" href="https://nathanherald.com/posts/legacy/document-semi-wacky-wacky-things/">
+    <link rel="stylesheet" type="text/css" href="https://cloud.typography.com/6836312/761366/css/fonts.css"><link rel="stylesheet" type="text/css" href="https://nathanherald.com/combined.min.31312963d9b6322f358005bab4cfc1a3a286b0ec67f5df6e22434de51d71c004.css" integrity="sha256-MTEpY9m2Mi81gAW6tM/Bo6KGsOxn9d9uIkNN5R1xwAQ=">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="generator" content="Hugo 0.136.5">
+    <meta name="title" content="I‘m Nathan Herald  → Document semi-wacky — wacky things">
+    <meta name="description" content="Sometimes, there are things that need to be documented.">
+    <meta property="og:title" content="Document semi-wacky — wacky things">
+    <meta property="og:type" content="website">
+    <meta property="og:description" content="Sometimes, there are things that need to be documented.">
+    <meta property="og:url" content="https://nathanherald.com/posts/legacy/document-semi-wacky-wacky-things/">
+    <meta property="og:image" content="/og.png">
+    <meta property="og:site_name" content="I‘m Nathan Herald">
+    
+  
+
+<link rel="alternate" type="application/rss+xml" href="https://nathanherald.com/posts/rss.xml" title="Archive of all the posts on this site on nathanherald.com">
+
+
+  </head>
+  <body class="default">
+    
+  <header class="section-header">
+    <div class="section-nav">
+      <h1 class="home-link">
+        <a data-nospan href="/" class="never-underline"><abbr title="Hello">👋</abbr></a>
+        <a href="/">I&rsquo;m Nathan</a>
+      </h1>
+      <nav>
+        <p>
+          Find more in the <a href="https://nathanherald.com/posts/">archive of all the posts on this site</a>
+or <a href="https://nathanherald.com/posts/rss.xml">subscribe with RSS</a>.
+
+        </p>
+      </nav>
+    </div>
+  </header>
+
+    
+  <main class="single">
+    <article>
+      <header>
+        <h1>
+          
+          
+            Document semi-wacky — wacky things
+            <p class="annotation">⭐️ a blog post</a>
+          
+        </h1>
+        
+          <h2>Sometimes, there are things that need to be documented.</h2>
+        
+      </header>
+
+      <div class="content">
+        <p><em>This is an exposition of point 4 from</em> <a href="/posts/legacy/be-a-good-programmer/"><em>Be a good programmer</em></a><em>.</em></p>
+<h3 id="so-when-do-you-document-anything">So when do you document anything?</h3>
+<p><strong>When it’s wacky or super difficult.</strong></p>
+<p>Thing’s aren’t always simple. Payment processors, email systems, history tracking, and other things can get really complicated fast and sometimes you just need document how it works. <a href="http://www.tumblr.com/docs/en/api/v2#auth">Tumblr’s api</a> uses some complicated signing (HMAC-SHA1) for requesting an oauth token and <a href="https://github.com/tumblr/tumblr_client/blob/master/bin/tumblr#L27-L51">it turns out</a> it’s not exactly the simplest thing ever and <a href="https://github.com/myobie/fetcher/blob/master/services/tumblr.rb#L56-L72">even wackier</a> if you don’t want to use any external libraries. That really needs to be documented. It’s wacky.</p>
+<p>When integrating with payment systems like paypal or authorize.net or braintree you just gotta do things a certain way and it would help the next person if you documented the order or operations, the libraries used, and the “why?” Asynchronous operations are also notoriously hard to follow, so it’s usually a good idea to put some comments in about when and where things might happen. Job queues, notifications, or feedback loops are all candidates for documenting more than normal.</p>
+<h3 id="when-should-you-not-documentthings">When should you not document things?</h3>
+<p>Pretty much the rest of the time.</p>
+<p>Code <em>should</em> speak for itself. Of course. If a programmer’s job is done well, then anyone can get up to speed on what’s going on quickly without having to read too many docs.</p>
+<p>Docs that are useless include things like @public or @private or listing out the types for the args for untyped languages (foo(String:bar)). Code examples showing the use of the methods are usually not a good idea because they get out of sync. <strong>If the method is being used in the project, then it’s example usage is already documented.</strong></p>
+<p>A method has three chances to document itself:</p>
+<ol>
+<li>Using an appropriate name</li>
+<li>Not being too long</li>
+<li>Being consistently used throughout the application</li>
+</ol>
+<h4 id="use-an-appropriate-name">Use an appropriate name</h4>
+<p>If a method sends an email, name it as such. But don’t hide indirect side effects. Recently at work we noticed a method named find_by_identifier that actually will either find something, create something, and also possibly send an email. It didn’t start out that way, but as the product evolved it gained new responsibilities.</p>
+<p>That does not mean the method should have been refactored — refactoring is to change the method’s instructions without changing behavior. Instead, it needs to be re-specified and re-implemented. It’s a <strong>new</strong> thing and deserves that kind of consideration.</p>
+<h4 id="dont-be-longer-than-a-fewlines">Don’t be longer than a few lines</h4>
+<p>The more things a method does, the harder it is to build a mental model of the product or feature one is working on. Having small methods makes refactoring easier and causes less test breakage in the long run. Specify, implement, and refactor until each method is understandable and small.</p>
+<p>Don’t worry, you’re not writing a timer for the nuclear missiles. Or, if you are, you shouldn’t listen to me. Seriously.</p>
+<h4 id="be-consistent">Be consistent</h4>
+<p>If you create a <code>find_by_email</code> method and usually use it like <code>find_by_email(params[:email])</code> but then one time you pass in some strange object like <code>find_by_email(Email.first)</code> then I am now confused. I thought <code>params[:email]</code> was always a String, but now I don’t know. I gotta go digging to learn more to figure out what’s going on.</p>
+<p>Do you really need to support both String and Email objects? <strong>Probably not.</strong> Do <code>find_by_email(Email.first.address)</code> or <code>find_by_email(Email.first.to_s)</code>.</p>
+<h3 id="ok-ok-how-do-i-document-thisstuff">OK. OK. How do I document this stuff?</h3>
+<h4 id="be-succinct">Be succinct</h4>
+<p>When you do need to document, it’s best to keep the documentation as close to the actual code as possible — so that means comments. I really like <a href="http://tomdoc.org/">TomDoc</a> for backend application code It’s quick and simple and helps keep everything consistent.</p>
+<p>For javascript I really love <a href="http://jashkenas.github.io/docco/">docco</a>. It’s beautiful and inline. I’m considering moving almost all of my docs to this style.</p>
+<h4 id="and-libraries">And Libraries</h4>
+<p>Take the extra step to outline regular usage examples, lists of classes and methods, and maybe answer some frequently asked questions. Since multiple random people might be using the code it needs to be really well explained.</p>
+<p><a href="http://www.sinatrarb.com/documentation.html">One of my favorite projects</a> has pretty decent documentation. And <a href="http://guides.rubyonrails.org/">Rails’s guides</a> are pretty great, but the <a href="http://api.rubyonrails.org/">regular api docs</a> are pretty sad. Sure they list out the methods and everything, but some are missing or just have no documentation at all. This is something <em>we</em> can fix.</p>
+<p>I need to know how to install, configure, and do basic tasks with your tool quickly. <strong>Put all of that in the README.</strong></p>
+<h3 id="anything-else">Anything else?</h3>
+<p><strong>What did I miss?</strong> This is the end of the four part series. What did I leave out or what could I do to make it better?</p>
+
+      </div>
+
+      <footer>
+        
+        <p>
+          
+            Posted on
+          
+          <time datetime="2013-12-05T09:42:53Z">
+            5 Dec, 2013
+          </time>
+          
+            onto
+            <a href="https://medium.com/@myobie/document-semi-crazy-wacky-things-d578a34fd6a">Medium</a>
+          
+          
+          
+        </p>
+      </footer>
+    </article>
+  </main>
+
+    
+    
+    <script async src="https://nathanherald.com/behavior.min.e41a74d07fee42e04abe287c617e80b67998e06c69d3d3c07c6cd91f272bc0bc.js" integrity="sha256-5Bp00H/uQuBKvih8YX6AtnmY4Gxp09PAfGzZHycrwLw="></script>
+      <script defer data-domain="nathanherald.com" src="https://stats.myobie.wtf/script.js"></script>
+  </body>
+</html>

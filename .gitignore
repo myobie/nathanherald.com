@@ -1,6 +1,5 @@
 .DS_Store
 .env
-public/*
 node_modules/*
 vendor/*
 resources/*

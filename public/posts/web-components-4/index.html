@@ -1,0 +1,217 @@
+<!doctype html>
+<html>
+  <head lang="en-us">
+    <meta charset="UTF-8">
+    <title>I‘m Nathan Herald → Learning about Web Components: Part 4 – Researching pre-rendering custom elements and/or SSR</title>
+    <script>
+      if ((new URL(window.location.href)).host === 'myobie.com') { window.location.assign('https://nathanherald.com') }
+    </script>
+    <link rel="canonical" href="https://nathanherald.com/posts/web-components-4/">
+    <link rel="stylesheet" type="text/css" href="https://cloud.typography.com/6836312/761366/css/fonts.css"><link rel="stylesheet" type="text/css" href="https://nathanherald.com/combined.min.31312963d9b6322f358005bab4cfc1a3a286b0ec67f5df6e22434de51d71c004.css" integrity="sha256-MTEpY9m2Mi81gAW6tM/Bo6KGsOxn9d9uIkNN5R1xwAQ=">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="generator" content="Hugo 0.136.5">
+    <meta name="title" content="I‘m Nathan Herald  → Learning about Web Components: Part 4 – Researching pre-rendering custom elements and/or SSR">
+    <meta name="description" content="">
+    <meta property="og:title" content="Learning about Web Components: Part 4 – Researching pre-rendering custom elements and/or SSR">
+    <meta property="og:type" content="website">
+    <meta property="og:description" content="">
+    <meta property="og:url" content="https://nathanherald.com/posts/web-components-4/">
+    <meta property="og:image" content="/og.png">
+    <meta property="og:site_name" content="I‘m Nathan Herald">
+    
+  
+
+<link rel="alternate" type="application/rss+xml" href="https://nathanherald.com/posts/rss.xml" title="Archive of all the posts on this site on nathanherald.com">
+
+
+  </head>
+  <body class="default">
+    
+  <header class="section-header">
+    <div class="section-nav">
+      <h1 class="home-link">
+        <a data-nospan href="/" class="never-underline"><abbr title="Hello">👋</abbr></a>
+        <a href="/">I&rsquo;m Nathan</a>
+      </h1>
+      <nav>
+        <p>
+          Find more in the <a href="https://nathanherald.com/posts/">archive of all the posts on this site</a>
+or <a href="https://nathanherald.com/posts/rss.xml">subscribe with RSS</a>.
+
+        </p>
+      </nav>
+    </div>
+  </header>
+
+    
+  <main class="single">
+    <article>
+      <header>
+        <h1>
+          
+          
+            Learning about Web Components: Part 4 – Researching pre-rendering custom elements and/or SSR
+            <p class="annotation">⭐️ a blog post</a>
+          
+        </h1>
+        
+      </header>
+
+      <div class="content">
+        <p>Now that I’m starting to get a handle on building custom elements which can do things dynamically in the browser, I also want to see how difficult it would be to implement <a href="https://en.wikipedia.org/wiki/Server-side_scripting">“server side rendering”</a> for my custom elements. There is a noticeable delay when first loading my photo grid demo – the browser must download, parse, and run my javascript, instantiate my custom elements, they then do a simulated database query, and then finally the image grid can render.</p>
+<p>You can see the delay in this screen recording:</p>
+<video controls src="https://nathanherald.com/posts/web-components-4/prev-demo.mov" type="video/mp4">
+    
+</video>
+
+<p>I’d prefer if the HTML returned from the server could already include the first version of the image grid, then the javascript could take over from there once it’s ready in the browser.</p>
+<p>The announcement of <a href="https://webkit.org/blog/13851/declarative-shadow-dom/">Declarative Shadow DOM in WebKit</a> and an <a href="https://developer.chrome.com/en/articles/declarative-shadow-dom/">update about support in Chromium</a> are what really got me started looking into web components again in the first place. The promise of being able to serve HTML which can be shown without any javascript means web components are finally ready for use 💪 Firefox has announced they also will be implementing the agreed upon declarative API, so the future is finally here.</p>
+<p>The first project I found which talked about declarative shadow DOM + SSR was <a href="https://github.com/matthewp/ocean">ocean</a> – which provides “web component server-side rendering” in deno or a service worker. <a href="https://www.npmjs.com/package/@lit-labs/ssr"><code>lit-labs/ssr</code></a> and <a href="https://docs.astro.build/en/guides/server-side-rendering/">astro’s SSR</a> are also very cool libraries.</p>
+<p>But those never really clicked for me. None of them seem to be both fully up-to-date with the latest specification + able to render any custom element I might build.</p>
+<p>It clicked for me today when I was rereading the <a href="https://webkit.org/blog/13851/declarative-shadow-dom/">two</a> <a href="https://developer.chrome.com/en/articles/declarative-shadow-dom/">announcements</a> and I finally noticed something I hadn’t noticed before.</p>
+<p>From <a href="https://developer.chrome.com/en/articles/declarative-shadow-dom/">the Chromium page</a>:</p>
+<blockquote>
+<p>Because the contents of a <strong>serialized</strong> Declarative Shadow Root are entirely static…</p>
+</blockquote>
+<p>From <a href="https://webkit.org/blog/13851/declarative-shadow-dom/">the WebKit page</a>:</p>
+<blockquote>
+<p>In the following example, the outer template element contains an instance of some-component element and its shadow tree content is <strong>serialized</strong> using declarative shadow DOM.</p>
+</blockquote>
+<p>Both pages mention that declarative shadow DOM is supposed to be the serialized version of a living shadow root. This made more sense when I found an older page talking about <a href="https://github.com/mfreed7/declarative-shadow-dom/blob/master/README.md#serialization">a not-yet-standardized and chromium-only built-in function to serialize a custom element <code>getInnerHTML()</code></a>. The example shows:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">html</span> <span class="o">=</span> <span class="nx">element</span><span class="p">.</span><span class="nx">getInnerHTML</span><span class="p">({</span> <span class="nx">includeShadowRoots</span><span class="o">:</span> <span class="kc">true</span> <span class="p">});</span>
+</span></span></code></pre></div><p><em>I am more interested in more of an <code>outerHTML</code> equivalent, but still I can work with this.</em></p>
+<p>Calling <code>getInnerHTML()</code> on the <code>&lt;image-grid&gt;</code> in the <a href="/posts/web-components-3/demo.html">demo page from part 3 of this series</a> in Chrome returns:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">image-cell</span> <span class="na">record-id</span><span class="o">=</span><span class="s">&#34;5&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="c">&lt;!-- this shadowroot attribute is old and deprecated, see below --&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">&lt;</span><span class="nt">template</span> <span class="na">shadowroot</span><span class="o">=</span><span class="s">&#34;open&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">&lt;</span><span class="nt">style</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="p">:</span><span class="nd">host</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">align-items</span><span class="p">:</span> <span class="kc">center</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">display</span><span class="p">:</span> <span class="kc">flex</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">flex-direction</span><span class="p">:</span> <span class="kc">column</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">height</span><span class="p">:</span> <span class="mi">100</span><span class="kt">%</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">justify-content</span><span class="p">:</span> <span class="kc">center</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">width</span><span class="p">:</span> <span class="mi">100</span><span class="kt">%</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="nt">img</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">max-width</span><span class="p">:</span> <span class="mi">100</span><span class="kt">%</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">width</span><span class="p">:</span> <span class="kc">auto</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">height</span><span class="p">:</span> <span class="kc">auto</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">object-fit</span><span class="p">:</span> <span class="kc">contain</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">overflow</span><span class="p">:</span> <span class="kc">hidden</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="p">.</span><span class="nc">name</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">display</span><span class="p">:</span> <span class="kc">block</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">min-height</span><span class="p">:</span> <span class="n">min-content</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">text-align</span><span class="p">:</span> <span class="kc">center</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">&lt;/</span><span class="nt">style</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">&lt;</span><span class="nt">img</span> <span class="na">alt</span><span class="o">=</span><span class="s">&#34;Photo of a lot of differently colored tulips&#34;</span> <span class="na">src</span><span class="o">=</span><span class="s">&#34;./five.jpg&#34;</span> <span class="na">width</span><span class="o">=</span><span class="s">&#34;1000&#34;</span> <span class="na">height</span><span class="o">=</span><span class="s">&#34;662&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">&lt;</span><span class="nt">p</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;name&#34;</span><span class="p">&gt;</span>five.jpg<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">&lt;/</span><span class="nt">template</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;/</span><span class="nt">image-cell</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">image-cell</span> <span class="na">record-id</span><span class="o">=</span><span class="s">&#34;4&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="c">&lt;!-- this shadowroot attribute is old and deprecated, see below --&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">&lt;</span><span class="nt">template</span> <span class="na">shadowroot</span><span class="o">=</span><span class="s">&#34;open&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">&lt;</span><span class="nt">style</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="p">:</span><span class="nd">host</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">align-items</span><span class="p">:</span> <span class="kc">center</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="c">/* ... */</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="c">/* ... */</span>
+</span></span><span class="line"><span class="cl">    <span class="p">&lt;/</span><span class="nt">style</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">&lt;</span><span class="nt">img</span> <span class="na">alt</span><span class="o">=</span><span class="s">&#34;Photo through a hexagonal window into a tea room on a sunny day&#34;</span> <span class="na">src</span><span class="o">=</span><span class="s">&#34;./four.jpg&#34;</span> <span class="na">width</span><span class="o">=</span><span class="s">&#34;662&#34;</span> <span class="na">height</span><span class="o">=</span><span class="s">&#34;1000&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">&lt;</span><span class="nt">p</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;name&#34;</span><span class="p">&gt;</span>four.jpg<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">&lt;/</span><span class="nt">template</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;/</span><span class="nt">image-cell</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="c">&lt;!-- ... --&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">template</span> <span class="na">shadowrootmode</span><span class="o">=</span><span class="s">&#34;open&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">&lt;</span><span class="nt">style</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">:</span><span class="nd">host</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="k">box-sizing</span><span class="p">:</span> <span class="kc">border-box</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="k">display</span><span class="p">:</span> <span class="k">grid</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="k">gap</span><span class="p">:</span> <span class="mi">16</span><span class="kt">px</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="k">grid-template-columns</span><span class="p">:</span> <span class="mi">1</span><span class="n">fr</span> <span class="mi">1</span><span class="n">fr</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="k">margin</span><span class="p">:</span> <span class="mi">0</span> <span class="kc">auto</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="k">max-width</span><span class="p">:</span> <span class="mi">600</span><span class="kt">px</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="k">padding</span><span class="p">:</span> <span class="mi">20</span><span class="kt">px</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">&lt;/</span><span class="nt">style</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="p">&lt;</span><span class="nt">slot</span><span class="p">&gt;&lt;/</span><span class="nt">slot</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;/</span><span class="nt">template</span><span class="p">&gt;</span>
+</span></span></code></pre></div><p>The <strong>first thing</strong> to unpack here is: Chrome’s non-yet-standardized <code>getInnerHTML()</code> function is returning <code>&lt;template&gt;</code> elements with the old and deprecated <code>shadowroot</code> attribute. So this function isn’t going to work out-of-the-box for me.</p>
+<p>Still, it never occurred to me that the DOM might know how to serialize itself. That SSR needn’t be so much about rendering templates or munging strings – instead be about building up a DOM to a state, then serializing it in a fully presentable way.  This feels <em>simpler</em> and <em>easier</em> for me to think about now.</p>
+<p>The <strong>second thing</strong> to notice is: when we serialize a shadow root, we must include a full template every time. That means if we have scoped <code>&lt;style&gt;</code>s in the <code>&lt;template&gt;</code>, they will be repeated over and over for every instance of the custom element. We could handle this by extracting the CSS to a file and <code>@import</code>ing it if we cared about optimizing things.</p>
+<p>The <a href="https://developer.chrome.com/en/articles/declarative-shadow-dom/#server-rendering-with-style">Chrome page</a> says we don’t have to worry:</p>
+<blockquote>
+<p>Styles specified this way are also highly optimized: if the same stylesheet is present in multiple Declarative Shadow Roots, it is only loaded and parsed once. The browser uses a single backing <code>CSSStyleSheet</code> that is shared by all of the shadow roots, eliminating duplicate memory overhead.</p>
+</blockquote>
+<p>The <strong>third thing</strong> to notice is: our custom element will have a <code>shadowRoot</code> before our code calls <code>attachShadow()</code>. We don’t technically have to worry about this: calling <code>attachShadow()</code> will clear and return the existing <code>shadowRoot</code> which was created by the HTML parser when it found the <code>&lt;template&gt;</code> tag in our HTML.</p>
+<p>From this information, I figured I could quickly build my own serializer which outputs the up-to-date <code>&lt;template shadowrootmode=open&gt;</code> attribute and works more like <code>outerHTML</code>.</p>
+<p>I found a <a href="https://gist.github.com/developit/54f3e3d1ce9ed0e5a171044edcd0784f">“<code>getInnerHTML()</code> polyfill” written by <code>@developit</code></a> (who works on preact and <a href="https://mastodon.social/@developit">I follow on mastodon</a>). It’s a bit terse and took a bit for me to grasp, but it’s nice to see that it can be a really short and simple function.</p>
+<p><a href="https://gist.github.com/myobie/071458ed72c395f20e97a81316a30e40">Here is my version</a>. It’s a very quick draft which works for me in all the current major browsers. It won’t work for every use case and isn’t ready for production… it is a proof-of-concept though.</p>
+<p>Here is the output from my serializer of the <code>&lt;image-grid&gt;</code> custom element from the previous demo page:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">image-grid</span> <span class="na">aria-live</span><span class="o">=</span><span class="s">&#34;polite&#34;</span> <span class="na">role</span><span class="o">=</span><span class="s">&#34;region&#34;</span> <span class="na">aria-label</span><span class="o">=</span><span class="s">&#34;Image grid&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">&lt;</span><span class="nt">image-cell</span> <span class="na">record-id</span><span class="o">=</span><span class="s">&#34;1&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">&lt;</span><span class="nt">template</span> <span class="na">shadowrootmode</span><span class="o">=</span><span class="s">&#34;open&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="p">&lt;</span><span class="nt">style</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="c">/* ... */</span>
+</span></span><span class="line"><span class="cl">      <span class="p">&lt;/</span><span class="nt">style</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="p">&lt;</span><span class="nt">img</span> <span class="na">alt</span><span class="o">=</span><span class="s">&#34;Photo of a building on a sunny day&#34;</span> <span class="na">src</span><span class="o">=</span><span class="s">&#34;./one.jpg&#34;</span> <span class="na">width</span><span class="o">=</span><span class="s">&#34;1000&#34;</span> <span class="na">height</span><span class="o">=</span><span class="s">&#34;838&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="p">&lt;</span><span class="nt">p</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;name&#34;</span><span class="p">&gt;</span>one.jpg<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">&lt;/</span><span class="nt">template</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">&lt;/</span><span class="nt">image-cell</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">&lt;</span><span class="nt">image-cell</span> <span class="na">record-id</span><span class="o">=</span><span class="s">&#34;4&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="c">&lt;!-- ... --&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">&lt;/</span><span class="nt">image-cell</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="c">&lt;!-- ... --&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">&lt;</span><span class="nt">template</span> <span class="na">shadowrootmode</span><span class="o">=</span><span class="s">&#34;open&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">&lt;</span><span class="nt">style</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="c">/* ... */</span>
+</span></span><span class="line"><span class="cl">    <span class="p">&lt;/</span><span class="nt">style</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="p">&lt;</span><span class="nt">slot</span><span class="p">&gt;&lt;/</span><span class="nt">slot</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">&lt;/</span><span class="nt">template</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;/</span><span class="nt">image-grid</span><span class="p">&gt;</span>
+</span></span></code></pre></div><p>OK! I copied and pasted the serialized html from the browser’s console to a new <code>demo-serialized.html</code> file, I did some quick hacking to make the components check if the <code>shadowRoot</code> already exists, and now I have an example of what the resulting HTML could be like if I could do the serialization on the server.</p>
+<p>I recorded a screencast of the page loading now, which is basically immediate:</p>
+<video controls src="https://nathanherald.com/posts/web-components-4/demo-ssr.mov" type="video/mp4">
+    
+</video>
+
+<p>The javascript kicks in and the images continue to re-sort every 10 seconds, just like before.</p>
+<h2 id="whats-next">What’s next?</h2>
+<p>I don’t yet know how to run the serializer on the server – maybe one of those <a href="https://github.com/WebReflection/linkedom">“mock DOM libraries”</a> could make it all work out. When I get some free time I’ll dive into that.</p>
+<p>If you have any feedback about any of this, if I made any mistakes, or if you just want to chat about web components or anything else, then <a href="https://indieweb.social/@myobie">find me on mastodon</a> 👋</p>
+
+      </div>
+
+      <footer>
+        
+        <p>
+          
+            Posted on
+          
+          <time datetime="2023-09-17T21:13:50&#43;02:00">
+            17 Sep, 2023
+          </time>
+          
+          
+          
+        </p>
+      </footer>
+    </article>
+  </main>
+
+    
+    
+    <script async src="https://nathanherald.com/behavior.min.e41a74d07fee42e04abe287c617e80b67998e06c69d3d3c07c6cd91f272bc0bc.js" integrity="sha256-5Bp00H/uQuBKvih8YX6AtnmY4Gxp09PAfGzZHycrwLw="></script>
+      <script defer data-domain="nathanherald.com" src="https://stats.myobie.wtf/script.js"></script>
+  </body>
+</html>
