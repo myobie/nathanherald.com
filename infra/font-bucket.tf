@@ -1,4 +1,4 @@
-# created this user in the UI with programatic access and zero permissions
+# created this user in the UI with programmatic access and zero permissions
 # and then ran $ ./import aws_iam_user.font_bucketeer font_bucketeer
 resource "aws_iam_user" "font_bucketeer" {
   name = "font_bucketeer"
