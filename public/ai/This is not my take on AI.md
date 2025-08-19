@@ -22,7 +22,7 @@ AI tools and companies are progressing fast and I have a lot of questions that I
 
 This stuff is probably coming for you too. Those automated phone systems where you “hit 3 for billing” are terrible and annoying. They are not _better_ than just speaking to a human. And yet, those are forced upon us to save costs, to reduce the number of jobs. AI seems like that times 100: it will reduce costs so much that it will be used whether it’s good or not.
 
-And, if there are productivity gains to be had, and I think there are, then we should own the means to run the programs that deliver them. I’m building new.space where you can make sense of all your tabs, bookmarks, files, and notes in a private, collaborative space using AI as you choose, you are in control. That is one possible way to do own our data and context going forward: build products that respect privacy and user control, letting us choose where our data goes and when.
+And, if there are productivity gains to be had, and I think there are, then we should own the means to run the programs that deliver them. I’m building [new.space](https://new.space/app) where you can make sense of all your tabs, bookmarks, files, and notes in a private, collaborative space using AI as you choose, you are in control. That is one possible way to do own our data and context going forward: build products that respect privacy and user control, letting us choose where our data goes and when.
 
 ## Big takeaway #2 for me: Always work on code like an open source project
 
