@@ -155,7 +155,7 @@ Related: https://solarpunk.moe/@alilly/114928042375589900
 <details>
 <summary>What is an agent, what does that really mean?</summary>
 
-An agent is an LLM with possible tool/function calls, running in a loop. The LLM can generate a spec to call a tool, another program calls that tool, then the previous conversation + the return value of the tool is fed back into the LLM. Repeat. Sometimes there is a function call to end the loop, the LLM can generate the spec to call that to finish the task. 
+An agent is an LLM or SLM with possible tool/function calls, running in a loop. The LM can generate a spec to call a tool, another program calls that tool, then the previous conversation + the return value of the tool is fed back into the LLM. Repeat. Sometimes there is a function call to end the loop, the LM can generate the spec to call that to finish the task. 
 
 **”Tools in a loop.”**
 
