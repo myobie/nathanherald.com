@@ -4,7 +4,22 @@
     <title>nathanherald.com feed</title>
     <link>https://nathanherald.com/</link>
     <description>Recent posts from nathanherald.com</description>
-    <lastBuildDate>2025-03-09T22:14:08+01:00</lastBuildDate>
+    <lastBuildDate>Tue, 19 Aug 2025 20:25:16 +0200</lastBuildDate>
+
+    <item>
+      <title>New page: [/ai](https://nathanherald.com/ai)</title>
+      <link>https://nathanherald.com/ai/</link>
+      <pubDate>Tue, 19 Aug 2025 20:25:08 +0200</pubDate>
+      <guid isPermaLink="true">https://nathanherald.com/ai/</guid>
+      <description>&lt;h1 id="new-page-ai"&gt;New page: &lt;a
+href="https://nathanherald.com/ai"&gt;/ai&lt;/a&gt;&lt;/h1&gt;
+&lt;p&gt;I want to publish some thoughts about AI on my website, but I don't
+want those thoughts scattered over many blog posts. So I've made a new
+page at &lt;a href="https://nathanherald.com/ai"&gt;/ai&lt;/a&gt; to hold those
+thoughts. It will be a living document, I'll update it whenever I can,
+and if anything is super interesting then I'll throw another RSS item in
+to let you know. 🫡&lt;/p&gt;</description>
+    </item>
 
     <item>
       <title>Removing Hugo</title>

@@ -1,0 +1,190 @@
+#!/usr/bin/env bash
+
+set -e
+
+# Check if pandoc is installed
+if ! command -v pandoc &> /dev/null; then
+    echo "Error: pandoc is not installed. Run: brew install pandoc"
+    exit 1
+fi
+
+# Check arguments
+if [ $# -eq 0 ]; then
+    echo "Usage: $0 <markdown-file> [output-file]"
+    echo "Example: $0 content.md"
+    echo "Example: $0 content.md output.html"
+    exit 1
+fi
+
+# Get the absolute path to the repo root
+REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+
+# Input file
+INPUT_FILE="$1"
+
+# Check if input file exists
+if [ ! -f "$INPUT_FILE" ]; then
+    echo "Error: File '$INPUT_FILE' not found"
+    exit 1
+fi
+
+# Determine output file
+if [ $# -ge 2 ]; then
+    OUTPUT_FILE="$2"
+else
+    # Default: same directory, change .md to index.html
+    DIR=$(dirname "$INPUT_FILE")
+    OUTPUT_FILE="$DIR/index.html"
+fi
+
+# Extract frontmatter if present (between --- lines at start of file)
+FRONTMATTER=""
+CONTENT=""
+IN_FRONTMATTER=false
+FRONTMATTER_END=false
+LINE_COUNT=0
+
+while IFS= read -r line; do
+    LINE_COUNT=$((LINE_COUNT + 1))
+    
+    if [ $LINE_COUNT -eq 1 ] && [ "$line" = "---" ]; then
+        IN_FRONTMATTER=true
+        continue
+    fi
+    
+    if $IN_FRONTMATTER && [ "$line" = "---" ]; then
+        IN_FRONTMATTER=false
+        FRONTMATTER_END=true
+        continue
+    fi
+    
+    if $IN_FRONTMATTER; then
+        FRONTMATTER="${FRONTMATTER}${line}
+"
+    else
+        CONTENT="${CONTENT}${line}
+"
+    fi
+done < "$INPUT_FILE"
+
+# If no frontmatter was found, use entire file as content
+if [ -z "$CONTENT" ]; then
+    CONTENT=$(cat "$INPUT_FILE")
+fi
+
+# Parse frontmatter for title and date
+TITLE=""
+DATE=""
+DESCRIPTION=""
+
+if [ -n "$FRONTMATTER" ]; then
+    TITLE=$(echo "$FRONTMATTER" | grep -E "^title:" | sed 's/^title:[[:space:]]*//' | head -1)
+    DATE=$(echo "$FRONTMATTER" | grep -E "^date:" | sed 's/^date:[[:space:]]*//' | head -1)
+    DESCRIPTION=$(echo "$FRONTMATTER" | grep -E "^description:" | sed 's/^description:[[:space:]]*//' | head -1)
+fi
+
+# Default title if not provided
+if [ -z "$TITLE" ]; then
+    # Try to extract from first # heading
+    TITLE=$(echo "$CONTENT" | grep -E "^#[[:space:]]" | head -1 | sed 's/^#[[:space:]]*//')
+    if [ -z "$TITLE" ]; then
+        TITLE="Untitled"
+    fi
+fi
+
+# Remove the first H1 from content if it matches the title (to avoid duplication)
+CONTENT_WITHOUT_H1="$CONTENT"
+if [ -n "$TITLE" ]; then
+    # Check if first H1 matches the title
+    FIRST_H1=$(echo "$CONTENT" | grep -E "^#[[:space:]]" | head -1 | sed 's/^#[[:space:]]*//')
+    if [ "$FIRST_H1" = "$TITLE" ]; then
+        # Remove the first H1 line
+        CONTENT_WITHOUT_H1=$(echo "$CONTENT" | sed '1,/^#[[:space:]]/{ /^#[[:space:]]/d; }')
+    fi
+fi
+
+# Convert markdown to HTML using pandoc
+HTML_CONTENT=$(echo "$CONTENT_WITHOUT_H1" | pandoc -f gfm -t html)
+
+# Generate the full HTML page
+cat > "$OUTPUT_FILE" << EOF
+<!DOCTYPE html>
+<html>
+  <head lang="en-us">
+    <meta charset="UTF-8">
+    <title>
+      I'm Nathan Herald → $TITLE
+    </title>
+    <script>
+      if ((new URL(window.location.href)).host === 'myobie.com') { window.location.assign('https://nathanherald.com') }
+    </script>
+    <link href="https://cloud.typography.com/6836312/761366/css/fonts.css" rel="stylesheet" type="text/css">
+    <link href="/styles.css" rel="stylesheet" type="text/css">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="I'm Nathan Herald → $TITLE" name="title">
+    <meta content="$DESCRIPTION" name="description">
+    <meta content="$TITLE" property="og:title">
+    <meta content="website" property="og:type">
+    <meta content="$DESCRIPTION" property="og:description">
+    <meta content="/og.png" property="og:image">
+    <meta content="I'm Nathan Herald" property="og:site_name">
+    <link href="/rss.xml" rel="alternate" title="Feed of all the posts on nathanherald.com" type="application/rss+xml">
+  </head>
+  <body class="default">
+    <header class="section-header">
+      <div class="section-nav">
+        <h1 class="home-link">
+          <a class="never-underline" data-nospan="" href="/"><abbr title="Hello">👋</abbr></a>
+          <a href="/">I'm Nathan</a>
+        </h1>
+        <nav>
+          <p>
+            Find more in the <a href="/posts/">archive of all the posts on this site</a> or
+            <a href="/rss.xml">subscribe with RSS</a>.
+          </p>
+        </nav>
+      </div>
+    </header>
+    <main class="single">
+      <article>
+        <header>
+          <h1>
+            $TITLE
+          </h1>
+        </header>
+        <div class="content">
+$HTML_CONTENT
+        </div>
+EOF
+
+# Add footer with date if available
+if [ -n "$DATE" ]; then
+    cat >> "$OUTPUT_FILE" << EOF
+        <footer>
+          <p>
+            Posted on <time datetime="$DATE">$DATE</time>
+          </p>
+        </footer>
+EOF
+fi
+
+# Close the HTML
+cat >> "$OUTPUT_FILE" << EOF
+      </article>
+    </main>
+    <script async src="/behavior.js"></script>
+    <script async src="/assets/details-controls.js"></script>
+    <script data-domain="nathanherald.com" defer src="https://stats.myobie.wtf/script.js"></script>
+  </body>
+</html>
+EOF
+
+# Run tidy if available
+if [ -f "$REPO_ROOT/bin/tidy" ]; then
+    "$REPO_ROOT/bin/tidy" "$OUTPUT_FILE" 2>/dev/null || true
+elif command -v tidy &> /dev/null; then
+    tidy -config "$REPO_ROOT/.tidyrc" -m "$OUTPUT_FILE" 2>/dev/null || true
+fi
+
+echo "✅ Converted: $INPUT_FILE → $OUTPUT_FILE"

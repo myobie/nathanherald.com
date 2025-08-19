@@ -357,3 +357,9 @@ details summary {
   }
 }
 
+details-controls {
+  display: flex;
+  justify-content: center;
+  gap: 1em;
+  margin: 1em auto;
+}
