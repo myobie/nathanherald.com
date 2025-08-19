@@ -34,6 +34,10 @@ What’s great is we already have tools to handle this. We have pull request rev
 
 TK I’d love to expand on this more soon.
 
+## Links I haven’t had a chance to go through yet
+
+* <https://malwaretech.com/2025/08/every-reason-why-i-hate-ai.html> (via <https://adactio.com/links/22087>)
+
 ## The internet is full of confusing takes
 
 Some of the smartest people I know are anti-AI and refuse to knowingly use it. Some of the other smartest people I know are using AI everyday, and say everyone else should too. I’ve heard some say they’ve been “AI pilled” (both in a positive and negative way). Some say there is no ethical way to use AI. Some say AI is mistaken so often to be useless. Others say it’s correct so often that they don’t need as many employees/coworkers anymore to do their work. 
