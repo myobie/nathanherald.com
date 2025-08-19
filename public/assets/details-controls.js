@@ -1,47 +1,51 @@
 class DetailsControls extends HTMLElement {
   constructor() {
     super()
-    this.expanded = false
+    this.expandButton = null
+    this.collapseButton = null
   }
 
   connectedCallback() {
-    this.render()
-    this.attachEventListeners()
+    this.expandButton = this.ownerDocument.createElement('button')
+    this.expandButton.innerHTML = 'Expand all sections'
+
+    this.collapseButton = this.ownerDocument.createElement('button')
+    this.collapseButton.innerHTML = 'Collapse all sections'
+
+    this.expandButton.addEventListener('click', this)
+    this.collapseButton.addEventListener('click', this)
+
+    this.append(this.expandButton, this.collapseButton)
   }
 
-  render() {
-    this.innerHTML = `
-      <div style="display: flex; gap: 1em; margin: 1em 0;">
-        <button class="expand-all">Expand all</button>
-        <button class="collapse-all">Collapse all</button>
-      </div>
-    `
+  disconnectedCallback() {
+    this.expandButton.removeEventListener('click', this)
+    this.collapseButton.removeEventListener('click', this)
   }
 
-  attachEventListeners() {
-    const expandBtn = this.querySelector('.expand-all')
-    const collapseBtn = this.querySelector('.collapse-all')
+  handleEvent(e) {
+    const target = e.target.closest('button')
 
-    expandBtn?.addEventListener('click', () => this.expandAll())
-    collapseBtn?.addEventListener('click', () => this.collapseAll())
+    if (target && e.type === 'click') {
+      if (e.target.hasAttribute('data-expand')) {
+        this.expandAll()
+      } else {
+        this.collapseAll()
+      }
+    }
   }
 
   expandAll() {
-    const details = document.querySelectorAll('details')
-    details.forEach(detail => {
+    this.ownerDocument.querySelectorAll('details').forEach(detail => {
       detail.open = true
     })
-    this.expanded = true
   }
 
   collapseAll() {
-    const details = document.querySelectorAll('details')
-    details.forEach(detail => {
+    this.ownerDocument.querySelectorAll('details').forEach(detail => {
       detail.open = false
     })
-    this.expanded = false
   }
 }
 
-// Register the custom element
 customElements.define('details-controls', DetailsControls)

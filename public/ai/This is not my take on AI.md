@@ -2,7 +2,7 @@
 
 _The world doesn’t need another take._
 
-_TL;DR: I’ve concluded that AI is coming for us and it’s important we understand it and we are in control of our data, of our context. This is why I am personally working to enable local AI workflows on phones and laptops. I’ll keep this page updated as I learn more. This page is for me. You do you._
+_TL;DR: I’ve concluded that AI is coming and it’s important I understand it and I am in control of my data, of my context. This is why I am personally working to enable local AI workflows on phones and laptops. I’ll keep this page updated as I learn more._
 
 [masto]: https://indieweb.social/@myobie
 
@@ -14,13 +14,13 @@ _TL;DR: I’ve concluded that AI is coming for us and it’s important we unders
 
 AI tools and companies are progressing fast and I have a lot of questions that I haven’t found easy answers to. **So, I’ve taken some time to research, use AI for real work, and read a lot of takes on AI. I’m collecting what I’ve learned here.** I plan to keep this page semi-up-to-date over time as I learn more. I don’t want to make a lot of blog posts about AI, instead I’ll just have this page here as a living document. I’ll try to pull my “big takeaways” up here to the top.
 
-## Big Takeway #1: AI is coming for us and it’s best to understand it
+## Big Takeway #1: AI is here and it’s best for me to understand it
 
-> https://www.youtube.com/watch?v=XAPfNPIvWkM&pp=ygUUa25vdyB5b3VyIGVuZW15IGxpdmU%3D
+> <iframe allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen frameborder="0" height="315" src= "https://www.youtube-nocookie.com/embed/XAPfNPIvWkM" width="560"></iframe>
 >
 > Rage Against The Machine -  Know Your Enemy Clip (Live At Finsbury Park)
 
-This stuff is probably coming for you. Those automated phone systems where you “hit 3 for billing” are terrible and annoying. They are not _better_ than just speaking to a human. And yet, those are forced upon us to save costs, to reduce the number of jobs. AI seems like that times 100: it will reduce costs so much that it will be used whether it’s good or not.
+This stuff is probably coming for you too. Those automated phone systems where you “hit 3 for billing” are terrible and annoying. They are not _better_ than just speaking to a human. And yet, those are forced upon us to save costs, to reduce the number of jobs. AI seems like that times 100: it will reduce costs so much that it will be used whether it’s good or not.
 
 And, if there are productivity gains to be had, and I think there are, then we should own the means to run the programs that deliver them. I’m building new.space where you can make sense of all your tabs, bookmarks, files, and notes in a private, collaborative space using AI as you choose, you are in control. That is one possible way to do own our data and context going forward: build products that respect privacy and user control, letting us choose where our data goes and when.
 
