@@ -1,0 +1,166 @@
+#!/usr/bin/env bash
+
+set -e
+
+# Check if pandoc is installed
+if ! command -v pandoc &> /dev/null; then
+    echo "Error: pandoc is not installed. Run: brew install pandoc"
+    exit 1
+fi
+
+# Check arguments
+if [ $# -eq 0 ]; then
+    echo "Usage: $0 <markdown-file>"
+    echo "Example: $0 public/ai/rss.md"
+    exit 1
+fi
+
+# Get the absolute path to the repo root
+REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+RSS_FILE="$REPO_ROOT/public/rss.xml"
+
+# Input file
+INPUT_FILE="$1"
+
+# Check if input file exists
+if [ ! -f "$INPUT_FILE" ]; then
+    echo "Error: File '$INPUT_FILE' not found"
+    exit 1
+fi
+
+# Generate GUID from file path
+# Remove 'public/' prefix and 'rss.md' suffix to get the URL path
+REL_PATH=$(echo "$INPUT_FILE" | sed "s|^$REPO_ROOT/||" | sed 's|^public/||' | sed 's|/rss\.md$||' | sed 's|\.md$||')
+GUID="https://nathanherald.com/$REL_PATH"
+
+# Clean up double slashes and trailing slashes in GUID
+GUID=$(echo "$GUID" | sed 's|//|/|g' | sed 's|https:/|https://|')
+if [ "$REL_PATH" != "" ]; then
+    GUID="${GUID}/"
+fi
+
+echo "📝 Processing: $INPUT_FILE"
+echo "🔗 GUID/Link: $GUID"
+
+# Get file modification time in RFC-822 format for RSS
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    # macOS
+    MOD_TIME=$(stat -f "%Sm" -t "%a, %d %b %Y %H:%M:%S %z" "$INPUT_FILE")
+else
+    # Linux
+    MOD_TIME=$(date -r "$INPUT_FILE" "+%a, %d %b %Y %H:%M:%S %z")
+fi
+
+# Read the markdown file
+CONTENT=$(cat "$INPUT_FILE")
+
+# Extract title from first H1
+TITLE=$(echo "$CONTENT" | grep -E "^#[[:space:]]" | head -1 | sed 's/^#[[:space:]]*//')
+if [ -z "$TITLE" ]; then
+    # Fallback to filename
+    TITLE=$(basename "$INPUT_FILE" .md)
+fi
+
+# Convert markdown to HTML using pandoc
+HTML_CONTENT=$(echo "$CONTENT" | pandoc -f gfm -t html)
+
+# Escape HTML for XML (basic escaping)
+# We need to escape & first, then < and >
+HTML_CONTENT=$(echo "$HTML_CONTENT" | sed 's/&/\&amp;/g' | sed 's/</\&lt;/g' | sed 's/>/\&gt;/g')
+
+# Create the new RSS item (as a single line for easier processing)
+NEW_ITEM_FORMATTED="    <item>
+      <title>$TITLE</title>
+      <link>$GUID</link>
+      <pubDate>$MOD_TIME</pubDate>
+      <guid isPermaLink=\"true\">$GUID</guid>
+      <description>$HTML_CONTENT</description>
+    </item>"
+
+# Check if RSS file exists
+if [ ! -f "$RSS_FILE" ]; then
+    echo "Error: RSS file not found at $RSS_FILE"
+    exit 1
+fi
+
+# Create a temporary file
+TEMP_FILE=$(mktemp)
+
+# Check if item with this GUID already exists
+if grep -q "<guid isPermaLink=\"true\">$GUID</guid>" "$RSS_FILE"; then
+    echo "✏️  Updating existing item..."
+    
+    # Process the RSS file line by line
+    IN_ITEM=false
+    FOUND_GUID=false
+    SKIP_UNTIL_CLOSE=false
+    
+    while IFS= read -r line; do
+        if [[ "$line" == *"<item>"* ]]; then
+            IN_ITEM=true
+            ITEM_BUFFER="$line"
+        elif $IN_ITEM && [[ "$line" == *"</item>"* ]]; then
+            ITEM_BUFFER="$ITEM_BUFFER
+$line"
+            
+            # Check if this item contains our GUID
+            if echo "$ITEM_BUFFER" | grep -q "<guid isPermaLink=\"true\">$GUID</guid>"; then
+                # Replace with new item
+                echo "$NEW_ITEM_FORMATTED" >> "$TEMP_FILE"
+                FOUND_GUID=true
+            else
+                # Keep existing item
+                echo "$ITEM_BUFFER" >> "$TEMP_FILE"
+            fi
+            
+            IN_ITEM=false
+            ITEM_BUFFER=""
+        elif $IN_ITEM; then
+            ITEM_BUFFER="$ITEM_BUFFER
+$line"
+        else
+            echo "$line" >> "$TEMP_FILE"
+        fi
+    done < "$RSS_FILE"
+    
+else
+    echo "➕ Adding new item..."
+    
+    # Add new item after the lastBuildDate line
+    # Using a simpler approach without awk multi-line variables
+    INSERTING=false
+    while IFS= read -r line; do
+        echo "$line" >> "$TEMP_FILE"
+        if [[ "$line" == *"<lastBuildDate>"* ]]; then
+            # Add a blank line and the new item after lastBuildDate
+            echo "" >> "$TEMP_FILE"
+            echo "$NEW_ITEM_FORMATTED" >> "$TEMP_FILE"
+            INSERTING=true
+        fi
+    done < "$RSS_FILE"
+fi
+
+# Update lastBuildDate
+CURRENT_DATE=$(date "+%a, %d %b %Y %H:%M:%S %z")
+sed -i '' "s|<lastBuildDate>.*</lastBuildDate>|<lastBuildDate>$CURRENT_DATE</lastBuildDate>|" "$TEMP_FILE"
+
+# Validate the XML before replacing
+if command -v xmllint &> /dev/null; then
+    if xmllint --noout "$TEMP_FILE" 2>/dev/null; then
+        echo "✓ XML validation passed"
+    else
+        echo "❌ Error: Generated RSS feed is not valid XML!"
+        echo "   Running xmllint for details:"
+        xmllint --noout "$TEMP_FILE"
+        rm "$TEMP_FILE"
+        exit 1
+    fi
+fi
+
+# Replace the original RSS file
+mv "$TEMP_FILE" "$RSS_FILE"
+
+echo "✅ RSS feed updated successfully!"
+echo "   Title: $TITLE"
+echo "   Link: $GUID"
+echo "   Date: $MOD_TIME"

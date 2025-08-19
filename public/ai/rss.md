@@ -1,0 +1,3 @@
+# New page: [/ai](https://nathanherald.com/ai)
+
+I want to publish some thoughts about AI on my website, but I don't want those thoughts scattered over many blog posts. So I've made a new page at [/ai](https://nathanherald.com/ai) to hold those thoughts. It will be a living document, I'll update it whenever I can, and if anything is super interesting then I'll throw another RSS item in to let you know. 🫡
