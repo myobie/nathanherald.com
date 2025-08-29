@@ -4,16 +4,24 @@
   --font-weight-black: 800;
   --font-weight-bold: 700;
   --font-weight-book: 400;
+  --page-background: #FAF9F0;
+  --primary-color: #121435;
+  --line-color: #3D9970;
+  --link-color: #FF5722;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --page-background: #233142;
+    --primary-color: #E3E3E3;
+    --line-color: #455D7A;
+    --link-color: #F95959;
+  }
 }
 
 /* styles */
 
 body {
-  --page-background: black;
-  --primary-color: white;
-  --link-color: white;
-  --line-color: white;
-
   background: var(--page-background);
   color: var(--primary-color);
   font-size: 115%;
@@ -27,6 +35,7 @@ body {
   -webkit-text-size-adjust: none;
   -webkit-text-size-adjust: 100%;
   max-height: 50000em;
+
 }
 
 img, input[type="image"], video, embed, iframe, marquee, object, table {
@@ -38,9 +47,6 @@ strong {
   font-weight: var(--font-weight-bold);
 }
 
-body.animated {
-  transition: color 1s, background-color 1s;
-}
 
 main {
   margin: 3em;
@@ -58,9 +64,6 @@ a {
   text-decoration-color: var(--line-color);
 }
 
-.animated a {
-  transition: color 1s, text-decoration-color 1s;
-}
 
 a:hover {
   text-decoration: none;
@@ -311,55 +314,23 @@ details summary {
   }
 }
 
-/* themes */
-
-.blaze {
-  --page-background: #7FDBFF;
-  --primary-color: #001F3F;
-  --line-color: #F012BE;
-  --link-color: #85144B;
-}
-
-.blood {
-  --page-background: #FAFAFA;
-  --primary-color: #FF347F;
-  --line-color: #001F3F;
-  --link-color: #C9356C;
-}
-
-.default, .puce {
-  --page-background: #FAF9F0;
-  --primary-color: #121435;
-  --line-color: #3D9970;
-  --link-color: #FF5722;
-}
-
-@media (prefers-color-scheme: dark) {
-  .default, .blaze {
-    --page-background: #233142;
-    --primary-color: #E3E3E3;
-    --line-color: #455D7A;
-    --link-color: #F95959;
-  }
-
-  .blood {
-    --page-background: #111111;
-    --primary-color: #dddddd;
-    --line-color: #FF4136;
-    --link-color: #0074D9;
-  }
-
-  .puce {
-    --page-background: #001F3F;
-    --primary-color: #dddddd;
-    --line-color: #FFDC00;
-    --link-color: #7FDBFF;
-  }
-}
 
 details-controls {
   display: flex;
   justify-content: center;
   gap: 1em;
   margin: 1em auto;
+}
+
+/* Transitions - only active after page load */
+body.transitions-enabled {
+  transition: color 1s, background-color 1s;
+}
+
+body.transitions-enabled a {
+  transition: color 1s, text-decoration-color 1s;
+}
+
+body.transitions-enabled .section-header {
+  transition: background-color 1s;
 }
