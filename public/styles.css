@@ -36,7 +36,6 @@ body {
   -webkit-text-size-adjust: 100%;
   max-height: 50000em;
 
-  transition: color 1s, background-color 1s;
 }
 
 img, input[type="image"], video, embed, iframe, marquee, object, table {
@@ -63,7 +62,6 @@ a {
   text-decoration: underline;
   color: var(--link-color);
   text-decoration-color: var(--line-color);
-  transition: color 1s, text-decoration-color 1s;
 }
 
 
@@ -264,7 +262,6 @@ details summary {
 
 .section-header {
   background-color: rgba(0, 0, 0, 0.03);
-  transition: background-color 1s;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -323,4 +320,17 @@ details-controls {
   justify-content: center;
   gap: 1em;
   margin: 1em auto;
+}
+
+/* Transitions - only active after page load */
+body.transitions-enabled {
+  transition: color 1s, background-color 1s;
+}
+
+body.transitions-enabled a {
+  transition: color 1s, text-decoration-color 1s;
+}
+
+body.transitions-enabled .section-header {
+  transition: background-color 1s;
 }
