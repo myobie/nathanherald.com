@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+  <head lang="en-us">
+    <meta content="HTML Tidy for HTML5 for Apple macOS version 5.8.0" name="generator">
+    <meta charset="UTF-8">
+    <title>
+      I'm Nathan Herald → Untitled
+    </title>
+    <script>
+      if ((new URL(window.location.href)).host === 'myobie.com') { window.location.assign('https://nathanherald.com') }
+    </script>
+    <link href="https://cloud.typography.com/6836312/761366/css/fonts.css" rel="stylesheet" type=
+    "text/css">
+    <link href="/styles.css" rel="stylesheet" type="text/css">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="I'm Nathan Herald → Untitled" name="title">
+    <meta content="" name="description">
+    <meta content="Untitled" property="og:title">
+    <meta content="website" property="og:type">
+    <meta content="" property="og:description">
+    <meta content="/og.png" property="og:image">
+    <meta content="I'm Nathan Herald" property="og:site_name">
+    <link href="/rss.xml" rel="alternate" title="Feed of all the posts on nathanherald.com" type=
+    "application/rss+xml">
+  </head>
+  <body class="default">
+    <header class="section-header">
+      <div class="section-nav">
+        <h1 class="home-link">
+          <a class="never-underline" data-nospan="" href="/"><abbr title="Hello">👋</abbr></a>
+          <a href="/">I'm Nathan</a>
+        </h1>
+        <nav>
+          <p>
+            Find more in the <a href="/posts/">archive of all the posts on this site</a> or
+            <a href="/rss.xml">subscribe with RSS</a>.
+          </p>
+        </nav>
+      </div>
+    </header>
+    <main class="single">
+      <article>
+        <header>
+          <h1>
+            Untitled
+          </h1>
+        </header>
+        <div class="content">
+          <p>
+            +++ title = "Server-side DOM serialization with a weather app example" date =
+            "2025-01-02T12:00:00+01:00" description = "A practical demonstration of server-side DOM
+            serialization using custom elements, built with Bun, Deno, and Cloudflare Workers" +++
+          </p>
+          <p>
+            After exploring [server-side rendering and DOM serialization][web-components-4] in my
+            Web Components series, I wanted to build a practical example that demonstrates these
+            concepts in action. The result is a weather app that showcases server-side DOM
+            serialization across multiple JavaScript runtimes.
+          </p>
+          <p>
+            ➡️ <strong><a href="https://weather.myobie.wtf/">See it live at
+            weather.myobie.wtf</a></strong> | <strong><a href=
+            "https://github.com/myobie/serialized-weather">View source on GitHub</a></strong>
+          </p>
+          <h2 id="the-core-idea">
+            The Core Idea
+          </h2>
+          <p>
+            This weather app demonstrates building a DOM on the server, serializing it, and sending
+            it as the initial HTML response. The same DOM gets deserialized and becomes fully
+            interactive in the browser using the exact same custom elements and JavaScript code.
+          </p>
+          <p>
+            The magic happens with <a href=
+            "https://github.com/WebReflection/linkedom"><code>linkedom</code></a>, which acts as a
+            server-side DOM implementation. For 99% of my custom element code, linkedom requires no
+            changes from what works in browsers—it's like having another browser target for your
+            components.
+          </p>
+          <h2 id="progressive-enhancement-in-action">
+            Progressive Enhancement in Action
+          </h2>
+          <p>
+            The app implements true progressive enhancement with intelligent fallbacks:
+          </p>
+          <ul>
+            <li>
+              <strong>Server-side rendering</strong>: Custom elements run on the server and
+              serialize their initial state
+            </li>
+            <li>
+              <strong>Timeout protection</strong>: If server requests take too long, the page
+              renders immediately
+            </li>
+            <li>
+              <strong>Client-side recovery</strong>: The browser takes over and retries any failed
+              server requests
+            </li>
+            <li>
+              <strong>Graceful degradation</strong>: Works as either a pure SPA or pure
+              server-rendered app
+            </li>
+          </ul>
+          <p>
+            This approach ensures users always get a functional experience, regardless of network
+            conditions or server performance.
+          </p>
+          <h2 id="multi-runtime-implementation">
+            Multi-Runtime Implementation
+          </h2>
+          <p>
+            The repository demonstrates the same serialization approach across different
+            environments:
+          </p>
+          <h3 id="deno-implementation">
+            Deno Implementation
+          </h3>
+          <p>
+            Uses import maps and native fetch for a clean, standards-based approach. Shows how
+            modern JavaScript runtimes can handle server-side custom elements elegantly.
+          </p>
+          <h3 id="bun-implementation">
+            Bun Implementation
+          </h3>
+          <p>
+            Leverages Bun's speed and Node.js compatibility while maintaining the same
+            serialization patterns. Demonstrates how the approach scales across different runtime
+            performance characteristics.
+          </p>
+          <h3 id="cloudflare-worker">
+            Cloudflare Worker
+          </h3>
+          <p>
+            Runs at the edge with sub-100ms response times. Proves that server-side DOM
+            serialization works even in serverless, resource-constrained environments.
+          </p>
+          <h3 id="specialized-variants">
+            Specialized Variants
+          </h3>
+          <ul>
+            <li>
+              <strong>Client-only version</strong>: Pure SPA by skipping server-side element
+              registration
+            </li>
+            <li>
+              <strong>Server-only version</strong>: Traditional server-rendered app without
+              client-side JavaScript
+            </li>
+          </ul>
+          <h2 id="technical-challenges-and-solutions">
+            Technical Challenges and Solutions
+          </h2>
+          <p>
+            The main hurdle with server-side custom elements is that they must inherit from
+            <code>HTMLElement</code>, which normally only exists in browsers. The repository
+            explores several workarounds:
+          </p>
+          <ol type="1">
+            <li>
+              <strong>Mock HTMLElement</strong>: Create minimal server-side implementations
+            </li>
+            <li>
+              <strong>Runtime detection</strong>: Different code paths for server vs. browser
+            </li>
+            <li>
+              <strong>Element lifecycle management</strong>: Proper handling of
+              <code>connectedCallback</code> in server environments
+            </li>
+            <li>
+              <strong>Serialization strategies</strong>: Ensuring shadow DOM and custom element
+              state transfer correctly
+            </li>
+          </ol>
+          <h2 id="building-on-previous-work">
+            Building on Previous Work
+          </h2>
+          <p>
+            This weather app serves as the practical companion to the theoretical foundations I
+            laid out in [Web Components Part 4][web-components-4]. Where that post explored the
+            concepts and research behind server-side custom element serialization, this project
+            shows those ideas implemented across real deployment scenarios.
+          </p>
+          <p>
+            The combination of both posts provides a complete picture: the research and theory,
+            followed by production-ready implementations that you can run and deploy today.
+          </p>
+          <hr>
+          <p>
+            <em>Try the <a href="https://weather.myobie.wtf/">live demo</a> and explore the
+            <a href="https://github.com/myobie/serialized-weather">source code</a> to see
+            server-side DOM serialization in action.</em>
+          </p>
+        </div>
+      </article>
+    </main>
+    <script async src="/behavior.js"></script> 
+    <script async src="/assets/details-controls.js"></script> 
+    <script data-domain="nathanherald.com" defer src="https://stats.myobie.wtf/script.js"></script>
+  </body>
+</html>
