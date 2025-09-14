@@ -37,22 +37,24 @@ else
     OUTPUT_FILE="$DIR/index.html"
 fi
 
-# Extract frontmatter if present (between --- lines at start of file)
+# Extract frontmatter if present (between --- or +++ lines at start of file)
 FRONTMATTER=""
 CONTENT=""
 IN_FRONTMATTER=false
 FRONTMATTER_END=false
+FRONTMATTER_DELIMITER=""
 LINE_COUNT=0
 
 while IFS= read -r line; do
     LINE_COUNT=$((LINE_COUNT + 1))
     
-    if [ $LINE_COUNT -eq 1 ] && [ "$line" = "---" ]; then
+    if [ $LINE_COUNT -eq 1 ] && ([ "$line" = "---" ] || [ "$line" = "+++" ]); then
         IN_FRONTMATTER=true
+        FRONTMATTER_DELIMITER="$line"
         continue
     fi
     
-    if $IN_FRONTMATTER && [ "$line" = "---" ]; then
+    if $IN_FRONTMATTER && [ "$line" = "$FRONTMATTER_DELIMITER" ]; then
         IN_FRONTMATTER=false
         FRONTMATTER_END=true
         continue
@@ -72,15 +74,26 @@ if [ -z "$CONTENT" ]; then
     CONTENT=$(cat "$INPUT_FILE")
 fi
 
-# Parse frontmatter for title and date
+# Parse frontmatter for title, date, description, and externalUrl
 TITLE=""
 DATE=""
 DESCRIPTION=""
+EXTERNAL_URL=""
 
 if [ -n "$FRONTMATTER" ]; then
-    TITLE=$(echo "$FRONTMATTER" | grep -E "^title:" | sed 's/^title:[[:space:]]*//' | head -1)
-    DATE=$(echo "$FRONTMATTER" | grep -E "^date:" | sed 's/^date:[[:space:]]*//' | head -1)
-    DESCRIPTION=$(echo "$FRONTMATTER" | grep -E "^description:" | sed 's/^description:[[:space:]]*//' | head -1)
+    if [ "$FRONTMATTER_DELIMITER" = "---" ]; then
+        # YAML format (key: value)
+        TITLE=$(echo "$FRONTMATTER" | grep -E "^title:" | sed 's/^title:[[:space:]]*//' | head -1)
+        DATE=$(echo "$FRONTMATTER" | grep -E "^date:" | sed 's/^date:[[:space:]]*//' | head -1)
+        DESCRIPTION=$(echo "$FRONTMATTER" | grep -E "^description:" | sed 's/^description:[[:space:]]*//' | head -1)
+        EXTERNAL_URL=$(echo "$FRONTMATTER" | grep -E "^externalUrl:" | sed 's/^externalUrl:[[:space:]]*//' | head -1)
+    else
+        # TOML format (key = "value")
+        TITLE=$(echo "$FRONTMATTER" | grep -E "^title[[:space:]]*=" | sed 's/^title[[:space:]]*=[[:space:]]*//' | sed 's/^"\(.*\)"$/\1/' | head -1)
+        DATE=$(echo "$FRONTMATTER" | grep -E "^date[[:space:]]*=" | sed 's/^date[[:space:]]*=[[:space:]]*//' | sed 's/^"\(.*\)"$/\1/' | head -1)
+        DESCRIPTION=$(echo "$FRONTMATTER" | grep -E "^description[[:space:]]*=" | sed 's/^description[[:space:]]*=[[:space:]]*//' | sed 's/^"\(.*\)"$/\1/' | head -1)
+        EXTERNAL_URL=$(echo "$FRONTMATTER" | grep -E "^externalUrl[[:space:]]*=" | sed 's/^externalUrl[[:space:]]*=[[:space:]]*//' | sed 's/^"\(.*\)"$/\1/' | head -1)
+    fi
 fi
 
 # Default title if not provided
@@ -150,7 +163,20 @@ cat > "$OUTPUT_FILE" << EOF
       <article>
         <header>
           <h1>
+EOF
+
+# Add title with or without external link
+if [ -n "$EXTERNAL_URL" ]; then
+    cat >> "$OUTPUT_FILE" << EOF
+            <a href="$EXTERNAL_URL">$TITLE</a>
+EOF
+else
+    cat >> "$OUTPUT_FILE" << EOF
             $TITLE
+EOF
+fi
+
+cat >> "$OUTPUT_FILE" << EOF
           </h1>
         </header>
         <div class="content">

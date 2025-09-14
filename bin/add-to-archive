@@ -1,0 +1,226 @@
+#!/usr/bin/env bash
+
+set -e
+
+# Check arguments
+if [ $# -eq 0 ]; then
+    echo "Usage: $0 <markdown-file>"
+    echo "Example: $0 public/posts/til/strudel/index.md"
+    exit 1
+fi
+
+# Get the absolute path to the repo root
+REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+ARCHIVE_PAGE="$REPO_ROOT/public/posts/index.html"
+
+# Input file
+INPUT_FILE="$1"
+
+# Check if input file exists
+if [ ! -f "$INPUT_FILE" ]; then
+    echo "Error: File '$INPUT_FILE' not found"
+    exit 1
+fi
+
+echo "📝 Processing: $INPUT_FILE"
+
+# Extract frontmatter and content (same logic as other scripts)
+FRONTMATTER=""
+CONTENT=""
+IN_FRONTMATTER=false
+FRONTMATTER_DELIMITER=""
+LINE_COUNT=0
+
+while IFS= read -r line; do
+    LINE_COUNT=$((LINE_COUNT + 1))
+    
+    if [ $LINE_COUNT -eq 1 ] && ([ "$line" = "---" ] || [ "$line" = "+++" ]); then
+        IN_FRONTMATTER=true
+        FRONTMATTER_DELIMITER="$line"
+        continue
+    fi
+    
+    if $IN_FRONTMATTER && [ "$line" = "$FRONTMATTER_DELIMITER" ]; then
+        IN_FRONTMATTER=false
+        continue
+    fi
+    
+    if $IN_FRONTMATTER; then
+        FRONTMATTER="${FRONTMATTER}${line}
+"
+    else
+        CONTENT="${CONTENT}${line}
+"
+    fi
+done < "$INPUT_FILE"
+
+# If no frontmatter was found, use entire file as content
+if [ -z "$CONTENT" ]; then
+    CONTENT=$(cat "$INPUT_FILE")
+fi
+
+# Parse frontmatter for title, date, and externalUrl
+TITLE=""
+DATE=""
+EXTERNAL_URL=""
+if [ -n "$FRONTMATTER" ]; then
+    if [ "$FRONTMATTER_DELIMITER" = "---" ]; then
+        # YAML format (key: value)
+        TITLE=$(echo "$FRONTMATTER" | grep -E "^title:" | sed 's/^title:[[:space:]]*//' | head -1)
+        DATE=$(echo "$FRONTMATTER" | grep -E "^date:" | sed 's/^date:[[:space:]]*//' | head -1)
+        EXTERNAL_URL=$(echo "$FRONTMATTER" | grep -E "^externalUrl:" | sed 's/^externalUrl:[[:space:]]*//' | head -1)
+    else
+        # TOML format (key = "value")
+        TITLE=$(echo "$FRONTMATTER" | grep -E "^title[[:space:]]*=" | sed 's/^title[[:space:]]*=[[:space:]]*//' | sed 's/^"\(.*\)"$/\1/' | head -1)
+        DATE=$(echo "$FRONTMATTER" | grep -E "^date[[:space:]]*=" | sed 's/^date[[:space:]]*=[[:space:]]*//' | sed 's/^"\(.*\)"$/\1/' | head -1)
+        EXTERNAL_URL=$(echo "$FRONTMATTER" | grep -E "^externalUrl[[:space:]]*=" | sed 's/^externalUrl[[:space:]]*=[[:space:]]*//' | sed 's/^"\(.*\)"$/\1/' | head -1)
+    fi
+fi
+
+# Extract title from first H1 if not found in frontmatter
+if [ -z "$TITLE" ]; then
+    TITLE=$(echo "$CONTENT" | grep -E "^#[[:space:]]" | head -1 | sed 's/^#[[:space:]]*//')
+    if [ -z "$TITLE" ]; then
+        # Fallback to filename
+        TITLE=$(basename "$INPUT_FILE" .md)
+    fi
+fi
+
+# Generate URL path from file path
+REL_PATH=$(echo "$INPUT_FILE" | sed "s|^$REPO_ROOT/||" | sed 's|^public/||' | sed 's|/index\.md$||' | sed 's|\.md$||')
+URL_PATH="/$REL_PATH/"
+
+# Determine post type
+if [ -n "$EXTERNAL_URL" ]; then
+    POST_TYPE="link post"
+    EMOJI="🔗"
+else
+    POST_TYPE="blog post"
+    EMOJI="⭐️"
+fi
+
+echo "📄 Title: $TITLE"
+echo "🔗 URL: $URL_PATH"
+echo "📅 Date: $DATE"
+echo "🏷️  Type: $POST_TYPE ($EMOJI)"
+
+# Parse the date to get month and year for grouping
+if [ -n "$DATE" ]; then
+    # Extract year and month from ISO date (e.g., "2025-09-14T22:23:25+02:00")
+    YEAR=$(echo "$DATE" | cut -d'-' -f1)
+    MONTH_NUM=$(echo "$DATE" | cut -d'-' -f2)
+    DAY=$(echo "$DATE" | cut -d'T' -f1 | cut -d'-' -f3)
+    
+    # Convert month number to name
+    case $MONTH_NUM in
+        01) MONTH_NAME="January" ;;
+        02) MONTH_NAME="February" ;;
+        03) MONTH_NAME="March" ;;
+        04) MONTH_NAME="April" ;;
+        05) MONTH_NAME="May" ;;
+        06) MONTH_NAME="June" ;;
+        07) MONTH_NAME="July" ;;
+        08) MONTH_NAME="August" ;;
+        09) MONTH_NAME="September" ;;
+        10) MONTH_NAME="October" ;;
+        11) MONTH_NAME="November" ;;
+        12) MONTH_NAME="December" ;;
+        *) MONTH_NAME="Unknown" ;;
+    esac
+    
+    MONTH_YEAR="$MONTH_NAME $YEAR"
+    FORMATTED_DATE="$DAY $MONTH_NAME, $YEAR"
+else
+    echo "Error: No date found in frontmatter"
+    exit 1
+fi
+
+echo "📆 Month/Year: $MONTH_YEAR"
+
+# Check if archive page exists
+if [ ! -f "$ARCHIVE_PAGE" ]; then
+    echo "Error: Archive page not found at $ARCHIVE_PAGE"
+    exit 1
+fi
+
+# Create the new list item
+NEW_ITEM="              <li>
+                <p class=\"permalink\">
+                  <abbr title=\"$POST_TYPE\">$EMOJI</abbr> <a href=
+                  \"$URL_PATH\">$TITLE</a> <span class=\"meta\">– <time datetime=
+                  \"$DATE\">$FORMATTED_DATE</time></span>
+                </p>
+              </li>"
+
+# Create a temporary file
+TEMP_FILE=$(mktemp)
+
+# Process the archive page
+IN_MONTH_LIST=false
+FOUND_MONTH=false
+CURRENT_MONTH=""
+
+while IFS= read -r line; do
+    if [[ "$line" == *"<ol class=\"month-list\">"* ]]; then
+        IN_MONTH_LIST=true
+        echo "$line" >> "$TEMP_FILE"
+        continue
+    fi
+    
+    if $IN_MONTH_LIST && [[ "$line" == *"</ol>"* ]] && [[ "$line" != *"article-list"* ]]; then
+        # End of month-list
+        if [ "$FOUND_MONTH" = false ]; then
+            # Need to add a new month section at the top
+            echo "          <li>" >> "$TEMP_FILE"
+            echo "            <h3>" >> "$TEMP_FILE"
+            echo "              $MONTH_YEAR" >> "$TEMP_FILE"
+            echo "            </h3>" >> "$TEMP_FILE"
+            echo "            <ol class=\"article-list\">" >> "$TEMP_FILE"
+            echo "$NEW_ITEM" >> "$TEMP_FILE"
+            echo "            </ol>" >> "$TEMP_FILE"
+            echo "          </li>" >> "$TEMP_FILE"
+        fi
+        IN_MONTH_LIST=false
+        echo "$line" >> "$TEMP_FILE"
+        continue
+    fi
+    
+    if $IN_MONTH_LIST && [[ "$line" =~ ^[[:space:]]*\<h3\> ]]; then
+        # Extract the month/year from the h3
+        CURRENT_MONTH=$(echo "$line" | sed 's|.*<h3>||' | sed 's|</h3>.*||' | xargs)
+        if [ "$CURRENT_MONTH" = "$MONTH_YEAR" ]; then
+            FOUND_MONTH=true
+            echo "$line" >> "$TEMP_FILE"
+            continue
+        elif [ "$FOUND_MONTH" = false ]; then
+            # This is a month that comes after our target month chronologically
+            # Insert our new month section before this one
+            echo "          <li>" >> "$TEMP_FILE"
+            echo "            <h3>" >> "$TEMP_FILE"
+            echo "              $MONTH_YEAR" >> "$TEMP_FILE"
+            echo "            </h3>" >> "$TEMP_FILE"
+            echo "            <ol class=\"article-list\">" >> "$TEMP_FILE"
+            echo "$NEW_ITEM" >> "$TEMP_FILE"
+            echo "            </ol>" >> "$TEMP_FILE"
+            echo "          </li>" >> "$TEMP_FILE"
+            FOUND_MONTH=true
+        fi
+        echo "$line" >> "$TEMP_FILE"
+        continue
+    fi
+    
+    if $IN_MONTH_LIST && $FOUND_MONTH && [ "$CURRENT_MONTH" = "$MONTH_YEAR" ] && [[ "$line" == *"<ol class=\"article-list\">"* ]]; then
+        # Found the right month's article list, add our item at the top
+        echo "$line" >> "$TEMP_FILE"
+        echo "$NEW_ITEM" >> "$TEMP_FILE"
+        continue
+    fi
+    
+    echo "$line" >> "$TEMP_FILE"
+done < "$ARCHIVE_PAGE"
+
+# Replace the original archive page
+mv "$TEMP_FILE" "$ARCHIVE_PAGE"
+
+echo "✅ Archive updated successfully!"
+echo "   Added '$TITLE' to $MONTH_YEAR section"

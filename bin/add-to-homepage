@@ -1,0 +1,170 @@
+#!/usr/bin/env bash
+
+set -e
+
+# Check arguments
+if [ $# -eq 0 ]; then
+    echo "Usage: $0 <markdown-file>"
+    echo "Example: $0 public/posts/til/strudel/index.md"
+    exit 1
+fi
+
+# Get the absolute path to the repo root
+REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+HOMEPAGE="$REPO_ROOT/public/index.html"
+
+# Input file
+INPUT_FILE="$1"
+
+# Check if input file exists
+if [ ! -f "$INPUT_FILE" ]; then
+    echo "Error: File '$INPUT_FILE' not found"
+    exit 1
+fi
+
+echo "📝 Processing: $INPUT_FILE"
+
+# Extract frontmatter and content (same logic as other scripts)
+FRONTMATTER=""
+CONTENT=""
+IN_FRONTMATTER=false
+FRONTMATTER_DELIMITER=""
+LINE_COUNT=0
+
+while IFS= read -r line; do
+    LINE_COUNT=$((LINE_COUNT + 1))
+    
+    if [ $LINE_COUNT -eq 1 ] && ([ "$line" = "---" ] || [ "$line" = "+++" ]); then
+        IN_FRONTMATTER=true
+        FRONTMATTER_DELIMITER="$line"
+        continue
+    fi
+    
+    if $IN_FRONTMATTER && [ "$line" = "$FRONTMATTER_DELIMITER" ]; then
+        IN_FRONTMATTER=false
+        continue
+    fi
+    
+    if $IN_FRONTMATTER; then
+        FRONTMATTER="${FRONTMATTER}${line}
+"
+    else
+        CONTENT="${CONTENT}${line}
+"
+    fi
+done < "$INPUT_FILE"
+
+# If no frontmatter was found, use entire file as content
+if [ -z "$CONTENT" ]; then
+    CONTENT=$(cat "$INPUT_FILE")
+fi
+
+# Parse frontmatter for title and externalUrl
+TITLE=""
+EXTERNAL_URL=""
+if [ -n "$FRONTMATTER" ]; then
+    if [ "$FRONTMATTER_DELIMITER" = "---" ]; then
+        # YAML format (key: value)
+        TITLE=$(echo "$FRONTMATTER" | grep -E "^title:" | sed 's/^title:[[:space:]]*//' | head -1)
+        EXTERNAL_URL=$(echo "$FRONTMATTER" | grep -E "^externalUrl:" | sed 's/^externalUrl:[[:space:]]*//' | head -1)
+    else
+        # TOML format (key = "value")
+        TITLE=$(echo "$FRONTMATTER" | grep -E "^title[[:space:]]*=" | sed 's/^title[[:space:]]*=[[:space:]]*//' | sed 's/^"\(.*\)"$/\1/' | head -1)
+        EXTERNAL_URL=$(echo "$FRONTMATTER" | grep -E "^externalUrl[[:space:]]*=" | sed 's/^externalUrl[[:space:]]*=[[:space:]]*//' | sed 's/^"\(.*\)"$/\1/' | head -1)
+    fi
+fi
+
+# Extract title from first H1 if not found in frontmatter
+if [ -z "$TITLE" ]; then
+    TITLE=$(echo "$CONTENT" | grep -E "^#[[:space:]]" | head -1 | sed 's/^#[[:space:]]*//')
+    if [ -z "$TITLE" ]; then
+        # Fallback to filename
+        TITLE=$(basename "$INPUT_FILE" .md)
+    fi
+fi
+
+# Generate URL path from file path
+REL_PATH=$(echo "$INPUT_FILE" | sed "s|^$REPO_ROOT/||" | sed 's|^public/||' | sed 's|/index\.md$||' | sed 's|\.md$||')
+URL_PATH="/$REL_PATH/"
+
+# Determine post type
+if [ -n "$EXTERNAL_URL" ]; then
+    POST_TYPE="link post"
+    EMOJI="🔗"
+else
+    POST_TYPE="blog post"
+    EMOJI="⭐️"
+fi
+
+echo "📄 Title: $TITLE"
+echo "🔗 URL: $URL_PATH"
+echo "🏷️  Type: $POST_TYPE ($EMOJI)"
+
+# Check if homepage exists
+if [ ! -f "$HOMEPAGE" ]; then
+    echo "Error: Homepage not found at $HOMEPAGE"
+    exit 1
+fi
+
+# Create the new list item
+NEW_ITEM="            <li>
+              <abbr title=\"$POST_TYPE\">$EMOJI</abbr> <a class=\"title\" href=
+              \"$URL_PATH\">$TITLE</a>
+            </li>"
+
+# Create a temporary file
+TEMP_FILE=$(mktemp)
+
+# Process the homepage
+IN_LATEST_POSTS=false
+ITEM_COUNT=0
+SKIP_LINES=0
+
+while IFS= read -r line; do
+    if [[ "$line" == *"<nav class=\"latest-posts listing\">"* ]]; then
+        IN_LATEST_POSTS=true
+        echo "$line" >> "$TEMP_FILE"
+        continue
+    fi
+    
+    if $IN_LATEST_POSTS && [[ "$line" == *"</nav>"* ]]; then
+        IN_LATEST_POSTS=false
+        echo "$line" >> "$TEMP_FILE"
+        continue
+    fi
+    
+    if $IN_LATEST_POSTS && [[ "$line" == *"<ol>"* ]]; then
+        echo "$line" >> "$TEMP_FILE"
+        # Add the new item as the first one
+        echo "$NEW_ITEM" >> "$TEMP_FILE"
+        continue
+    fi
+    
+    if $IN_LATEST_POSTS && [[ "$line" == *"<li>"* ]]; then
+        ITEM_COUNT=$((ITEM_COUNT + 1))
+        if [ $ITEM_COUNT -le 4 ]; then
+            # Keep the first 4 existing items (now they become items 2-5)
+            echo "$line" >> "$TEMP_FILE"
+        else
+            # Skip items beyond the 5th position
+            SKIP_LINES=1
+        fi
+        continue
+    fi
+    
+    if $IN_LATEST_POSTS && [ $SKIP_LINES -eq 1 ]; then
+        # Skip lines until we find the closing </li>
+        if [[ "$line" == *"</li>"* ]]; then
+            SKIP_LINES=0
+        fi
+        continue
+    fi
+    
+    echo "$line" >> "$TEMP_FILE"
+done < "$HOMEPAGE"
+
+# Replace the original homepage
+mv "$TEMP_FILE" "$HOMEPAGE"
+
+echo "✅ Homepage updated successfully!"
+echo "   Added '$TITLE' as the latest post"

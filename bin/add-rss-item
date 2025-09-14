@@ -29,8 +29,8 @@ if [ ! -f "$INPUT_FILE" ]; then
 fi
 
 # Generate GUID from file path
-# Remove 'public/' prefix and 'rss.md' suffix to get the URL path
-REL_PATH=$(echo "$INPUT_FILE" | sed "s|^$REPO_ROOT/||" | sed 's|^public/||' | sed 's|/rss\.md$||' | sed 's|\.md$||')
+# Remove 'public/' prefix and 'index.md' or '.md' suffix to get the URL path
+REL_PATH=$(echo "$INPUT_FILE" | sed "s|^$REPO_ROOT/||" | sed 's|^public/||' | sed 's|/index\.md$||' | sed 's|/rss\.md$||' | sed 's|\.md$||')
 GUID="https://nathanherald.com/$REL_PATH"
 
 # Clean up double slashes and trailing slashes in GUID
@@ -51,14 +51,60 @@ else
     MOD_TIME=$(date -r "$INPUT_FILE" "+%a, %d %b %Y %H:%M:%S %z")
 fi
 
-# Read the markdown file
-CONTENT=$(cat "$INPUT_FILE")
+# Extract frontmatter and content (same logic as md2html)
+FRONTMATTER=""
+CONTENT=""
+IN_FRONTMATTER=false
+FRONTMATTER_DELIMITER=""
+LINE_COUNT=0
 
-# Extract title from first H1
-TITLE=$(echo "$CONTENT" | grep -E "^#[[:space:]]" | head -1 | sed 's/^#[[:space:]]*//')
+while IFS= read -r line; do
+    LINE_COUNT=$((LINE_COUNT + 1))
+    
+    if [ $LINE_COUNT -eq 1 ] && ([ "$line" = "---" ] || [ "$line" = "+++" ]); then
+        IN_FRONTMATTER=true
+        FRONTMATTER_DELIMITER="$line"
+        continue
+    fi
+    
+    if $IN_FRONTMATTER && [ "$line" = "$FRONTMATTER_DELIMITER" ]; then
+        IN_FRONTMATTER=false
+        continue
+    fi
+    
+    if $IN_FRONTMATTER; then
+        FRONTMATTER="${FRONTMATTER}${line}
+"
+    else
+        CONTENT="${CONTENT}${line}
+"
+    fi
+done < "$INPUT_FILE"
+
+# If no frontmatter was found, use entire file as content
+if [ -z "$CONTENT" ]; then
+    CONTENT=$(cat "$INPUT_FILE")
+fi
+
+# Parse frontmatter for title
+TITLE=""
+if [ -n "$FRONTMATTER" ]; then
+    if [ "$FRONTMATTER_DELIMITER" = "---" ]; then
+        # YAML format (key: value)
+        TITLE=$(echo "$FRONTMATTER" | grep -E "^title:" | sed 's/^title:[[:space:]]*//' | head -1)
+    else
+        # TOML format (key = "value")
+        TITLE=$(echo "$FRONTMATTER" | grep -E "^title[[:space:]]*=" | sed 's/^title[[:space:]]*=[[:space:]]*//' | sed 's/^"\(.*\)"$/\1/' | head -1)
+    fi
+fi
+
+# Extract title from first H1 if not found in frontmatter
 if [ -z "$TITLE" ]; then
-    # Fallback to filename
-    TITLE=$(basename "$INPUT_FILE" .md)
+    TITLE=$(echo "$CONTENT" | grep -E "^#[[:space:]]" | head -1 | sed 's/^#[[:space:]]*//')
+    if [ -z "$TITLE" ]; then
+        # Fallback to filename
+        TITLE=$(basename "$INPUT_FILE" .md)
+    fi
 fi
 
 # Convert markdown to HTML using pandoc

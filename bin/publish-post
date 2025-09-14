@@ -1,0 +1,58 @@
+#!/usr/bin/env bash
+
+set -e
+
+# Check arguments
+if [ $# -eq 0 ]; then
+    echo "Usage: $0 <markdown-file>"
+    echo "Example: $0 public/posts/til/strudel/index.md"
+    echo ""
+    echo "This script will:"
+    echo "1. Convert the markdown to HTML"
+    echo "2. Add the post to the RSS feed"
+    echo "3. Add the post to the homepage (latest 5)"
+    echo "4. Add the post to the posts archive"
+    exit 1
+fi
+
+# Get the absolute path to the repo root
+REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+
+# Input file
+INPUT_FILE="$1"
+
+# Check if input file exists
+if [ ! -f "$INPUT_FILE" ]; then
+    echo "Error: File '$INPUT_FILE' not found"
+    exit 1
+fi
+
+echo "🚀 Publishing post: $INPUT_FILE"
+echo ""
+
+# Step 1: Convert markdown to HTML
+echo "📄 Step 1: Converting markdown to HTML..."
+"$REPO_ROOT/bin/md2html" "$INPUT_FILE"
+echo ""
+
+# Step 2: Add to RSS feed
+echo "📡 Step 2: Adding to RSS feed..."
+"$REPO_ROOT/bin/add-rss-item" "$INPUT_FILE"
+echo ""
+
+# Step 3: Add to homepage
+echo "🏠 Step 3: Adding to homepage..."
+"$REPO_ROOT/bin/add-to-homepage" "$INPUT_FILE"
+echo ""
+
+# Step 4: Add to archive
+echo "📚 Step 4: Adding to posts archive..."
+"$REPO_ROOT/bin/add-to-archive" "$INPUT_FILE"
+echo ""
+
+echo "✅ Post published successfully!"
+echo ""
+echo "Next steps:"
+echo "- Review the changes with 'git diff'"
+echo "- Test the website locally"
+echo "- Commit and push when ready"
