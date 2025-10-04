@@ -80,7 +80,7 @@ Now you can put music on there from your Mac, but only if UTM is not running, so
 
 I don’t want to deal with iTunes on Windows or Mac day-to-day… and it turns out one can just use the Finder to put music files on the iPod, run a python script in the Terminal and it will jam all those files into the iPod’s internal database.
 
-The python script is from: <https://github.com/andrewfowlie/shuffle-db3>
+The python script is from: <https://github.com/myobie/shuffle-db>
 
 **First,** you’ll need to install python and then install one package:
 
@@ -94,7 +94,7 @@ pip3 install --break-system-packages eyed3
 Then we can download the python script directly from the code repository.
 
 ```
-cd ~/Downloads && curl -O "https://raw.githubusercontent.com/andrewfowlie/shuffle-db3/master/src/python/rebuild_db3.py"
+cd ~/Downloads && curl -O "https://raw.githubusercontent.com/myobie/shuffle-db/master/src/python/rebuild_db3.py"
 ```
 
 In the Finder, drag the `rebuild_db3.py` file from your Downloads folder to the iPod’s drive that is mounted there. It needs to be at the root.
