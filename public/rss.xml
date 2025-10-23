@@ -4,7 +4,17 @@
     <title>nathanherald.com feed</title>
     <link>https://nathanherald.com/</link>
     <description>Recent posts from nathanherald.com</description>
-    <lastBuildDate>Sun, 14 Sep 2025 22:46:15 +0200</lastBuildDate>
+    <lastBuildDate>Thu, 23 Oct 2025 14:43:12 +0200</lastBuildDate>
+
+    <item>
+      <title>TIL about Git Notes</title>
+      <link>https://nathanherald.com/posts/til/git-notes/</link>
+      <pubDate>Thu, 23 Oct 2025 14:42:52 +0200</pubDate>
+      <guid isPermaLink="true">https://nathanherald.com/posts/til/git-notes/</guid>
+      <description>&lt;p&gt;Git has a notes command that lets you add annotations to commits
+without changing the commit itself. Pretty handy for adding metadata or
+references after the fact!&lt;/p&gt;</description>
+    </item>
 
     <item>
       <title>TIL about strudel</title>
