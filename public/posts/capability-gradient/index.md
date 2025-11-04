@@ -15,7 +15,7 @@ I've been thinking about how I feel great when I dive deep into a topic, to expa
 
 If I need a new chair, I might just go to IKEA. Simple and done. _Or_, I can go further. I can shop around, I can do research, I can learn about the history of chairs, I can develop my taste, and then I can make a more informed decision. _Or_, I can go further still. I can contact a carpenter and collaborate, my taste can be instilled into the design. _Or_, I can go further, I can become an apprentice, practice, and then finally build my own chair.
 
-As a basic consumer, I can only have what is offered in my nearby stores. Developing taste through curation: I can advise my friends and my future self on options. Through collaboration I can customize. And through mastery I complete freedom to iterate.
+As a basic consumer, I can only have what is offered in my nearby stores. Developing taste through curation: I can advise my friends and my future self on options. Through collaboration I can customize. And through mastery I have complete freedom to iterate.
 
 The deeper you go, the more adaptable you become. And you’re building capability for *your own future ideas* – the ones you haven’t had yet. You can’t know which current ideas will work or what better ideas you’ll have next month. If you’ve only bought from IKEA, you’re locked in. If you’ve built chairs yourself, you can pivot when inspiration strikes.
 
