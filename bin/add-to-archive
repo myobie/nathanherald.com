@@ -143,6 +143,13 @@ if [ ! -f "$ARCHIVE_PAGE" ]; then
     exit 1
 fi
 
+# Check if this URL already exists in the archive
+# Need to handle multiline HTML formatting where href= and URL are on separate lines
+if grep -q "$URL_PATH" "$ARCHIVE_PAGE"; then
+    echo "⚠️  Post already exists in archive, skipping..."
+    exit 0
+fi
+
 # Create the new list item
 NEW_ITEM="              <li>
                 <p class=\"permalink\">

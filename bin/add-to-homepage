@@ -106,6 +106,13 @@ if [ ! -f "$HOMEPAGE" ]; then
     exit 1
 fi
 
+# Check if this URL already exists in the homepage
+# Need to handle multiline HTML formatting where href= and URL are on separate lines
+if grep -q "$URL_PATH" "$HOMEPAGE"; then
+    echo "⚠️  Post already exists on homepage, skipping..."
+    exit 0
+fi
+
 # Create the new list item
 NEW_ITEM="            <li>
               <abbr title=\"$POST_TYPE\">$EMOJI</abbr> <a class=\"title\" href=

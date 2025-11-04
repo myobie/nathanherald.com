@@ -181,15 +181,51 @@ cat >> "$OUTPUT_FILE" << EOF
         </header>
         <div class="content">
 $HTML_CONTENT
+EOF
+
+# Add "Read more" link for link posts
+if [ -n "$EXTERNAL_URL" ]; then
+    cat >> "$OUTPUT_FILE" << EOF
+          <p>
+            → <a href="$EXTERNAL_URL">Read more at the source</a>
+          </p>
+EOF
+fi
+
+cat >> "$OUTPUT_FILE" << EOF
         </div>
 EOF
 
 # Add footer with date if available
 if [ -n "$DATE" ]; then
+    # Format the date nicely (same logic as add-to-archive)
+    YEAR=$(echo "$DATE" | cut -d'-' -f1)
+    MONTH_NUM=$(echo "$DATE" | cut -d'-' -f2)
+    DAY=$(echo "$DATE" | cut -d'T' -f1 | cut -d'-' -f3)
+
+    # Convert month number to name
+    case $MONTH_NUM in
+        01) MONTH_NAME="January" ;;
+        02) MONTH_NAME="February" ;;
+        03) MONTH_NAME="March" ;;
+        04) MONTH_NAME="April" ;;
+        05) MONTH_NAME="May" ;;
+        06) MONTH_NAME="June" ;;
+        07) MONTH_NAME="July" ;;
+        08) MONTH_NAME="August" ;;
+        09) MONTH_NAME="September" ;;
+        10) MONTH_NAME="October" ;;
+        11) MONTH_NAME="November" ;;
+        12) MONTH_NAME="December" ;;
+        *) MONTH_NAME="Unknown" ;;
+    esac
+
+    FORMATTED_DATE="$DAY $MONTH_NAME, $YEAR"
+
     cat >> "$OUTPUT_FILE" << EOF
         <footer>
           <p>
-            Posted on <time datetime="$DATE">$DATE</time>
+            Posted on <time datetime="$DATE">$FORMATTED_DATE</time>
           </p>
         </footer>
 EOF
