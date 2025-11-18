@@ -28,6 +28,11 @@ if [ ! -f "$INPUT_FILE" ]; then
     exit 1
 fi
 
+# Ensure file ends with a newline
+if [ -n "$(tail -c 1 "$INPUT_FILE")" ]; then
+    echo >> "$INPUT_FILE"
+fi
+
 # Determine output file
 if [ $# -ge 2 ]; then
     OUTPUT_FILE="$2"
@@ -47,19 +52,19 @@ LINE_COUNT=0
 
 while IFS= read -r line; do
     LINE_COUNT=$((LINE_COUNT + 1))
-    
+
     if [ $LINE_COUNT -eq 1 ] && ([ "$line" = "---" ] || [ "$line" = "+++" ]); then
         IN_FRONTMATTER=true
         FRONTMATTER_DELIMITER="$line"
         continue
     fi
-    
+
     if $IN_FRONTMATTER && [ "$line" = "$FRONTMATTER_DELIMITER" ]; then
         IN_FRONTMATTER=false
         FRONTMATTER_END=true
         continue
     fi
-    
+
     if $IN_FRONTMATTER; then
         FRONTMATTER="${FRONTMATTER}${line}
 "

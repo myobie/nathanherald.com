@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+  <head lang="en-us">
+    <meta content="HTML Tidy for HTML5 for Apple macOS version 5.8.0" name="generator">
+    <meta charset="UTF-8">
+    <title>
+      I'm Nathan Herald → I Don't Have a CMS Anymore
+    </title>
+    <script>
+      if ((new URL(window.location.href)).host === 'myobie.com') { window.location.assign('https://nathanherald.com') }
+    </script>
+    <link href="https://cloud.typography.com/6836312/761366/css/fonts.css" rel="stylesheet" type=
+    "text/css">
+    <link href="/styles.css" rel="stylesheet" type="text/css">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="I'm Nathan Herald → I Don't Have a CMS Anymore" name="title">
+    <meta content=
+    "I replaced hugo with plain HTML + Claude Code. Now Claude maintains my website. No CMS, no build pipeline. Just plain files and an AI agent that does the work “by hand.”"
+    name="description">
+    <meta content="I Don't Have a CMS Anymore" property="og:title">
+    <meta content="website" property="og:type">
+    <meta content=
+    "I replaced hugo with plain HTML + Claude Code. Now Claude maintains my website. No CMS, no build pipeline. Just plain files and an AI agent that does the work “by hand.”"
+    property="og:description">
+    <meta content="/og.png" property="og:image">
+    <meta content="I'm Nathan Herald" property="og:site_name">
+    <link href="/rss.xml" rel="alternate" title="Feed of all the posts on nathanherald.com" type=
+    "application/rss+xml">
+  </head>
+  <body class="default">
+    <header class="section-header">
+      <div class="section-nav">
+        <h1 class="home-link">
+          <a class="never-underline" data-nospan="" href="/"><abbr title="Hello">👋</abbr></a>
+          <a href="/">I'm Nathan</a>
+        </h1>
+        <nav>
+          <p>
+            Find more in the <a href="/posts/">archive of all the posts on this site</a> or
+            <a href="/rss.xml">subscribe with RSS</a>.
+          </p>
+        </nav>
+      </div>
+    </header>
+    <main class="single">
+      <article>
+        <header>
+          <h1>
+            I Don't Have a CMS Anymore
+          </h1>
+        </header>
+        <div class="content">
+          <p>
+            I used to run this site on <a href="https://gohugo.io">hugo</a>. Standard static site
+            generator setup: write markdown, run <code>hugo build</code>, preview locally, deploy.
+            It worked fine, until it didn’t. A hugo update would break publishing new posts and I
+            would let my site sit broken for months. Or trying to get the HTML how I wanted would
+            require me to learn about shortcodes or weird go template language stuff…
+          </p>
+          <p>
+            <strong>I deleted all of that.</strong>
+          </p>
+          <p>
+            Now my website is just HTML files. No CMS at all.
+          </p>
+          <p>
+            When I want to publish a post, I write a markdown or HTML file and then tell
+            <code>claude</code>: “publish it.” That’s it.
+          </p>
+          <p>
+            Claude Code has built up its own scripts to convert the markdown to HTML, update the
+            RSS feed, add the post to the homepage and archive, run all the formatting tools, and
+            handle everything else. I don’t touch any of it. I’ve never even looked at those
+            scripts.
+          </p>
+          <p>
+            <strong>This is an experiment for me: how far can I push a coding agent?</strong> Can
+            we eliminate traditional tooling entirely? Can the robot just do everything “by hand”?
+          </p>
+          <p>
+            Static site generators exist because manually maintaining a website, keeping an RSS
+            feed in sync, updating navigation, managing archives, etc, is tedious and error-prone.
+          </p>
+          <p>
+            But <strong>what if the automation doesn’t need to be baked into tooling?</strong> What
+            if it can just be… done, on demand, by an agent? What if we can conjure specific,
+            tailored tools when we need them?
+          </p>
+          <p>
+            No build step. No framework. No abstractions. Just files.
+          </p>
+          <p>
+            I still write the posts. I wrote this one.
+          </p>
+          <p>
+            <code>claude</code> does everything else.
+          </p>
+          <p>
+            This is the same pattern as <a href="/posts/libraries-have-staff">the library staff
+            metaphor I wrote about recently</a>. I’m the user of the library. Claude Code is the
+            staff keeping everything organized and accessible for me.
+          </p>
+          <p>
+            I didn’t realize the anxiety of just dealing with hugo was keeping me from posting.
+            Now, I don’t have an excuse. It’s way too easy to throw some markdown over to the thing
+            and let it figure it out.
+          </p>
+          <h2 id="take-aways">
+            Take aways
+          </h2>
+          <p>
+            <strong>Agents can replace more infrastructure than I expected.</strong> I thought I’d
+            still need some sort of framework or some kind of build system. Turns out those can be
+            coded up on-demand. And if I change my mind, new tools are produced and run
+            just-in-time.
+          </p>
+          <p>
+            <strong>Simple systems are easier to maintain.</strong> The less abstraction, the more
+            directly Claude Code can work. Bash scripts and HTML files are transparent. Claude can
+            read them, understand them, modify them. No nested packages or dependencies. No magic.
+          </p>
+          <p>
+            <strong>The agent maintains its own tools.</strong> It built the publishing scripts,
+            and now it maintains them. When requirements change, It updates the code. What a weird
+            future we have created.
+          </p>
+          <h2 id="future-experiments">
+            Future experiments
+          </h2>
+          <p>
+            <strong>Local, private coding agent.</strong> I don’t like sending up tons of data to
+            Anthropic just to publish a blog post. Can I make this work with a local model on my
+            laptop? I’m testing that out when I get time…
+          </p>
+          <h2 id="markdown-crown">
+            Markdown 👑
+          </h2>
+          <p>
+            <em>Now, my website is simple.</em> A handful of posts, static pages, an RSS feed. No
+            complex taxonomy, no search, no comments, no dynamic features.
+          </p>
+          <p>
+            If I needed those things, I might need real tooling again. Or I might not. Maybe a
+            coding agent can just build that stuff too. I honestly don’t know where the line is
+            yet.
+          </p>
+          <p>
+            Maybe we just need markdown files and a really good agent.
+          </p>
+        </div>
+        <footer>
+          <p>
+            Posted on <time datetime="2025-11-19T16:00:00+01:00">19 November, 2025</time>
+          </p>
+        </footer>
+      </article>
+    </main>
+    <script async src="/behavior.js"></script> 
+    <script async src="/assets/details-controls.js"></script> 
+    <script data-domain="nathanherald.com" defer src="https://stats.myobie.wtf/script.js"></script>
+  </body>
+</html>

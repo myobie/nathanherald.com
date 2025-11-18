@@ -4,7 +4,75 @@
     <title>nathanherald.com feed</title>
     <link>https://nathanherald.com/</link>
     <description>Recent posts from nathanherald.com</description>
-    <lastBuildDate>Tue, 18 Nov 2025 15:18:23 +0100</lastBuildDate>
+    <lastBuildDate>Tue, 18 Nov 2025 15:47:21 +0100</lastBuildDate>
+
+    <item>
+      <title>I Don't Have a CMS Anymore</title>
+      <link>https://nathanherald.com/posts/no-cms/</link>
+      <pubDate>Tue, 18 Nov 2025 15:47:19 +0100</pubDate>
+      <guid isPermaLink="true">https://nathanherald.com/posts/no-cms/</guid>
+      <description>&lt;p&gt;I used to run this site on &lt;a href="https://gohugo.io"&gt;hugo&lt;/a&gt;.
+Standard static site generator setup: write markdown, run
+&lt;code&gt;hugo build&lt;/code&gt;, preview locally, deploy. It worked fine, until
+it didn’t. A hugo update would break publishing new posts and I would
+let my site sit broken for months. Or trying to get the HTML how I
+wanted would require me to learn about shortcodes or weird go template
+language stuff…&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;I deleted all of that.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Now my website is just HTML files. No CMS at all.&lt;/p&gt;
+&lt;p&gt;When I want to publish a post, I write a markdown or HTML file and
+then tell &lt;code&gt;claude&lt;/code&gt;: "publish it.” That's it.&lt;/p&gt;
+&lt;p&gt;Claude Code has built up its own scripts to convert the markdown to
+HTML, update the RSS feed, add the post to the homepage and archive, run
+all the formatting tools, and handle everything else. I don't touch any
+of it. I've never even looked at those scripts.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;This is an experiment for me: how far can I push a coding
+agent?&lt;/strong&gt; Can we eliminate traditional tooling entirely? Can the
+robot just do everything "by hand"?&lt;/p&gt;
+&lt;p&gt;Static site generators exist because manually maintaining a website,
+keeping an RSS feed in sync, updating navigation, managing archives,
+etc, is tedious and error-prone.&lt;/p&gt;
+&lt;p&gt;But &lt;strong&gt;what if the automation doesn't need to be baked into
+tooling?&lt;/strong&gt; What if it can just be... done, on demand, by an
+agent? What if we can conjure specific, tailored tools when we need
+them?&lt;/p&gt;
+&lt;p&gt;No build step. No framework. No abstractions. Just files.&lt;/p&gt;
+&lt;p&gt;I still write the posts. I wrote this one.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;claude&lt;/code&gt; does everything else.&lt;/p&gt;
+&lt;p&gt;This is the same pattern as &lt;a href="/posts/libraries-have-staff"&gt;the
+library staff metaphor I wrote about recently&lt;/a&gt;. I'm the user of the
+library. Claude Code is the staff keeping everything organized and
+accessible for me.&lt;/p&gt;
+&lt;p&gt;I didn’t realize the anxiety of just dealing with hugo was keeping me
+from posting. Now, I don’t have an excuse. It’s way too easy to throw
+some markdown over to the thing and let it figure it out.&lt;/p&gt;
+&lt;h2 id="take-aways"&gt;Take aways&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;Agents can replace more infrastructure than I
+expected.&lt;/strong&gt; I thought I'd still need some sort of framework or
+some kind of build system. Turns out those can be coded up on-demand.
+And if I change my mind, new tools are produced and run
+just-in-time.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Simple systems are easier to maintain.&lt;/strong&gt; The less
+abstraction, the more directly Claude Code can work. Bash scripts and
+HTML files are transparent. Claude can read them, understand them,
+modify them. No nested packages or dependencies. No magic.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;The agent maintains its own tools.&lt;/strong&gt; It built the
+publishing scripts, and now it maintains them. When requirements change,
+It updates the code. What a weird future we have created.&lt;/p&gt;
+&lt;h2 id="future-experiments"&gt;Future experiments&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;Local, private coding agent.&lt;/strong&gt; I don’t like sending up
+tons of data to Anthropic just to publish a blog post. Can I make this
+work with a local model on my laptop? I’m testing that out when I get
+time…&lt;/p&gt;
+&lt;h2 id="markdown-crown"&gt;Markdown 👑&lt;/h2&gt;
+&lt;p&gt;&lt;em&gt;Now, my website is simple.&lt;/em&gt; A handful of posts, static pages,
+an RSS feed. No complex taxonomy, no search, no comments, no dynamic
+features.&lt;/p&gt;
+&lt;p&gt;If I needed those things, I might need real tooling again. Or I might
+not. Maybe a coding agent can just build that stuff too. I honestly
+don't know where the line is yet.&lt;/p&gt;
+&lt;p&gt;Maybe we just need markdown files and a really good agent.&lt;/p&gt;</description>
+    </item>
 
     <item>
       <title>The Library Doesn't Just Have a Card Catalog… it has a full-time staff</title>
