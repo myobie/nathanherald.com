@@ -117,7 +117,7 @@ if [ -n "$TITLE" ]; then
 fi
 
 # Convert markdown to HTML using pandoc
-HTML_CONTENT=$(echo "$CONTENT_WITHOUT_H1" | pandoc -f gfm -t html)
+HTML_CONTENT=$(echo "$CONTENT_WITHOUT_H1" | pandoc -f gfm+smart -t html)
 
 # Generate the full HTML page
 cat > "$OUTPUT_FILE" << EOF

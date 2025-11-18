@@ -4,7 +4,154 @@
     <title>nathanherald.com feed</title>
     <link>https://nathanherald.com/</link>
     <description>Recent posts from nathanherald.com</description>
-    <lastBuildDate>Tue, 04 Nov 2025 11:52:40 +0100</lastBuildDate>
+    <lastBuildDate>Tue, 18 Nov 2025 15:18:23 +0100</lastBuildDate>
+
+    <item>
+      <title>The Library Doesn't Just Have a Card Catalog… it has a full-time staff</title>
+      <link>https://nathanherald.com/posts/libraries-have-staff/</link>
+      <pubDate>Tue, 18 Nov 2025 15:18:16 +0100</pubDate>
+      <guid isPermaLink="true">https://nathanherald.com/posts/libraries-have-staff/</guid>
+      <description>&lt;p&gt;A few years ago, &lt;a
+href="https://nathanherald.com/posts/digital-card-catalog/"&gt;I wrote
+about how the library's card catalog is the right metaphor for
+organizing our digital information&lt;/a&gt;. The physical catalog works
+because it connects all our information exactly how we need for our
+personal knowledge bases.&lt;/p&gt;
+&lt;p&gt;But I missed something fundamental: &lt;strong&gt;the card catalog in a
+real Library doesn’t maintain itself.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Behind every well-organized library is &lt;strong&gt;a team of
+people&lt;/strong&gt; constantly working to keep information accessible.
+They’re cataloging new acquisitions, updating subject headings,
+cross-referencing related materials, culling outdated items, all
+&lt;em&gt;before&lt;/em&gt; you ask. When you walk into a library and find exactly
+what you’re looking for, it’s because of the wonderful staff there.&lt;/p&gt;
+&lt;p&gt;The reason we struggle with digital organization isn’t that we lack
+filing systems: there are too many &lt;em&gt;systems&lt;/em&gt; out there to count.
+It’s that &lt;strong&gt;we’re trying to be both the user and the entire
+staff,&lt;/strong&gt; and we simply don’t have the time.&lt;/p&gt;
+&lt;h2 id="what-library-staff-actually-do"&gt;What Library Staff Actually
+Do&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;Cataloging&lt;/strong&gt;: Every new item gets metadata assigned:
+and not just title and author, but subject headings, classifications,
+and keywords.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Cross-referencing&lt;/strong&gt;: Related materials get linked. If
+you’re checkout out the Cold War, the librarian has already connected
+biographies, primary source documents, and relevant periodicals.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Collection maintenance&lt;/strong&gt;: Old, outdated, or
+rarely-used items get evaluated. The collection stays relevant through
+&lt;strong&gt;active curation, not just accumulation.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Discovery support&lt;/strong&gt;: Librarians create displays,
+reading lists, and subject guides that surface relevant materials you
+didn’t know to ask for.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Answer questions&lt;/strong&gt;: When search isn’t cutting it, a
+human who understands the collection and knows where things are can
+help.&lt;/p&gt;
+&lt;p&gt;All of this is &lt;strong&gt;proactive&lt;/strong&gt;. The organization work
+happens continuously in the background, an act of renewal.&lt;/p&gt;
+&lt;h2 id="weve-been-trying-to-do-this-ourselves"&gt;We’ve Been Trying to Do
+This Ourselves&lt;/h2&gt;
+&lt;p&gt;With all of our notes, documents, bookmarks, photos, and emails, we
+are attempting to be our own librarians. We make folders. We add tags
+when we remember. We try to search when we need something. We promise
+ourselves we’ll organize everything soon.&lt;/p&gt;
+&lt;p&gt;It doesn’t work because the ratio is impossible: one person cannot be
+both a library’s sole user and its entire staff. The cataloging work
+scales with the collection size and our available time does not.&lt;/p&gt;
+&lt;p&gt;Every productivity system eventually fails for this reason. We build
+the perfect folder hierarchy, create the ultimate tagging system,
+install the best knowledge management software; then life happens. Files
+pile up. Tags become inconsistent. The system that was supposed to save
+us time becomes another thing we feel guilty about not maintaining.&lt;/p&gt;
+&lt;p&gt;The problem isn’t our discipline – the problem is structural.&lt;/p&gt;
+&lt;h2 id="a-personal-library-staff"&gt;A Personal Library Staff?&lt;/h2&gt;
+&lt;p&gt;For the first time, we can actually build something resembling “a
+proactive staff.”&lt;/p&gt;
+&lt;p&gt;Cloud AI &lt;a
+href="https://simonwillison.net/2025/Sep/18/agents/"&gt;agents&lt;/a&gt; can do
+some of this work, but at the expense of sending all our private
+information up to their servers constantly…&lt;/p&gt;
+&lt;p&gt;So recently &lt;strong&gt;I’ve been learning about and working with local
+models,&lt;/strong&gt; the ones you can run on your phone or laptop in a truly
+private, offline way. I’ve had success doing the systematic, repetitive
+organization work that can improve our personal knowledge systems and
+finally make them workable over time.&lt;/p&gt;
+&lt;p&gt;Here’s what I’ve learned is possible: I can build agents that process
+new documents as they arrive, extracting metadata and assigning
+categories based on my existing system. When patterns emerge, they
+suggest new categories I hadn’t thought of. I’ve programmed experiments
+to scan my collection for connections – linking meeting notes to project
+documents, research papers to relevant bookmarks, photos to calendar
+events.&lt;/p&gt;
+&lt;p&gt;They can handle maintenance too. Flagging duplicates, identifying
+outdated information, highlighting orphaned items that have no
+connections to anything else. As documents move into my archive, agents
+generate abstracts so I don’t lose track of what I once knew. They
+create reading lists organized by theme, produce regular digests of what
+I’ve saved recently.&lt;/p&gt;
+&lt;p&gt;And they can “learn” from how I search. Every query I run is
+information about what matters to me and how I think about my personal
+context. An agent can use that to preemptively improve discoverability
+of materials I’ll likely need, without me having to stop and manually
+organize everything first.&lt;/p&gt;
+&lt;p&gt;None of this requires me to stop what I’m doing to organize. The
+agents can work in the background.&lt;/p&gt;
+&lt;h2 id="private-and-local-is-the-future"&gt;Private and local is the
+future&lt;/h2&gt;
+&lt;p&gt;Your personal context contains your most sensitive information: work
+documents, personal notes, financial records, health information, etc.
+Sending this to a cloud AI service doesn’t feel right. And we don’t have
+to.&lt;/p&gt;
+&lt;p&gt;A Mac Mini can run models that will handle this work. No
+subscriptions. No data leaving your network. Your local private “staff”
+works for you, not for the cloud provider that trained them.&lt;/p&gt;
+&lt;h3 id="specialized-agents-not-one-super-agent"&gt;Specialized agents, not
+one super-agent&lt;/h3&gt;
+&lt;p&gt;Local models are small, so it is prudent to build many small agents
+instead of one big one.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;A &lt;strong&gt;filing agent&lt;/strong&gt; that runs daily to categorize new
+items&lt;/li&gt;
+&lt;li&gt;A &lt;strong&gt;connection agent&lt;/strong&gt; that finds relationships between
+materials&lt;/li&gt;
+&lt;li&gt;A &lt;strong&gt;maintenance agent&lt;/strong&gt; that flags issues and
+duplicates&lt;/li&gt;
+&lt;li&gt;A &lt;strong&gt;summary agent&lt;/strong&gt; that creates abstracts and
+digests&lt;/li&gt;
+&lt;li&gt;A &lt;strong&gt;search agent&lt;/strong&gt; that learns from your queries to
+improve indexing&lt;/li&gt;
+&lt;li&gt;Etc&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Each agent should have focused instructions tailored to your specific
+organization system. You’re not prompting ChatGPT to “organize my
+files.” You’re running custom, tailored local programs that know your
+taxonomy, your terminology, and your priorities.&lt;/p&gt;
+&lt;p&gt;Every time you search for something or ask a question, you’re
+providing data about what matters to you and how you think about your
+information. Every time you manually connect two documents, you’re
+teaching the system about relationships it should look for. Every time
+you can’t find something, you’re revealing a gap in the
+organization.&lt;/p&gt;
+&lt;p&gt;These patterns should become instructions for proactive work. If you
+frequently search for “client feedback from Q3,” your agents should
+learn to automatically tag and group client feedback by quarter. If you
+often link legal documents to project files, your agents should start
+suggesting those connections preemptively.&lt;/p&gt;
+&lt;h2 id="local-agents-change-the-game"&gt;Local Agents Change the Game&lt;/h2&gt;
+&lt;p&gt;The library card catalog works because it is maintained by people
+whose full-time job is keeping information accessible. Personal
+knowledge management has failed for most of us because we’re trying to
+do that work ourselves while also being the library’s primary user.&lt;/p&gt;
+&lt;p&gt;Local, private agents can solve this by becoming your library staff.
+They can do the proactive, systematic organization work in the
+background. They can learn from your usage patterns. They can run
+continuously without requiring your attention. And because they run
+locally, your information stays yours.&lt;/p&gt;
+&lt;p&gt;You don't need better organizational discipline. You need staff. And
+for the first time, you might can actually have them.&lt;/p&gt;
+&lt;p&gt;I'm building toward this vision in a product called &lt;a
+href="https://new.space/app"&gt;new.space&lt;/a&gt;. Run local models on your
+iPhone today. Give it a try.&lt;/p&gt;</description>
+    </item>
 
     <item>
       <title>The Capability Gradient</title>
