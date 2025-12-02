@@ -4,7 +4,320 @@
     <title>nathanherald.com feed</title>
     <link>https://nathanherald.com/</link>
     <description>Recent posts from nathanherald.com</description>
-    <lastBuildDate>Tue, 18 Nov 2025 15:47:21 +0100</lastBuildDate>
+    <lastBuildDate>Tue, 02 Dec 2025 23:32:36 +0100</lastBuildDate>
+
+    <item>
+      <title>SwiftUI @State Considered Harmful</title>
+      <link>https://nathanherald.com/posts/swiftui-state-considered-harmful/</link>
+      <pubDate>Tue, 02 Dec 2025 23:32:28 +0100</pubDate>
+      <guid isPermaLink="true">https://nathanherald.com/posts/swiftui-state-considered-harmful/</guid>
+      <description>&lt;h2 id="the-problem-with-state-for-collections"&gt;The Problem with
+&lt;code&gt;@State&lt;/code&gt; for Collections&lt;/h2&gt;
+&lt;p&gt;When you're building a SwiftUI app with lists of items, like say
+podcast episodes, the obvious first approach is &lt;code&gt;@State&lt;/code&gt;:&lt;/p&gt;
+&lt;div class="sourceCode" id="cb1"&gt;&lt;pre
+class="sourceCode swift"&gt;&lt;code class="sourceCode swift"&gt;&lt;span id="cb1-1"&gt;&lt;a href="#cb1-1" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;span class="kw"&gt;struct&lt;/span&gt; EpisodeListView&lt;span class="op"&gt;:&lt;/span&gt; &lt;span class="dt"&gt;View&lt;/span&gt; &lt;span class="op"&gt;{&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb1-2"&gt;&lt;a href="#cb1-2" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;    &lt;span class="at"&gt;@State&lt;/span&gt; &lt;span class="kw"&gt;private&lt;/span&gt; &lt;span class="kw"&gt;var&lt;/span&gt; &lt;span class="va"&gt;episodes&lt;/span&gt;&lt;span class="op"&gt;:&lt;/span&gt; &lt;span class="op"&gt;[&lt;/span&gt;Episode&lt;span class="op"&gt;]&lt;/span&gt; &lt;span class="op"&gt;=&lt;/span&gt; &lt;span class="op"&gt;[]&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb1-3"&gt;&lt;a href="#cb1-3" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;/span&gt;
+&lt;span id="cb1-4"&gt;&lt;a href="#cb1-4" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;    &lt;span class="kw"&gt;var&lt;/span&gt; &lt;span class="va"&gt;body&lt;/span&gt;&lt;span class="op"&gt;:&lt;/span&gt; some View &lt;span class="op"&gt;{&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb1-5"&gt;&lt;a href="#cb1-5" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;        List&lt;span class="op"&gt;(&lt;/span&gt;episodes&lt;span class="op"&gt;)&lt;/span&gt; &lt;span class="op"&gt;{&lt;/span&gt; episode &lt;span class="cf"&gt;in&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb1-6"&gt;&lt;a href="#cb1-6" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;            EpisodeRow&lt;span class="op"&gt;(&lt;/span&gt;episode&lt;span class="op"&gt;:&lt;/span&gt; episode&lt;span class="op"&gt;)&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb1-7"&gt;&lt;a href="#cb1-7" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;        &lt;span class="op"&gt;}&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb1-8"&gt;&lt;a href="#cb1-8" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;    &lt;span class="op"&gt;}&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb1-9"&gt;&lt;a href="#cb1-9" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;span class="op"&gt;}&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;This seems to work at first. But then I notice UI stuttering while
+using the app…&lt;/p&gt;
+&lt;p&gt;The moment you change &lt;em&gt;any&lt;/em&gt; property on &lt;em&gt;any&lt;/em&gt; episode,
+SwiftUI invalidates the entire &lt;code&gt;@State&lt;/code&gt; array. Every
+&lt;code&gt;EpisodeRow&lt;/code&gt; re-renders. With 100 episodes and a playback
+position updating every second, you're re-rendering 100 rows every
+second. 1,000 episodes and things get real sad. Your UI stutters. Your
+battery drains.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;The fundamental problem:&lt;/strong&gt; &lt;code&gt;@State&lt;/code&gt; treats
+the entire array as a single unit of change. SwiftUI can't see
+&lt;em&gt;inside&lt;/em&gt; structs to know that only
+&lt;code&gt;episodes[42].playbackPosition&lt;/code&gt; changed, for example. It sees
+"the array changed" and rebuilds everything.&lt;/p&gt;
+&lt;h2
+id="the-solution-observable-collections-of-observables-with-identity-preservation"&gt;The
+Solution: Observable Collections of Observables with Identity
+Preservation&lt;/h2&gt;
+&lt;p&gt;SwiftUI seems to have a lot of the downsides of the "just rerender
+everything" frameworks like React. Luckily, I have dealt with react,
+preact, svelte, etc. &lt;strong&gt;Granular reactivity requires granular
+changes and stable identity.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;After a lot of iteration, this of what I've landed on. I am not a
+SwiftUI expert, so please tell me if this is terrible.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Ive made each item an &lt;code&gt;@Observable&lt;/code&gt; class, stored
+them by reference in a dictionary, and I update them
+in-place.&lt;/strong&gt;&lt;/p&gt;
+&lt;div class="sourceCode" id="cb2"&gt;&lt;pre
+class="sourceCode swift"&gt;&lt;code class="sourceCode swift"&gt;&lt;span id="cb2-1"&gt;&lt;a href="#cb2-1" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;span class="at"&gt;@Observable&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb2-2"&gt;&lt;a href="#cb2-2" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;span class="kw"&gt;final&lt;/span&gt; &lt;span class="kw"&gt;class&lt;/span&gt; Episode&lt;span class="op"&gt;:&lt;/span&gt; &lt;span class="dt"&gt;Identifiable&lt;/span&gt;&lt;span class="op"&gt;,&lt;/span&gt; &lt;span class="at"&gt;@unchecked&lt;/span&gt; Sendable &lt;span class="op"&gt;{&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb2-3"&gt;&lt;a href="#cb2-3" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;    &lt;span class="kw"&gt;var&lt;/span&gt; &lt;span class="va"&gt;id&lt;/span&gt;&lt;span class="op"&gt;:&lt;/span&gt; String&lt;/span&gt;
+&lt;span id="cb2-4"&gt;&lt;a href="#cb2-4" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;    &lt;span class="kw"&gt;var&lt;/span&gt; &lt;span class="va"&gt;title&lt;/span&gt;&lt;span class="op"&gt;:&lt;/span&gt; String&lt;/span&gt;
+&lt;span id="cb2-5"&gt;&lt;a href="#cb2-5" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;    &lt;span class="kw"&gt;var&lt;/span&gt; &lt;span class="va"&gt;playbackPosition&lt;/span&gt;&lt;span class="op"&gt;:&lt;/span&gt; Int&lt;/span&gt;
+&lt;span id="cb2-6"&gt;&lt;a href="#cb2-6" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;    &lt;span class="kw"&gt;var&lt;/span&gt; &lt;span class="va"&gt;isDownloaded&lt;/span&gt;&lt;span class="op"&gt;:&lt;/span&gt; Bool&lt;/span&gt;
+&lt;span id="cb2-7"&gt;&lt;a href="#cb2-7" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;    &lt;span class="co"&gt;// ... other properties&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb2-8"&gt;&lt;a href="#cb2-8" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;/span&gt;
+&lt;span id="cb2-9"&gt;&lt;a href="#cb2-9" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;    &lt;span class="kw"&gt;func&lt;/span&gt; &lt;span class="fu"&gt;update&lt;/span&gt;&lt;span class="op"&gt;(&lt;/span&gt;&lt;span class="va"&gt;from&lt;/span&gt; &lt;span class="va"&gt;snapshot&lt;/span&gt;&lt;span class="op"&gt;:&lt;/span&gt; &lt;span class="dt"&gt;EpisodeSnapshot&lt;/span&gt;&lt;span class="op"&gt;)&lt;/span&gt; &lt;span class="op"&gt;{&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb2-10"&gt;&lt;a href="#cb2-10" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;        &lt;span class="kw"&gt;self&lt;/span&gt;&lt;span class="op"&gt;.&lt;/span&gt;title &lt;span class="op"&gt;=&lt;/span&gt; other&lt;span class="op"&gt;.&lt;/span&gt;title&lt;/span&gt;
+&lt;span id="cb2-11"&gt;&lt;a href="#cb2-11" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;        &lt;span class="kw"&gt;self&lt;/span&gt;&lt;span class="op"&gt;.&lt;/span&gt;playbackPosition &lt;span class="op"&gt;=&lt;/span&gt; other&lt;span class="op"&gt;.&lt;/span&gt;playbackPosition&lt;/span&gt;
+&lt;span id="cb2-12"&gt;&lt;a href="#cb2-12" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;        &lt;span class="kw"&gt;self&lt;/span&gt;&lt;span class="op"&gt;.&lt;/span&gt;isDownloaded &lt;span class="op"&gt;=&lt;/span&gt; other&lt;span class="op"&gt;.&lt;/span&gt;isDownloaded&lt;/span&gt;
+&lt;span id="cb2-13"&gt;&lt;a href="#cb2-13" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;        &lt;span class="co"&gt;// ... update all properties except identity (id)&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb2-14"&gt;&lt;a href="#cb2-14" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;    &lt;span class="op"&gt;}&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb2-15"&gt;&lt;a href="#cb2-15" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;span class="op"&gt;}&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;When I build an app I am dogmatic that there should be one "app
+state" that exists outside the UI and is granularly reactive by default.
+It can be unit tested. And when I look at this object I should be able
+to imagine what the UI looks like.&lt;/p&gt;
+&lt;div class="sourceCode" id="cb3"&gt;&lt;pre
+class="sourceCode swift"&gt;&lt;code class="sourceCode swift"&gt;&lt;span id="cb3-1"&gt;&lt;a href="#cb3-1" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;span class="at"&gt;@MainActor&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb3-2"&gt;&lt;a href="#cb3-2" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;span class="at"&gt;@Observable&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb3-3"&gt;&lt;a href="#cb3-3" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;span class="kw"&gt;final&lt;/span&gt; &lt;span class="kw"&gt;class&lt;/span&gt; AppState &lt;span class="op"&gt;{&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb3-4"&gt;&lt;a href="#cb3-4" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;    &lt;span class="kw"&gt;var&lt;/span&gt; &lt;span class="va"&gt;episodes&lt;/span&gt;&lt;span class="op"&gt;:&lt;/span&gt; &lt;span class="op"&gt;[&lt;/span&gt;String&lt;span class="op"&gt;:&lt;/span&gt; Episode&lt;span class="op"&gt;]&lt;/span&gt; &lt;span class="op"&gt;=&lt;/span&gt; &lt;span class="op"&gt;[:]&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb3-5"&gt;&lt;a href="#cb3-5" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;/span&gt;
+&lt;span id="cb3-6"&gt;&lt;a href="#cb3-6" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;    &lt;span class="kw"&gt;func&lt;/span&gt; &lt;span class="fu"&gt;mergeEpisodes&lt;/span&gt;&lt;span class="op"&gt;(&lt;/span&gt;&lt;span class="va"&gt;_&lt;/span&gt; &lt;span class="va"&gt;incoming&lt;/span&gt;&lt;span class="op"&gt;:&lt;/span&gt; [&lt;span class="dt"&gt;String&lt;/span&gt;&lt;span class="op"&gt;:&lt;/span&gt; &lt;span class="dt"&gt;EpisodeSnapshot&lt;/span&gt;]&lt;span class="op"&gt;)&lt;/span&gt; &lt;span class="op"&gt;{&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb3-7"&gt;&lt;a href="#cb3-7" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;        &lt;span class="kw"&gt;let&lt;/span&gt; &lt;span class="va"&gt;incomingIds&lt;/span&gt; &lt;span class="op"&gt;=&lt;/span&gt; Set&lt;span class="op"&gt;(&lt;/span&gt;incoming&lt;span class="op"&gt;.&lt;/span&gt;keys&lt;span class="op"&gt;)&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb3-8"&gt;&lt;a href="#cb3-8" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;        &lt;span class="kw"&gt;let&lt;/span&gt; &lt;span class="va"&gt;existingIds&lt;/span&gt; &lt;span class="op"&gt;=&lt;/span&gt; Set&lt;span class="op"&gt;(&lt;/span&gt;episodes&lt;span class="op"&gt;.&lt;/span&gt;keys&lt;span class="op"&gt;)&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb3-9"&gt;&lt;a href="#cb3-9" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;/span&gt;
+&lt;span id="cb3-10"&gt;&lt;a href="#cb3-10" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;        &lt;span class="co"&gt;// Remove deleted&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb3-11"&gt;&lt;a href="#cb3-11" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;        &lt;span class="cf"&gt;for&lt;/span&gt; id &lt;span class="cf"&gt;in&lt;/span&gt; existingIds&lt;span class="op"&gt;.&lt;/span&gt;subtracting&lt;span class="op"&gt;(&lt;/span&gt;incomingIds&lt;span class="op"&gt;)&lt;/span&gt; &lt;span class="op"&gt;{&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb3-12"&gt;&lt;a href="#cb3-12" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;            episodes&lt;span class="op"&gt;.&lt;/span&gt;removeValue&lt;span class="op"&gt;(&lt;/span&gt;forKey&lt;span class="op"&gt;:&lt;/span&gt; id&lt;span class="op"&gt;)&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb3-13"&gt;&lt;a href="#cb3-13" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;        &lt;span class="op"&gt;}&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb3-14"&gt;&lt;a href="#cb3-14" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;/span&gt;
+&lt;span id="cb3-15"&gt;&lt;a href="#cb3-15" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;        &lt;span class="co"&gt;// Update existing or add new&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb3-16"&gt;&lt;a href="#cb3-16" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;        &lt;span class="cf"&gt;for&lt;/span&gt; &lt;span class="op"&gt;(&lt;/span&gt;id&lt;span class="op"&gt;,&lt;/span&gt; incomingEpisode&lt;span class="op"&gt;)&lt;/span&gt; &lt;span class="cf"&gt;in&lt;/span&gt; incoming &lt;span class="op"&gt;{&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb3-17"&gt;&lt;a href="#cb3-17" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;            &lt;span class="cf"&gt;if&lt;/span&gt; &lt;span class="kw"&gt;let&lt;/span&gt; &lt;span class="va"&gt;existing&lt;/span&gt; &lt;span class="op"&gt;=&lt;/span&gt; episodes&lt;span class="op"&gt;[&lt;/span&gt;id&lt;span class="op"&gt;]&lt;/span&gt; &lt;span class="op"&gt;{&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb3-18"&gt;&lt;a href="#cb3-18" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;                existing&lt;span class="op"&gt;.&lt;/span&gt;update&lt;span class="op"&gt;(&lt;/span&gt;from&lt;span class="op"&gt;:&lt;/span&gt; incomingEpisode&lt;span class="op"&gt;)&lt;/span&gt;  &lt;span class="co"&gt;// Update in-place!&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb3-19"&gt;&lt;a href="#cb3-19" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;            &lt;span class="op"&gt;}&lt;/span&gt; &lt;span class="cf"&gt;else&lt;/span&gt; &lt;span class="op"&gt;{&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb3-20"&gt;&lt;a href="#cb3-20" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;                episodes&lt;span class="op"&gt;[&lt;/span&gt;id&lt;span class="op"&gt;]&lt;/span&gt; &lt;span class="op"&gt;=&lt;/span&gt; Episdoe&lt;span class="op"&gt;(&lt;/span&gt;from&lt;span class="op"&gt;:&lt;/span&gt; incomingEpisode&lt;span class="op"&gt;)&lt;/span&gt;  &lt;span class="co"&gt;// New item&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb3-21"&gt;&lt;a href="#cb3-21" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;            &lt;span class="op"&gt;}&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb3-22"&gt;&lt;a href="#cb3-22" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;        &lt;span class="op"&gt;}&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb3-23"&gt;&lt;a href="#cb3-23" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;    &lt;span class="op"&gt;}&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb3-24"&gt;&lt;a href="#cb3-24" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;span class="op"&gt;}&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;This gives me:&lt;/p&gt;
+&lt;ol type="1"&gt;
+&lt;li&gt;&lt;strong&gt;Granular updates:&lt;/strong&gt; When
+&lt;code&gt;episode.playbackPosition&lt;/code&gt; changes, only views observing that
+specific property re-render&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Stable object identity:&lt;/strong&gt; The same
+&lt;code&gt;Episode&lt;/code&gt; instance persists across refreshes, so SwiftUI can
+diff efficiently&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Single source of truth:&lt;/strong&gt; One &lt;code&gt;Episode&lt;/code&gt;
+instance per ID, owned by &lt;code&gt;AppState&lt;/code&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id="questions-youre-probably-asking"&gt;Questions You're Probably
+Asking&lt;/h2&gt;
+&lt;h3 id="1-why-a-class-instead-of-a-struct"&gt;1. "Why a class instead of a
+struct?"&lt;/h3&gt;
+&lt;p&gt;Structs are value types. When you put structs in an array and modify
+one, you get a new array. SwiftUI sees a new array and re-renders
+everything.&lt;/p&gt;
+&lt;p&gt;Classes are reference types. When you modify a property on a class
+instance, the reference stays the same. With &lt;code&gt;@Observable&lt;/code&gt;,
+SwiftUI tracks which properties each view actually reads and only
+re-renders when those specific properties change on the class
+instance.&lt;/p&gt;
+&lt;div class="sourceCode" id="cb4"&gt;&lt;pre
+class="sourceCode swift"&gt;&lt;code class="sourceCode swift"&gt;&lt;span id="cb4-1"&gt;&lt;a href="#cb4-1" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;span class="co"&gt;// With structs: entire list re-renders&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb4-2"&gt;&lt;a href="#cb4-2" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;episodes&lt;span class="op"&gt;[&lt;/span&gt;&lt;span class="dv"&gt;0&lt;/span&gt;&lt;span class="op"&gt;].&lt;/span&gt;playbackPosition &lt;span class="op"&gt;=&lt;/span&gt; &lt;span class="dv"&gt;100&lt;/span&gt;  &lt;span class="co"&gt;// Creates new array&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb4-3"&gt;&lt;a href="#cb4-3" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;/span&gt;
+&lt;span id="cb4-4"&gt;&lt;a href="#cb4-4" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;span class="co"&gt;// With classes: only views reading playbackPosition re-render&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb4-5"&gt;&lt;a href="#cb4-5" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;episodes&lt;span class="op"&gt;[&lt;/span&gt;&lt;span class="st"&gt;&amp;quot;id&amp;quot;&lt;/span&gt;&lt;span class="op"&gt;]?.&lt;/span&gt;playbackPosition &lt;span class="op"&gt;=&lt;/span&gt; &lt;span class="dv"&gt;100&lt;/span&gt;  &lt;span class="co"&gt;// Same reference, property changes&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h3 id="2-wont-this-cause-memory-leaks-or-retain-cycles"&gt;2. "Won't this
+cause memory leaks or retain cycles?"&lt;/h3&gt;
+&lt;p&gt;Not if you follow the ownership model. &lt;code&gt;AppState&lt;/code&gt; owns all
+&lt;code&gt;Episode&lt;/code&gt; instances in a dictionary. Views receive references
+through lookups (&lt;code&gt;appState.episode(id: episodeId)&lt;/code&gt;). There
+are no closures capturing episodes, no parent-child cycles—just a flat
+owner (AppState) and temporary readers (views).&lt;/p&gt;
+&lt;p&gt;Do you know a better way to enforce this? Let me know, hit me up on
+&lt;a href="https://indieweb.social/@myobie"&gt;mastodon&lt;/a&gt;.&lt;/p&gt;
+&lt;h3 id="3-why-a-dictionary-instead-of-an-array"&gt;3. "Why a dictionary
+instead of an array?"&lt;/h3&gt;
+&lt;p&gt;Two reasons:&lt;/p&gt;
+&lt;ol type="1"&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;Fast lookups by ID&lt;/strong&gt; - Detail views might need to
+look up episodes frequently. Make it easy.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;Merging is clearer&lt;/strong&gt; - When I refresh from
+disk/network, I get a new set of episodes. With a dictionary, it's
+obvious how to merge: update existing keys in-place, add new keys,
+remove missing keys.&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Also, computed properties give you arrays when you need them:&lt;/p&gt;
+&lt;div class="sourceCode" id="cb5"&gt;&lt;pre
+class="sourceCode swift"&gt;&lt;code class="sourceCode swift"&gt;&lt;span id="cb5-1"&gt;&lt;a href="#cb5-1" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;span class="kw"&gt;var&lt;/span&gt; &lt;span class="va"&gt;allEpisodes&lt;/span&gt;&lt;span class="op"&gt;:&lt;/span&gt; &lt;span class="op"&gt;[&lt;/span&gt;Episode&lt;span class="op"&gt;]&lt;/span&gt; &lt;span class="op"&gt;{&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb5-2"&gt;&lt;a href="#cb5-2" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;    episodes&lt;span class="op"&gt;.&lt;/span&gt;values&lt;span class="op"&gt;.&lt;/span&gt;sorted &lt;span class="op"&gt;{&lt;/span&gt; $&lt;span class="fl"&gt;0.&lt;/span&gt;date &lt;span class="op"&gt;&amp;gt;&lt;/span&gt; $&lt;span class="fl"&gt;1.&lt;/span&gt;date &lt;span class="op"&gt;}&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb5-3"&gt;&lt;a href="#cb5-3" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;span class="op"&gt;}&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Don't sleep on computed properties: those are observable too.&lt;/p&gt;
+&lt;h3
+id="4-what-about-thread-safety-you-marked-episode-as-unchecked-sendable"&gt;4.
+"What about thread safety? You marked Episode as @unchecked
+Sendable."&lt;/h3&gt;
+&lt;p&gt;Yes, and this is intentional. &lt;code&gt;Episode&lt;/code&gt; is &lt;em&gt;only&lt;/em&gt;
+mutated on the main actor, through &lt;code&gt;AppState&lt;/code&gt; (which is
+&lt;code&gt;@MainActor&lt;/code&gt;). The &lt;code&gt;@unchecked Sendable&lt;/code&gt;
+conformance lets us pass episodes across actor boundaries for read-only
+operations (like background parsing) without copying.&lt;/p&gt;
+&lt;p&gt;The rule is simple: &lt;strong&gt;read anywhere, write only on main actor
+through AppState/AppActions&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;I've also implemented an &lt;code&gt;EpisodeSnapshot&lt;/code&gt;
+&lt;code&gt;struct&lt;/code&gt; which can be thrown across actor boundaries anytime.
+Loading from disk should send &lt;code&gt;EpisodeSnapshot&lt;/code&gt;s over to the
+&lt;code&gt;AppState&lt;/code&gt;, for example, to cross the boundary. Same with
+persisting episodes to disk.&lt;/p&gt;
+&lt;p&gt;Do you know a better way to enforce this? Let me know, hit me up on
+&lt;a href="https://indieweb.social/@myobie"&gt;mastodon&lt;/a&gt;.&lt;/p&gt;
+&lt;h3
+id="5-why-not-just-use-observationignored-on-frequently-changing-properties"&gt;5.
+"Why not just use @ObservationIgnored on frequently-changing
+properties?"&lt;/h3&gt;
+&lt;p&gt;Because then SwiftUI doesn't see the changes at all. If
+&lt;code&gt;playbackPosition&lt;/code&gt; is ignored, the progress indicator in the
+UI never updates. Also, "app state" should only be the actual state. If
+it isn't useful for the app, then it shouldn't be in there.&lt;/p&gt;
+&lt;p&gt;The real solution is structuring views to observe only what they
+display:&lt;/p&gt;
+&lt;div class="sourceCode" id="cb6"&gt;&lt;pre
+class="sourceCode swift"&gt;&lt;code class="sourceCode swift"&gt;&lt;span id="cb6-1"&gt;&lt;a href="#cb6-1" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;span class="co"&gt;// Good: This view only observes title and date&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb6-2"&gt;&lt;a href="#cb6-2" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;span class="kw"&gt;struct&lt;/span&gt; EpisodeRow&lt;span class="op"&gt;:&lt;/span&gt; &lt;span class="dt"&gt;View&lt;/span&gt; &lt;span class="op"&gt;{&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb6-3"&gt;&lt;a href="#cb6-3" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;    &lt;span class="kw"&gt;let&lt;/span&gt; &lt;span class="va"&gt;episode&lt;/span&gt;&lt;span class="op"&gt;:&lt;/span&gt; Episode&lt;/span&gt;
+&lt;span id="cb6-4"&gt;&lt;a href="#cb6-4" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;/span&gt;
+&lt;span id="cb6-5"&gt;&lt;a href="#cb6-5" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;    &lt;span class="kw"&gt;var&lt;/span&gt; &lt;span class="va"&gt;body&lt;/span&gt;&lt;span class="op"&gt;:&lt;/span&gt; some View &lt;span class="op"&gt;{&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb6-6"&gt;&lt;a href="#cb6-6" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;        VStack &lt;span class="op"&gt;{&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb6-7"&gt;&lt;a href="#cb6-7" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;            Text&lt;span class="op"&gt;(&lt;/span&gt;episode&lt;span class="op"&gt;.&lt;/span&gt;title&lt;span class="op"&gt;)&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb6-8"&gt;&lt;a href="#cb6-8" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;            Text&lt;span class="op"&gt;(&lt;/span&gt;episode&lt;span class="op"&gt;.&lt;/span&gt;date&lt;span class="op"&gt;,&lt;/span&gt; style&lt;span class="op"&gt;:&lt;/span&gt; &lt;span class="op"&gt;.&lt;/span&gt;date&lt;span class="op"&gt;)&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb6-9"&gt;&lt;a href="#cb6-9" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;        &lt;span class="op"&gt;}&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb6-10"&gt;&lt;a href="#cb6-10" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;    &lt;span class="op"&gt;}&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb6-11"&gt;&lt;a href="#cb6-11" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;span class="op"&gt;}&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb6-12"&gt;&lt;a href="#cb6-12" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;/span&gt;
+&lt;span id="cb6-13"&gt;&lt;a href="#cb6-13" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;span class="co"&gt;// The playback position view is separate&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb6-14"&gt;&lt;a href="#cb6-14" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;span class="kw"&gt;struct&lt;/span&gt; PlaybackProgress&lt;span class="op"&gt;:&lt;/span&gt; &lt;span class="dt"&gt;View&lt;/span&gt; &lt;span class="op"&gt;{&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb6-15"&gt;&lt;a href="#cb6-15" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;    &lt;span class="kw"&gt;let&lt;/span&gt; &lt;span class="va"&gt;episode&lt;/span&gt;&lt;span class="op"&gt;:&lt;/span&gt; Episode&lt;/span&gt;
+&lt;span id="cb6-16"&gt;&lt;a href="#cb6-16" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;/span&gt;
+&lt;span id="cb6-17"&gt;&lt;a href="#cb6-17" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;    &lt;span class="kw"&gt;var&lt;/span&gt; &lt;span class="va"&gt;body&lt;/span&gt;&lt;span class="op"&gt;:&lt;/span&gt; some View &lt;span class="op"&gt;{&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb6-18"&gt;&lt;a href="#cb6-18" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;        ProgressView&lt;span class="op"&gt;(&lt;/span&gt;value&lt;span class="op"&gt;:&lt;/span&gt; Double&lt;span class="op"&gt;(&lt;/span&gt;episode&lt;span class="op"&gt;.&lt;/span&gt;playbackPosition&lt;span class="op"&gt;),&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb6-19"&gt;&lt;a href="#cb6-19" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;                     total&lt;span class="op"&gt;:&lt;/span&gt; Double&lt;span class="op"&gt;(&lt;/span&gt;episode&lt;span class="op"&gt;.&lt;/span&gt;duration&lt;span class="op"&gt;))&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb6-20"&gt;&lt;a href="#cb6-20" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;    &lt;span class="op"&gt;}&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb6-21"&gt;&lt;a href="#cb6-21" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;span class="op"&gt;}&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Now playback position updates only re-render
+&lt;code&gt;PlaybackProgress&lt;/code&gt;, not &lt;code&gt;EpisodeRow&lt;/code&gt;.&lt;/p&gt;
+&lt;h3 id="6-how-do-views-get-fresh-data-after-updates"&gt;6. "How do views
+get fresh data after updates?"&lt;/h3&gt;
+&lt;p&gt;Detail views should always look up from AppState:&lt;/p&gt;
+&lt;div class="sourceCode" id="cb7"&gt;&lt;pre
+class="sourceCode swift"&gt;&lt;code class="sourceCode swift"&gt;&lt;span id="cb7-1"&gt;&lt;a href="#cb7-1" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;span class="kw"&gt;struct&lt;/span&gt; EpisodeDetailView&lt;span class="op"&gt;:&lt;/span&gt; &lt;span class="dt"&gt;View&lt;/span&gt; &lt;span class="op"&gt;{&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb7-2"&gt;&lt;a href="#cb7-2" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;    &lt;span class="kw"&gt;let&lt;/span&gt; &lt;span class="va"&gt;episodeId&lt;/span&gt;&lt;span class="op"&gt;:&lt;/span&gt; String  &lt;span class="co"&gt;// Just the ID&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb7-3"&gt;&lt;a href="#cb7-3" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;    &lt;span class="at"&gt;@Environment&lt;/span&gt;&lt;span class="op"&gt;(&lt;/span&gt;AppState&lt;span class="op"&gt;.&lt;/span&gt;&lt;span class="kw"&gt;self&lt;/span&gt;&lt;span class="op"&gt;)&lt;/span&gt; &lt;span class="kw"&gt;private&lt;/span&gt; &lt;span class="kw"&gt;var&lt;/span&gt; &lt;span class="va"&gt;appState&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb7-4"&gt;&lt;a href="#cb7-4" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;/span&gt;
+&lt;span id="cb7-5"&gt;&lt;a href="#cb7-5" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;    &lt;span class="kw"&gt;private&lt;/span&gt; &lt;span class="kw"&gt;var&lt;/span&gt; &lt;span class="va"&gt;episode&lt;/span&gt;&lt;span class="op"&gt;:&lt;/span&gt; Episode&lt;span class="op"&gt;?&lt;/span&gt; &lt;span class="op"&gt;{&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb7-6"&gt;&lt;a href="#cb7-6" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;        appState&lt;span class="op"&gt;.&lt;/span&gt;episode&lt;span class="op"&gt;(&lt;/span&gt;id&lt;span class="op"&gt;:&lt;/span&gt; episodeId&lt;span class="op"&gt;)&lt;/span&gt;  &lt;span class="co"&gt;// Always fresh&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb7-7"&gt;&lt;a href="#cb7-7" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;    &lt;span class="op"&gt;}&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb7-8"&gt;&lt;a href="#cb7-8" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;/span&gt;
+&lt;span id="cb7-9"&gt;&lt;a href="#cb7-9" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;    &lt;span class="kw"&gt;var&lt;/span&gt; &lt;span class="va"&gt;body&lt;/span&gt;&lt;span class="op"&gt;:&lt;/span&gt; some View &lt;span class="op"&gt;{&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb7-10"&gt;&lt;a href="#cb7-10" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;        &lt;span class="cf"&gt;if&lt;/span&gt; &lt;span class="kw"&gt;let&lt;/span&gt; &lt;span class="va"&gt;episode&lt;/span&gt; &lt;span class="op"&gt;{&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb7-11"&gt;&lt;a href="#cb7-11" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;            Text&lt;span class="op"&gt;(&lt;/span&gt;episode&lt;span class="op"&gt;.&lt;/span&gt;title&lt;span class="op"&gt;)&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb7-12"&gt;&lt;a href="#cb7-12" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;            &lt;span class="co"&gt;// ...&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb7-13"&gt;&lt;a href="#cb7-13" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;        &lt;span class="op"&gt;}&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb7-14"&gt;&lt;a href="#cb7-14" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;    &lt;span class="op"&gt;}&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb7-15"&gt;&lt;a href="#cb7-15" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;span class="op"&gt;}&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;The view holds an ID, not a stale copy. Every access goes through
+AppState, which holds the authoritative instance.&lt;/p&gt;
+&lt;h3 id="7-does-this-help-with-testing"&gt;7. "Does this help with
+testing?"&lt;/h3&gt;
+&lt;p&gt;Enormously. All state lives in &lt;code&gt;AppState&lt;/code&gt; and I bundle all
+mutations in &lt;code&gt;AppActions&lt;/code&gt;. Tests don't need to render SwiftUI
+at all:&lt;/p&gt;
+&lt;div class="sourceCode" id="cb8"&gt;&lt;pre
+class="sourceCode swift"&gt;&lt;code class="sourceCode swift"&gt;&lt;span id="cb8-1"&gt;&lt;a href="#cb8-1" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;span class="at"&gt;@MainActor&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb8-2"&gt;&lt;a href="#cb8-2" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;span class="kw"&gt;func&lt;/span&gt; &lt;span class="fu"&gt;testDownloadUpdatesEpisode&lt;/span&gt;&lt;span class="op"&gt;()&lt;/span&gt; &lt;span class="fu"&gt;async&lt;/span&gt; &lt;span class="kw"&gt;throws&lt;/span&gt; &lt;span class="op"&gt;{&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb8-3"&gt;&lt;a href="#cb8-3" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;    &lt;span class="kw"&gt;let&lt;/span&gt; &lt;span class="va"&gt;appState&lt;/span&gt; &lt;span class="op"&gt;=&lt;/span&gt; AppState&lt;span class="op"&gt;(...)&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb8-4"&gt;&lt;a href="#cb8-4" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;    &lt;span class="kw"&gt;let&lt;/span&gt; &lt;span class="va"&gt;appActions&lt;/span&gt; &lt;span class="op"&gt;=&lt;/span&gt; AppActions&lt;span class="op"&gt;(&lt;/span&gt;appState&lt;span class="op"&gt;:&lt;/span&gt; appState&lt;span class="op"&gt;,&lt;/span&gt; &lt;span class="op"&gt;...)&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb8-5"&gt;&lt;a href="#cb8-5" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;/span&gt;
+&lt;span id="cb8-6"&gt;&lt;a href="#cb8-6" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;    &lt;span class="co"&gt;// Seed an episode&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb8-7"&gt;&lt;a href="#cb8-7" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;    &lt;span class="kw"&gt;let&lt;/span&gt; &lt;span class="va"&gt;episode&lt;/span&gt; &lt;span class="op"&gt;=&lt;/span&gt; Episode&lt;span class="op"&gt;(&lt;/span&gt;id&lt;span class="op"&gt;:&lt;/span&gt; &lt;span class="st"&gt;&amp;quot;test&amp;quot;&lt;/span&gt;&lt;span class="op"&gt;,&lt;/span&gt; isDownloaded&lt;span class="op"&gt;:&lt;/span&gt; &lt;span class="kw"&gt;false&lt;/span&gt;&lt;span class="op"&gt;,&lt;/span&gt; &lt;span class="op"&gt;...)&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb8-8"&gt;&lt;a href="#cb8-8" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;    appState&lt;span class="op"&gt;.&lt;/span&gt;episodes&lt;span class="op"&gt;[&lt;/span&gt;&lt;span class="st"&gt;&amp;quot;test&amp;quot;&lt;/span&gt;&lt;span class="op"&gt;]&lt;/span&gt; &lt;span class="op"&gt;=&lt;/span&gt; episode&lt;/span&gt;
+&lt;span id="cb8-9"&gt;&lt;a href="#cb8-9" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;/span&gt;
+&lt;span id="cb8-10"&gt;&lt;a href="#cb8-10" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;    &lt;span class="co"&gt;// Perform action&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb8-11"&gt;&lt;a href="#cb8-11" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;    &lt;span class="cf"&gt;await&lt;/span&gt; appActions&lt;span class="op"&gt;.&lt;/span&gt;downloadEpisode&lt;span class="op"&gt;(&lt;/span&gt;episode&lt;span class="op"&gt;)&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb8-12"&gt;&lt;a href="#cb8-12" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;/span&gt;
+&lt;span id="cb8-13"&gt;&lt;a href="#cb8-13" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;    &lt;span class="co"&gt;// Assert state changed&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb8-14"&gt;&lt;a href="#cb8-14" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;    XCTAssertTrue&lt;span class="op"&gt;(&lt;/span&gt;appState&lt;span class="op"&gt;.&lt;/span&gt;episodes&lt;span class="op"&gt;[&lt;/span&gt;&lt;span class="st"&gt;&amp;quot;test&amp;quot;&lt;/span&gt;&lt;span class="op"&gt;]?.&lt;/span&gt;isDownloaded &lt;span class="op"&gt;==&lt;/span&gt; &lt;span class="kw"&gt;true&lt;/span&gt;&lt;span class="op"&gt;)&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb8-15"&gt;&lt;a href="#cb8-15" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;span class="op"&gt;}&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;No UI, no simulators, fast and deterministic. The views are just
+projections of state, so I can just test the state.&lt;/p&gt;
+&lt;h3 id="8-what-about-derivedcomputed-state-like-downloaded-episodes"&gt;8.
+"What about derived/computed state like 'downloaded episodes'?"&lt;/h3&gt;
+&lt;p&gt;Keep derived state as computed properties on
+&lt;code&gt;AppState&lt;/code&gt;:&lt;/p&gt;
+&lt;div class="sourceCode" id="cb9"&gt;&lt;pre
+class="sourceCode swift"&gt;&lt;code class="sourceCode swift"&gt;&lt;span id="cb9-1"&gt;&lt;a href="#cb9-1" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;span class="kw"&gt;var&lt;/span&gt; &lt;span class="va"&gt;downloadedEpisodes&lt;/span&gt;&lt;span class="op"&gt;:&lt;/span&gt; &lt;span class="op"&gt;[&lt;/span&gt;Episode&lt;span class="op"&gt;]&lt;/span&gt; &lt;span class="op"&gt;{&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb9-2"&gt;&lt;a href="#cb9-2" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;    episodes&lt;span class="op"&gt;.&lt;/span&gt;values&lt;span class="op"&gt;.&lt;/span&gt;filter &lt;span class="op"&gt;{&lt;/span&gt; $&lt;span class="fl"&gt;0.&lt;/span&gt;isDownloaded &lt;span class="op"&gt;}.&lt;/span&gt;sorted &lt;span class="op"&gt;{&lt;/span&gt; $&lt;span class="fl"&gt;0.&lt;/span&gt;date &lt;span class="op"&gt;&amp;gt;&lt;/span&gt; $&lt;span class="fl"&gt;1.&lt;/span&gt;date &lt;span class="op"&gt;}&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb9-3"&gt;&lt;a href="#cb9-3" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;span class="op"&gt;}&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb9-4"&gt;&lt;a href="#cb9-4" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;/span&gt;
+&lt;span id="cb9-5"&gt;&lt;a href="#cb9-5" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;span class="kw"&gt;var&lt;/span&gt; &lt;span class="va"&gt;newEpisodes&lt;/span&gt;&lt;span class="op"&gt;:&lt;/span&gt; &lt;span class="op"&gt;[&lt;/span&gt;Episode&lt;span class="op"&gt;]&lt;/span&gt; &lt;span class="op"&gt;{&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb9-6"&gt;&lt;a href="#cb9-6" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;    episodes&lt;span class="op"&gt;.&lt;/span&gt;values&lt;span class="op"&gt;.&lt;/span&gt;filter &lt;span class="op"&gt;{&lt;/span&gt; &lt;span class="op"&gt;!&lt;/span&gt;$&lt;span class="fl"&gt;0.&lt;/span&gt;hasPlayed &lt;span class="op"&gt;}.&lt;/span&gt;sorted &lt;span class="op"&gt;{&lt;/span&gt; $&lt;span class="fl"&gt;0.&lt;/span&gt;date &lt;span class="op"&gt;&amp;gt;&lt;/span&gt; $&lt;span class="fl"&gt;1.&lt;/span&gt;date &lt;span class="op"&gt;}&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb9-7"&gt;&lt;a href="#cb9-7" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;span class="op"&gt;}&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;These recompute on access, but because &lt;code&gt;@Observable&lt;/code&gt;
+tracks reads, a view that only accesses &lt;code&gt;downloadedEpisodes&lt;/code&gt;
+won't re-render when &lt;code&gt;newEpisodes&lt;/code&gt; would change (unless the
+underlying episodes data changed in a way that affects both). You can
+move to a memoized version if you find you need to optimize, but wait
+IMO.&lt;/p&gt;
+&lt;h3 id="9-how-do-you-handle-navigation-with-reactive-data"&gt;9. "How do
+you handle navigation with reactive data?"&lt;/h3&gt;
+&lt;p&gt;Navigate by ID, not by object:&lt;/p&gt;
+&lt;div class="sourceCode" id="cb10"&gt;&lt;pre
+class="sourceCode swift"&gt;&lt;code class="sourceCode swift"&gt;&lt;span id="cb10-1"&gt;&lt;a href="#cb10-1" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;span class="co"&gt;// Good: Pass ID&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb10-2"&gt;&lt;a href="#cb10-2" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;NavigationLink&lt;span class="op"&gt;(&lt;/span&gt;value&lt;span class="op"&gt;:&lt;/span&gt; NavigationRoute&lt;span class="op"&gt;.&lt;/span&gt;episode&lt;span class="op"&gt;(&lt;/span&gt;episode&lt;span class="op"&gt;.&lt;/span&gt;id&lt;span class="op"&gt;))&lt;/span&gt; &lt;span class="op"&gt;{&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb10-3"&gt;&lt;a href="#cb10-3" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;    EpisodeRow&lt;span class="op"&gt;(&lt;/span&gt;episode&lt;span class="op"&gt;:&lt;/span&gt; episode&lt;span class="op"&gt;)&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb10-4"&gt;&lt;a href="#cb10-4" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;span class="op"&gt;}&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb10-5"&gt;&lt;a href="#cb10-5" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;/span&gt;
+&lt;span id="cb10-6"&gt;&lt;a href="#cb10-6" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;span class="co"&gt;// In destination&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb10-7"&gt;&lt;a href="#cb10-7" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;span class="op"&gt;.&lt;/span&gt;navigationDestination&lt;span class="op"&gt;(&lt;/span&gt;&lt;span class="cf"&gt;for&lt;/span&gt;&lt;span class="op"&gt;:&lt;/span&gt; NavigationRoute&lt;span class="op"&gt;.&lt;/span&gt;&lt;span class="kw"&gt;self&lt;/span&gt;&lt;span class="op"&gt;)&lt;/span&gt; &lt;span class="op"&gt;{&lt;/span&gt; route &lt;span class="cf"&gt;in&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb10-8"&gt;&lt;a href="#cb10-8" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;    &lt;span class="cf"&gt;switch&lt;/span&gt; route &lt;span class="op"&gt;{&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb10-9"&gt;&lt;a href="#cb10-9" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;    &lt;span class="cf"&gt;case&lt;/span&gt; &lt;span class="op"&gt;.&lt;/span&gt;episode&lt;span class="op"&gt;(&lt;/span&gt;&lt;span class="kw"&gt;let&lt;/span&gt; &lt;span class="va"&gt;id&lt;/span&gt;&lt;span class="op"&gt;):&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb10-10"&gt;&lt;a href="#cb10-10" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;        EpisodeDetailView&lt;span class="op"&gt;(&lt;/span&gt;episodeId&lt;span class="op"&gt;:&lt;/span&gt; id&lt;span class="op"&gt;)&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb10-11"&gt;&lt;a href="#cb10-11" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;    &lt;span class="op"&gt;}&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb10-12"&gt;&lt;a href="#cb10-12" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;span class="op"&gt;}&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;The detail view looks up fresh data from AppState using the ID. Even
+if the episode updates while navigating, the detail view sees the
+current state.&lt;/p&gt;
+&lt;h3 id="10-what-about-high-frequency-updates-like-playback-progress"&gt;10.
+"What about high-frequency updates like playback progress?"&lt;/h3&gt;
+&lt;p&gt;Throttle before mutating state. I use Combine to debounce playback
+callbacks:&lt;/p&gt;
+&lt;div class="sourceCode" id="cb11"&gt;&lt;pre
+class="sourceCode swift"&gt;&lt;code class="sourceCode swift"&gt;&lt;span id="cb11-1"&gt;&lt;a href="#cb11-1" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;span class="co"&gt;// AudioPlayerService sends callbacks frequently&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb11-2"&gt;&lt;a href="#cb11-2" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;span class="co"&gt;// A Combine pipeline throttles to ~250ms before updating AppState&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb11-3"&gt;&lt;a href="#cb11-3" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;playerProgressPublisher&lt;/span&gt;
+&lt;span id="cb11-4"&gt;&lt;a href="#cb11-4" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;    &lt;span class="op"&gt;.&lt;/span&gt;throttle&lt;span class="op"&gt;(&lt;/span&gt;&lt;span class="cf"&gt;for&lt;/span&gt;&lt;span class="op"&gt;:&lt;/span&gt; &lt;span class="op"&gt;.&lt;/span&gt;milliseconds&lt;span class="op"&gt;(&lt;/span&gt;&lt;span class="dv"&gt;250&lt;/span&gt;&lt;span class="op"&gt;),&lt;/span&gt; scheduler&lt;span class="op"&gt;:&lt;/span&gt; DispatchQueue&lt;span class="op"&gt;.&lt;/span&gt;main&lt;span class="op"&gt;,&lt;/span&gt; latest&lt;span class="op"&gt;:&lt;/span&gt; &lt;span class="kw"&gt;true&lt;/span&gt;&lt;span class="op"&gt;)&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb11-5"&gt;&lt;a href="#cb11-5" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;    &lt;span class="op"&gt;.&lt;/span&gt;sink &lt;span class="op"&gt;{&lt;/span&gt; &lt;span class="op"&gt;[&lt;/span&gt;&lt;span class="kw"&gt;weak&lt;/span&gt; &lt;span class="kw"&gt;self&lt;/span&gt;&lt;span class="op"&gt;]&lt;/span&gt; time &lt;span class="cf"&gt;in&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb11-6"&gt;&lt;a href="#cb11-6" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;        &lt;span class="kw"&gt;self&lt;/span&gt;&lt;span class="op"&gt;?.&lt;/span&gt;appState&lt;span class="op"&gt;.&lt;/span&gt;currentTime &lt;span class="op"&gt;=&lt;/span&gt; time&lt;/span&gt;
+&lt;span id="cb11-7"&gt;&lt;a href="#cb11-7" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;    &lt;span class="op"&gt;}&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;The audio callback fires 60x/second. AppState updates 4x/second. The
+UI is smooth, and you're not burning CPU on excessive re-renders.&lt;/p&gt;
+&lt;h3 id="11-how-does-this-compare-to-reduxtca"&gt;11. "How does this compare
+to Redux/TCA?"&lt;/h3&gt;
+&lt;p&gt;Similar in spirit, different in mechanics. Like Redux/TCA:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Single source of truth (AppState)&lt;/li&gt;
+&lt;li&gt;Unidirectional flow (Action → State → UI)&lt;/li&gt;
+&lt;li&gt;Testable without UI&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Unlike Redux/TCA:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;No action types or reducers—just methods on AppActions&lt;/li&gt;
+&lt;li&gt;Native Swift observation instead of custom subscription system&lt;/li&gt;
+&lt;li&gt;Reference types for items that need granular updates&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;It's less ceremony, more direct mutation, but the same core
+principles.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;Any other questions I missed? Hit me up on &lt;a
+href="https://indieweb.social/@myobie"&gt;mastodon&lt;/a&gt;.&lt;/p&gt;</description>
+    </item>
 
     <item>
       <title>I Don't Have a CMS Anymore</title>

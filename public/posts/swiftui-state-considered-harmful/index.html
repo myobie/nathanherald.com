@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html>
+  <head lang="en-us">
+    <meta content="HTML Tidy for HTML5 for Apple macOS version 5.8.0" name="generator">
+    <meta charset="UTF-8">
+    <title>
+      I'm Nathan Herald → SwiftUI @State Considered Harmful
+    </title>
+    <script>
+      if ((new URL(window.location.href)).host === 'myobie.com') { window.location.assign('https://nathanherald.com') }
+    </script>
+    <link href="https://cloud.typography.com/6836312/761366/css/fonts.css" rel="stylesheet" type=
+    "text/css">
+    <link href="/styles.css" rel="stylesheet" type="text/css">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="I'm Nathan Herald → SwiftUI @State Considered Harmful" name="title">
+    <meta content=
+    "Why @State for collections causes performance problems and how to fix it with observable classes and identity preservation"
+    name="description">
+    <meta content="SwiftUI @State Considered Harmful" property="og:title">
+    <meta content="website" property="og:type">
+    <meta content=
+    "Why @State for collections causes performance problems and how to fix it with observable classes and identity preservation"
+    property="og:description">
+    <meta content="/og.png" property="og:image">
+    <meta content="I'm Nathan Herald" property="og:site_name">
+    <link href="/rss.xml" rel="alternate" title="Feed of all the posts on nathanherald.com" type=
+    "application/rss+xml">
+  </head>
+  <body class="default">
+    <header class="section-header">
+      <div class="section-nav">
+        <h1 class="home-link">
+          <a class="never-underline" data-nospan="" href="/"><abbr title="Hello">👋</abbr></a>
+          <a href="/">I'm Nathan</a>
+        </h1>
+        <nav>
+          <p>
+            Find more in the <a href="/posts/">archive of all the posts on this site</a> or
+            <a href="/rss.xml">subscribe with RSS</a>.
+          </p>
+        </nav>
+      </div>
+    </header>
+    <main class="single">
+      <article>
+        <header>
+          <h1>
+            SwiftUI @State Considered Harmful
+          </h1>
+        </header>
+        <div class="content">
+          <h2 id="the-problem-with-state-for-collections">
+            The Problem with <code>@State</code> for Collections
+          </h2>
+          <p>
+            When you’re building a SwiftUI app with lists of items, like say podcast episodes, the
+            obvious approach is <code>@State</code>:
+          </p>
+          <div class="sourceCode" id="cb1">
+            <pre class="sourceCode swift"><code class="sourceCode swift"><span id=
+            "cb1-1"><a aria-hidden="true" href="#cb1-1" tabindex="-1"></a><span class=
+            "kw">struct</span> EpisodeListView<span class="op">:</span> <span class=
+            "dt">View</span> <span class="op">{</span></span>
+<span id="cb1-2"><a aria-hidden="true" href="#cb1-2" tabindex="-1"></a>    <span class=
+"at">@State</span> <span class="kw">private</span> <span class="kw">var</span> <span class=
+"va">episodes</span><span class="op">:</span> <span class="op">[</span>Episode<span class=
+"op">]</span> <span class="op">=</span> <span class="op">[]</span></span>
+<span id="cb1-3"><a aria-hidden="true" href="#cb1-3" tabindex="-1"></a></span>
+<span id="cb1-4"><a aria-hidden="true" href="#cb1-4" tabindex="-1"></a>    <span class=
+"kw">var</span> <span class="va">body</span><span class="op">:</span> some View <span class=
+"op">{</span></span>
+<span id="cb1-5"><a aria-hidden="true" href="#cb1-5" tabindex="-1"></a>        List<span class=
+"op">(</span>episodes<span class="op">)</span> <span class="op">{</span> episode <span class=
+"cf">in</span></span>
+<span id="cb1-6"><a aria-hidden="true" href="#cb1-6" tabindex=
+"-1"></a>            EpisodeRow<span class="op">(</span>episode<span class=
+"op">:</span> episode<span class="op">)</span></span>
+<span id="cb1-7"><a aria-hidden="true" href="#cb1-7" tabindex="-1"></a>        <span class=
+"op">}</span></span>
+<span id="cb1-8"><a aria-hidden="true" href="#cb1-8" tabindex="-1"></a>    <span class=
+"op">}</span></span>
+<span id="cb1-9"><a aria-hidden="true" href="#cb1-9" tabindex="-1"></a><span class=
+"op">}</span></span></code></pre>
+          </div>
+          <p>
+            This seems to work at first. But then I notice UI stuttering while using the app…
+          </p>
+          <p>
+            The moment you change <em>any</em> property on <em>any</em> episode, SwiftUI
+            invalidates the entire <code>@State</code> array. Every <code>EpisodeRow</code>
+            re-renders. With 100 episodes and a playback position updating every second, you’re
+            re-rendering 100 rows every second. 1,000 episodes and things get real sad. Your UI
+            stutters. Your battery drains.
+          </p>
+          <p>
+            <strong>The fundamental problem:</strong> <code>@State</code> treats the entire array
+            as a single unit of change. SwiftUI can’t see <em>inside</em> structs to know that only
+            <code>episodes[42].playbackPosition</code> changed, for example. It sees “the array
+            changed” and rebuilds everything.
+          </p>
+          <h2 id="the-solution-observable-collections-of-observables-with-identity-preservation">
+            The Solution: Observable Collections of Observables with Identity Preservation
+          </h2>
+          <p>
+            SwiftUI seems to have a lot of the downsides of the “just rerender everything”
+            frameworks like React. Luckily, I have dealt with react, preact, svelte, etc.
+            <strong>Granular reactivity requires granular changes and stable identity.</strong>
+          </p>
+          <p>
+            After a lot of iteration, this of what I’ve landed on. I am not a SwiftUI expert, so
+            please tell me if this is terrible.
+          </p>
+          <p>
+            <strong>Ive made each item an <code>@Observable</code> class, stored them by reference
+            in a dictionary, and I update them in-place.</strong>
+          </p>
+          <div class="sourceCode" id="cb2">
+            <pre class="sourceCode swift"><code class="sourceCode swift"><span id=
+            "cb2-1"><a aria-hidden="true" href="#cb2-1" tabindex="-1"></a><span class=
+            "at">@MainActor</span></span>
+<span id="cb2-2"><a aria-hidden="true" href="#cb2-2" tabindex="-1"></a><span class=
+"at">@Observable</span></span>
+<span id="cb2-3"><a aria-hidden="true" href="#cb2-3" tabindex="-1"></a><span class=
+"kw">final</span> <span class="kw">class</span> Episode<span class="op">:</span> <span class=
+"dt">Identifiable</span> <span class="op">{</span></span>
+<span id="cb2-4"><a aria-hidden="true" href="#cb2-4" tabindex="-1"></a>    <span class=
+"kw">var</span> <span class="va">id</span><span class="op">:</span> String</span>
+<span id="cb2-5"><a aria-hidden="true" href="#cb2-5" tabindex="-1"></a>    <span class=
+"kw">var</span> <span class="va">title</span><span class="op">:</span> String</span>
+<span id="cb2-6"><a aria-hidden="true" href="#cb2-6" tabindex="-1"></a>    <span class=
+"kw">var</span> <span class="va">playbackPosition</span><span class="op">:</span> Int</span>
+<span id="cb2-7"><a aria-hidden="true" href="#cb2-7" tabindex="-1"></a>    <span class=
+"kw">var</span> <span class="va">isDownloaded</span><span class="op">:</span> Bool</span>
+<span id="cb2-8"><a aria-hidden="true" href="#cb2-8" tabindex="-1"></a>    <span class=
+"co">// ... other properties</span></span>
+<span id="cb2-9"><a aria-hidden="true" href="#cb2-9" tabindex="-1"></a></span>
+<span id="cb2-10"><a aria-hidden="true" href="#cb2-10" tabindex="-1"></a>    <span class=
+"kw">func</span> <span class="fu">update</span><span class="op">(</span><span class=
+"va">from</span> <span class="va">snapshot</span><span class="op">:</span> <span class=
+"dt">EpisodeSnapshot</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb2-11"><a aria-hidden="true" href="#cb2-11" tabindex="-1"></a>        <span class=
+"kw">self</span><span class="op">.</span>title <span class="op">=</span> snapshot<span class=
+"op">.</span>title</span>
+<span id="cb2-12"><a aria-hidden="true" href="#cb2-12" tabindex="-1"></a>        <span class=
+"kw">self</span><span class="op">.</span>playbackPosition <span class=
+"op">=</span> snapshot<span class="op">.</span>playbackPosition</span>
+<span id="cb2-13"><a aria-hidden="true" href="#cb2-13" tabindex="-1"></a>        <span class=
+"kw">self</span><span class="op">.</span>isDownloaded <span class=
+"op">=</span> snapshot<span class="op">.</span>isDownloaded</span>
+<span id="cb2-14"><a aria-hidden="true" href="#cb2-14" tabindex="-1"></a>        <span class=
+"co">// ... update all properties except identity (id)</span></span>
+<span id="cb2-15"><a aria-hidden="true" href="#cb2-15" tabindex="-1"></a>    <span class=
+"op">}</span></span>
+<span id="cb2-16"><a aria-hidden="true" href="#cb2-16" tabindex="-1"></a><span class=
+"op">}</span></span></code></pre>
+          </div>
+          <p>
+            When I build an app I am dogmatic that there should be one “app state” that exists
+            outside the UI and is granularly reactive by default. It can be unit tested. And when I
+            look at this object I should be able to imagine what the UI looks like.
+          </p>
+          <div class="sourceCode" id="cb3">
+            <pre class="sourceCode swift"><code class="sourceCode swift"><span id=
+            "cb3-1"><a aria-hidden="true" href="#cb3-1" tabindex="-1"></a><span class=
+            "at">@MainActor</span></span>
+<span id="cb3-2"><a aria-hidden="true" href="#cb3-2" tabindex="-1"></a><span class=
+"at">@Observable</span></span>
+<span id="cb3-3"><a aria-hidden="true" href="#cb3-3" tabindex="-1"></a><span class=
+"kw">final</span> <span class="kw">class</span> AppState <span class="op">{</span></span>
+<span id="cb3-4"><a aria-hidden="true" href="#cb3-4" tabindex="-1"></a>    <span class=
+"kw">var</span> <span class="va">episodes</span><span class="op">:</span> <span class=
+"op">[</span>String<span class="op">:</span> Episode<span class="op">]</span> <span class=
+"op">=</span> <span class="op">[:]</span></span>
+<span id="cb3-5"><a aria-hidden="true" href="#cb3-5" tabindex="-1"></a></span>
+<span id="cb3-6"><a aria-hidden="true" href="#cb3-6" tabindex="-1"></a>    <span class=
+"kw">func</span> <span class="fu">mergeEpisodes</span><span class="op">(</span><span class=
+"va">_</span> <span class="va">incoming</span><span class="op">:</span> [<span class=
+"dt">String</span><span class="op">:</span> <span class="dt">EpisodeSnapshot</span>]<span class=
+"op">)</span> <span class="op">{</span></span>
+<span id="cb3-7"><a aria-hidden="true" href="#cb3-7" tabindex="-1"></a>        <span class=
+"kw">let</span> <span class="va">incomingIds</span> <span class="op">=</span> Set<span class=
+"op">(</span>incoming<span class="op">.</span>keys<span class="op">)</span></span>
+<span id="cb3-8"><a aria-hidden="true" href="#cb3-8" tabindex="-1"></a>        <span class=
+"kw">let</span> <span class="va">existingIds</span> <span class="op">=</span> Set<span class=
+"op">(</span>episodes<span class="op">.</span>keys<span class="op">)</span></span>
+<span id="cb3-9"><a aria-hidden="true" href="#cb3-9" tabindex="-1"></a></span>
+<span id="cb3-10"><a aria-hidden="true" href="#cb3-10" tabindex="-1"></a>        <span class=
+"co">// Remove deleted</span></span>
+<span id="cb3-11"><a aria-hidden="true" href="#cb3-11" tabindex="-1"></a>        <span class=
+"cf">for</span> id <span class="cf">in</span> existingIds<span class=
+"op">.</span>subtracting<span class="op">(</span>incomingIds<span class="op">)</span> <span class=
+"op">{</span></span>
+<span id="cb3-12"><a aria-hidden="true" href="#cb3-12" tabindex=
+"-1"></a>            episodes<span class="op">.</span>removeValue<span class=
+"op">(</span>forKey<span class="op">:</span> id<span class="op">)</span></span>
+<span id="cb3-13"><a aria-hidden="true" href="#cb3-13" tabindex="-1"></a>        <span class=
+"op">}</span></span>
+<span id="cb3-14"><a aria-hidden="true" href="#cb3-14" tabindex="-1"></a></span>
+<span id="cb3-15"><a aria-hidden="true" href="#cb3-15" tabindex="-1"></a>        <span class=
+"co">// Update existing or add new</span></span>
+<span id="cb3-16"><a aria-hidden="true" href="#cb3-16" tabindex="-1"></a>        <span class=
+"cf">for</span> <span class="op">(</span>id<span class="op">,</span> incomingEpisode<span class=
+"op">)</span> <span class="cf">in</span> incoming <span class="op">{</span></span>
+<span id="cb3-17"><a aria-hidden="true" href="#cb3-17" tabindex="-1"></a>            <span class=
+"cf">if</span> <span class="kw">let</span> <span class="va">existing</span> <span class=
+"op">=</span> episodes<span class="op">[</span>id<span class="op">]</span> <span class=
+"op">{</span></span>
+<span id="cb3-18"><a aria-hidden="true" href="#cb3-18" tabindex=
+"-1"></a>                existing<span class="op">.</span>update<span class=
+"op">(</span>from<span class="op">:</span> incomingEpisode<span class="op">)</span>  <span class=
+"co">// Update in-place!</span></span>
+<span id="cb3-19"><a aria-hidden="true" href="#cb3-19" tabindex="-1"></a>            <span class=
+"op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
+<span id="cb3-20"><a aria-hidden="true" href="#cb3-20" tabindex=
+"-1"></a>                episodes<span class="op">[</span>id<span class="op">]</span> <span class=
+"op">=</span> Episdoe<span class="op">(</span>from<span class=
+"op">:</span> incomingEpisode<span class="op">)</span>  <span class="co">// New item</span></span>
+<span id="cb3-21"><a aria-hidden="true" href="#cb3-21" tabindex="-1"></a>            <span class=
+"op">}</span></span>
+<span id="cb3-22"><a aria-hidden="true" href="#cb3-22" tabindex="-1"></a>        <span class=
+"op">}</span></span>
+<span id="cb3-23"><a aria-hidden="true" href="#cb3-23" tabindex="-1"></a>    <span class=
+"op">}</span></span>
+<span id="cb3-24"><a aria-hidden="true" href="#cb3-24" tabindex="-1"></a><span class=
+"op">}</span></span></code></pre>
+          </div>
+          <p>
+            This gives me:
+          </p>
+          <ol type="1">
+            <li>
+              <strong>Granular updates:</strong> When <code>episode.playbackPosition</code>
+              changes, only views observing that specific property re-render
+            </li>
+            <li>
+              <strong>Stable object identity:</strong> The same <code>Episode</code> instance
+              persists across refreshes, so SwiftUI can diff efficiently
+            </li>
+            <li>
+              <strong>Single source of truth:</strong> One <code>Episode</code> instance per ID,
+              owned by <code>AppState</code>
+            </li>
+          </ol>
+          <h2 id="questions-youre-probably-asking">
+            Questions You’re Probably Asking
+          </h2>
+          <h3 id="1-why-a-class-instead-of-a-struct">
+            1. “Why a class instead of a struct?”
+          </h3>
+          <p>
+            Structs are value types. When you put structs in an array and modify one, you get a new
+            array. SwiftUI sees a new array and re-renders everything.
+          </p>
+          <p>
+            Classes are reference types. When you modify a property on a class instance, the
+            reference stays the same. With <code>@Observable</code>, SwiftUI tracks which
+            properties each view actually reads and only re-renders when those specific properties
+            change on the class instance.
+          </p>
+          <div class="sourceCode" id="cb4">
+            <pre class="sourceCode swift"><code class="sourceCode swift"><span id=
+            "cb4-1"><a aria-hidden="true" href="#cb4-1" tabindex="-1"></a><span class=
+            "co">// With structs: entire list re-renders</span></span>
+<span id="cb4-2"><a aria-hidden="true" href="#cb4-2" tabindex="-1"></a>episodes<span class=
+"op">[</span><span class="dv">0</span><span class="op">].</span>playbackPosition <span class=
+"op">=</span> <span class="dv">100</span>  <span class="co">// Creates new array</span></span>
+<span id="cb4-3"><a aria-hidden="true" href="#cb4-3" tabindex="-1"></a></span>
+<span id="cb4-4"><a aria-hidden="true" href="#cb4-4" tabindex="-1"></a><span class=
+"co">// With classes: only views reading playbackPosition re-render</span></span>
+<span id="cb4-5"><a aria-hidden="true" href="#cb4-5" tabindex="-1"></a>episodes<span class=
+"op">[</span><span class="st">"id"</span><span class="op">]?.</span>playbackPosition <span class=
+"op">=</span> <span class="dv">100</span>  <span class=
+"co">// Same reference, property changes</span></span></code></pre>
+          </div>
+          <h3 id="2-wont-this-cause-memory-leaks-or-retain-cycles">
+            2. “Won’t this cause memory leaks or retain cycles?”
+          </h3>
+          <p>
+            Not if you follow the ownership model. <code>AppState</code> owns all
+            <code>Episode</code> instances in a dictionary. Views receive references through
+            lookups (<code>appState.episode(id: episodeId)</code>). There are no closures capturing
+            episodes, no parent-child cycles—just a flat owner (AppState) and temporary readers
+            (views).
+          </p>
+          <p>
+            Do you know a better way to enforce this? Let me know, hit me up on <a href=
+            "https://indieweb.social/@myobie">mastodon</a>.
+          </p>
+          <h3 id="3-why-a-dictionary-instead-of-an-array">
+            3. “Why a dictionary instead of an array?”
+          </h3>
+          <p>
+            Two reasons:
+          </p>
+          <ol type="1">
+            <li>
+              <p>
+                <strong>Fast lookups by ID</strong> - Detail views might need to look up episodes
+                frequently. Make it easy.
+              </p>
+            </li>
+            <li>
+              <p>
+                <strong>Merging is clearer</strong> - When I refresh from disk/network, I get a new
+                set of episodes. With a dictionary, it’s obvious how to merge: update existing keys
+                in-place, add new keys, remove missing keys.
+              </p>
+            </li>
+          </ol>
+          <p>
+            Also, computed properties give you arrays when you need them:
+          </p>
+          <div class="sourceCode" id="cb5">
+            <pre class="sourceCode swift"><code class="sourceCode swift"><span id=
+            "cb5-1"><a aria-hidden="true" href="#cb5-1" tabindex="-1"></a><span class=
+            "kw">var</span> <span class="va">allEpisodes</span><span class=
+            "op">:</span> <span class="op">[</span>Episode<span class="op">]</span> <span class=
+            "op">{</span></span>
+<span id="cb5-2"><a aria-hidden="true" href="#cb5-2" tabindex="-1"></a>    episodes<span class=
+"op">.</span>values<span class="op">.</span>sorted <span class="op">{</span> $<span class=
+"fl">0.</span>date <span class="op">&gt;</span> $<span class="fl">1.</span>date <span class=
+"op">}</span></span>
+<span id="cb5-3"><a aria-hidden="true" href="#cb5-3" tabindex="-1"></a><span class=
+"op">}</span></span></code></pre>
+          </div>
+          <p>
+            Don’t sleep on computed properties: those are observable too.
+          </p>
+          <h3 id="4-what-about-thread-safety">
+            4. “What about thread safety?”
+          </h3>
+          <p>
+            Both <code>Episode</code> and <code>AppState</code> are marked <code>@MainActor</code>,
+            so they can only be accessed from the main thread. The compiler enforces this for you.
+          </p>
+          <p>
+            For crossing actor boundaries (like loading from disk on a background thread), I use an
+            <code>EpisodeSnapshot</code> struct. Snapshots are plain value types that can be safely
+            sent anywhere. Background work produces snapshots, then sends them to
+            <code>AppState</code> on the main actor to be merged in.
+          </p>
+          <div class="sourceCode" id="cb6">
+            <pre class="sourceCode swift"><code class="sourceCode swift"><span id=
+            "cb6-1"><a aria-hidden="true" href="#cb6-1" tabindex="-1"></a><span class=
+            "co">// Background actor loads data and creates snapshots</span></span>
+<span id="cb6-2"><a aria-hidden="true" href="#cb6-2" tabindex="-1"></a><span class=
+"kw">let</span> <span class="va">snapshots</span><span class="op">:</span> <span class=
+"op">[</span>String<span class="op">:</span> EpisodeSnapshot<span class="op">]</span> <span class=
+"op">=</span> <span class="cf">await</span> loadFromDisk<span class="op">()</span></span>
+<span id="cb6-3"><a aria-hidden="true" href="#cb6-3" tabindex="-1"></a></span>
+<span id="cb6-4"><a aria-hidden="true" href="#cb6-4" tabindex="-1"></a><span class=
+"co">// Send to main actor for merging</span></span>
+<span id="cb6-5"><a aria-hidden="true" href="#cb6-5" tabindex="-1"></a><span class=
+"cf">await</span> appState<span class="op">.</span>mergeEpisodes<span class=
+"op">(</span>snapshots<span class="op">)</span></span></code></pre>
+          </div>
+          <p>
+            This keeps the boundary clean: snapshots cross actors, Episodes stay on main.
+          </p>
+          <h3 id="5-why-not-just-use-observationignored-on-frequently-changing-properties">
+            5. “Why not just use @ObservationIgnored on frequently-changing properties?”
+          </h3>
+          <p>
+            Because then SwiftUI doesn’t see the changes at all. If <code>playbackPosition</code>
+            is ignored, the progress indicator in the UI never updates. Also, “app state” should
+            only be the actual state. If it isn’t useful for the app, then it shouldn’t be in
+            there.
+          </p>
+          <p>
+            The real solution is structuring views to observe only what they display:
+          </p>
+          <div class="sourceCode" id="cb7">
+            <pre class="sourceCode swift"><code class="sourceCode swift"><span id=
+            "cb7-1"><a aria-hidden="true" href="#cb7-1" tabindex="-1"></a><span class=
+            "co">// Good: This view only observes title and date</span></span>
+<span id="cb7-2"><a aria-hidden="true" href="#cb7-2" tabindex="-1"></a><span class=
+"kw">struct</span> EpisodeRow<span class="op">:</span> <span class="dt">View</span> <span class=
+"op">{</span></span>
+<span id="cb7-3"><a aria-hidden="true" href="#cb7-3" tabindex="-1"></a>    <span class=
+"kw">let</span> <span class="va">episode</span><span class="op">:</span> Episode</span>
+<span id="cb7-4"><a aria-hidden="true" href="#cb7-4" tabindex="-1"></a></span>
+<span id="cb7-5"><a aria-hidden="true" href="#cb7-5" tabindex="-1"></a>    <span class=
+"kw">var</span> <span class="va">body</span><span class="op">:</span> some View <span class=
+"op">{</span></span>
+<span id="cb7-6"><a aria-hidden="true" href="#cb7-6" tabindex="-1"></a>        VStack <span class=
+"op">{</span></span>
+<span id="cb7-7"><a aria-hidden="true" href="#cb7-7" tabindex="-1"></a>            Text<span class=
+"op">(</span>episode<span class="op">.</span>title<span class="op">)</span></span>
+<span id="cb7-8"><a aria-hidden="true" href="#cb7-8" tabindex="-1"></a>            Text<span class=
+"op">(</span>episode<span class="op">.</span>date<span class="op">,</span> style<span class=
+"op">:</span> <span class="op">.</span>date<span class="op">)</span></span>
+<span id="cb7-9"><a aria-hidden="true" href="#cb7-9" tabindex="-1"></a>        <span class=
+"op">}</span></span>
+<span id="cb7-10"><a aria-hidden="true" href="#cb7-10" tabindex="-1"></a>    <span class=
+"op">}</span></span>
+<span id="cb7-11"><a aria-hidden="true" href="#cb7-11" tabindex="-1"></a><span class=
+"op">}</span></span>
+<span id="cb7-12"><a aria-hidden="true" href="#cb7-12" tabindex="-1"></a></span>
+<span id="cb7-13"><a aria-hidden="true" href="#cb7-13" tabindex="-1"></a><span class=
+"co">// The playback position view is separate</span></span>
+<span id="cb7-14"><a aria-hidden="true" href="#cb7-14" tabindex="-1"></a><span class=
+"kw">struct</span> PlaybackProgress<span class="op">:</span> <span class=
+"dt">View</span> <span class="op">{</span></span>
+<span id="cb7-15"><a aria-hidden="true" href="#cb7-15" tabindex="-1"></a>    <span class=
+"kw">let</span> <span class="va">episode</span><span class="op">:</span> Episode</span>
+<span id="cb7-16"><a aria-hidden="true" href="#cb7-16" tabindex="-1"></a></span>
+<span id="cb7-17"><a aria-hidden="true" href="#cb7-17" tabindex="-1"></a>    <span class=
+"kw">var</span> <span class="va">body</span><span class="op">:</span> some View <span class=
+"op">{</span></span>
+<span id="cb7-18"><a aria-hidden="true" href="#cb7-18" tabindex=
+"-1"></a>        ProgressView<span class="op">(</span>value<span class=
+"op">:</span> Double<span class="op">(</span>episode<span class=
+"op">.</span>playbackPosition<span class="op">),</span></span>
+<span id="cb7-19"><a aria-hidden="true" href="#cb7-19" tabindex=
+"-1"></a>                     total<span class="op">:</span> Double<span class=
+"op">(</span>episode<span class="op">.</span>duration<span class="op">))</span></span>
+<span id="cb7-20"><a aria-hidden="true" href="#cb7-20" tabindex="-1"></a>    <span class=
+"op">}</span></span>
+<span id="cb7-21"><a aria-hidden="true" href="#cb7-21" tabindex="-1"></a><span class=
+"op">}</span></span></code></pre>
+          </div>
+          <p>
+            Now playback position updates only re-render <code>PlaybackProgress</code>, not
+            <code>EpisodeRow</code>.
+          </p>
+          <h3 id="6-how-do-views-get-fresh-data-after-updates">
+            6. “How do views get fresh data after updates?”
+          </h3>
+          <p>
+            Detail views should always look up from AppState:
+          </p>
+          <div class="sourceCode" id="cb8">
+            <pre class="sourceCode swift"><code class="sourceCode swift"><span id=
+            "cb8-1"><a aria-hidden="true" href="#cb8-1" tabindex="-1"></a><span class=
+            "kw">struct</span> EpisodeDetailView<span class="op">:</span> <span class=
+            "dt">View</span> <span class="op">{</span></span>
+<span id="cb8-2"><a aria-hidden="true" href="#cb8-2" tabindex="-1"></a>    <span class=
+"kw">let</span> <span class="va">episodeId</span><span class="op">:</span> String  <span class=
+"co">// Just the ID</span></span>
+<span id="cb8-3"><a aria-hidden="true" href="#cb8-3" tabindex="-1"></a>    <span class=
+"at">@Environment</span><span class="op">(</span>AppState<span class="op">.</span><span class=
+"kw">self</span><span class="op">)</span> <span class="kw">private</span> <span class=
+"kw">var</span> <span class="va">appState</span></span>
+<span id="cb8-4"><a aria-hidden="true" href="#cb8-4" tabindex="-1"></a></span>
+<span id="cb8-5"><a aria-hidden="true" href="#cb8-5" tabindex="-1"></a>    <span class=
+"kw">private</span> <span class="kw">var</span> <span class="va">episode</span><span class=
+"op">:</span> Episode<span class="op">?</span> <span class="op">{</span></span>
+<span id="cb8-6"><a aria-hidden="true" href="#cb8-6" tabindex="-1"></a>        appState<span class=
+"op">.</span>episode<span class="op">(</span>id<span class="op">:</span> episodeId<span class=
+"op">)</span>  <span class="co">// Always fresh</span></span>
+<span id="cb8-7"><a aria-hidden="true" href="#cb8-7" tabindex="-1"></a>    <span class=
+"op">}</span></span>
+<span id="cb8-8"><a aria-hidden="true" href="#cb8-8" tabindex="-1"></a></span>
+<span id="cb8-9"><a aria-hidden="true" href="#cb8-9" tabindex="-1"></a>    <span class=
+"kw">var</span> <span class="va">body</span><span class="op">:</span> some View <span class=
+"op">{</span></span>
+<span id="cb8-10"><a aria-hidden="true" href="#cb8-10" tabindex="-1"></a>        <span class=
+"cf">if</span> <span class="kw">let</span> <span class="va">episode</span> <span class=
+"op">{</span></span>
+<span id="cb8-11"><a aria-hidden="true" href="#cb8-11" tabindex=
+"-1"></a>            Text<span class="op">(</span>episode<span class="op">.</span>title<span class=
+"op">)</span></span>
+<span id="cb8-12"><a aria-hidden="true" href="#cb8-12" tabindex="-1"></a>            <span class=
+"co">// ...</span></span>
+<span id="cb8-13"><a aria-hidden="true" href="#cb8-13" tabindex="-1"></a>        <span class=
+"op">}</span></span>
+<span id="cb8-14"><a aria-hidden="true" href="#cb8-14" tabindex="-1"></a>    <span class=
+"op">}</span></span>
+<span id="cb8-15"><a aria-hidden="true" href="#cb8-15" tabindex="-1"></a><span class=
+"op">}</span></span></code></pre>
+          </div>
+          <p>
+            The view holds an ID, not a stale copy. Every access goes through AppState, which holds
+            the authoritative instance.
+          </p>
+          <h3 id="7-does-this-help-with-testing">
+            7. “Does this help with testing?”
+          </h3>
+          <p>
+            Enormously. All state lives in <code>AppState</code> and I bundle all mutations in
+            <code>AppActions</code>. Tests don’t need to render SwiftUI at all:
+          </p>
+          <div class="sourceCode" id="cb9">
+            <pre class="sourceCode swift"><code class="sourceCode swift"><span id=
+            "cb9-1"><a aria-hidden="true" href="#cb9-1" tabindex="-1"></a><span class=
+            "at">@MainActor</span></span>
+<span id="cb9-2"><a aria-hidden="true" href="#cb9-2" tabindex="-1"></a><span class=
+"kw">func</span> <span class="fu">testDownloadUpdatesEpisode</span><span class=
+"op">()</span> <span class="fu">async</span> <span class="kw">throws</span> <span class=
+"op">{</span></span>
+<span id="cb9-3"><a aria-hidden="true" href="#cb9-3" tabindex="-1"></a>    <span class=
+"kw">let</span> <span class="va">appState</span> <span class="op">=</span> AppState<span class=
+"op">(...)</span></span>
+<span id="cb9-4"><a aria-hidden="true" href="#cb9-4" tabindex="-1"></a>    <span class=
+"kw">let</span> <span class="va">appActions</span> <span class="op">=</span> AppActions<span class=
+"op">(</span>appState<span class="op">:</span> appState<span class="op">,</span> <span class=
+"op">...)</span></span>
+<span id="cb9-5"><a aria-hidden="true" href="#cb9-5" tabindex="-1"></a></span>
+<span id="cb9-6"><a aria-hidden="true" href="#cb9-6" tabindex="-1"></a>    <span class=
+"co">// Seed an episode</span></span>
+<span id="cb9-7"><a aria-hidden="true" href="#cb9-7" tabindex="-1"></a>    <span class=
+"kw">let</span> <span class="va">episode</span> <span class="op">=</span> Episode<span class=
+"op">(</span>id<span class="op">:</span> <span class="st">"test"</span><span class=
+"op">,</span> isDownloaded<span class="op">:</span> <span class="kw">false</span><span class=
+"op">,</span> <span class="op">...)</span></span>
+<span id="cb9-8"><a aria-hidden="true" href="#cb9-8" tabindex="-1"></a>    appState<span class=
+"op">.</span>episodes<span class="op">[</span><span class="st">"test"</span><span class=
+"op">]</span> <span class="op">=</span> episode</span>
+<span id="cb9-9"><a aria-hidden="true" href="#cb9-9" tabindex="-1"></a></span>
+<span id="cb9-10"><a aria-hidden="true" href="#cb9-10" tabindex="-1"></a>    <span class=
+"co">// Perform action</span></span>
+<span id="cb9-11"><a aria-hidden="true" href="#cb9-11" tabindex="-1"></a>    <span class=
+"cf">await</span> appActions<span class="op">.</span>downloadEpisode<span class=
+"op">(</span>episode<span class="op">)</span></span>
+<span id="cb9-12"><a aria-hidden="true" href="#cb9-12" tabindex="-1"></a></span>
+<span id="cb9-13"><a aria-hidden="true" href="#cb9-13" tabindex="-1"></a>    <span class=
+"co">// Assert state changed</span></span>
+<span id="cb9-14"><a aria-hidden="true" href="#cb9-14" tabindex=
+"-1"></a>    XCTAssertTrue<span class="op">(</span>appState<span class=
+"op">.</span>episodes<span class="op">[</span><span class="st">"test"</span><span class=
+"op">]?.</span>isDownloaded <span class="op">==</span> <span class="kw">true</span><span class=
+"op">)</span></span>
+<span id="cb9-15"><a aria-hidden="true" href="#cb9-15" tabindex="-1"></a><span class=
+"op">}</span></span></code></pre>
+          </div>
+          <p>
+            No UI, no simulators, fast and deterministic. The views are just projections of state,
+            so I can just test the state.
+          </p>
+          <h3 id="8-what-about-derivedcomputed-state-like-downloaded-episodes">
+            8. “What about derived/computed state like ‘downloaded episodes’?”
+          </h3>
+          <p>
+            Keep derived state as computed properties on <code>AppState</code>:
+          </p>
+          <div class="sourceCode" id="cb10">
+            <pre class="sourceCode swift"><code class="sourceCode swift"><span id=
+            "cb10-1"><a aria-hidden="true" href="#cb10-1" tabindex="-1"></a><span class=
+            "kw">var</span> <span class="va">downloadedEpisodes</span><span class=
+            "op">:</span> <span class="op">[</span>Episode<span class="op">]</span> <span class=
+            "op">{</span></span>
+<span id="cb10-2"><a aria-hidden="true" href="#cb10-2" tabindex="-1"></a>    episodes<span class=
+"op">.</span>values<span class="op">.</span>filter <span class="op">{</span> $<span class=
+"fl">0.</span>isDownloaded <span class="op">}.</span>sorted <span class="op">{</span> $<span class=
+"fl">0.</span>date <span class="op">&gt;</span> $<span class="fl">1.</span>date <span class=
+"op">}</span></span>
+<span id="cb10-3"><a aria-hidden="true" href="#cb10-3" tabindex="-1"></a><span class=
+"op">}</span></span>
+<span id="cb10-4"><a aria-hidden="true" href="#cb10-4" tabindex="-1"></a></span>
+<span id="cb10-5"><a aria-hidden="true" href="#cb10-5" tabindex="-1"></a><span class=
+"kw">var</span> <span class="va">newEpisodes</span><span class="op">:</span> <span class=
+"op">[</span>Episode<span class="op">]</span> <span class="op">{</span></span>
+<span id="cb10-6"><a aria-hidden="true" href="#cb10-6" tabindex="-1"></a>    episodes<span class=
+"op">.</span>values<span class="op">.</span>filter <span class="op">{</span> <span class=
+"op">!</span>$<span class="fl">0.</span>hasPlayed <span class="op">}.</span>sorted <span class=
+"op">{</span> $<span class="fl">0.</span>date <span class="op">&gt;</span> $<span class=
+"fl">1.</span>date <span class="op">}</span></span>
+<span id="cb10-7"><a aria-hidden="true" href="#cb10-7" tabindex="-1"></a><span class=
+"op">}</span></span></code></pre>
+          </div>
+          <p>
+            These recompute on access, but because <code>@Observable</code> tracks reads, a view
+            that only accesses <code>downloadedEpisodes</code> won’t re-render when
+            <code>newEpisodes</code> would change (unless the underlying episodes data changed in a
+            way that affects both). You can move to a memoized version if you find you need to
+            optimize, but wait IMO.
+          </p>
+          <h3 id="9-how-do-you-handle-navigation-with-reactive-data">
+            9. “How do you handle navigation with reactive data?”
+          </h3>
+          <p>
+            Navigate by ID, not by object:
+          </p>
+          <div class="sourceCode" id="cb11">
+            <pre class="sourceCode swift"><code class="sourceCode swift"><span id=
+            "cb11-1"><a aria-hidden="true" href="#cb11-1" tabindex="-1"></a><span class=
+            "co">// Good: Pass ID</span></span>
+<span id="cb11-2"><a aria-hidden="true" href="#cb11-2" tabindex="-1"></a>NavigationLink<span class=
+"op">(</span>value<span class="op">:</span> NavigationRoute<span class=
+"op">.</span>episode<span class="op">(</span>episode<span class="op">.</span>id<span class=
+"op">))</span> <span class="op">{</span></span>
+<span id="cb11-3"><a aria-hidden="true" href="#cb11-3" tabindex="-1"></a>    EpisodeRow<span class=
+"op">(</span>episode<span class="op">:</span> episode<span class="op">)</span></span>
+<span id="cb11-4"><a aria-hidden="true" href="#cb11-4" tabindex="-1"></a><span class=
+"op">}</span></span>
+<span id="cb11-5"><a aria-hidden="true" href="#cb11-5" tabindex="-1"></a></span>
+<span id="cb11-6"><a aria-hidden="true" href="#cb11-6" tabindex="-1"></a><span class=
+"co">// In destination</span></span>
+<span id="cb11-7"><a aria-hidden="true" href="#cb11-7" tabindex="-1"></a><span class=
+"op">.</span>navigationDestination<span class="op">(</span><span class="cf">for</span><span class=
+"op">:</span> NavigationRoute<span class="op">.</span><span class="kw">self</span><span class=
+"op">)</span> <span class="op">{</span> route <span class="cf">in</span></span>
+<span id="cb11-8"><a aria-hidden="true" href="#cb11-8" tabindex="-1"></a>    <span class=
+"cf">switch</span> route <span class="op">{</span></span>
+<span id="cb11-9"><a aria-hidden="true" href="#cb11-9" tabindex="-1"></a>    <span class=
+"cf">case</span> <span class="op">.</span>episode<span class="op">(</span><span class=
+"kw">let</span> <span class="va">id</span><span class="op">):</span></span>
+<span id="cb11-10"><a aria-hidden="true" href="#cb11-10" tabindex=
+"-1"></a>        EpisodeDetailView<span class="op">(</span>episodeId<span class=
+"op">:</span> id<span class="op">)</span></span>
+<span id="cb11-11"><a aria-hidden="true" href="#cb11-11" tabindex="-1"></a>    <span class=
+"op">}</span></span>
+<span id="cb11-12"><a aria-hidden="true" href="#cb11-12" tabindex="-1"></a><span class=
+"op">}</span></span></code></pre>
+          </div>
+          <p>
+            The detail view looks up fresh data from AppState using the ID. Even if the episode
+            updates while navigating, the detail view sees the current state.
+          </p>
+          <h3 id="10-what-about-high-frequency-updates-like-playback-progress">
+            10. “What about high-frequency updates like playback progress?”
+          </h3>
+          <p>
+            Throttle before mutating state. I use Combine to debounce playback callbacks:
+          </p>
+          <div class="sourceCode" id="cb12">
+            <pre class="sourceCode swift"><code class="sourceCode swift"><span id=
+            "cb12-1"><a aria-hidden="true" href="#cb12-1" tabindex="-1"></a><span class=
+            "co">// AudioPlayerService sends callbacks frequently</span></span>
+<span id="cb12-2"><a aria-hidden="true" href="#cb12-2" tabindex="-1"></a><span class=
+"co">// A Combine pipeline throttles to ~250ms before updating AppState</span></span>
+<span id="cb12-3"><a aria-hidden="true" href="#cb12-3" tabindex=
+"-1"></a>playerProgressPublisher</span>
+<span id="cb12-4"><a aria-hidden="true" href="#cb12-4" tabindex="-1"></a>    <span class=
+"op">.</span>throttle<span class="op">(</span><span class="cf">for</span><span class=
+"op">:</span> <span class="op">.</span>milliseconds<span class="op">(</span><span class=
+"dv">250</span><span class="op">),</span> scheduler<span class=
+"op">:</span> DispatchQueue<span class="op">.</span>main<span class=
+"op">,</span> latest<span class="op">:</span> <span class="kw">true</span><span class=
+"op">)</span></span>
+<span id="cb12-5"><a aria-hidden="true" href="#cb12-5" tabindex="-1"></a>    <span class=
+"op">.</span>sink <span class="op">{</span> <span class="op">[</span><span class=
+"kw">weak</span> <span class="kw">self</span><span class="op">]</span> time <span class=
+"cf">in</span></span>
+<span id="cb12-6"><a aria-hidden="true" href="#cb12-6" tabindex="-1"></a>        <span class=
+"kw">self</span><span class="op">?.</span>appState<span class="op">.</span>currentTime <span class=
+"op">=</span> time</span>
+<span id="cb12-7"><a aria-hidden="true" href="#cb12-7" tabindex="-1"></a>    <span class=
+"op">}</span></span></code></pre>
+          </div>
+          <p>
+            The audio callback fires 60x/second. AppState updates 4x/second. The UI is smooth, and
+            you’re not burning CPU on excessive re-renders.
+          </p>
+          <h3 id="11-how-does-this-compare-to-reduxtca">
+            11. “How does this compare to Redux/TCA?”
+          </h3>
+          <p>
+            Similar in spirit, different in mechanics. Like Redux/TCA:
+          </p>
+          <ul>
+            <li>Single source of truth (AppState)
+            </li>
+            <li>Unidirectional flow (Action → State → UI)
+            </li>
+            <li>Testable without UI
+            </li>
+          </ul>
+          <p>
+            Unlike Redux/TCA:
+          </p>
+          <ul>
+            <li>No action types or reducers—just methods on AppActions
+            </li>
+            <li>Native Swift observation instead of custom subscription system
+            </li>
+            <li>Reference types for items that need granular updates
+            </li>
+          </ul>
+          <p>
+            It’s less ceremony, more direct mutation, but the same core principles.
+          </p>
+          <hr>
+          <p>
+            Any other questions I missed? Hit me up on <a href=
+            "https://indieweb.social/@myobie">mastodon</a>.
+          </p>
+        </div>
+        <footer>
+          <p>
+            Posted on <time datetime="2025-12-02T12:00:00+01:00">02 December, 2025</time>
+          </p>
+        </footer>
+      </article>
+    </main>
+    <script async src="/behavior.js"></script> 
+    <script async src="/assets/details-controls.js"></script> 
+    <script data-domain="nathanherald.com" defer src="https://stats.myobie.wtf/script.js"></script>
+  </body>
+</html>
