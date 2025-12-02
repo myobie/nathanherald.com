@@ -1,4 +1,4 @@
-/* Background */ .chroma { color: #272822; background-color: rgba(0, 0, 0, 0.02); }
+/* Background */ .chroma, .sourceCode { color: #272822; background-color: rgba(0, 0, 0, 0.02); }
 /* Error */ .chroma .err { color: #960050; background-color: #1e0010; }
 /* LineTableTD */ .chroma .lntd { vertical-align: top; padding: 0; margin: 0; border: 0; }
 /* LineTable */ .chroma .lntable { border-spacing: 0; padding: 0; margin: 0; border: 0; width: auto; overflow: auto; display: block; }
@@ -71,3 +71,34 @@
 /* GenericInserted */ .chroma .gi { color: #272822; }
 /* GenericStrong */ .chroma .gs { font-weight: bold; }
 /* GenericSubheading */ .chroma .gu { color: #272822; }
+
+/* Pandoc syntax highlighting classes */
+/* Keyword */ .sourceCode .kw { color: #00a8c8; }
+/* DataType */ .sourceCode .dt { color: #00a8c8; }
+/* DecVal (numbers) */ .sourceCode .dv { color: #ae81ff; }
+/* BaseN */ .sourceCode .bn { color: #ae81ff; }
+/* Float */ .sourceCode .fl { color: #ae81ff; }
+/* Char */ .sourceCode .ch { color: #d88200; }
+/* String */ .sourceCode .st { color: #d88200; }
+/* Comment */ .sourceCode .co { color: #75715e; }
+/* Operator */ .sourceCode .op { color: #f92672; }
+/* Variable */ .sourceCode .va { color: #111111; }
+/* ControlFlow */ .sourceCode .cf { color: #00a8c8; }
+/* BuiltIn */ .sourceCode .bu { color: #111111; }
+/* Extension */ .sourceCode .ex { color: #75af00; }
+/* Preprocessor */ .sourceCode .pp { color: #75715e; }
+/* Attribute */ .sourceCode .at { color: #75af00; }
+/* Documentation */ .sourceCode .do { color: #75715e; }
+/* Annotation */ .sourceCode .an { color: #75715e; }
+/* CommentVar */ .sourceCode .cv { color: #75715e; }
+/* Constant */ .sourceCode .cn { color: #00a8c8; }
+/* SpecialChar */ .sourceCode .sc { color: #8045ff; }
+/* VerbatimString */ .sourceCode .vs { color: #d88200; }
+/* SpecialString */ .sourceCode .ss { color: #d88200; }
+/* Import */ .sourceCode .im { color: #f92672; }
+/* Function */ .sourceCode .fu { color: #75af00; }
+/* RegionMarker */ .sourceCode .re { color: #75715e; }
+/* Information */ .sourceCode .in { color: #75715e; }
+/* Warning */ .sourceCode .wa { color: #75715e; }
+/* Alert */ .sourceCode .al { color: #960050; }
+/* Error */ .sourceCode .er { color: #960050; background-color: #1e0010; }

@@ -138,6 +138,8 @@ cat > "$OUTPUT_FILE" << EOF
     </script>
     <link href="https://cloud.typography.com/6836312/761366/css/fonts.css" rel="stylesheet" type="text/css">
     <link href="/styles.css" rel="stylesheet" type="text/css">
+    <link href="/syntax-light.css" rel="stylesheet" type="text/css">
+    <link href="/syntax-dark.css" rel="stylesheet" type="text/css">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="IE=edge" http-equiv="X-UA-Compatible">
     <meta content="I'm Nathan Herald → $TITLE" name="title">
