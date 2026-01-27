@@ -673,6 +673,8 @@ Send the daily reminder for me at 9am.</textarea><br>
     // MAIN TEST RUNNER
     // ========================================
     let currentSession = null;
+    let currentApiType = null;
+    let currentAvailability = null;
 
     async function runAllTests() {
       log('');
@@ -703,12 +705,16 @@ Send the daily reminder for me at 9am.</textarea><br>
         return;
       }
 
+      currentApiType = phase1.api;
+
       // Phase 2: Availability
       const phase2 = await phase2_checkAvailability(phase1.api);
       if (!phase2.success) {
         setMainStatus(`❌ Failed to check availability: ${phase2.error}`, 'error');
         return;
       }
+
+      currentAvailability = phase2.availability;
 
       if (phase2.availability === 'unavailable') {
         setMainStatus(`❌ Chrome AI model unavailable.<br><br>
@@ -719,10 +725,23 @@ Send the daily reminder for me at 9am.</textarea><br>
         return;
       }
 
-      // Phase 3: Session (only if available or downloadable)
-      if (phase2.availability === 'readily' || phase2.availability === 'available' ||
-          phase2.availability === 'downloadable' || phase2.availability === 'after-download') {
+      // If model needs download, stop here and wait for user gesture (button click)
+      if (phase2.availability === 'downloadable' || phase2.availability === 'after-download') {
+        log('Model needs download - waiting for user gesture (button click)', 'warn');
+        setMainStatus(`📥 Model needs to be downloaded (~2GB).<br><br>
+          <strong>Click "Parse Config" button</strong> to trigger the download.<br>
+          Chrome requires a user click to start model downloads.`, 'warning');
+        document.getElementById('parseBtn').disabled = false;
+        setPhaseStatus(3, 'pending', 'Waiting for button click to start download...');
+        setPhaseStatus(4, 'pending', 'Waiting...');
+        log('========================================');
+        log('WAITING FOR USER GESTURE');
+        log('========================================');
+        return;
+      }
 
+      // Phase 3: Session (only auto-run if model is readily available)
+      if (phase2.availability === 'readily' || phase2.availability === 'available') {
         const phase3 = await phase3_createSession(phase1.api, phase2.availability);
         if (!phase3.success) {
           setMainStatus(`❌ Failed to create session: ${phase3.error}`, 'error');
@@ -766,8 +785,30 @@ Send the daily reminder for me at 9am.</textarea><br>
     // INTERACTIVE PARSE BUTTON
     // ========================================
     document.getElementById('parseBtn').addEventListener('click', async () => {
+      // If no session exists yet, create one (this provides the user gesture Chrome needs)
+      if (!currentSession && currentApiType) {
+        log('');
+        log('========================================');
+        log('USER CLICKED - Creating session with user gesture');
+        log('========================================');
+
+        setMainStatus('⏳ Creating session (this may download the model)...', 'info');
+        document.getElementById('parseBtn').disabled = true;
+
+        const phase3 = await phase3_createSession(currentApiType, currentAvailability);
+        if (!phase3.success) {
+          setMainStatus(`❌ Failed to create session: ${phase3.error}`, 'error');
+          document.getElementById('parseBtn').disabled = false;
+          return;
+        }
+
+        currentSession = phase3.session;
+        document.getElementById('parseBtn').disabled = false;
+      }
+
       if (!currentSession) {
         log('No session available', 'error');
+        setResult('Error: No session available. Try running tests again.');
         return;
       }
 
@@ -776,10 +817,17 @@ Send the daily reminder for me at 9am.</textarea><br>
       const result = await phase4_parseConfig(currentSession, markdown);
 
       if (result.success && result.parsed) {
+        setMainStatus(`✅ Chrome AI is working!<br><br>
+          Successfully parsed config in ${result.elapsed}ms.<br>
+          Name: <strong>${result.parsed.name}</strong><br>
+          Theme: <strong>${result.parsed.theme}</strong><br>
+          Notification: <strong>${result.parsed.notificationHour}</strong>`, 'success');
         setResult(`✅ SUCCESS!\n\nRaw response:\n${result.response}\n\nParsed JSON:\n${JSON.stringify(result.parsed, null, 2)}`);
       } else if (result.success) {
+        setMainStatus(`⚠️ Got response but couldn't parse as JSON`, 'warning');
         setResult(`Raw response:\n${result.response}\n\nParse error: ${result.parseError}`);
       } else {
+        setMainStatus(`❌ Prompt failed: ${result.error}`, 'error');
         setResult(`Error: ${result.error}`);
       }
     });
@@ -787,6 +835,8 @@ Send the daily reminder for me at 9am.</textarea><br>
     document.getElementById('rerunBtn').addEventListener('click', () => {
       logContainer.innerHTML = '';
       currentSession = null;
+      currentApiType = null;
+      currentAvailability = null;
       runAllTests();
     });
 
