@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Chrome AI Test - nathanherald.com</title>
+
+  <!-- Origin Trial Token for Chrome Prompt API -->
+  <meta http-equiv="origin-trial" content="AjKUWIWV77Dhf5bcvHxyqgvzVqVIEwdD5QAo2Pt6inyYgI0Eivv8xLSN8ByDVMwgF5IaxjDt0BA945UchYJujAsAAABkeyJvcmlnaW4iOiJodHRwczovL25hdGhhbmhlcmFsZC5jb206NDQzIiwiZmVhdHVyZSI6IkFJUHJvbXB0QVBJTXVsdGltb2RhbElucHV0IiwiZXhwaXJ5IjoxNzgxNTY4MDAwfQ==">
+
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1a1a1a;
+      --muted: #666;
+      --border: #e0e0e0;
+      --success: #22863a;
+      --success-bg: #dcffe4;
+      --warning: #735c0f;
+      --warning-bg: #fffbdd;
+      --error: #cb2431;
+      --error-bg: #ffeef0;
+      --info: #0366d6;
+      --info-bg: #f1f8ff;
+      --code-bg: #1e1e1e;
+      --code-fg: #d4d4d4;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0d1117;
+        --fg: #e6edf3;
+        --muted: #8b949e;
+        --border: #30363d;
+        --success: #3fb950;
+        --success-bg: #1b4721;
+        --warning: #d29922;
+        --warning-bg: #3d2e00;
+        --error: #f85149;
+        --error-bg: #4a1c1c;
+        --info: #58a6ff;
+        --info-bg: #0c2d6b;
+        --code-bg: #161b22;
+        --code-fg: #e6edf3;
+      }
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
+
+    h1, h2, h3 { margin-top: 2rem; margin-bottom: 1rem; }
+    h1 { font-size: 1.75rem; }
+    h2 { font-size: 1.25rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; }
+    h3 { font-size: 1rem; color: var(--muted); }
+
+    .status-box {
+      padding: 1rem;
+      border-radius: 6px;
+      margin: 1rem 0;
+      border: 1px solid;
+    }
+
+    .status-success { background: var(--success-bg); border-color: var(--success); color: var(--success); }
+    .status-warning { background: var(--warning-bg); border-color: var(--warning); color: var(--warning); }
+    .status-error { background: var(--error-bg); border-color: var(--error); color: var(--error); }
+    .status-info { background: var(--info-bg); border-color: var(--info); color: var(--info); }
+
+    .log-container {
+      background: var(--code-bg);
+      color: var(--code-fg);
+      border-radius: 6px;
+      padding: 1rem;
+      font-family: ui-monospace, "SF Mono", Menlo, Monaco, monospace;
+      font-size: 0.85rem;
+      overflow-x: auto;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    .log-entry { margin: 0.25rem 0; white-space: pre-wrap; word-break: break-word; }
+    .log-time { color: #6a9955; }
+    .log-info { color: #569cd6; }
+    .log-warn { color: #dcdcaa; }
+    .log-error { color: #f14c4c; }
+    .log-success { color: #4ec9b0; }
+
+    button {
+      background: var(--info);
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      margin: 0.5rem 0.5rem 0.5rem 0;
+    }
+
+    button:hover { opacity: 0.9; }
+    button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    textarea {
+      width: 100%;
+      min-height: 120px;
+      font-family: ui-monospace, "SF Mono", Menlo, Monaco, monospace;
+      font-size: 0.9rem;
+      padding: 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: var(--bg);
+      color: var(--fg);
+      resize: vertical;
+    }
+
+    .progress-container {
+      background: var(--border);
+      border-radius: 4px;
+      height: 24px;
+      margin: 1rem 0;
+      overflow: hidden;
+      display: none;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: var(--info);
+      width: 0%;
+      transition: width 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+
+    .result-box {
+      background: var(--code-bg);
+      color: var(--code-fg);
+      border-radius: 6px;
+      padding: 1rem;
+      font-family: ui-monospace, "SF Mono", Menlo, Monaco, monospace;
+      font-size: 0.85rem;
+      white-space: pre-wrap;
+      word-break: break-word;
+      min-height: 100px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+
+    .info-card {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+    }
+
+    .info-card dt { color: var(--muted); font-size: 0.8rem; margin-bottom: 0.25rem; }
+    .info-card dd { margin: 0 0 0.75rem 0; font-family: monospace; color: var(--code-fg); }
+
+    .phase {
+      border-left: 3px solid var(--border);
+      padding-left: 1rem;
+      margin: 1.5rem 0;
+    }
+
+    .phase-header {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .phase-status {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--border);
+    }
+
+    .phase-status.pending { background: var(--muted); }
+    .phase-status.running { background: var(--warning); animation: pulse 1s infinite; }
+    .phase-status.success { background: var(--success); }
+    .phase-status.error { background: var(--error); }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+  <h1>Chrome Built-in AI Test</h1>
+  <p>Testing the <a href="https://developer.chrome.com/docs/ai/prompt-api">Chrome Prompt API</a> with origin trial token for <code>nathanherald.com</code>.</p>
+
+  <!-- Main Status -->
+  <div id="mainStatus" class="status-box status-info">
+    ⏳ Initializing tests...
+  </div>
+
+  <!-- Progress Bar -->
+  <div id="progressContainer" class="progress-container">
+    <div id="progressBar" class="progress-bar">0%</div>
+  </div>
+
+  <!-- Environment Info -->
+  <h2>Environment</h2>
+  <div class="grid">
+    <div class="info-card">
+      <dl>
+        <dt>Browser</dt>
+        <dd id="infoBrowser">Detecting...</dd>
+        <dt>Chrome Version</dt>
+        <dd id="infoChromeVersion">Detecting...</dd>
+        <dt>Platform</dt>
+        <dd id="infoPlatform">Detecting...</dd>
+      </dl>
+    </div>
+    <div class="info-card">
+      <dl>
+        <dt>Origin</dt>
+        <dd id="infoOrigin">Detecting...</dd>
+        <dt>Protocol</dt>
+        <dd id="infoProtocol">Detecting...</dd>
+        <dt>Origin Trial</dt>
+        <dd id="infoOriginTrial">Checking...</dd>
+      </dl>
+    </div>
+  </div>
+
+  <!-- Test Phases -->
+  <h2>Test Phases</h2>
+
+  <div class="phase" id="phase1">
+    <div class="phase-header">
+      <div class="phase-status pending" id="phase1Status"></div>
+      <h3>Phase 1: API Detection</h3>
+    </div>
+    <p id="phase1Result">Waiting...</p>
+  </div>
+
+  <div class="phase" id="phase2">
+    <div class="phase-header">
+      <div class="phase-status pending" id="phase2Status"></div>
+      <h3>Phase 2: Availability Check</h3>
+    </div>
+    <p id="phase2Result">Waiting...</p>
+  </div>
+
+  <div class="phase" id="phase3">
+    <div class="phase-header">
+      <div class="phase-status pending" id="phase3Status"></div>
+      <h3>Phase 3: Session Creation</h3>
+    </div>
+    <p id="phase3Result">Waiting...</p>
+  </div>
+
+  <div class="phase" id="phase4">
+    <div class="phase-header">
+      <div class="phase-status pending" id="phase4Status"></div>
+      <h3>Phase 4: Config Parsing Test</h3>
+    </div>
+    <p id="phase4Result">Waiting...</p>
+  </div>
+
+  <!-- Interactive Test -->
+  <h2>Interactive Test</h2>
+  <p>Enter a markdown config to parse:</p>
+  <textarea id="configInput"># My App Settings
+
+My name is Nathan.
+I prefer dark mode.
+Send the daily reminder for me at 9am.</textarea>
+  <br>
+  <button id="parseBtn" disabled>Parse Config with Chrome AI</button>
+  <button id="rerunBtn">Re-run All Tests</button>
+
+  <h3>Result</h3>
+  <div id="result" class="result-box">Results will appear here after running the test...</div>
+
+  <!-- Detailed Log -->
+  <h2>Detailed Log</h2>
+  <div id="logContainer" class="log-container"></div>
+
+  <script>
+    // ========================================
+    // LOGGING SYSTEM
+    // ========================================
+    const logContainer = document.getElementById('logContainer');
+    const logs = [];
+
+    function log(message, level = 'info') {
+      const timestamp = new Date().toISOString().split('T')[1].slice(0, 12);
+      const entry = { timestamp, message, level };
+      logs.push(entry);
+
+      const div = document.createElement('div');
+      div.className = `log-entry log-${level}`;
+      div.innerHTML = `<span class="log-time">[${timestamp}]</span> ${escapeHtml(message)}`;
+      logContainer.appendChild(div);
+      logContainer.scrollTop = logContainer.scrollHeight;
+
+      // Also log to console
+      const consoleMethods = { info: 'log', warn: 'warn', error: 'error', success: 'log' };
+      console[consoleMethods[level] || 'log'](`[${timestamp}] ${message}`);
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    function logObject(label, obj) {
+      log(`${label}:`);
+      try {
+        const lines = JSON.stringify(obj, null, 2).split('\n');
+        lines.forEach(line => log('  ' + line));
+      } catch (e) {
+        log(`  [Unable to stringify: ${e.message}]`, 'warn');
+      }
+    }
+
+    // ========================================
+    // UI HELPERS
+    // ========================================
+    function setMainStatus(message, type = 'info') {
+      const el = document.getElementById('mainStatus');
+      el.className = `status-box status-${type}`;
+      el.innerHTML = message;
+    }
+
+    function setPhaseStatus(phase, status, message) {
+      const statusEl = document.getElementById(`phase${phase}Status`);
+      const resultEl = document.getElementById(`phase${phase}Result`);
+
+      statusEl.className = `phase-status ${status}`;
+      resultEl.textContent = message;
+    }
+
+    function showProgress(show) {
+      document.getElementById('progressContainer').style.display = show ? 'block' : 'none';
+    }
+
+    function setProgress(percent, text) {
+      const bar = document.getElementById('progressBar');
+      bar.style.width = `${percent}%`;
+      bar.textContent = text || `${percent.toFixed(1)}%`;
+    }
+
+    function setResult(text) {
+      document.getElementById('result').textContent = text;
+    }
+
+    // ========================================
+    // ENVIRONMENT DETECTION
+    // ========================================
+    function detectEnvironment() {
+      log('=== ENVIRONMENT DETECTION ===');
+
+      // Browser & Chrome version
+      const ua = navigator.userAgent;
+      log(`User Agent: ${ua}`);
+
+      const chromeMatch = ua.match(/Chrome\/(\d+)/);
+      const chromeVersion = chromeMatch ? chromeMatch[1] : 'Not Chrome';
+
+      document.getElementById('infoBrowser').textContent =
+        ua.includes('Chrome') ? 'Chrome' : ua.includes('Firefox') ? 'Firefox' : ua.includes('Safari') ? 'Safari' : 'Unknown';
+      document.getElementById('infoChromeVersion').textContent = chromeVersion;
+      document.getElementById('infoPlatform').textContent = navigator.platform;
+      document.getElementById('infoOrigin').textContent = location.origin;
+      document.getElementById('infoProtocol').textContent = location.protocol;
+
+      log(`Chrome Version: ${chromeVersion}`);
+      log(`Platform: ${navigator.platform}`);
+      log(`Origin: ${location.origin}`);
+      log(`Protocol: ${location.protocol}`);
+
+      // Check origin trial requirements
+      const isHttps = location.protocol === 'https:';
+      const isCorrectDomain = location.hostname === 'nathanherald.com';
+      const isChrome = !!chromeMatch;
+      const chromeVersionNum = parseInt(chromeVersion) || 0;
+      const isVersionOk = chromeVersionNum >= 139 && chromeVersionNum <= 147;
+
+      log(`HTTPS: ${isHttps}`);
+      log(`Correct Domain: ${isCorrectDomain}`);
+      log(`Chrome 139-147: ${isVersionOk} (v${chromeVersion})`);
+
+      let originTrialStatus = '✅ Should work';
+      if (!isHttps) originTrialStatus = '❌ Needs HTTPS';
+      else if (!isCorrectDomain) originTrialStatus = '❌ Wrong domain (need nathanherald.com)';
+      else if (!isChrome) originTrialStatus = '❌ Not Chrome';
+      else if (!isVersionOk) originTrialStatus = `⚠️ Chrome ${chromeVersion} (need 139-147)`;
+
+      document.getElementById('infoOriginTrial').textContent = originTrialStatus;
+      log(`Origin Trial Status: ${originTrialStatus}`);
+
+      return { isHttps, isCorrectDomain, isChrome, chromeVersionNum, isVersionOk };
+    }
+
+    // ========================================
+    // PHASE 1: API DETECTION
+    // ========================================
+    async function phase1_detectAPI() {
+      log('');
+      log('=== PHASE 1: API DETECTION ===');
+      setPhaseStatus(1, 'running', 'Checking for LanguageModel API...');
+
+      const detection = {
+        LanguageModel: typeof LanguageModel,
+        'LanguageModel.availability': typeof LanguageModel !== 'undefined' ? typeof LanguageModel.availability : 'N/A',
+        'LanguageModel.create': typeof LanguageModel !== 'undefined' ? typeof LanguageModel.create : 'N/A',
+        'window.ai': typeof window.ai,
+        'window.ai.languageModel': typeof window.ai !== 'undefined' && window.ai ? typeof window.ai.languageModel : 'N/A',
+      };
+
+      logObject('API Detection Results', detection);
+
+      if (typeof LanguageModel !== 'undefined') {
+        log('✓ LanguageModel API found!', 'success');
+        setPhaseStatus(1, 'success', '✅ LanguageModel API is available');
+        return { success: true, api: 'LanguageModel', detection };
+      }
+
+      if (typeof window.ai !== 'undefined' && window.ai?.languageModel) {
+        log('✓ window.ai.languageModel API found!', 'success');
+        setPhaseStatus(1, 'success', '✅ window.ai API is available');
+        return { success: true, api: 'window.ai', detection };
+      }
+
+      log('✗ No AI API found', 'error');
+      setPhaseStatus(1, 'error', '❌ No AI API found - Origin trial may not be active');
+      return { success: false, detection };
+    }
+
+    // ========================================
+    // PHASE 2: AVAILABILITY CHECK
+    // ========================================
+    async function phase2_checkAvailability(apiType) {
+      log('');
+      log('=== PHASE 2: AVAILABILITY CHECK ===');
+      setPhaseStatus(2, 'running', 'Checking model availability...');
+
+      try {
+        let availability;
+
+        if (apiType === 'LanguageModel') {
+          log('Calling LanguageModel.availability()...');
+          availability = await LanguageModel.availability();
+        } else if (apiType === 'window.ai') {
+          log('Calling window.ai.languageModel.capabilities()...');
+          const caps = await window.ai.languageModel.capabilities();
+          availability = caps.available;
+          logObject('Capabilities', caps);
+        }
+
+        log(`Availability result: "${availability}"`, availability === 'readily' || availability === 'available' ? 'success' : 'info');
+
+        const statusMessages = {
+          'readily': '✅ Model is ready to use immediately',
+          'available': '✅ Model is available',
+          'downloadable': '📥 Model can be downloaded (~2GB). Click "Parse Config" to start.',
+          'after-download': '📥 Model available after download. Click "Parse Config" to start.',
+          'downloading': '⏳ Model is currently downloading...',
+          'unavailable': '❌ Model unavailable (hardware requirements not met?)',
+        };
+
+        const message = statusMessages[availability] || `Unknown status: ${availability}`;
+        const status = (availability === 'readily' || availability === 'available') ? 'success' :
+                       (availability === 'downloadable' || availability === 'after-download' || availability === 'downloading') ? 'running' : 'error';
+
+        setPhaseStatus(2, status, message);
+
+        return { success: true, availability };
+
+      } catch (e) {
+        log(`Availability check error: ${e.message}`, 'error');
+        log(`Stack: ${e.stack}`, 'error');
+        setPhaseStatus(2, 'error', `❌ Error: ${e.message}`);
+        return { success: false, error: e.message };
+      }
+    }
+
+    // ========================================
+    // PHASE 3: SESSION CREATION
+    // ========================================
+    async function phase3_createSession(apiType, availability) {
+      log('');
+      log('=== PHASE 3: SESSION CREATION ===');
+      setPhaseStatus(3, 'running', 'Creating AI session...');
+
+      const needsDownload = availability === 'downloadable' || availability === 'after-download' || availability === 'downloading';
+
+      if (needsDownload) {
+        log('Model needs to be downloaded first. Showing progress bar.', 'warn');
+        showProgress(true);
+        setProgress(0, 'Preparing download...');
+      }
+
+      try {
+        let session;
+        const startTime = Date.now();
+
+        if (apiType === 'LanguageModel') {
+          log('Calling LanguageModel.create() with download monitor...');
+
+          session = await LanguageModel.create({
+            monitor: (m) => {
+              log('Download monitor attached');
+              m.addEventListener('downloadprogress', (e) => {
+                const pct = (e.loaded * 100);
+                log(`Download progress: ${pct.toFixed(1)}%`);
+                setProgress(pct, `Downloading: ${pct.toFixed(1)}%`);
+                setPhaseStatus(3, 'running', `Downloading model: ${pct.toFixed(1)}%`);
+              });
+            }
+          });
+
+        } else if (apiType === 'window.ai') {
+          log('Calling window.ai.languageModel.create()...');
+          session = await window.ai.languageModel.create();
+        }
+
+        const elapsed = Date.now() - startTime;
+        log(`Session created in ${elapsed}ms`, 'success');
+        showProgress(false);
+
+        // Log session info
+        if (session) {
+          const sessionInfo = {
+            hasPrompt: typeof session.prompt === 'function',
+            hasPromptStreaming: typeof session.promptStreaming === 'function',
+            hasDestroy: typeof session.destroy === 'function',
+          };
+          logObject('Session capabilities', sessionInfo);
+        }
+
+        setPhaseStatus(3, 'success', `✅ Session created (${elapsed}ms)`);
+        return { success: true, session };
+
+      } catch (e) {
+        log(`Session creation error: ${e.message}`, 'error');
+        log(`Stack: ${e.stack}`, 'error');
+        showProgress(false);
+        setPhaseStatus(3, 'error', `❌ Error: ${e.message}`);
+        return { success: false, error: e.message };
+      }
+    }
+
+    // ========================================
+    // PHASE 4: CONFIG PARSING TEST
+    // ========================================
+    async function phase4_parseConfig(session, markdown) {
+      log('');
+      log('=== PHASE 4: CONFIG PARSING TEST ===');
+      setPhaseStatus(4, 'running', 'Sending prompt to AI...');
+
+      const prompt = `Extract settings from this config file and return valid JSON with these fields:
+- name (string): the user's display name
+- theme (string): "light" or "dark"
+- notificationHour (number): hour in 24-hour format (0-23), or -1 if not specified
+
+Config file:
+${markdown}
+
+Return ONLY the JSON object, no markdown formatting, no explanation, just the JSON.`;
+
+      log('Prompt:');
+      prompt.split('\n').forEach(line => log('  ' + line));
+
+      try {
+        const startTime = Date.now();
+        log('Calling session.prompt()...');
+
+        const response = await session.prompt(prompt);
+
+        const elapsed = Date.now() - startTime;
+        log(`Response received in ${elapsed}ms`, 'success');
+        log('Raw response:');
+        response.split('\n').forEach(line => log('  ' + line));
+
+        // Try to parse as JSON
+        let parsed = null;
+        let parseError = null;
+
+        try {
+          let cleaned = response.trim();
+          // Remove markdown code blocks if present
+          if (cleaned.startsWith('```')) {
+            cleaned = cleaned.replace(/```json?\n?/g, '').replace(/```\s*$/g, '').trim();
+          }
+          parsed = JSON.parse(cleaned);
+          log('Successfully parsed as JSON!', 'success');
+          logObject('Parsed config', parsed);
+        } catch (e) {
+          parseError = e.message;
+          log(`JSON parse failed: ${e.message}`, 'warn');
+        }
+
+        setPhaseStatus(4, parsed ? 'success' : 'running',
+          parsed ? `✅ Config parsed successfully (${elapsed}ms)` : `⚠️ Got response but JSON parse failed`);
+
+        return { success: true, response, parsed, parseError, elapsed };
+
+      } catch (e) {
+        log(`Prompt error: ${e.message}`, 'error');
+        log(`Stack: ${e.stack}`, 'error');
+        setPhaseStatus(4, 'error', `❌ Error: ${e.message}`);
+        return { success: false, error: e.message };
+      }
+    }
+
+    // ========================================
+    // MAIN TEST RUNNER
+    // ========================================
+    let currentSession = null;
+
+    async function runAllTests() {
+      log('');
+      log('========================================');
+      log('STARTING CHROME AI TESTS');
+      log(`Time: ${new Date().toISOString()}`);
+      log('========================================');
+
+      setMainStatus('⏳ Running tests...', 'info');
+      document.getElementById('parseBtn').disabled = true;
+
+      // Reset phases
+      [1, 2, 3, 4].forEach(i => setPhaseStatus(i, 'pending', 'Waiting...'));
+
+      // Environment
+      const env = detectEnvironment();
+
+      // Phase 1: API Detection
+      const phase1 = await phase1_detectAPI();
+      if (!phase1.success) {
+        setMainStatus(`❌ Chrome AI API not found.<br><br>
+          <strong>Possible reasons:</strong><br>
+          • Not using Chrome browser<br>
+          • Chrome version not 139-147 (you have v${env.chromeVersionNum || 'unknown'})<br>
+          • Not on HTTPS<br>
+          • Origin trial token not accepted<br>
+          • Wrong domain (need nathanherald.com)`, 'error');
+        return;
+      }
+
+      // Phase 2: Availability
+      const phase2 = await phase2_checkAvailability(phase1.api);
+      if (!phase2.success) {
+        setMainStatus(`❌ Failed to check availability: ${phase2.error}`, 'error');
+        return;
+      }
+
+      if (phase2.availability === 'unavailable') {
+        setMainStatus(`❌ Chrome AI model unavailable.<br><br>
+          <strong>This usually means:</strong><br>
+          • Hardware doesn't meet requirements (need 4GB+ VRAM or 16GB+ RAM)<br>
+          • Not enough storage (need ~22GB free)<br>
+          • Model not rolled out to your region yet`, 'error');
+        return;
+      }
+
+      // Phase 3: Session (only if available or downloadable)
+      if (phase2.availability === 'readily' || phase2.availability === 'available' ||
+          phase2.availability === 'downloadable' || phase2.availability === 'after-download') {
+
+        const phase3 = await phase3_createSession(phase1.api, phase2.availability);
+        if (!phase3.success) {
+          setMainStatus(`❌ Failed to create session: ${phase3.error}`, 'error');
+          return;
+        }
+
+        currentSession = phase3.session;
+        document.getElementById('parseBtn').disabled = false;
+
+        // Phase 4: Parse config
+        const markdown = document.getElementById('configInput').value;
+        const phase4 = await phase4_parseConfig(currentSession, markdown);
+
+        if (phase4.success && phase4.parsed) {
+          setMainStatus(`✅ Chrome AI is working!<br><br>
+            Successfully parsed config in ${phase4.elapsed}ms.<br>
+            Name: <strong>${phase4.parsed.name}</strong><br>
+            Theme: <strong>${phase4.parsed.theme}</strong><br>
+            Notification: <strong>${phase4.parsed.notificationHour}</strong>`, 'success');
+
+          setResult(`✅ SUCCESS!\n\nRaw response:\n${phase4.response}\n\nParsed JSON:\n${JSON.stringify(phase4.parsed, null, 2)}`);
+        } else if (phase4.success) {
+          setMainStatus(`⚠️ Got response but couldn't parse as JSON`, 'warning');
+          setResult(`Raw response:\n${phase4.response}\n\nParse error: ${phase4.parseError}`);
+        } else {
+          setMainStatus(`❌ Prompt failed: ${phase4.error}`, 'error');
+          setResult(`Error: ${phase4.error}`);
+        }
+
+      } else {
+        setMainStatus(`⏳ Model is ${phase2.availability}. Please wait...`, 'warning');
+      }
+
+      log('');
+      log('========================================');
+      log('TESTS COMPLETE');
+      log('========================================');
+    }
+
+    // ========================================
+    // INTERACTIVE PARSE BUTTON
+    // ========================================
+    document.getElementById('parseBtn').addEventListener('click', async () => {
+      if (!currentSession) {
+        log('No session available', 'error');
+        return;
+      }
+
+      setResult('Parsing...');
+      const markdown = document.getElementById('configInput').value;
+      const result = await phase4_parseConfig(currentSession, markdown);
+
+      if (result.success && result.parsed) {
+        setResult(`✅ SUCCESS!\n\nRaw response:\n${result.response}\n\nParsed JSON:\n${JSON.stringify(result.parsed, null, 2)}`);
+      } else if (result.success) {
+        setResult(`Raw response:\n${result.response}\n\nParse error: ${result.parseError}`);
+      } else {
+        setResult(`Error: ${result.error}`);
+      }
+    });
+
+    document.getElementById('rerunBtn').addEventListener('click', () => {
+      logContainer.innerHTML = '';
+      currentSession = null;
+      runAllTests();
+    });
+
+    // ========================================
+    // RUN ON LOAD
+    // ========================================
+    runAllTests();
+  </script>
+</body>
+</html>
