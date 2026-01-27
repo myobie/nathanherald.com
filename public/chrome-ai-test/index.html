@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Chrome AI Test - nathanherald.com</title>
-
-  <!-- Origin Trial Token for Chrome Prompt API -->
-  <meta http-equiv="origin-trial" content="AjKUWIWV77Dhf5bcvHxyqgvzVqVIEwdD5QAo2Pt6inyYgI0Eivv8xLSN8ByDVMwgF5IaxjDt0BA945UchYJujAsAAABkeyJvcmlnaW4iOiJodHRwczovL25hdGhhbmhlcmFsZC5jb206NDQzIiwiZmVhdHVyZSI6IkFJUHJvbXB0QVBJTXVsdGltb2RhbElucHV0IiwiZXhwaXJ5IjoxNzgxNTY4MDAwfQ==">
-
-  <style>
+  <head>
+    <meta content="HTML Tidy for HTML5 for Apple macOS version 5.8.0" name="generator">
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <title>
+      Chrome AI Test - nathanherald.com
+    </title><!-- Origin Trial Token for Chrome Prompt API -->
+    <meta content=
+    "AjKUWIWV77Dhf5bcvHxyqgvzVqVIEwdD5QAo2Pt6inyYgI0Eivv8xLSN8ByDVMwgF5IaxjDt0BA945UchYJujAsAAABkeyJvcmlnaW4iOiJodHRwczovL25hdGhhbmhlcmFsZC5jb206NDQzIiwiZmVhdHVyZSI6IkFJUHJvbXB0QVBJTXVsdGltb2RhbElucHV0IiwiZXhwaXJ5IjoxNzgxNTY4MDAwfQ=="
+    http-equiv="origin-trial">
+    <style>
     :root {
       --bg: #fff;
       --fg: #1a1a1a;
@@ -200,102 +202,144 @@
     }
 
     .hidden { display: none !important; }
-  </style>
-</head>
-<body>
-  <h1>Chrome Built-in AI Test</h1>
-  <p>Testing the <a href="https://developer.chrome.com/docs/ai/prompt-api">Chrome Prompt API</a> with origin trial token for <code>nathanherald.com</code>.</p>
-
-  <!-- Main Status -->
-  <div id="mainStatus" class="status-box status-info">
-    ⏳ Initializing tests...
-  </div>
-
-  <!-- Progress Bar -->
-  <div id="progressContainer" class="progress-container">
-    <div id="progressBar" class="progress-bar">0%</div>
-  </div>
-
-  <!-- Environment Info -->
-  <h2>Environment</h2>
-  <div class="grid">
-    <div class="info-card">
-      <dl>
-        <dt>Browser</dt>
-        <dd id="infoBrowser">Detecting...</dd>
-        <dt>Chrome Version</dt>
-        <dd id="infoChromeVersion">Detecting...</dd>
-        <dt>Platform</dt>
-        <dd id="infoPlatform">Detecting...</dd>
-      </dl>
+    </style>
+  </head>
+  <body>
+    <h1>
+      Chrome Built-in AI Test
+    </h1>
+    <p>
+      Testing the <a href="https://developer.chrome.com/docs/ai/prompt-api">Chrome Prompt API</a>
+      with origin trial token for <code>nathanherald.com</code>.
+    </p><!-- Main Status -->
+    <div class="status-box status-info" id="mainStatus">
+      ⏳ Initializing tests...
+    </div><!-- Progress Bar -->
+    <div class="progress-container" id="progressContainer">
+      <div class="progress-bar" id="progressBar">
+        0%
+      </div>
+    </div><!-- Environment Info -->
+    <h2>
+      Environment
+    </h2>
+    <div class="grid">
+      <div class="info-card">
+        <dl>
+          <dt>
+            Browser
+          </dt>
+          <dd id="infoBrowser">
+            Detecting...
+          </dd>
+          <dt>
+            Chrome Version
+          </dt>
+          <dd id="infoChromeVersion">
+            Detecting...
+          </dd>
+          <dt>
+            Platform
+          </dt>
+          <dd id="infoPlatform">
+            Detecting...
+          </dd>
+        </dl>
+      </div>
+      <div class="info-card">
+        <dl>
+          <dt>
+            Origin
+          </dt>
+          <dd id="infoOrigin">
+            Detecting...
+          </dd>
+          <dt>
+            Protocol
+          </dt>
+          <dd id="infoProtocol">
+            Detecting...
+          </dd>
+          <dt>
+            Origin Trial
+          </dt>
+          <dd id="infoOriginTrial">
+            Checking...
+          </dd>
+        </dl>
+      </div>
+    </div><!-- Test Phases -->
+    <h2>
+      Test Phases
+    </h2>
+    <div class="phase" id="phase1">
+      <div class="phase-header">
+        <div class="phase-status pending" id="phase1Status"></div>
+        <h3>
+          Phase 1: API Detection
+        </h3>
+      </div>
+      <p id="phase1Result">
+        Waiting...
+      </p>
     </div>
-    <div class="info-card">
-      <dl>
-        <dt>Origin</dt>
-        <dd id="infoOrigin">Detecting...</dd>
-        <dt>Protocol</dt>
-        <dd id="infoProtocol">Detecting...</dd>
-        <dt>Origin Trial</dt>
-        <dd id="infoOriginTrial">Checking...</dd>
-      </dl>
+    <div class="phase" id="phase2">
+      <div class="phase-header">
+        <div class="phase-status pending" id="phase2Status"></div>
+        <h3>
+          Phase 2: Availability Check
+        </h3>
+      </div>
+      <p id="phase2Result">
+        Waiting...
+      </p>
     </div>
-  </div>
-
-  <!-- Test Phases -->
-  <h2>Test Phases</h2>
-
-  <div class="phase" id="phase1">
-    <div class="phase-header">
-      <div class="phase-status pending" id="phase1Status"></div>
-      <h3>Phase 1: API Detection</h3>
+    <div class="phase" id="phase3">
+      <div class="phase-header">
+        <div class="phase-status pending" id="phase3Status"></div>
+        <h3>
+          Phase 3: Session Creation
+        </h3>
+      </div>
+      <p id="phase3Result">
+        Waiting...
+      </p>
     </div>
-    <p id="phase1Result">Waiting...</p>
-  </div>
-
-  <div class="phase" id="phase2">
-    <div class="phase-header">
-      <div class="phase-status pending" id="phase2Status"></div>
-      <h3>Phase 2: Availability Check</h3>
-    </div>
-    <p id="phase2Result">Waiting...</p>
-  </div>
-
-  <div class="phase" id="phase3">
-    <div class="phase-header">
-      <div class="phase-status pending" id="phase3Status"></div>
-      <h3>Phase 3: Session Creation</h3>
-    </div>
-    <p id="phase3Result">Waiting...</p>
-  </div>
-
-  <div class="phase" id="phase4">
-    <div class="phase-header">
-      <div class="phase-status pending" id="phase4Status"></div>
-      <h3>Phase 4: Config Parsing Test</h3>
-    </div>
-    <p id="phase4Result">Waiting...</p>
-  </div>
-
-  <!-- Interactive Test -->
-  <h2>Interactive Test</h2>
-  <p>Enter a markdown config to parse:</p>
-  <textarea id="configInput"># My App Settings
+    <div class="phase" id="phase4">
+      <div class="phase-header">
+        <div class="phase-status pending" id="phase4Status"></div>
+        <h3>
+          Phase 4: Config Parsing Test
+        </h3>
+      </div>
+      <p id="phase4Result">
+        Waiting...
+      </p>
+    </div><!-- Interactive Test -->
+    <h2>
+      Interactive Test
+    </h2>
+    <p>
+      Enter a markdown config to parse:
+    </p>
+    <textarea id="configInput"># My App Settings
 
 My name is Nathan.
 I prefer dark mode.
-Send the daily reminder for me at 9am.</textarea>
-  <br>
-  <button id="parseBtn" disabled>Parse Config with Chrome AI</button>
-  <button id="rerunBtn">Re-run All Tests</button>
-
-  <h3>Result</h3>
-  <div id="result" class="result-box">Results will appear here after running the test...</div>
-
-  <!-- Detailed Log -->
-  <h2>Detailed Log</h2>
-  <div id="logContainer" class="log-container"></div>
-
-  <script>
+Send the daily reminder for me at 9am.</textarea><br>
+    <button disabled id="parseBtn">Parse Config with Chrome AI</button> <button id=
+    "rerunBtn">Re-run All Tests</button>
+    <h3>
+      Result
+    </h3>
+    <div class="result-box" id="result">
+      Results will appear here after running the test...
+    </div><!-- Detailed Log -->
+    <h2>
+      Detailed Log
+    </h2>
+    <div class="log-container" id="logContainer"></div>
+    <script>
     // ========================================
     // LOGGING SYSTEM
     // ========================================
@@ -571,14 +615,14 @@ Send the daily reminder for me at 9am.</textarea>
       setPhaseStatus(4, 'running', 'Sending prompt to AI...');
 
       const prompt = `Extract settings from this config file and return valid JSON with these fields:
-- name (string): the user's display name
-- theme (string): "light" or "dark"
-- notificationHour (number): hour in 24-hour format (0-23), or -1 if not specified
+    - name (string): the user's display name
+    - theme (string): "light" or "dark"
+    - notificationHour (number): hour in 24-hour format (0-23), or -1 if not specified
 
-Config file:
-${markdown}
+    Config file:
+    ${markdown}
 
-Return ONLY the JSON object, no markdown formatting, no explanation, just the JSON.`;
+    Return ONLY the JSON object, no markdown formatting, no explanation, just the JSON.`;
 
       log('Prompt:');
       prompt.split('\n').forEach(line => log('  ' + line));
@@ -750,6 +794,6 @@ Return ONLY the JSON object, no markdown formatting, no explanation, just the JS
     // RUN ON LOAD
     // ========================================
     runAllTests();
-  </script>
-</body>
+    </script>
+  </body>
 </html>

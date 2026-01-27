@@ -10,6 +10,14 @@ I keep finding little uses for small local SLMs in my side projects, and one tha
 
 Apple's Foundation Models are different from all other SLMs because they are more directly integrated into swift. I don't have to ask the robot to produce json, parse that, see if it is valid, etc. They handle all of that behind the scenes and I receive a valid swift struct or enum.
 
+## Why markdown instead of json or a settings UI?
+
+I'm building a small journal app for myself that's all markdown. Having the config also be a markdown file keeps the experience consistent for me. It's all just text files I can edit however I want.
+
+Beyond that, there are real advantages to letting an SLM parse natural language config. Natural language can make setting a time in your app way easier since "9am" and "9:00 AM" and "nine in the morning" and "early, like 9ish" can all work. And there is less UI to build: instead of designing screens with toggles, dropdowns, and date pickers, you just need a text editor. Plus users can even include notes about why they're choosing to configure something a certain way right there in the markdown.
+
+This pattern works for other things too: natural language search ("show me photos from last summer"), extracting data from messy text (receipts, emails), smart tagging, or anywhere users would benefit from not having to learn your app's specific input format.
+
 Here is a little app I made. You can find the project up on [GitHub][repo]. It's just a one file SwiftUI macOS app.
 
 ![Screenshot of ConfigWithMarkdown app showing a two-pane layout: markdown config on the left, parsed struct values on the right](screenshot.png)
