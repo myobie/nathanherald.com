@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+  <head lang="en-us">
+    <meta content="HTML Tidy for HTML5 for Apple macOS version 5.8.0" name="generator">
+    <meta charset="UTF-8">
+    <title>
+      I'm Nathan Herald → You Could Configure Your App with Markdown
+    </title>
+    <script>
+      if ((new URL(window.location.href)).host === 'myobie.com') { window.location.assign('https://nathanherald.com') }
+    </script>
+    <link href="https://cloud.typography.com/6836312/761366/css/fonts.css" rel="stylesheet" type=
+    "text/css">
+    <link href="/styles.css" rel="stylesheet" type="text/css">
+    <link href="/syntax-light.css" rel="stylesheet" type="text/css">
+    <link href="/syntax-dark.css" rel="stylesheet" type="text/css">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="I'm Nathan Herald → You Could Configure Your App with Markdown" name="title">
+    <meta content=
+    "Using Apple's Foundation Models to parse a config.md file into a Swift struct. Small local models can solve small, interesting problems - all on-device."
+    name="description">
+    <meta content="You Could Configure Your App with Markdown" property="og:title">
+    <meta content="website" property="og:type">
+    <meta content=
+    "Using Apple's Foundation Models to parse a config.md file into a Swift struct. Small local models can solve small, interesting problems - all on-device."
+    property="og:description">
+    <meta content="/og.png" property="og:image">
+    <meta content="I'm Nathan Herald" property="og:site_name">
+    <link href="/rss.xml" rel="alternate" title="Feed of all the posts on nathanherald.com" type=
+    "application/rss+xml">
+  </head>
+  <body class="default">
+    <header class="section-header">
+      <div class="section-nav">
+        <h1 class="home-link">
+          <a class="never-underline" data-nospan="" href="/"><abbr title="Hello">👋</abbr></a>
+          <a href="/">I'm Nathan</a>
+        </h1>
+        <nav>
+          <p>
+            Find more in the <a href="/posts/">archive of all the posts on this site</a> or
+            <a href="/rss.xml">subscribe with RSS</a>.
+          </p>
+        </nav>
+      </div>
+    </header>
+    <main class="single">
+      <article>
+        <header>
+          <h1>
+            You Could Configure Your App with Markdown
+          </h1>
+        </header>
+        <div class="content">
+          <p>
+            I keep finding little uses for small local SLMs in my side projects, and one that I
+            really like is using Apple’s Foundation Model to parse a <code>config.md</code> file
+            into an <code>AppConfig</code> struct. You could configure your display name, your
+            location, what time you’d like to receive notifications/reminders, the app’s theme, and
+            more in plain language.
+          </p>
+          <blockquote>
+            <p>
+              SLM == “Small Language Model” which is what I assume Apple’s on-device model is. LLMs
+              are the giant ones that run on servers or beefy machines.
+            </p>
+          </blockquote>
+          <p>
+            Apple’s Foundation Models are different from all other SLMs because they are more
+            directly integrated into swift. I don’t have to ask the robot to produce json, parse
+            that, see if it is valid, etc. They handle all of that behind the scenes and I receive
+            a valid swift struct or enum.
+          </p>
+          <p>
+            Here is a little app I made. You can find the project up on <a href=
+            "https://github.com/myobie/ConfigWithMarkdown">GitHub</a>. It’s just a one file SwiftUI
+            macOS app.
+          </p>
+          <p>
+            <img alt=
+            "Screenshot of ConfigWithMarkdown app showing a two-pane layout: markdown config on the left, parsed struct values on the right"
+            src="screenshot.png">
+          </p>
+          <blockquote>
+            <p>
+              I can’t provide a Playground because playgrounds cannot use macros, so they can’t
+              show off the <code>@Generable</code> stuff. So it must be a whole ass xcode project.
+              Sorry.
+            </p>
+          </blockquote>
+          <p>
+            My dream config struct for this app looks like this:
+          </p>
+          <div class="sourceCode" id="cb1">
+            <pre class="sourceCode swift"><code class="sourceCode swift"><span id=
+            "cb1-1"><a aria-hidden="true" href="#cb1-1" tabindex="-1"></a><span class=
+            "at">@Generable</span></span>
+<span id="cb1-2"><a aria-hidden="true" href="#cb1-2" tabindex="-1"></a><span class=
+"kw">enum</span> Theme<span class="op">:</span> <span class="dt">String</span> <span class=
+"op">{</span></span>
+<span id="cb1-3"><a aria-hidden="true" href="#cb1-3" tabindex="-1"></a>    <span class=
+"cf">case</span> light</span>
+<span id="cb1-4"><a aria-hidden="true" href="#cb1-4" tabindex="-1"></a>    <span class=
+"cf">case</span> dark</span>
+<span id="cb1-5"><a aria-hidden="true" href="#cb1-5" tabindex="-1"></a><span class=
+"op">}</span></span>
+<span id="cb1-6"><a aria-hidden="true" href="#cb1-6" tabindex="-1"></a></span>
+<span id="cb1-7"><a aria-hidden="true" href="#cb1-7" tabindex="-1"></a><span class=
+"at">@Generable</span></span>
+<span id="cb1-8"><a aria-hidden="true" href="#cb1-8" tabindex="-1"></a><span class=
+"kw">struct</span> AppConfig<span class="op">:</span> <span class=
+"dt">Equatable</span> <span class="op">{</span></span>
+<span id="cb1-9"><a aria-hidden="true" href="#cb1-9" tabindex="-1"></a>    <span class=
+"at">@Guide</span><span class="op">(</span>description<span class="op">:</span> <span class=
+"st">"The user's display name if specified"</span><span class="op">)</span></span>
+<span id="cb1-10"><a aria-hidden="true" href="#cb1-10" tabindex="-1"></a>    <span class=
+"kw">var</span> <span class="va">name</span><span class="op">:</span> String</span>
+<span id="cb1-11"><a aria-hidden="true" href="#cb1-11" tabindex="-1"></a></span>
+<span id="cb1-12"><a aria-hidden="true" href="#cb1-12" tabindex="-1"></a>    <span class=
+"at">@Guide</span><span class="op">(</span>description<span class="op">:</span> <span class=
+"st">"The user's preferred color theme. Use 'light' for bright backgrounds and dark text, good for daytime or well-lit environments. Use 'dark' for dark backgrounds and light text, easier on the eyes at night or in dim rooms."</span><span class="op">)</span></span>
+<span id="cb1-13"><a aria-hidden="true" href="#cb1-13" tabindex="-1"></a>    <span class=
+"kw">var</span> <span class="va">theme</span><span class="op">:</span> Theme</span>
+<span id="cb1-14"><a aria-hidden="true" href="#cb1-14" tabindex="-1"></a></span>
+<span id="cb1-15"><a aria-hidden="true" href="#cb1-15" tabindex="-1"></a>    <span class=
+"at">@Guide</span><span class="op">(</span>description<span class="op">:</span> <span class=
+"st">"Notification hour in 24-hour format (0-23), or -1 if not specified. Pay attention to AM vs PM and daytime vs evening context."</span><span class="op">)</span></span>
+<span id="cb1-16"><a aria-hidden="true" href="#cb1-16" tabindex="-1"></a>    <span class=
+"kw">var</span> <span class="va">notificationHour</span><span class="op">:</span> Int</span>
+<span id="cb1-17"><a aria-hidden="true" href="#cb1-17" tabindex="-1"></a><span class=
+"op">}</span></span></code></pre>
+          </div>
+          <p>
+            <em>(I wanted to mix in an enum just to show how fancy this can be.)</em>
+          </p>
+          <p>
+            <code>@Guide</code> is for the SLM to try to help it figure out what these fields are
+            for. This is “prompt engineering” right here. You can see I’ve tried to
+            <em>explain</em> a bit why one might want light vs dark mode, which hopefully would
+            work for a config file that says something like “I mainly work at night.”
+          </p>
+          <p>
+            This is how you could use Apple’s local model to parse some markdown into that struct:
+          </p>
+          <div class="sourceCode" id="cb2">
+            <pre class="sourceCode swift"><code class="sourceCode swift"><span id=
+            "cb2-1"><a aria-hidden="true" href="#cb2-1" tabindex="-1"></a><span class=
+            "kw">func</span> <span class="fu">parseConfig</span><span class=
+            "op">(</span><span class="va">markdown</span><span class="op">:</span> <span class=
+            "dt">String</span><span class="op">)</span> <span class="fu">async</span> <span class=
+            "kw">throws</span> -&gt; <span class="fu">AppConfig</span> <span class=
+            "op">{</span></span>
+<span id="cb2-2"><a aria-hidden="true" href="#cb2-2" tabindex="-1"></a>    <span class=
+"kw">let</span> <span class="va">model</span> <span class=
+"op">=</span> SystemLanguageModel<span class="op">(</span>guardrails<span class=
+"op">:</span> <span class="op">.</span>permissiveContentTransformations<span class=
+"op">)</span></span>
+<span id="cb2-3"><a aria-hidden="true" href="#cb2-3" tabindex="-1"></a>    <span class=
+"kw">let</span> <span class="va">session</span> <span class=
+"op">=</span> LanguageModelSession<span class="op">(</span>model<span class=
+"op">:</span> model<span class="op">)</span></span>
+<span id="cb2-4"><a aria-hidden="true" href="#cb2-4" tabindex="-1"></a></span>
+<span id="cb2-5"><a aria-hidden="true" href="#cb2-5" tabindex="-1"></a>    <span class=
+"kw">let</span> <span class="va">prompt</span> <span class="op">=</span> <span class=
+"st">"""</span></span>
+<span id="cb2-6"><a aria-hidden="true" href="#cb2-6" tabindex="-1"></a><span class=
+"st">    Extract settings from this config file:</span></span>
+<span id="cb2-7"><a aria-hidden="true" href="#cb2-7" tabindex="-1"></a></span>
+<span id="cb2-8"><a aria-hidden="true" href="#cb2-8" tabindex="-1"></a><span class=
+"st">    </span><span class="er">\(</span><span class="st">markdown)</span></span>
+<span id="cb2-9"><a aria-hidden="true" href="#cb2-9" tabindex="-1"></a></span>
+<span id="cb2-10"><a aria-hidden="true" href="#cb2-10" tabindex="-1"></a><span class=
+"st">    Look for the user's name, theme preference (dark/light mode), and any notification time they've specified.</span></span>
+<span id="cb2-11"><a aria-hidden="true" href="#cb2-11" tabindex="-1"></a><span class=
+"st">    """</span></span>
+<span id="cb2-12"><a aria-hidden="true" href="#cb2-12" tabindex="-1"></a></span>
+<span id="cb2-13"><a aria-hidden="true" href="#cb2-13" tabindex="-1"></a>    <span class=
+"kw">let</span> <span class="va">response</span> <span class="op">=</span> <span class=
+"cf">try</span> <span class="cf">await</span> session<span class="op">.</span>respond<span class=
+"op">(</span>to<span class="op">:</span> prompt<span class="op">,</span> generating<span class=
+"op">:</span> AppConfig<span class="op">.</span><span class="kw">self</span><span class=
+"op">)</span></span>
+<span id="cb2-14"><a aria-hidden="true" href="#cb2-14" tabindex="-1"></a>    <span class=
+"kw">return</span> response<span class="op">.</span>content</span>
+<span id="cb2-15"><a aria-hidden="true" href="#cb2-15" tabindex="-1"></a><span class=
+"op">}</span></span></code></pre>
+          </div>
+          <p>
+            OK, about the <code>guardrails</code>: it’s not what you think. The default guardrails
+            are so restrictive that they won’t work a majority of the time. With the default
+            guardrails if you ask the SLM to “tell me a joke” it will refuse to do so. And even
+            with <code>.permissiveContentTransformations</code> there are still a ton of guardrails
+            on.
+          </p>
+          <p>
+            <strong>IMHO Apple’s models are useless without
+            <code>.permissiveContentTransformations</code>.</strong>
+          </p>
+          <p>
+            The rest of the app is the SwiftUI to make the two pane layout + button. You can view
+            it all on <a href="https://github.com/myobie/ConfigWithMarkdown">GitHub</a>.
+          </p>
+          <p>
+            And you don’t have to use Apple’s models. At work we’ve open sourced our code we use to
+            boot up and use on-device MLX SLMs like <a href=
+            "https://huggingface.co/mlx-community/Qwen3-VL-4B-Instruct-4bit">Qwen 3</a> in our
+            <a href="https://new.space">new.space</a> app – our library is called <a href=
+            "https://github.com/shareup/shllm">SHLLM</a>.
+          </p>
+          <p>
+            You can also just use <a href="https://ollama.com">Ollama</a> or another local model
+            manager that exposes an HTTP api and use any OpenAI compatible HTTP client package.
+          </p>
+          <p>
+            Small models can do lots of small, interesting things like this. I am continually
+            looking for more places to use little models to solve little problems. And it’s
+            <strong>all on-device,</strong> nothing leaves or goes to any company anywhere,
+            <strong>which is important to me.</strong> More and more I want more things running on
+            my devices when possible.
+          </p>
+          <p>
+            What ideas do you have for where to use local models? What are some problems you’ve
+            used small models to solve yourself? Hit me up on <a href=
+            "https://indieweb.social/@myobie">mastodon</a> or <a href=
+            "https://www.threads.com/@myobie">threads</a>.
+          </p>
+        </div>
+        <footer>
+          <p>
+            Posted on <time datetime="2025-01-27T12:00:00+01:00">27 January, 2025</time>
+          </p>
+        </footer>
+      </article>
+    </main>
+    <script async src="/behavior.js"></script> 
+    <script async src="/assets/details-controls.js"></script> 
+    <script data-domain="nathanherald.com" defer src="https://stats.myobie.wtf/script.js"></script>
+  </body>
+</html>

@@ -4,7 +4,113 @@
     <title>nathanherald.com feed</title>
     <link>https://nathanherald.com/</link>
     <description>Recent posts from nathanherald.com</description>
-    <lastBuildDate>Tue, 02 Dec 2025 23:32:36 +0100</lastBuildDate>
+    <lastBuildDate>Tue, 27 Jan 2026 12:00:30 +0100</lastBuildDate>
+
+    <item>
+      <title>You Could Configure Your App with Markdown</title>
+      <link>https://nathanherald.com/posts/configure-app-with-markdown/</link>
+      <pubDate>Tue, 27 Jan 2026 11:59:50 +0100</pubDate>
+      <guid isPermaLink="true">https://nathanherald.com/posts/configure-app-with-markdown/</guid>
+      <description>&lt;p&gt;I keep finding little uses for small local SLMs in my side projects,
+and one that I really like is using Apple's Foundation Model to parse a
+&lt;code&gt;config.md&lt;/code&gt; file into an &lt;code&gt;AppConfig&lt;/code&gt; struct. You
+could configure your display name, your location, what time you'd like
+to receive notifications/reminders, the app's theme, and more in plain
+language.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;SLM == "Small Language Model" which is what I assume Apple's
+on-device model is. LLMs are the giant ones that run on servers or beefy
+machines.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Apple's Foundation Models are different from all other SLMs because
+they are more directly integrated into swift. I don't have to ask the
+robot to produce json, parse that, see if it is valid, etc. They handle
+all of that behind the scenes and I receive a valid swift struct or
+enum.&lt;/p&gt;
+&lt;p&gt;Here is a little app I made. You can find the project up on &lt;a
+href="https://github.com/myobie/ConfigWithMarkdown"&gt;GitHub&lt;/a&gt;. It's
+just a one file SwiftUI macOS app.&lt;/p&gt;
+&lt;p&gt;&lt;img src="screenshot.png"
+alt="Screenshot of ConfigWithMarkdown app showing a two-pane layout: markdown config on the left, parsed struct values on the right" /&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;I can't provide a Playground because playgrounds cannot use macros,
+so they can't show off the &lt;code&gt;@Generable&lt;/code&gt; stuff. So it must be
+a whole ass xcode project. Sorry.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;My dream config struct for this app looks like this:&lt;/p&gt;
+&lt;div class="sourceCode" id="cb1"&gt;&lt;pre
+class="sourceCode swift"&gt;&lt;code class="sourceCode swift"&gt;&lt;span id="cb1-1"&gt;&lt;a href="#cb1-1" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;span class="at"&gt;@Generable&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb1-2"&gt;&lt;a href="#cb1-2" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;span class="kw"&gt;enum&lt;/span&gt; Theme&lt;span class="op"&gt;:&lt;/span&gt; &lt;span class="dt"&gt;String&lt;/span&gt; &lt;span class="op"&gt;{&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb1-3"&gt;&lt;a href="#cb1-3" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;    &lt;span class="cf"&gt;case&lt;/span&gt; light&lt;/span&gt;
+&lt;span id="cb1-4"&gt;&lt;a href="#cb1-4" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;    &lt;span class="cf"&gt;case&lt;/span&gt; dark&lt;/span&gt;
+&lt;span id="cb1-5"&gt;&lt;a href="#cb1-5" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;span class="op"&gt;}&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb1-6"&gt;&lt;a href="#cb1-6" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;/span&gt;
+&lt;span id="cb1-7"&gt;&lt;a href="#cb1-7" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;span class="at"&gt;@Generable&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb1-8"&gt;&lt;a href="#cb1-8" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;span class="kw"&gt;struct&lt;/span&gt; AppConfig&lt;span class="op"&gt;:&lt;/span&gt; &lt;span class="dt"&gt;Equatable&lt;/span&gt; &lt;span class="op"&gt;{&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb1-9"&gt;&lt;a href="#cb1-9" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;    &lt;span class="at"&gt;@Guide&lt;/span&gt;&lt;span class="op"&gt;(&lt;/span&gt;description&lt;span class="op"&gt;:&lt;/span&gt; &lt;span class="st"&gt;&amp;quot;The user&amp;#39;s display name if specified&amp;quot;&lt;/span&gt;&lt;span class="op"&gt;)&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb1-10"&gt;&lt;a href="#cb1-10" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;    &lt;span class="kw"&gt;var&lt;/span&gt; &lt;span class="va"&gt;name&lt;/span&gt;&lt;span class="op"&gt;:&lt;/span&gt; String&lt;/span&gt;
+&lt;span id="cb1-11"&gt;&lt;a href="#cb1-11" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;/span&gt;
+&lt;span id="cb1-12"&gt;&lt;a href="#cb1-12" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;    &lt;span class="at"&gt;@Guide&lt;/span&gt;&lt;span class="op"&gt;(&lt;/span&gt;description&lt;span class="op"&gt;:&lt;/span&gt; &lt;span class="st"&gt;&amp;quot;The user&amp;#39;s preferred color theme. Use &amp;#39;light&amp;#39; for bright backgrounds and dark text, good for daytime or well-lit environments. Use &amp;#39;dark&amp;#39; for dark backgrounds and light text, easier on the eyes at night or in dim rooms.&amp;quot;&lt;/span&gt;&lt;span class="op"&gt;)&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb1-13"&gt;&lt;a href="#cb1-13" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;    &lt;span class="kw"&gt;var&lt;/span&gt; &lt;span class="va"&gt;theme&lt;/span&gt;&lt;span class="op"&gt;:&lt;/span&gt; Theme&lt;/span&gt;
+&lt;span id="cb1-14"&gt;&lt;a href="#cb1-14" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;/span&gt;
+&lt;span id="cb1-15"&gt;&lt;a href="#cb1-15" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;    &lt;span class="at"&gt;@Guide&lt;/span&gt;&lt;span class="op"&gt;(&lt;/span&gt;description&lt;span class="op"&gt;:&lt;/span&gt; &lt;span class="st"&gt;&amp;quot;Notification hour in 24-hour format (0-23), or -1 if not specified. Pay attention to AM vs PM and daytime vs evening context.&amp;quot;&lt;/span&gt;&lt;span class="op"&gt;)&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb1-16"&gt;&lt;a href="#cb1-16" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;    &lt;span class="kw"&gt;var&lt;/span&gt; &lt;span class="va"&gt;notificationHour&lt;/span&gt;&lt;span class="op"&gt;:&lt;/span&gt; Int&lt;/span&gt;
+&lt;span id="cb1-17"&gt;&lt;a href="#cb1-17" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;span class="op"&gt;}&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;em&gt;(I wanted to mix in an enum just to show how fancy this can
+be.)&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;@Guide&lt;/code&gt; is for the SLM to try to help it figure out what
+these fields are for. This is "prompt engineering" right here. You can
+see I've tried to &lt;em&gt;explain&lt;/em&gt; a bit why one might want light vs
+dark mode, which hopefully would work for a config file that says
+something like "I mainly work at night."&lt;/p&gt;
+&lt;p&gt;This is how you could use Apple's local model to parse some markdown
+into that struct:&lt;/p&gt;
+&lt;div class="sourceCode" id="cb2"&gt;&lt;pre
+class="sourceCode swift"&gt;&lt;code class="sourceCode swift"&gt;&lt;span id="cb2-1"&gt;&lt;a href="#cb2-1" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;span class="kw"&gt;func&lt;/span&gt; &lt;span class="fu"&gt;parseConfig&lt;/span&gt;&lt;span class="op"&gt;(&lt;/span&gt;&lt;span class="va"&gt;markdown&lt;/span&gt;&lt;span class="op"&gt;:&lt;/span&gt; &lt;span class="dt"&gt;String&lt;/span&gt;&lt;span class="op"&gt;)&lt;/span&gt; &lt;span class="fu"&gt;async&lt;/span&gt; &lt;span class="kw"&gt;throws&lt;/span&gt; -&amp;gt; &lt;span class="fu"&gt;AppConfig&lt;/span&gt; &lt;span class="op"&gt;{&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb2-2"&gt;&lt;a href="#cb2-2" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;    &lt;span class="kw"&gt;let&lt;/span&gt; &lt;span class="va"&gt;model&lt;/span&gt; &lt;span class="op"&gt;=&lt;/span&gt; SystemLanguageModel&lt;span class="op"&gt;(&lt;/span&gt;guardrails&lt;span class="op"&gt;:&lt;/span&gt; &lt;span class="op"&gt;.&lt;/span&gt;permissiveContentTransformations&lt;span class="op"&gt;)&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb2-3"&gt;&lt;a href="#cb2-3" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;    &lt;span class="kw"&gt;let&lt;/span&gt; &lt;span class="va"&gt;session&lt;/span&gt; &lt;span class="op"&gt;=&lt;/span&gt; LanguageModelSession&lt;span class="op"&gt;(&lt;/span&gt;model&lt;span class="op"&gt;:&lt;/span&gt; model&lt;span class="op"&gt;)&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb2-4"&gt;&lt;a href="#cb2-4" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;/span&gt;
+&lt;span id="cb2-5"&gt;&lt;a href="#cb2-5" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;    &lt;span class="kw"&gt;let&lt;/span&gt; &lt;span class="va"&gt;prompt&lt;/span&gt; &lt;span class="op"&gt;=&lt;/span&gt; &lt;span class="st"&gt;&amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb2-6"&gt;&lt;a href="#cb2-6" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;span class="st"&gt;    Extract settings from this config file:&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb2-7"&gt;&lt;a href="#cb2-7" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;/span&gt;
+&lt;span id="cb2-8"&gt;&lt;a href="#cb2-8" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;span class="st"&gt;    &lt;/span&gt;&lt;span class="er"&gt;\(&lt;/span&gt;&lt;span class="st"&gt;markdown)&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb2-9"&gt;&lt;a href="#cb2-9" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;/span&gt;
+&lt;span id="cb2-10"&gt;&lt;a href="#cb2-10" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;span class="st"&gt;    Look for the user&amp;#39;s name, theme preference (dark/light mode), and any notification time they&amp;#39;ve specified.&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb2-11"&gt;&lt;a href="#cb2-11" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;span class="st"&gt;    &amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb2-12"&gt;&lt;a href="#cb2-12" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;/span&gt;
+&lt;span id="cb2-13"&gt;&lt;a href="#cb2-13" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;    &lt;span class="kw"&gt;let&lt;/span&gt; &lt;span class="va"&gt;response&lt;/span&gt; &lt;span class="op"&gt;=&lt;/span&gt; &lt;span class="cf"&gt;try&lt;/span&gt; &lt;span class="cf"&gt;await&lt;/span&gt; session&lt;span class="op"&gt;.&lt;/span&gt;respond&lt;span class="op"&gt;(&lt;/span&gt;to&lt;span class="op"&gt;:&lt;/span&gt; prompt&lt;span class="op"&gt;,&lt;/span&gt; generating&lt;span class="op"&gt;:&lt;/span&gt; AppConfig&lt;span class="op"&gt;.&lt;/span&gt;&lt;span class="kw"&gt;self&lt;/span&gt;&lt;span class="op"&gt;)&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb2-14"&gt;&lt;a href="#cb2-14" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;    &lt;span class="kw"&gt;return&lt;/span&gt; response&lt;span class="op"&gt;.&lt;/span&gt;content&lt;/span&gt;
+&lt;span id="cb2-15"&gt;&lt;a href="#cb2-15" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;span class="op"&gt;}&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;OK, about the &lt;code&gt;guardrails&lt;/code&gt;: it's not what you think. The
+default guardrails are so restrictive that they won't work a majority of
+the time. With the default guardrails if you ask the SLM to "tell me a
+joke" it will refuse to do so. And even with
+&lt;code&gt;.permissiveContentTransformations&lt;/code&gt; there are still a ton of
+guardrails on.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;IMHO Apple's models are useless without
+&lt;code&gt;.permissiveContentTransformations&lt;/code&gt;.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;The rest of the app is the SwiftUI to make the two pane layout +
+button. You can view it all on &lt;a
+href="https://github.com/myobie/ConfigWithMarkdown"&gt;GitHub&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;And you don't have to use Apple's models. At work we've open sourced
+our code we use to boot up and use on-device MLX SLMs like &lt;a
+href="https://huggingface.co/mlx-community/Qwen3-VL-4B-Instruct-4bit"&gt;Qwen
+3&lt;/a&gt; in our new.space app – our library is called &lt;a
+href="https://github.com/shareup/shllm"&gt;SHLLM&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;You can also just use Ollama or another local model manager that
+exposes an HTTP api and use any OpenAI compatible HTTP client
+package.&lt;/p&gt;
+&lt;p&gt;Small models can do lots of small, interesting things like this. I am
+continually looking for more places to use little models to solve little
+problems. And it's &lt;strong&gt;all on-device,&lt;/strong&gt; nothing leaves or
+goes to any company anywhere, &lt;strong&gt;which is important to me.&lt;/strong&gt;
+More and more I want more things running on my devices when
+possible.&lt;/p&gt;
+&lt;p&gt;What ideas do you have for where to use local models? What are some
+problems you've used small models to solve yourself? Hit me up on &lt;a
+href="https://indieweb.social/@myobie"&gt;mastodon&lt;/a&gt; or &lt;a
+href="https://www.threads.net/@myobie"&gt;threads&lt;/a&gt;.&lt;/p&gt;</description>
+    </item>
 
     <item>
       <title>SwiftUI @State Considered Harmful</title>
