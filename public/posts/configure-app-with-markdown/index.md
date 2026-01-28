@@ -80,6 +80,8 @@ And you don't have to use Apple's models. At work we've open sourced our code we
 
 You can also just use [Ollama][] or another local model manager that exposes an HTTP api and use any OpenAI compatible HTTP client package.
 
+And soon small models will be able to solve little problems on-device even on the web. Chrome is experimenting with a built-in [Prompt API][chrome-ai] that runs Gemini Nano locally in the browser. I made a [test page](/chrome-ai-test/) that parses a markdown config the same way. It's still in origin trial, so it might not work for you yet, but it's coming.
+
 Small models can do lots of small, interesting things like this. I am continually looking for more places to use little models to solve little problems. And it's **all on-device,** nothing leaves or goes to any company anywhere, **which is important to me.** More and more I want more things running on my devices when possible.
 
 What ideas do you have for where to use local models? What are some problems you've used small models to solve yourself? Hit me up on [mastodon][] or [threads][].
@@ -91,3 +93,4 @@ What ideas do you have for where to use local models? What are some problems you
 [Ollama]: https://ollama.com
 [mastodon]: https://indieweb.social/@myobie
 [threads]: https://www.threads.com/@myobie
+[chrome-ai]: https://developer.chrome.com/docs/ai/prompt-api

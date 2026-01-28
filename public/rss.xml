@@ -4,12 +4,12 @@
     <title>nathanherald.com feed</title>
     <link>https://nathanherald.com/</link>
     <description>Recent posts from nathanherald.com</description>
-    <lastBuildDate>Tue, 27 Jan 2026 12:00:30 +0100</lastBuildDate>
+    <lastBuildDate>Wed, 28 Jan 2026 12:48:09 +0100</lastBuildDate>
 
     <item>
       <title>You Could Configure Your App with Markdown</title>
       <link>https://nathanherald.com/posts/configure-app-with-markdown/</link>
-      <pubDate>Tue, 27 Jan 2026 11:59:50 +0100</pubDate>
+      <pubDate>Wed, 28 Jan 2026 12:42:19 +0100</pubDate>
       <guid isPermaLink="true">https://nathanherald.com/posts/configure-app-with-markdown/</guid>
       <description>&lt;p&gt;I keep finding little uses for small local SLMs in my side projects,
 and one that I really like is using Apple's Foundation Model to parse a
@@ -27,6 +27,24 @@ they are more directly integrated into swift. I don't have to ask the
 robot to produce json, parse that, see if it is valid, etc. They handle
 all of that behind the scenes and I receive a valid swift struct or
 enum.&lt;/p&gt;
+&lt;h2 id="why-markdown-instead-of-json-or-a-settings-ui"&gt;Why markdown
+instead of json or a settings UI?&lt;/h2&gt;
+&lt;p&gt;I'm building a small journal app for myself that's all markdown.
+Having the config also be a markdown file keeps the experience
+consistent for me. It's all just text files I can edit however I
+want.&lt;/p&gt;
+&lt;p&gt;Beyond that, there are real advantages to letting an SLM parse
+natural language config. Natural language can make setting a time in
+your app way easier since "9am" and "9:00 AM" and "nine in the morning"
+and "early, like 9ish" can all work. And there is less UI to build:
+instead of designing screens with toggles, dropdowns, and date pickers,
+you just need a text editor. Plus users can even include notes about why
+they're choosing to configure something a certain way right there in the
+markdown.&lt;/p&gt;
+&lt;p&gt;This pattern works for other things too: natural language search
+("show me photos from last summer"), extracting data from messy text
+(receipts, emails), smart tagging, or anywhere users would benefit from
+not having to learn your app's specific input format.&lt;/p&gt;
 &lt;p&gt;Here is a little app I made. You can find the project up on &lt;a
 href="https://github.com/myobie/ConfigWithMarkdown"&gt;GitHub&lt;/a&gt;. It's
 just a one file SwiftUI macOS app.&lt;/p&gt;
@@ -95,11 +113,18 @@ href="https://github.com/myobie/ConfigWithMarkdown"&gt;GitHub&lt;/a&gt;.&lt;/p&g
 &lt;p&gt;And you don't have to use Apple's models. At work we've open sourced
 our code we use to boot up and use on-device MLX SLMs like &lt;a
 href="https://huggingface.co/mlx-community/Qwen3-VL-4B-Instruct-4bit"&gt;Qwen
-3&lt;/a&gt; in our new.space app – our library is called &lt;a
-href="https://github.com/shareup/shllm"&gt;SHLLM&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;You can also just use Ollama or another local model manager that
-exposes an HTTP api and use any OpenAI compatible HTTP client
-package.&lt;/p&gt;
+3&lt;/a&gt; in our &lt;a href="https://new.space"&gt;new.space&lt;/a&gt; app – our library
+is called &lt;a href="https://github.com/shareup/shllm"&gt;SHLLM&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;You can also just use &lt;a href="https://ollama.com"&gt;Ollama&lt;/a&gt; or
+another local model manager that exposes an HTTP api and use any OpenAI
+compatible HTTP client package.&lt;/p&gt;
+&lt;p&gt;And soon small models will be able to solve little problems on-device
+even on the web. Chrome is experimenting with a built-in &lt;a
+href="https://developer.chrome.com/docs/ai/prompt-api"&gt;Prompt API&lt;/a&gt;
+that runs Gemini Nano locally in the browser. I made a &lt;a
+href="/chrome-ai-test/"&gt;test page&lt;/a&gt; that parses a markdown config the
+same way. It's still in origin trial, so it might not work for you yet,
+but it's coming.&lt;/p&gt;
 &lt;p&gt;Small models can do lots of small, interesting things like this. I am
 continually looking for more places to use little models to solve little
 problems. And it's &lt;strong&gt;all on-device,&lt;/strong&gt; nothing leaves or
@@ -109,7 +134,7 @@ possible.&lt;/p&gt;
 &lt;p&gt;What ideas do you have for where to use local models? What are some
 problems you've used small models to solve yourself? Hit me up on &lt;a
 href="https://indieweb.social/@myobie"&gt;mastodon&lt;/a&gt; or &lt;a
-href="https://www.threads.net/@myobie"&gt;threads&lt;/a&gt;.&lt;/p&gt;</description>
+href="https://www.threads.com/@myobie"&gt;threads&lt;/a&gt;.&lt;/p&gt;</description>
     </item>
 
     <item>
