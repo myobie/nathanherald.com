@@ -4,7 +4,41 @@
     <title>nathanherald.com feed</title>
     <link>https://nathanherald.com/</link>
     <description>Recent posts from nathanherald.com</description>
-    <lastBuildDate>Wed, 28 Jan 2026 12:48:09 +0100</lastBuildDate>
+    <lastBuildDate>Mon, 09 Feb 2026 18:34:07 +0100</lastBuildDate>
+
+    <item>
+      <title>Two interesting AI developments</title>
+      <link>https://nathanherald.com/posts/two-interesting-ai-developments/</link>
+      <pubDate>Mon, 09 Feb 2026 18:34:01 +0100</pubDate>
+      <guid isPermaLink="true">https://nathanherald.com/posts/two-interesting-ai-developments/</guid>
+      <description>&lt;p&gt;Two things I saw recently that prompted me to &lt;a href="/ai"&gt;update my
+/ai page&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a href="https://openclaw.ai/"&gt;OpenClaw&lt;/a&gt;&lt;/strong&gt; is an
+open-source, self-hosted personal AI agent by Peter Steinberger
+(steipete, founder of PSPDFKit). It's an AI that doesn't just chat but
+actually does things: it can message people via WhatsApp, Telegram, and
+Slack, control a browser, automate your devices, and has an extensible
+plugin system. It runs on your own hardware. The project has had quite
+the naming saga -- it started as Clawdis, became Clawdbot (~30k GitHub
+stars), got renamed to Moltbot after Anthropic's legal team reached out
+about the name, and finally landed on OpenClaw. It now has 179k+ GitHub
+stars. It's a huge project and worth keeping an eye on, though it does
+have all three legs of Simon Willison's &lt;a
+href="https://simonwillison.net/2025/Jun/16/the-lethal-trifecta/"&gt;lethal
+trifecta&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a
+href="https://mitchellh.com/writing/my-ai-adoption-journey"&gt;My AI
+Adoption Journey&lt;/a&gt;&lt;/strong&gt; by Mitchell Hashimoto (co-founder of
+HashiCorp) documents his six-phase path from AI skepticism to running
+agents continuously. The whole thing is worth reading. I've had a
+similar journey, especially the part where he forces himself to
+reproduce his own work with the agent. I took the time to do that too:
+sit down and try to get the coding agent to write the code how I would
+write it. Now I feel more confident being able to instruct the robot to
+do things and know that the output will be pretty reasonable. That
+confidence doesn't come from the tools getting better (though they are).
+It comes from me learning what they need to hear.&lt;/p&gt;</description>
+    </item>
 
     <item>
       <title>You Could Configure Your App with Markdown</title>
