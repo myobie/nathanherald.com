@@ -7,6 +7,7 @@ class DetailsControls extends HTMLElement {
 
   connectedCallback() {
     this.expandButton = this.ownerDocument.createElement('button')
+    this.expandButton.setAttribute('data-expand', '')
     this.expandButton.innerHTML = 'Expand all sections'
 
     this.collapseButton = this.ownerDocument.createElement('button')

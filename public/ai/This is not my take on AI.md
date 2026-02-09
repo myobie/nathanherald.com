@@ -14,7 +14,7 @@ _TL;DR: I’ve concluded that AI is coming and it’s important I understand it 
 
 AI tools and companies are progressing fast and I have a lot of questions that I haven’t found easy answers to. **So, I’ve taken some time to research, use AI for real work, and read a lot of takes on AI. I’m collecting what I’ve learned here.** I plan to keep this page semi-up-to-date over time as I learn more. I don’t want to make a lot of blog posts about AI, instead I’ll just have this page here as a living document. I’ll try to pull my “big takeaways” up here to the top.
 
-## Big Takeway #1: AI is here and it’s best for me to understand it
+## Big Takeaway #1: AI is here and it's best for me to understand it
 
 > <iframe allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen frameborder="0" height="315" src= "https://www.youtube-nocookie.com/embed/XAPfNPIvWkM" width="560"></iframe>
 >
@@ -32,11 +32,21 @@ Code originating from generative AI must be seen as a suspicious contribution as
 
 What’s great is we already have tools to handle this. We have pull request reviews, CI, multi-approval requirements before merging, sandboxes or staging environments, etc. All of these things are made to protect us from ourselves, and they will all help protect us from AI tools as well.
 
-TK I’d love to expand on this more soon.
+TK I'd love to expand on this more soon.
 
-## Links I haven’t had a chance to go through yet
+## Big takeaway #3: The lethal trifecta for AI agents
 
-* <https://malwaretech.com/2025/08/every-reason-why-i-hate-ai.html> (via <https://adactio.com/links/22087>)
+Simon Willison identified the three properties that, when combined in an AI agent system, create a serious security vulnerability:
+
+1. **Access to private data** (emails, files, databases)
+2. **Exposure to untrusted content** (web pages, documents from others)
+3. **The ability to externally communicate** (HTTP requests, sending emails, etc.)
+
+> LLMs are unable to *reliably distinguish* the importance of instructions based on where they came from.
+
+Removing any one of the three legs is enough to prevent the attack. This is particularly relevant as people adopt [MCP](https://modelcontextprotocol.io/) plugins where mixing tools from different sources can inadvertently assemble all three dangerous ingredients together.
+
+RE: [The lethal trifecta for AI agents](https://simonwillison.net/2025/Jun/16/the-lethal-trifecta/) by Simon Willison.
 
 ## The internet is full of confusing takes
 
@@ -49,6 +59,17 @@ RE:
 * [My AI Skeptic Friends Are All Nuts](https://fly.io/blog/youre-all-nuts/)
 * [Contra Ptacek's Terrible Article On AI](https://ludic.mataroa.blog/blog/contra-ptaceks-terrible-article-on-ai/?utm_source=chatgpt.com)
 * [if you are going to write an article making claims like AI can break down problems, it can reason, it can refactor, it can help you learn, it is genuinely capable at the task of producing software, you actually need to provide evidence at this point](https://mastodon.social/@jcoglan/114624176663492584)
+
+<details>
+<summary>Some people really hate AI</summary>
+
+And I think it's important to link to them here. These aren't casual skeptics -- they've thought about it and concluded AI is fundamentally harmful.
+
+* [Every Reason Why I Hate AI and You Should Too](https://malwaretech.com/2025/08/every-reason-why-i-hate-ai.html) by Marcus Hutchins (the security researcher who stopped WannaCry)
+* [I Am An AI Hater](https://anthonymoser.github.io/writing/ai/haterdom/2025/08/26/i-am-an-ai-hater.html) by Anthony Moser
+
+I mention further down that there will be "AI vegans." These people are already here and their concerns are worth reading even if you don't fully agree.
+</details>
 
 ## Ethical concerns
 
@@ -77,15 +98,17 @@ Firefly is trained only on licensed content by Adobe. This seems like a great de
 
 >  We only train Adobe Firefly on content where we have permission to do so. 
 
-Phi4 claims to be trained on high quality data like licensed books and academic sources. This is a very good, tool call capable model, so this opens up a ton of local AI use cases where you use your own energy to do AI tasks with a more ethically trained model. 
+Phi-4-mini claims to be trained on high quality data like licensed books and academic sources. This is a very good, tool call capable model that can run on a laptop or phone, so this opens up a ton of local AI use cases where you use your own energy to do AI tasks with a more ethically trained model.
 
-[phi-4 on Deepinfra](https://deepinfra.com/microsoft/phi-4?utm_source=chatgpt.com)
+[phi-4-mini on Ollama](https://ollama.com/library/phi4-mini)
 
-> Phi-4 is a model built upon a blend of synthetic datasets, data from filtered public domain websites, and acquired academic books and Q&A datasets. The goal of this approach was to ensure that small capable models were trained with data focused on high quality and advanced reasoning.
+> Phi-4-mini is a lightweight model built upon a blend of synthetic datasets, data from filtered public domain websites, and acquired academic books and Q&A datasets. The goal of this approach was to ensure that small capable models were trained with data focused on high quality and advanced reasoning.
 
 So it seems very possible to build SMLs and maybe even LLMs in an ethical way with enough effort and will.
 
-However, all the “big models”, frontier LLMs, are in a grey area today. Legally, we don’t know, the courts haven’t ruled yet. Extra-legally, it can feel like theft for sure. The vibes are mixed and that is worth acknowledging. **I don’t believe the law will actually help us here.** One reason is: the lawyers and the judges who would adjudicate this are most likely using these tools. It feels too much of a “the can of worms is already open” or “the egg is already scrambled” situation. Extra-legally, pressure can always be applied towards companies that they behave in a more ethical manner. Sure. We should always strive for that. We don’t have to accept raw capitalism. We are always making trade offs, and that will continue.
+However, all the "big models", frontier LLMs, are in a grey area today. Courts are now ruling, but in contradictory ways: the [UK High Court ruled](https://www.ropesgray.com/en/insights/viewpoints/102lvxe/getty-image-loses-copyright-infringement-claim-against-stability-ai-in-uks-first) (Getty v. Stability AI, Nov 2025) that AI training does NOT constitute copyright infringement because trained models don't "store" copyrighted works. Meanwhile, a [Munich court ruled the opposite](https://www.twobirds.com/en/insights/2025/landmark-ruling-of-the-munich-regional-court-(gema-v-openai)-on-copyright-and-ai-training) (GEMA v. OpenAI, Nov 2025), finding OpenAI violated German copyright law by training on song lyrics. In the US, the [NYT v. OpenAI case](https://www.npr.org/2025/03/26/nx-s1-5288157/new-york-times-openai-copyright-case-goes-forward) is progressing but hasn't gone to trial yet. And the music industry is [settling into licensing deals](https://techcrunch.com/2025/11/25/warner-music-signs-deal-with-ai-music-startup-suno-settles-lawsuit/) rather than waiting for courts.
+
+Extra-legally, it can feel like theft for sure. The vibes are mixed and that is worth acknowledging. **I don't believe the law will actually help us here.** The egg is already scrambled and courts across jurisdictions can't even agree on the basics. Extra-legally, pressure can always be applied towards companies that they behave in a more ethical manner. Sure. We should always strive for that. We don't have to accept raw capitalism. We are always making trade offs, and that will continue.
 </details>
 
 <details>
@@ -101,7 +124,7 @@ It helped me to learn more about what is actually going on. Checkout these links
 * [Transformers, the tech behind LLMs | Deep Learning Chapter 5](https://www.youtube.com/watch?v=wjZofJX0v4M&pp=ygUTMyBibHVlIHRyYW5zZm9ybWVycw%3D%3D)
 * 👉 [The moment we stopped understanding AI: AlexNet](https://www.youtube.com/watch?v=UZDiGooFs54)
 
-If you watch only one explainer video, the [AlexNext](https://www.youtube.com/watch?v=UZDiGooFs54) one is the best to really explain what is going on inside these things _and_ how we got to where we are today.
+If you watch only one explainer video, the [AlexNet](https://www.youtube.com/watch?v=UZDiGooFs54) one is the best to really explain what is going on inside these things _and_ how we got to where we are today.
 </details>
 
 <details>
@@ -125,7 +148,7 @@ First, I hate that you made me type “web3” on this here website.
 
 Second, web3 is a lot different. My coins get more valuable if you buy a coin. It’s that simple. So I need as many people as possible to buy coins, so I can buy low and sell high. Stable coins might have utility, a lot of adjacent research and math is useful, IPFS is cool, sure, but overall it really seems mostly like a way to make new speculative assets.
 
-AI is not like this at all. My AI tasks don’t start working better, or become more valuable if you use AI too. Also, the companies are losing money because of how expensive all of this is for them. If you use AI right now, you are technically a burden to them. These AI companies are “valuable” today because of future profits, not their profits today. They have cash flowing through them, but most are not capturing much of that cash… instead they are spending money to watch all their revenue flow out. The chip maker is doing quite well though, if you haven’t seen.
+AI is not like this at all. My AI tasks don't start working better, or become more valuable if you use AI too. Also, most of the big AI companies are still losing money because of how expensive all of this is for them, though there are exceptions -- Midjourney is profitable with zero outside funding, and Microsoft is making real money on Azure AI. Most AI companies are "valuable" today because of future profits, not their profits today. They have cash flowing through them, but most are not capturing much of that cash… instead they are spending money to watch all their revenue flow out. The chip maker is doing quite well though, if you haven't seen.
 
 So it’s just not the same. The parts that feel the same are probably just general hype cycle dynamics. 
 </details>
@@ -133,11 +156,13 @@ So it’s just not the same. The parts that feel the same are probably just gene
 <details>
 <summary>Isn’t this using so much water and energy that we should be concerned?</summary>
 
-Maybe. 
+Yes, probably.
 
-It’s been difficult to find good reporting on this, and I just need more time to look into it. This feels too important to “have a take about” and not just take the time to do the research. So more information TK here.
+I've read quite a bit about this now and the honest answer is: the reporting doesn't do a great job of putting things into perspective. A single ChatGPT query uses roughly 5x more electricity than a web search, but what does that actually mean compared to, say, the energy I use making coffee or driving to the store? The articles I've found are better at describing the scale of data center growth than at helping a normal person understand where AI fits into their own energy footprint.
 
-If you know, or just have some good links, then [hit me up on mastodon][masto].
+That said, the trajectory is concerning. [MIT Technology Review reports](https://www.technologyreview.com/2025/05/20/1116327/ai-energy-usage-climate-footprint-big-tech/) that by 2028 more than half of data center electricity will go to AI, and no company reports AI-specific environmental metrics. [Brookings reports](https://www.brookings.edu/articles/ai-data-centers-and-water/) that a typical data center uses 300,000 gallons of water per day for cooling, and large ones use 5 million gallons -- and water cooling demand may increase 870%.
+
+The real concern isn't today's usage but the growth trajectory. AI usage is expected to double or triple in the next few years, and infrastructure decisions being made now will lock in environmental impacts for decades. Efficiency improvements are real (newer chips, better cooling) but are being outpaced by demand growth.
 </details>
 
 ## Terms and definitions
@@ -166,7 +191,9 @@ RE this article by Simon Willison: [Tools in a Loop](https://simonwillison.net/2
 
 ## Capabilities Today
 
-_I have found it difficult to understand what AI tools can actually do today. So I’ve been using different AI tools in anger + learning who to trust, who is reasonable about them. Here are some answers to my questions about capabilities._
+_I have found it difficult to understand what AI tools can actually do today. So I've been using different AI tools in anger + learning who to trust, who is reasonable about them. Here are some answers to my questions about capabilities._
+
+I have shipped code written by LLMs. Sometimes they write exactly the code I would have written and it doesn't need any touch ups. Other times, they produce slop that I have to just clear and try again or write myself. The variance is the thing -- it's not consistently good or consistently bad, it's both, sometimes in the same session.
 
 <details>
 <summary>AI tools aren’t _really_ doing anything beyond fancy spell check, next word prediction, right?</summary>
@@ -218,13 +245,15 @@ Yes.
 
 In my experiments, it does as well as an average person. And I say this confidently. I’ve worked with enough programmers that I think you could easily hit the average with today’s tools. 
 
-Now, to be clear, the average is a pretty low bar, so this isn’t as exciting or damning as it might sound. Today’s AI coding tools seem exactly like an unreliable coding intern who is in a hurry to go home. Which I guess is an achievement for humankind. I do expect AI coding tools to get much better over the next few years. 
+Now, to be clear, the average is a pretty low bar, so this isn't as exciting or damning as it might sound. Today's AI coding tools seem exactly like an unreliable coding intern who is in a hurry to go home. Which I guess is an achievement for humankind. That said, every 3-6 months the quality and reliability of these tools really is increasing, and I do expect them to keep getting better.
 
-Code feels easier to accurately generate than normal language to me, because of its limited grammar. And it can be tested to prove that it works. So I think it’s about the loops of tools that go from generate to test to remove, etc.
+Code feels easier to accurately generate than normal language to me, because of its limited grammar. And it can be tested to prove that it works. So I think it's about the loops of tools that go from generate to test to remove, etc. Justin Searls has written that [TDD is more important than ever](https://justin.searls.co/posts/tdd-is-more-important-than-ever/) precisely because AI coding agents need verification to work well. He also [built a project in three hours](https://justin.searls.co/links/2025-09-08-i-ve-got-your-shovelware-right-here/) that would have taken weeks, making it worth doing at all.
+
+There is real research now. A [large RCT at Microsoft, Accenture, and a Fortune 100 company](https://mitsloan.mit.edu/ideas-made-to-matter/how-generative-ai-affects-highly-skilled-workers) (4,867 developers) found Copilot increased completed tasks by 26% -- but almost all the gains went to junior devs (27-39%), while senior devs saw only 8-13%. Meanwhile, a [METR study](https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/) of 16 experienced open-source developers found that AI users were actually **19% slower** on their own repos -- and the developers *believed* they were 20% faster. That perception-reality gap is worth sitting with.
 
 Related: https://wandering.shop/@aesthr/114592630789058368
 
-> Sadly, while there are a few studies flying around about coding agents and their affect on productivity, there doesn’t appear to be any **reliable** research yet about this to me. It’s just too early to really know. I only ever see people posting links to studies that validate their already held beliefs. Hopefully we’ll see some peer reviewed research about this in the next couple years.
+Also: [Sprinkling Self-Doubt on ChatGPT](https://mastodon.social/@searls/115072539129871055) by Justin Searls.
 </details>
 
 <details>
@@ -246,33 +275,60 @@ The most successful projects I’ve worked on have been where I was fixing some 
 <details>
 <summary>Can AI _design_, like posters, graphics, art today?</summary>
 
-Mostly no, from what I’ve seen. 
+This needs to be split into two answers now.
 
-**You can design websites with AI tool,** but that is because that is coding. If you want a website that is as good as the average website, then yeah, you can poop that out of an AI system today. 
+**Reproducing something visually, pixel for pixel: mostly no.** Posters and graphic design are not code or bitmap images. You can generate bitmap images using AI tools, but that is not quite the same as "design." [Simon Willison always has each new model generate a pelican riding a bicycle and the results are informative.](https://simonwillison.net/tags/pelican-riding-a-bicycle/)
 
-**You can also generate bitmap images using AI tools,** but again that is not quite the same as “design.” 
+**Creating designs and working apps just by prompting: very much yes.** [Figma Make](https://blog.logrocket.com/ux-design/figma-make-review/) can turn text prompts into working app prototypes and designs, inheriting your existing design system, with no coding required. If you want a website or app prototype that is as good as the average, then yeah, you can get that from a prompt today.
 
-Posters and graphic design are not code or bitmap images tho. 
+**And you can now generate 3D models from text prompts.** Tools like [Meshy](https://www.meshy.ai/), [Tripo AI](https://www.tripo3d.ai/), and Luma Genie can generate textured, export-ready 3D meshes in 30-60 seconds from a description. These cover modeling, texturing, retopology, and rigging. ([Comparison of text-to-3D tools for 2026](https://www.3daistudio.com/3d-generator-ai-comparison-alternatives-guide/best-3d-generation-tools-2026/12-best-text-to-3d-tools-creators-2026))
 
-[Simon Willison always has each new model generate a pelican riding a bicycle and the results are informative.](https://simonwillison.net/tags/pelican-riding-a-bicycle/)
-
-It feels like someone is probably working on this right now and we’ll see something super surprising in the next couple years. Have you seen things I haven’t, then please [hit me up on mastodon][masto].
+This area is moving very fast.
 </details>
 
 <details>
 <summary>No one is making money off this stuff yet, right?</summary>
 
-Some are.
+Some are, with real numbers now.
 
-> Duolingo’s earnings are a window into the disconnect between the vocal minority who complain about AI online and the value businesses & people are getting out of it…
+[Midjourney](https://getlatka.com/companies/midjourney) generated ~$500M in revenue in 2025 with about 100 employees and **zero outside funding** -- genuinely profitable. [OpenAI](https://finance.yahoo.com/news/openai-cfo-says-annualized-revenue-173519097.html) hit ~$20B annualized revenue but is still burning ~$8B/year. [Anthropic](https://www.bloomberg.com/news/articles/2026-01-21/anthropic-s-revenue-run-rate-tops-9-billion-as-vcs-pile-in) topped $9B run rate. [Cursor](https://fortune.com/2025/12/11/cursor-ipo-1-billion-revenue-brainstorm-ai/) crossed $1B ARR but may be spending nearly 100% of revenue on API costs. Microsoft Azure is growing 39% year-over-year, driven largely by AI.
+
+So there is enormous revenue, but actual profitability among pure-play AI companies is rare. Midjourney is the standout.
+
+That said, a [MIT NANDA initiative study](https://mas.to/@carnage4life/115059290859727270) found that 95% of generative AI deployments fail to generate measurable business value. The money is flowing but the value is concentrated.
+
+> Duolingo's earnings are a window into the disconnect between the vocal minority who complain about AI online and the value businesses & people are getting out of it…
 >
 > https://mas.to/@carnage4life/114993379869191876
 
-Also:
-
-* [Some travel advisors are using AI to help plan trips and boost business](https://www.businessinsider.com/ai-travel-agents-trip-planning-agency-business-growth-2025-8)
-* … more TK?
+Also: [Some travel advisors are using AI to help plan trips and boost business](https://www.businessinsider.com/ai-travel-agents-trip-planning-agency-business-growth-2025-8)
 </details>
+
+## Local AI tools and workflows
+
+_One of my big takeaways above is that we should own our data and context. Here are some tools and projects that enable local AI workflows._
+
+* [qmd](https://github.com/tobi/qmd) by Tobi Lutke -- a local search engine for your personal markdown files, notes, and documents. BM25 + vector semantic search + LLM reranking, all running locally. Has MCP server integration so you can plug it into Claude as a context source.
+* [Local Text Summarization With Ollama and Python Is Just String Manipulation](https://nelson.cloud/local-text-summarization-with-ollama-and-python-is-just-string-manipulation/) -- a practical tutorial showing that using local LLMs through Ollama is fundamentally simple: you pass in a string, you get a string back.
+* [Ollama Advanced Use Cases and Integrations](https://www.cohorte.co/blog/ollama-advanced-use-cases-and-integrations) -- structured outputs, tool calling, RAG pipelines, all running locally.
+* I pushed my own [local marketplace for Claude plugins](https://github.com/myobie/dot-files/commit/66816d0505b6466e5284a5e96c13aaaf1c791def) to my dot-files repo -- an extensible framework for using Codex CLI as specialized agents within Claude for code reviews, debugging, and refactoring.
+
+## People building with AI right now
+
+Mitchell Hashimoto (co-founder of HashiCorp) wrote [My AI Adoption Journey](https://mitchellh.com/writing/my-ai-adoption-journey) documenting his six-phase path from skepticism to running agents continuously. The whole thing is worth reading, but some highlights: he forced himself to do every task twice (once manually, then with an agent) to build real intuition. He dedicates the last 30 minutes of each workday to agent tasks. And he invests heavily in "harness engineering" -- building verification tools and documentation (`AGENTS.md`) that help agents self-correct. He also wrote about [vibing a non-trivial Ghostty feature](https://mitchellh.com/writing/non-trivial-vibing) -- 16 AI sessions, $15.98 in tokens, and about 8 hours across 3 days to ship a real feature. His core takeaway: "Good AI drivers are experts in their domains and utilize AI as an assistant, not a replacement."
+
+## OpenClaw
+
+[OpenClaw](https://openclaw.ai/) ([github](https://github.com/openclaw/openclaw)) is an open-source, self-hosted personal AI agent built by [Peter Steinberger](https://steipete.me/) (steipete, founder of PSPDFKit). It's an AI that doesn't just chat but actually performs tasks: messaging via WhatsApp/Telegram/Slack, browser control, device automation, voice mode, and an extensible skills/plugin system. It runs on your own hardware.
+
+The project has had quite the naming saga: it started as **Clawdis** ([github](https://github.com/steipete/clawdis), Nov 2025), became **Clawdbot** after growing to ~30k stars, then was renamed to **Moltbot** after Anthropic's legal team contacted steipete about the name being too similar to "Claude" -- at which point handle snipers grabbed the old social media accounts within seconds and crypto scammers launched a fake $CLAWD token. It finally landed on **OpenClaw** (Jan 2026) and now has 179k+ GitHub stars.
+
+This project currently has all three legs of the [lethal trifecta](#big-takeaway-3-the-lethal-trifecta-for-ai-agents): access to private data, exposure to untrusted content, and the ability to externally communicate. Worth keeping in mind.
+
+Related:
+
+* [Just One More Prompt](https://steipete.me/posts/just-one-more-prompt) -- steipete reflects on his addiction to AI-powered development, drawing parallels to unsustainable work patterns.
+* [Shipping at Inference-Speed](https://steipete.me/posts/2025/shipping-at-inference-speed) -- his development workflow with AI.
 
 ## The Future
 
@@ -284,7 +340,6 @@ Maybe not.
 And yeah, that is dystopian. I am not excited about this, but if current trends hold I don’t see how you can be 100% sure.
 
 * [Deepfakes, Scams, and the Age of Paranoia](https://www.wired.com/story/paranoia-social-engineering-real-fake/)
-* …TK
 </details>
 
 <details>
@@ -298,13 +353,17 @@ Also, photograph didn’t kill 100% of painting, but it definitely made painting
 <details>
 <summary>Will my research, coding, writing, etc skills atrophy if I use AI?</summary>
 
-Seems possible. 
+Seems likely.
 
-It seems to me, if you are an expert, then you are less likely to atrophy. If you are not an expert yet, and you don’t put in the effort, then you are not building any “muscle.” This is true today: if another human does the hard work for you, then you didn’t learn anything. And so that seems likely to be true with AI. 
+It seems to me, if you are an expert, then you are less likely to atrophy. If you are not an expert yet, and you don't put in the effort, then you are not building any "muscle." This is true today: if another human does the hard work for you, then you didn't learn anything. And so that seems likely to be true with AI.
 
-> Sadly, while there are a few studies flying around, there doesn’t appear to be any reliable research yet about this. It’s just too early to really know. I only ever see people posting links to studies that validate their already held beliefs. Hopefully we’ll see some peer reviewed research about this in the next couple years.
+There is now real research on this. An [Anthropic study](https://www.anthropic.com/research/AI-assistance-coding-skills) (Jan 2026) had 52 junior engineers complete coding tasks with and without AI. The AI group scored **50% on a comprehension quiz** vs **67% for the hand-coding group** -- about two letter grades lower. Debugging skills were hit hardest. And the time savings from using AI were not even statistically significant. As they put it: "AI-enhanced productivity is not a shortcut to competence."
 
-If you are going to use AI, your best bet is probably to ask the AI to help you become an expert, and not to just give you the answers. 
+Meanwhile, a [Stanford study](https://digitaleconomy.stanford.edu/publications/canaries-in-the-coal-mine/) found that employment for software devs aged 22-25 has declined nearly 20% from its peak in late 2022. If juniors are being hired less, the pipeline for developing senior talent narrows.
+
+Related: [In the Long Run, LLMs Make Us Dumber](https://desunit.com/blog/in-the-long-run-llms-make-us-dumber/) argues that over-reliance on LLMs weakens cognitive abilities by removing beneficial mental friction.
+
+If you are going to use AI, your best bet is probably to ask the AI to help you become an expert, and not to just give you the answers.
 </details>
 
 <details>
@@ -312,7 +371,9 @@ If you are going to use AI, your best bet is probably to ask the AI to help you 
 
 Not every product.
 
-Checkout https://procreate.com/ai, for example. My prediction is there will be a few apps that either intentionally stay out of AI, or AI just never is a good fit for. 
+Checkout https://procreate.com/ai, for example. My prediction is there will be a few apps that either intentionally stay out of AI, or AI just never is a good fit for.
+
+Meanwhile, some people are frustrated that AI is being added to products they don't want it in. [One person is considering blocking all browsers except Chrome](https://mastodon.social/@mcc/115176228086016550) because it's the only major browser without built-in AI summarization.
 </details>
 
 <details>
@@ -342,11 +403,23 @@ Yes, it will not feel great for some people.
 
 I am personally not excited to become a robot engineering manager… and it definitely feels to me that that will be a job. I think the main unknown is to what degree things will change. Will there be a few people that change over to manage robots, or will the majority of knowledge workers change over? If I had to guess today, I’d guess majority.
 
-Related: 
+Related:
 
 > The thing that keeps coming up as I talk to people about AI in their workplaces is how *dehumanizing* it is. It's dehumanizing to ask a machine to do something, and then have to correct it over and over; it's dehumanizing to be told to read something that involved little to no human effort to make.
-> 
+>
 > https://mstdn.social/@aworkinglibrary/114659560902662745
+
+Justin Searls wrote about [The Generative Creativity Spectrum](https://justin.searls.co/mails/2025-09/): when creativity's value is internal (writing essays for yourself), AI diminishes it. When it's external (producing output for others), AI can help. Programming sits uncomfortably in the middle -- AI dramatically increases productivity but diminishes the engaging problem-solving that made coding rewarding.
+
+And steipete wrote about the flip side: AI can be [addictive](https://steipete.me/posts/just-one-more-prompt). "Just one more prompt" mirrors unsustainable work patterns. AI restored his passion for building but created a compulsive loop.
+</details>
+
+<details>
+<summary>The robots are faster than me now and I am the bottleneck</summary>
+
+AI agents can generate code and features so quickly that I may not have time to actually try them out. I have a side project right now where there is something waiting for me to test, to actually sit down and use it, and I haven't had time. The code was generated faster than I can evaluate it. I am the bottleneck.
+
+This is a weird inversion. The hard part used to be writing the code. Now the hard part might be having enough hours in the day to verify, test, and actually experience what was built.
 </details>
 
 
