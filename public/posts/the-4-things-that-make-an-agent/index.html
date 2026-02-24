@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html>
+  <head lang="en-us">
+    <meta content="HTML Tidy for HTML5 for Apple macOS version 5.8.0" name="generator">
+    <meta charset="UTF-8">
+    <title>
+      I'm Nathan Herald → The 4 things that make an "agent" today
+    </title>
+    <script>
+      if ((new URL(window.location.href)).host === 'myobie.com') { window.location.assign('https://nathanherald.com') }
+    </script>
+    <link href="https://cloud.typography.com/6836312/761366/css/fonts.css" rel="stylesheet" type=
+    "text/css">
+    <link href="/styles.css" rel="stylesheet" type="text/css">
+    <link href="/syntax-light.css" rel="stylesheet" type="text/css">
+    <link href="/syntax-dark.css" rel="stylesheet" type="text/css">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="I'm Nathan Herald → The 4 things that make an" name="title">
+    <meta a="" agents="" an="" and="" are="" beyond="" coding="" content="The definition of an"
+    expanded="" four="" hardware="" has="" in="" just="" llm="" loop.="" name="description" on=""
+    own="" plus="" scheduled="" skills.="" the="" things="" today="" tools="" why="" with="" your=
+    "">
+    <meta content="The 4 things that make an" property="og:title">
+    <meta content="website" property="og:type">
+    <meta a="" agents="" an="" and="" are="" beyond="" coding="" content="The definition of an"
+    expanded="" four="" hardware="" has="" in="" just="" llm="" loop.="" on="" own="" plus=""
+    property="og:description" scheduled="" skills.="" the="" things="" today="" tools="" why=""
+    with="" your="">
+    <meta content="/og.png" property="og:image">
+    <meta content="I'm Nathan Herald" property="og:site_name">
+    <link href="/rss.xml" rel="alternate" title="Feed of all the posts on nathanherald.com" type=
+    "application/rss+xml">
+  </head>
+  <body class="default">
+    <header class="section-header">
+      <div class="section-nav">
+        <h1 class="home-link">
+          <a class="never-underline" data-nospan="" href="/"><abbr title="Hello">👋</abbr></a>
+          <a href="/">I'm Nathan</a>
+        </h1>
+        <nav>
+          <p>
+            Find more in the <a href="/posts/">archive of all the posts on this site</a> or
+            <a href="/rss.xml">subscribe with RSS</a>.
+          </p>
+        </nav>
+      </div>
+    </header>
+    <main class="single">
+      <article>
+        <header>
+          <h1>
+            The 4 things that make an "agent" today
+          </h1>
+        </header>
+        <div class="content">
+          <p>
+            Six months ago, we agreed on a definition for an “agent:” <a href=
+            "https://simonwillison.net/2025/Sep/18/agents/">an LLM with tools in a loop</a>
+            <a href="https://simonwillison.net/2025/Sep/30/designing-agentic-loops/">iterating
+            toward a goal</a>. But recently the definition has expanded. While the entire industry
+            has slowly been figuring out what “an agent” is by trying different things, <a href=
+            "https://openclaw.ai/">OpenClaw</a> certainly has captured a lot of people’s
+            imaginations and helped crystallize what people <em>think</em> an agent <em>should</em>
+            be able to do.
+          </p>
+          <h2 id="an-agent-today-is-4-things">
+            An agent today is 4 things
+          </h2>
+          <ol type="1">
+            <li>Language model with tools in a loop
+            </li>
+            <li>Scheduled tasks
+            </li>
+            <li>Memory or session persistence
+            </li>
+            <li>Skills
+            </li>
+          </ol>
+          <p>
+            This has become the standard packaging for an agent over the last 6 months. This is
+            basically how OpenClaw describes itself, <a href=
+            "https://www.notion.com/help/guides/get-started-with-your-personal-agent-in-notion">Notion’s
+            AI agent</a> has roughly the same ideas, and even <a href=
+            "https://claude.ai/">Claude</a> and other products from frontier labs are describing
+            themselves in similar ways.
+          </p>
+          <p>
+            <strong>Language models with tools in a loop</strong> is the foundation everything else
+            is built on. The model <em>reasons</em> about a problem, calls a tool, sees the result,
+            and decides what to do next until it reaches its goal or gets stuck. This is the core
+            mechanic, the <em>engine.</em>
+          </p>
+          <p>
+            <strong>Scheduled tasks:</strong> everyone seems to always ask agents to “remind me to
+            do this tomorrow”, “every Monday and Thursday morning prepare and show me a report
+            about…”, “watch this web page and tell me when the price drops…”, etc. So this has
+            become table stakes for an agent: can it queue things up for later or to happen
+            regularly? OpenClaw has the <a href=
+            "https://docs.openclaw.ai/gateway/heartbeat"><code>HEARTBEAT.md</code></a>, but a
+            sqlite database would work fine as well.
+          </p>
+          <p>
+            <strong>Memory or session persistence:</strong> the agent needs to not forget
+            everything all the time. Coding agents already have this: you can resume work from the
+            past to jump right back where you were. General agents need this as well.
+          </p>
+          <p>
+            Simon Willison <a href="https://simonwillison.net/2025/Sep/18/agents/">has argued</a>
+            that memory is just “more tools,” that you can bolt long-term memory onto the basic
+            tools in a loop definition with a read/write memory tool. I think that undersells it.
+          </p>
+          <p>
+            Long term session persistence is a hard problem because language models have limited
+            <a href="https://www.ibm.com/think/topics/context-window">“context windows”</a>, so
+            coding agents today implement lossy <em>compaction</em> which isn’t great. Everyone is
+            looking for better ways to <em>remember</em> right now.
+          </p>
+          <p>
+            <strong>Skills</strong> are what really captures people’s imaginations: <strong>agents
+            can do things on your behalf.</strong> There are even “skill files” that are <a href=
+            "https://github.com/skillmatic-ai/awesome-agent-skills">almost a standard</a> at this
+            point.
+          </p>
+          <p>
+            The most useful skills are the authenticated ones: like access to your calendar, email,
+            messages, notes, etc. These are also the scariest, the agent could <a href=
+            "https://www.threads.com/@firerock31/post/DVHGBX2Epgq?xmt=AQF0a-tPvV_-XenNgad1ks8gRHKKJnD-NzAhV2CEDbaVfA">
+            run away with or delete your emails</a>.
+          </p>
+          <h3 id="a-note-on-security">
+            A note on security
+          </h3>
+          <p>
+            Unless you know how to build secure systems, don’t run something like OpenClaw with
+            your real email credentials or trust some SaaS to run it for you. Don’t let anyone tell
+            you your credentials are encrypted or that their system is 100% secure or any other
+            nonsense. Nothing is 100% secure, the goals are always:
+          </p>
+          <ol type="1">
+            <li>Minimize risk
+            </li>
+            <li>Minimize blast radius
+            </li>
+            <li>Increase your confidence in the system
+            </li>
+            <li>Not be too annoying (or you might turn off the security features)
+            </li>
+          </ol>
+          <p>
+            Doing those things iteratively over time is the only way to actually produce a secure
+            system of any kind.
+          </p>
+          <p>
+            Also: most best practices for security assume the code we write and execute is
+            trustworthy and we are protecting ourselves from someone gaining access to our systems
+            or seeing our credentials fly by. However, <strong>now the program itself is both
+            dangerous and untrustworthy and can execute arbitrary code.</strong> So if you are not
+            an expert, please know any advice you read might just be coming at this from the wrong
+            angle in the first place.
+          </p>
+          <p>
+            The agent cannot be trusted with your real credentials or to execute code outside of
+            any sandbox. There must be clear boundaries.
+          </p>
+          <p>
+            It doesn’t matter if your credentials are encrypted at rest if the agent can see them
+            in plain text while it is calling the gmail api to delete all your emails, or worse it
+            starts forwarding your emails to some rando.
+          </p>
+          <p>
+            I believe any system can be made “secure” for an acceptable definition of “secure,”
+            even an agent. And while <a href="https://github.com/dedene/claw-wrap">there are
+            projects to try to wrap OpenClaw,</a> I am suspicious if it can ever be fully “wrapped”
+            up like that. It really needed to have been built with security and privacy in mind
+            from the start to really get to a place where I would feel confident in it.
+          </p>
+          <h2 id="coding-agents-on-your-own-hardware-are-best">
+            Coding agents on your own hardware are best
+          </h2>
+          <p>
+            I have two personal opinions that I will layer on top:
+          </p>
+          <p>
+            <strong>1. The best agent is a coding agent and 2. the best place to run an agent is on
+            your own hardware.</strong>
+          </p>
+          <p>
+            <strong>All agents will be coding agents soon, I predict.</strong> A coding agent can
+            build custom solutions to get to a goal, it can create new skills on-demand, and the
+            programs it writes can be audited, tested, and easily modified. Claude (the non-code
+            one) will already write and execute python code on demand to do things like make word
+            and excel documents… so it already is a coding agent some of the time.
+          </p>
+          <p>
+            <strong><em>Writing executable code that statistically is very close to correct is way
+            more useful and valuable than writing prose that is statistically very close to
+            correct.</em></strong>
+          </p>
+          <p>
+            For privacy and security, your agent(s) should run on your hardware. SaaS doesn’t seem
+            like a good fit for highly personal agents that can take actions on your behalf.
+            <a href=
+            "https://www.tomshardware.com/tech-industry/artificial-intelligence/openclaw-fueled-ordering-frenzy-creates-apple-mac-shortage-delivery-for-high-unified-memory-units-now-ranges-from-6-days-to-6-weeks">
+            This is why Mac minis have been flying off the shelves.</a>
+          </p>
+          <p>
+            Your data lives on your device (or in some cloud you chose that your device is
+            connected to) and you shouldn’t need to transmit all of that up to someone else’s
+            servers just to tally up how my workouts have been going recently… or whatever it is I
+            want an agent to do. Right now it is difficult to directly run a good model locally, so
+            a <em>local agent</em> might still use Claude or ChatGPT for inference.
+          </p>
+          <p>
+            For local inference, <a href="https://ollama.com/">ollama</a> lets you run open-weights
+            models on your own machine. <a href=
+            "https://ollama.com/library/qwen3-coder-next"><code>qwen3-coder-next</code></a> is a
+            very impressive model for being so small (80B, 85GB at 8-bit) — it very well could
+            power a sophisticated agent today on a high-memory Mac Mini or similar hardware.
+          </p>
+          <p>
+            We’ve been working hard <a href="https://new.space/">at my day job</a> making it easy
+            to run AI in a private space, and we want to show what a safe, private, capable agent
+            can look like. <a href="https://shareup.world/">Follow our newsletter</a> for new
+            capabilities coming very soon.
+          </p>
+          <h2 id="where-this-is-heading">
+            Where this is heading
+          </h2>
+          <p>
+            OpenClaw showed people what’s possible, even if <a href=
+            "https://www.crowdstrike.com/en-us/blog/what-security-teams-need-to-know-about-openclaw-ai-super-agent/">
+            the security story is pretty scary for it</a>.
+          </p>
+          <p>
+            The <em>pattern</em> is what matters, not any single project. Tools in a loop,
+            scheduled tasks, memory, and skills. This is the architecture. Better implementations
+            are coming, ones that are built with security from the ground up, that run on your own
+            hardware, and that treat the agent as untrusted code by default.
+          </p>
+          <h2 id="what-is-your-use-case-for-an-agent">
+            What is your use case for an agent?
+          </h2>
+          <p>
+            What would you use one of these autonomous agents for? What does your dream agent look
+            like?
+          </p>
+          <p>
+            Hit me up on <a href="https://indieweb.social/@myobie">mastodon</a> or <a href=
+            "https://www.threads.com/@myobie">threads</a>, I’d love to hear what you think.
+          </p>
+        </div>
+        <footer>
+          <p>
+            Posted on <time datetime="2026-02-24T15:52:16+01:00">24 February, 2026</time>
+          </p>
+        </footer>
+      </article>
+    </main>
+    <script async src="/behavior.js"></script> 
+    <script async src="/assets/details-controls.js"></script> 
+    <script data-domain="nathanherald.com" defer src="https://stats.myobie.wtf/script.js"></script>
+  </body>
+</html>

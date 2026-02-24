@@ -4,7 +4,163 @@
     <title>nathanherald.com feed</title>
     <link>https://nathanherald.com/</link>
     <description>Recent posts from nathanherald.com</description>
-    <lastBuildDate>Mon, 09 Feb 2026 18:34:07 +0100</lastBuildDate>
+    <lastBuildDate>Tue, 24 Feb 2026 15:53:37 +0100</lastBuildDate>
+
+    <item>
+      <title>The 4 things that make an "agent" today</title>
+      <link>https://nathanherald.com/posts/the-4-things-that-make-an-agent/</link>
+      <pubDate>Tue, 24 Feb 2026 15:53:29 +0100</pubDate>
+      <guid isPermaLink="true">https://nathanherald.com/posts/the-4-things-that-make-an-agent/</guid>
+      <description>&lt;h1 id="the-4-things-that-make-an-agent-today"&gt;The 4 things that make an
+"agent" today&lt;/h1&gt;
+&lt;p&gt;Six months ago, we agreed on a definition for an "agent:" &lt;a
+href="https://simonwillison.net/2025/Sep/18/agents/"&gt;an LLM with tools
+in a loop&lt;/a&gt; &lt;a
+href="https://simonwillison.net/2025/Sep/30/designing-agentic-loops/"&gt;iterating
+toward a goal&lt;/a&gt;. But recently the definition has expanded. While the
+entire industry has slowly been figuring out what "an agent" is by
+trying different things, &lt;a href="https://openclaw.ai/"&gt;OpenClaw&lt;/a&gt;
+certainly has captured a lot of people's imaginations and helped
+crystallize what people &lt;em&gt;think&lt;/em&gt; an agent &lt;em&gt;should&lt;/em&gt; be able
+to do.&lt;/p&gt;
+&lt;h2 id="an-agent-today-is-4-things"&gt;An agent today is 4 things&lt;/h2&gt;
+&lt;ol type="1"&gt;
+&lt;li&gt;Language model with tools in a loop&lt;/li&gt;
+&lt;li&gt;Scheduled tasks&lt;/li&gt;
+&lt;li&gt;Memory or session persistence&lt;/li&gt;
+&lt;li&gt;Skills&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;This has become the standard packaging for an agent over the last 6
+months. This is basically how OpenClaw describes itself, &lt;a
+href="https://www.notion.com/help/guides/get-started-with-your-personal-agent-in-notion"&gt;Notion's
+AI agent&lt;/a&gt; has roughly the same ideas, and even &lt;a
+href="https://claude.ai/"&gt;Claude&lt;/a&gt; and other products from frontier
+labs are describing themselves in similar ways.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Language models with tools in a loop&lt;/strong&gt; is the
+foundation everything else is built on. The model &lt;em&gt;reasons&lt;/em&gt; about
+a problem, calls a tool, sees the result, and decides what to do next
+until it reaches its goal or gets stuck. This is the core mechanic, the
+&lt;em&gt;engine.&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Scheduled tasks:&lt;/strong&gt; everyone seems to always ask agents
+to "remind me to do this tomorrow", "every Monday and Thursday morning
+prepare and show me a report about…", "watch this web page and tell me
+when the price drops…", etc. So this has become table stakes for an
+agent: can it queue things up for later or to happen regularly? OpenClaw
+has the &lt;a
+href="https://docs.openclaw.ai/gateway/heartbeat"&gt;&lt;code&gt;HEARTBEAT.md&lt;/code&gt;&lt;/a&gt;,
+but a sqlite database would work fine as well.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Memory or session persistence:&lt;/strong&gt; the agent needs to
+not forget everything all the time. Coding agents already have this: you
+can resume work from the past to jump right back where you were. General
+agents need this as well.&lt;/p&gt;
+&lt;p&gt;Simon Willison &lt;a
+href="https://simonwillison.net/2025/Sep/18/agents/"&gt;has argued&lt;/a&gt; that
+memory is just "more tools," that you can bolt long-term memory onto the
+basic tools in a loop definition with a read/write memory tool. I think
+that undersells it.&lt;/p&gt;
+&lt;p&gt;Long term session persistence is a hard problem because language
+models have limited &lt;a
+href="https://www.ibm.com/think/topics/context-window"&gt;"context
+windows"&lt;/a&gt;, so coding agents today implement lossy &lt;em&gt;compaction&lt;/em&gt;
+which isn't great. Everyone is looking for better ways to
+&lt;em&gt;remember&lt;/em&gt; right now.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Skills&lt;/strong&gt; are what really captures people's
+imaginations: &lt;strong&gt;agents can do things on your behalf.&lt;/strong&gt;
+There are even "skill files" that are &lt;a
+href="https://github.com/skillmatic-ai/awesome-agent-skills"&gt;almost a
+standard&lt;/a&gt; at this point.&lt;/p&gt;
+&lt;p&gt;The most useful skills are the authenticated ones: like access to
+your calendar, email, messages, notes, etc. These are also the scariest,
+the agent could &lt;a
+href="https://www.threads.com/@firerock31/post/DVHGBX2Epgq?xmt=AQF0a-tPvV_-XenNgad1ks8gRHKKJnD-NzAhV2CEDbaVfA"&gt;run
+away with or delete your emails&lt;/a&gt;.&lt;/p&gt;
+&lt;h3 id="a-note-on-security"&gt;A note on security&lt;/h3&gt;
+&lt;p&gt;Unless you know how to build secure systems, don't run something like
+OpenClaw with your real email credentials or trust some SaaS to run it
+for you. Don't let anyone tell you your credentials are encrypted or
+that their system is 100% secure or any other nonsense. Nothing is 100%
+secure, the goals are always:&lt;/p&gt;
+&lt;ol type="1"&gt;
+&lt;li&gt;Minimize risk&lt;/li&gt;
+&lt;li&gt;Minimize blast radius&lt;/li&gt;
+&lt;li&gt;Increase your confidence in the system&lt;/li&gt;
+&lt;li&gt;Not be too annoying (or you might turn off the security
+features)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Doing those things iteratively over time is the only way to actually
+produce a secure system of any kind.&lt;/p&gt;
+&lt;p&gt;Also: most best practices for security assume the code we write and
+execute is trustworthy and we are protecting ourselves from someone
+gaining access to our systems or seeing our credentials fly by. However,
+&lt;strong&gt;now the program itself is both dangerous and untrustworthy and
+can execute arbitrary code.&lt;/strong&gt; So if you are not an expert, please
+know any advice you read might just be coming at this from the wrong
+angle in the first place.&lt;/p&gt;
+&lt;p&gt;The agent cannot be trusted with your real credentials or to execute
+code outside of any sandbox. There must be clear boundaries.&lt;/p&gt;
+&lt;p&gt;It doesn't matter if your credentials are encrypted at rest if the
+agent can see them in plain text while it is calling the gmail api to
+delete all your emails, or worse it starts forwarding your emails to
+some rando.&lt;/p&gt;
+&lt;p&gt;I believe any system can be made "secure" for an acceptable
+definition of "secure," even an agent. And while &lt;a
+href="https://github.com/dedene/claw-wrap"&gt;there are projects to try to
+wrap OpenClaw,&lt;/a&gt; I am suspicious if it can ever be fully "wrapped" up
+like that. It really needed to have been built with security and privacy
+in mind from the start to really get to a place where I would feel
+confident in it.&lt;/p&gt;
+&lt;h2 id="coding-agents-on-your-own-hardware-are-best"&gt;Coding agents on
+your own hardware are best&lt;/h2&gt;
+&lt;p&gt;I have two personal opinions that I will layer on top:&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;1. The best agent is a coding agent and 2. the best place to
+run an agent is on your own hardware.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;All agents will be coding agents soon, I predict.&lt;/strong&gt; A
+coding agent can build custom solutions to get to a goal, it can create
+new skills on-demand, and the programs it writes can be audited, tested,
+and easily modified. Claude (the non-code one) will already write and
+execute python code on demand to do things like make word and excel
+documents… so it already is a coding agent some of the time.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;em&gt;Writing executable code that statistically is very close
+to correct is way more useful and valuable than writing prose that is
+statistically very close to correct.&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;For privacy and security, your agent(s) should run on your hardware.
+SaaS doesn't seem like a good fit for highly personal agents that can
+take actions on your behalf. &lt;a
+href="https://www.tomshardware.com/tech-industry/artificial-intelligence/openclaw-fueled-ordering-frenzy-creates-apple-mac-shortage-delivery-for-high-unified-memory-units-now-ranges-from-6-days-to-6-weeks"&gt;This
+is why Mac minis have been flying off the shelves.&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Your data lives on your device (or in some cloud you chose that your
+device is connected to) and you shouldn't need to transmit all of that
+up to someone else's servers just to tally up how my workouts have been
+going recently… or whatever it is I want an agent to do. Right now it is
+difficult to directly run a good model locally, so a &lt;em&gt;local
+agent&lt;/em&gt; might still use Claude or ChatGPT for inference.&lt;/p&gt;
+&lt;p&gt;For local inference, &lt;a href="https://ollama.com/"&gt;ollama&lt;/a&gt; lets
+you run open-weights models on your own machine. &lt;a
+href="https://ollama.com/library/qwen3-coder-next"&gt;&lt;code&gt;qwen3-coder-next&lt;/code&gt;&lt;/a&gt;
+is a very impressive model for being so small (80B, 85GB at 8-bit) — it
+very well could power a sophisticated agent today on a high-memory Mac
+Mini or similar hardware.&lt;/p&gt;
+&lt;p&gt;We've been working hard &lt;a href="https://new.space/"&gt;at my day
+job&lt;/a&gt; making it easy to run AI in a private space, and we want to show
+what a safe, private, capable agent can look like. &lt;a
+href="https://shareup.world/"&gt;Follow our newsletter&lt;/a&gt; for new
+capabilities coming very soon.&lt;/p&gt;
+&lt;h2 id="where-this-is-heading"&gt;Where this is heading&lt;/h2&gt;
+&lt;p&gt;OpenClaw showed people what's possible, even if &lt;a
+href="https://www.crowdstrike.com/en-us/blog/what-security-teams-need-to-know-about-openclaw-ai-super-agent/"&gt;the
+security story is pretty scary for it&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;The &lt;em&gt;pattern&lt;/em&gt; is what matters, not any single project. Tools
+in a loop, scheduled tasks, memory, and skills. This is the
+architecture. Better implementations are coming, ones that are built
+with security from the ground up, that run on your own hardware, and
+that treat the agent as untrusted code by default.&lt;/p&gt;
+&lt;h2 id="what-is-your-use-case-for-an-agent"&gt;What is your use case for an
+agent?&lt;/h2&gt;
+&lt;p&gt;What would you use one of these autonomous agents for? What does your
+dream agent look like?&lt;/p&gt;
+&lt;p&gt;Hit me up on mastodon or threads, I'd love to hear what you
+think.&lt;/p&gt;</description>
+    </item>
 
     <item>
       <title>Two interesting AI developments</title>
