@@ -4,7 +4,20 @@
     <title>nathanherald.com feed</title>
     <link>https://nathanherald.com/</link>
     <description>Recent posts from nathanherald.com</description>
-    <lastBuildDate>Wed, 25 Feb 2026 11:51:56 +0100</lastBuildDate>
+    <lastBuildDate>Wed, 25 Feb 2026 13:08:59 +0100</lastBuildDate>
+
+    <item>
+      <title>CRDT File Sync</title>
+      <link>https://nathanherald.com/posts/links/crdt-filesync/</link>
+      <pubDate>Wed, 25 Feb 2026 13:08:53 +0100</pubDate>
+      <guid isPermaLink="true">https://nathanherald.com/posts/links/crdt-filesync/</guid>
+      <description>&lt;p&gt;I hadn't ever thought of having each device write its own database /
+file to a synced folder, and then just periodically having each device
+read all the other files to accumulate a fully synced state. It's such a
+simple, clever idea: no conflicts at the file-sync layer because each
+client only writes to its own file, and CRDTs handle merging the actual
+data.&lt;/p&gt;</description>
+    </item>
 
     <item>
       <title>Claude Code Remote Control</title>
