@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+# Push to origin via HTTPS instead of SSH, using gh credentials.
+# Useful when SSH requires Touch ID or the agent isn't available.
+
+cd "$(dirname $0)/.."
+
+ssh_url=$(git remote get-url origin)
+https_url=$(echo "$ssh_url" | sed 's|^git@github\.com:|https://github.com/|')
+
+git push "$https_url" "$@"
