@@ -4,7 +4,20 @@
     <title>nathanherald.com feed</title>
     <link>https://nathanherald.com/</link>
     <description>Recent posts from nathanherald.com</description>
-    <lastBuildDate>Tue, 24 Feb 2026 15:53:37 +0100</lastBuildDate>
+    <lastBuildDate>Wed, 25 Feb 2026 11:51:56 +0100</lastBuildDate>
+
+    <item>
+      <title>Claude Code Remote Control</title>
+      <link>https://nathanherald.com/posts/links/claude-code-remote-control/</link>
+      <pubDate>Wed, 25 Feb 2026 11:51:49 +0100</pubDate>
+      <guid isPermaLink="true">https://nathanherald.com/posts/links/claude-code-remote-control/</guid>
+      <description>&lt;p&gt;Anthropic just dropped Remote Control for Claude Code, letting you
+remote control your computer from your phone. Claude keeps running
+locally, your phone is just a window into the session.&lt;/p&gt;
+&lt;p&gt;I drafted this post from my phone using Remote Control and published
+it from my computer. It's a nice workflow: my Mac keeps working and I
+can message it from anywhere.&lt;/p&gt;</description>
+    </item>
 
     <item>
       <title>The 4 things that make an "agent" today</title>
