@@ -9,3 +9,4 @@ ssh_url=$(git remote get-url origin)
 https_url=$(echo "$ssh_url" | sed 's|^git@github\.com:|https://github.com/|')
 
 git push "$https_url" "$@"
+git update-ref refs/remotes/origin/main HEAD
