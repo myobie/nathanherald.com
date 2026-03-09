@@ -4,7 +4,32 @@
     <title>nathanherald.com feed</title>
     <link>https://nathanherald.com/</link>
     <description>Recent posts from nathanherald.com</description>
-    <lastBuildDate>Thu, 05 Mar 2026 11:09:37 +0100</lastBuildDate>
+    <lastBuildDate>Mon, 09 Mar 2026 20:49:21 +0100</lastBuildDate>
+
+    <item>
+      <title>pty – a wrapper for detaching from long running processes</title>
+      <link>https://nathanherald.com/posts/pty/</link>
+      <pubDate>Mon, 09 Mar 2026 20:49:13 +0100</pubDate>
+      <guid isPermaLink="true">https://nathanherald.com/posts/pty/</guid>
+      <description>&lt;p&gt;I opened my laptop this morning and my existing zellij sessions were
+using 300% CPU and tons of memory. And it occurred to me: I don't really
+need all this multiplexing. I just need to detach from a few important
+long running processes.&lt;/p&gt;
+&lt;p&gt;So I made &lt;a href="https://github.com/myobie/pty"&gt;a pty wrapper&lt;/a&gt;
+for exactly that. No session management, no window splitting, no status
+bar, just the ability to keep long running processes alive and reconnect
+to them. It uses xterm/headless for compatibility with applications like
+vim.&lt;/p&gt;
+&lt;p&gt;The goal is you can connect to processes from any kind of shell:
+ghostty, tmux, iTerm, a terminal over ssh, and all at the same time. The
+server allows multiple connections per process. This has felt way more
+flexible to me and therefore more unix-like.&lt;/p&gt;
+&lt;p&gt;I'm also working on a websocket API for the pty server. I plan to
+keep iterating on this over the next month. Is this something you'd be
+interested in using? Try it out and &lt;a
+href="https://indieweb.social/@myobie"&gt;let me know how it goes on
+Mastodon&lt;/a&gt;.&lt;/p&gt;</description>
+    </item>
 
     <item>
       <title>TIL Acorn can screenshot with layers</title>

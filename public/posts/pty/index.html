@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+  <head lang="en-us">
+    <meta content="HTML Tidy for HTML5 for Apple macOS version 5.8.0" name="generator">
+    <meta charset="UTF-8">
+    <title>
+      I'm Nathan Herald → pty – a wrapper for detaching from long running processes
+    </title>
+    <script>
+      if ((new URL(window.location.href)).host === 'myobie.com') { window.location.assign('https://nathanherald.com') }
+    </script>
+    <link href="https://cloud.typography.com/6836312/761366/css/fonts.css" rel="stylesheet" type=
+    "text/css">
+    <link href="/styles.css" rel="stylesheet" type="text/css">
+    <link href="/syntax-light.css" rel="stylesheet" type="text/css">
+    <link href="/syntax-dark.css" rel="stylesheet" type="text/css">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="I'm Nathan Herald → pty – a wrapper for detaching from long running processes"
+    name="title">
+    <meta content=
+    "I made a pty wrapper that lets you detach from and reconnect to long running processes, without needing tmux or zellij."
+    name="description">
+    <meta content="pty – a wrapper for detaching from long running processes" property="og:title">
+    <meta content="website" property="og:type">
+    <meta content=
+    "I made a pty wrapper that lets you detach from and reconnect to long running processes, without needing tmux or zellij."
+    property="og:description">
+    <meta content="/og.png" property="og:image">
+    <meta content="I'm Nathan Herald" property="og:site_name">
+    <link href="/rss.xml" rel="alternate" title="Feed of all the posts on nathanherald.com" type=
+    "application/rss+xml">
+  </head>
+  <body class="default">
+    <header class="section-header">
+      <div class="section-nav">
+        <h1 class="home-link">
+          <a class="never-underline" data-nospan="" href="/"><abbr title="Hello">👋</abbr></a>
+          <a href="/">I'm Nathan</a>
+        </h1>
+        <nav>
+          <p>
+            Find more in the <a href="/posts/">archive of all the posts on this site</a> or
+            <a href="/rss.xml">subscribe with RSS</a>.
+          </p>
+        </nav>
+      </div>
+    </header>
+    <main class="single">
+      <article>
+        <header>
+          <h1>
+            pty – a wrapper for detaching from long running processes
+          </h1>
+        </header>
+        <div class="content">
+          <p>
+            I opened my laptop this morning and my existing zellij sessions were using 300% CPU and
+            tons of memory. And it occurred to me: I don’t really need all this multiplexing. I
+            just need to detach from a few important long running processes.
+          </p>
+          <p>
+            So I made <a href="https://github.com/myobie/pty">a pty wrapper</a> for exactly that.
+            No session management, no window splitting, no status bar, just the ability to keep
+            long running processes alive and reconnect to them. It uses xterm/headless for
+            compatibility with applications like vim.
+          </p>
+          <p>
+            The goal is you can connect to processes from any kind of shell: ghostty, tmux, iTerm,
+            a terminal over ssh, and all at the same time. The server allows multiple connections
+            per process. This has felt way more flexible to me and therefore more unix-like.
+          </p>
+          <p>
+            I’m also working on a websocket API for the pty server. I plan to keep iterating on
+            this over the next month. Is this something you’d be interested in using? Try it out
+            and <a href="https://indieweb.social/@myobie">let me know how it goes on Mastodon</a>.
+          </p>
+        </div>
+        <footer>
+          <p>
+            Posted on <time datetime="2026-03-09T12:00:00+01:00">09 March, 2026</time>
+          </p>
+        </footer>
+      </article>
+    </main>
+    <script async src="/behavior.js"></script> 
+    <script async src="/assets/details-controls.js"></script> 
+    <script data-domain="nathanherald.com" defer src="https://stats.myobie.wtf/script.js"></script>
+  </body>
+</html>
