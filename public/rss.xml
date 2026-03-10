@@ -4,7 +4,40 @@
     <title>nathanherald.com feed</title>
     <link>https://nathanherald.com/</link>
     <description>Recent posts from nathanherald.com</description>
-    <lastBuildDate>Mon, 09 Mar 2026 20:49:21 +0100</lastBuildDate>
+    <lastBuildDate>Tue, 10 Mar 2026 15:36:29 +0100</lastBuildDate>
+
+    <item>
+      <title>csesh – monitoring and reconnecting Claude Code sessions</title>
+      <link>https://nathanherald.com/posts/csesh/</link>
+      <pubDate>Tue, 10 Mar 2026 15:36:22 +0100</pubDate>
+      <guid isPermaLink="true">https://nathanherald.com/posts/csesh/</guid>
+      <description>&lt;p&gt;I &lt;a href="/posts/no-cms/"&gt;removed the CMS from my website&lt;/a&gt; and
+now I just ask Claude Code to make new posts for me. I write the text,
+Claude puts a markdown file in the right place, runs some tooling it
+made for itself, and boom it's on my website.&lt;/p&gt;
+&lt;p&gt;I want to take this further with &lt;a
+href="https://code.claude.com/docs/en/remote-control"&gt;Claude Code Remote
+Control&lt;/a&gt; so I can make a post from my phone anytime by asking the
+Claude Code on my home Mac to post for me. But it keeps
+disconnecting.&lt;/p&gt;
+&lt;p&gt;So I made &lt;a href="https://github.com/myobie/csesh"&gt;csesh&lt;/a&gt;, a set
+of bash utilities for monitoring Claude Code sessions and forcing them
+to reconnect. It builds on my &lt;a href="/posts/pty/"&gt;pty wrapper&lt;/a&gt;,
+since I can not only detach from a process, I can send text to the
+backgrounded pty from the outside. A script can peek at the pty, send it
+&lt;code&gt;/reconnect&amp;lt;return&amp;gt;&lt;/code&gt; to trigger a reconnect, and peek
+again to see if it worked.&lt;/p&gt;
+&lt;p&gt;The tools:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;csesh&lt;/strong&gt; lists running Claude Code sessions&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;creconnect&lt;/strong&gt; reconnects disconnected sessions&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;ckeepalive&lt;/strong&gt; automatically reconnects every 5
+minutes&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;It is my goal this year to make sure I own all my data and eventually
+own my inference, so I can use a local, open source model instead of
+Claude for this website. One step at a time.&lt;/p&gt;</description>
+    </item>
 
     <item>
       <title>pty – a wrapper for detaching from long running processes</title>

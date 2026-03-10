@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+  <head lang="en-us">
+    <meta content="HTML Tidy for HTML5 for Apple macOS version 5.8.0" name="generator">
+    <meta charset="UTF-8">
+    <title>
+      I'm Nathan Herald → csesh – monitoring and reconnecting Claude Code sessions
+    </title>
+    <script>
+      if ((new URL(window.location.href)).host === 'myobie.com') { window.location.assign('https://nathanherald.com') }
+    </script>
+    <link href="https://cloud.typography.com/6836312/761366/css/fonts.css" rel="stylesheet" type=
+    "text/css">
+    <link href="/styles.css" rel="stylesheet" type="text/css">
+    <link href="/syntax-light.css" rel="stylesheet" type="text/css">
+    <link href="/syntax-dark.css" rel="stylesheet" type="text/css">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="I'm Nathan Herald → csesh – monitoring and reconnecting Claude Code sessions"
+    name="title">
+    <meta content=
+    "A set of bash utilities for monitoring Claude Code sessions and forcing them to reconnect when remote control disconnects."
+    name="description">
+    <meta content="csesh – monitoring and reconnecting Claude Code sessions" property="og:title">
+    <meta content="website" property="og:type">
+    <meta content=
+    "A set of bash utilities for monitoring Claude Code sessions and forcing them to reconnect when remote control disconnects."
+    property="og:description">
+    <meta content="/og.png" property="og:image">
+    <meta content="I'm Nathan Herald" property="og:site_name">
+    <link href="/rss.xml" rel="alternate" title="Feed of all the posts on nathanherald.com" type=
+    "application/rss+xml">
+  </head>
+  <body class="default">
+    <header class="section-header">
+      <div class="section-nav">
+        <h1 class="home-link">
+          <a class="never-underline" data-nospan="" href="/"><abbr title="Hello">👋</abbr></a>
+          <a href="/">I'm Nathan</a>
+        </h1>
+        <nav>
+          <p>
+            Find more in the <a href="/posts/">archive of all the posts on this site</a> or
+            <a href="/rss.xml">subscribe with RSS</a>.
+          </p>
+        </nav>
+      </div>
+    </header>
+    <main class="single">
+      <article>
+        <header>
+          <h1>
+            csesh – monitoring and reconnecting Claude Code sessions
+          </h1>
+        </header>
+        <div class="content">
+          <p>
+            I <a href="/posts/no-cms/">removed the CMS from my website</a> and now I just ask
+            Claude Code to make new posts for me. I write the text, Claude puts a markdown file in
+            the right place, runs some tooling it made for itself, and boom it’s on my website.
+          </p>
+          <p>
+            I want to take this further with <a href=
+            "https://code.claude.com/docs/en/remote-control">Claude Code Remote Control</a> so I
+            can make a post from my phone anytime by asking the Claude Code on my home Mac to post
+            for me. But it keeps disconnecting.
+          </p>
+          <p>
+            So I made <a href="https://github.com/myobie/csesh">csesh</a>, a set of bash utilities
+            for monitoring Claude Code sessions and forcing them to reconnect. It builds on my
+            <a href="/posts/pty/">pty wrapper</a>, since I can not only detach from a process, I
+            can send text to the backgrounded pty from the outside. A script can peek at the pty,
+            send it <code>/reconnect&lt;return&gt;</code> to trigger a reconnect, and peek again to
+            see if it worked.
+          </p>
+          <p>
+            The tools:
+          </p>
+          <ul>
+            <li>
+              <strong>csesh</strong> lists running Claude Code sessions
+            </li>
+            <li>
+              <strong>creconnect</strong> reconnects disconnected sessions
+            </li>
+            <li>
+              <strong>ckeepalive</strong> automatically reconnects every 5 minutes
+            </li>
+          </ul>
+          <p>
+            It is my goal this year to make sure I own all my data and eventually own my inference,
+            so I can use a local, open source model instead of Claude for this website. One step at
+            a time.
+          </p>
+        </div>
+        <footer>
+          <p>
+            Posted on <time datetime="2026-03-10T12:00:00+01:00">10 March, 2026</time>
+          </p>
+        </footer>
+      </article>
+    </main>
+    <script async src="/behavior.js"></script> 
+    <script async src="/assets/details-controls.js"></script> 
+    <script data-domain="nathanherald.com" defer src="https://stats.myobie.wtf/script.js"></script>
+  </body>
+</html>
