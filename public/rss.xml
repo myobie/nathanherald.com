@@ -4,7 +4,17 @@
     <title>nathanherald.com feed</title>
     <link>https://nathanherald.com/</link>
     <description>Recent posts from nathanherald.com</description>
-    <lastBuildDate>Tue, 10 Mar 2026 15:36:29 +0100</lastBuildDate>
+    <lastBuildDate>Wed, 11 Mar 2026 10:43:22 +0100</lastBuildDate>
+
+    <item>
+      <title>dandelions forever</title>
+      <link>https://nathanherald.com/posts/links/dandelions-forever/</link>
+      <pubDate>Wed, 11 Mar 2026 10:43:14 +0100</pubDate>
+      <guid isPermaLink="true">https://nathanherald.com/posts/links/dandelions-forever/</guid>
+      <description>&lt;iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/RUsUQ9tRHHQ" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen&gt;&lt;/iframe&gt;
+
+&lt;p&gt;2000s dreamcore vibes.&lt;/p&gt;</description>
+    </item>
 
     <item>
       <title>csesh – monitoring and reconnecting Claude Code sessions</title>
