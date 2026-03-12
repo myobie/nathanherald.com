@@ -4,7 +4,85 @@
     <title>nathanherald.com feed</title>
     <link>https://nathanherald.com/</link>
     <description>Recent posts from nathanherald.com</description>
-    <lastBuildDate>Wed, 11 Mar 2026 22:14:49 +0100</lastBuildDate>
+    <lastBuildDate>Thu, 12 Mar 2026 12:12:45 +0100</lastBuildDate>
+
+    <item>
+      <title>Gaining Agency</title>
+      <link>https://nathanherald.com/posts/coding-agents-and-agency/</link>
+      <pubDate>Thu, 12 Mar 2026 12:12:36 +0100</pubDate>
+      <guid isPermaLink="true">https://nathanherald.com/posts/coding-agents-and-agency/</guid>
+      <description>&lt;p&gt;When I was at Virginia Tech I taught web design classes through the
+YMCA using the on-campus computer labs. I loved making websites and I
+wanted to give the superpower of publishing online to as many people as
+possible. In one class the head librarian of the town library was there.
+I'll never forget when she came in to one class so excited: &lt;strong&gt;she
+had updated the library website herself, without asking for help,
+without asking permission.&lt;/strong&gt; She felt so empowered.&lt;/p&gt;
+&lt;p&gt;Years later I taught web design and development at a professional
+school in Washington DC and saw the same thing happen again and again:
+that excitement that comes from self-publishing, self-expression,
+without guardrails or needing permission or help.&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;I want as many people as possible to enjoy the web, not be
+oppressed by it, not be stuck in algorithmic hell holes.&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;In the late 90s (high school) we were hacking on our computers,
+changing everything we could. We (me and my friends) were stealing Adobe
+and Macromedia software to make stuff (we eventually bought stuff when
+we could afford it). We were ripping and sharing music online, and in
+the 2000s even ripping and sharing DVDs with each other. We were making
+weird websites, weird online spaces, just terrible code and design, and
+we loved it. There was this energy: this is MY computer and I will use
+it how I want. My data, my media.&lt;/p&gt;
+&lt;p&gt;While it may seem people are stuck on these huge centralized sites
+today: there are &lt;a
+href="https://bloggingwizard.com/blogging-statistics/"&gt;more blogs now
+than ever&lt;/a&gt;. People are still publishing, building their own corners
+of the internet, and making stuff.&lt;/p&gt;
+&lt;p&gt;Even still, a personal website is tough to manage for most people and
+many people can only publish in the ways their CMS allows.&lt;/p&gt;
+&lt;p&gt;Coding agents &lt;em&gt;can&lt;/em&gt; expand agency over one's online presence
+and data. They might be the first time &lt;em&gt;"use a computer to do what
+you want"&lt;/em&gt; is actually accessible to everyone, not just people
+willing to learn a very technical system. Every previous wave of web
+tools, no matter how simple, still required you to learn a complex tool.
+Agents let you describe what you want and get something tailor made.
+That's a fundamentally different relationship with technology.&lt;/p&gt;
+&lt;p&gt;I &lt;a href="/posts/no-cms/"&gt;removed the CMS from my website&lt;/a&gt; as an
+experiment and now I just tell claude code what to post. I write the
+text, it does everything else (it published this post, for example). And
+one of my goals this year is to own all my data and eventually own my
+inference (my own coding agent model), running local open source models
+instead of relying on any company.&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Would you be interested in having a website setup like mine,
+where you can ask to post or make a change and it just happens?&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;One of the most valuable things about a coding agent for me is
+getting past blockers: something that would take too much time,
+something tedious, or something just beyond my knowledge by a tiny
+bit.&lt;/p&gt;
+&lt;p&gt;For example: &lt;strong&gt;HTML is way easier to read than to
+write.&lt;/strong&gt; People still need to learn new things to publish online,
+but now there is an on-ramp. The agent can explain it, write the first
+draft, and when you would have gotten stuck in the past the agent can
+help you get over the hump.&lt;/p&gt;
+&lt;p&gt;When I was leading the web design department of that professional
+school I built my own CRM to manage incoming / outgoing emails. People
+would come in and teach certain modules that I needed to keep up with, I
+needed to know when I last emailed them, produce reports of who I hadn't
+emailed recently, etc. I was able to build that and was way more
+productive than my peers because I could code. And some of my peers
+today think that is alright: I deserve to be more productive because I
+know how to code. I disagree.&lt;/p&gt;
+&lt;p&gt;Now, someone could probably cobble together something similar with a
+coding agent without needing to have put in the time I have. This is a
+great thing. My goal is always more people doing more with the tech and
+data they own, not to gate keep or hoard.&lt;/p&gt;
+&lt;p&gt;The web is what we make of it. We have a great interconnected world
+today, with a few too many centralized big players. We can make more
+spaces for individuals and small groups. I think agents can help.
+Especially if we create open, locally running agents.&lt;/p&gt;
+&lt;p&gt;Should I make some online courses about self-publishing online with a
+personal coding agent? 🤔 Let me know what you think &lt;a
+href="https://indieweb.social/@myobie"&gt;on mastodon&lt;/a&gt;.&lt;/p&gt;</description>
+    </item>
 
     <item>
       <title>Gugusse et l'Automate</title>
