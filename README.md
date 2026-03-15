@@ -1,16 +1,12 @@
 # [nathanherald.com](https://nathanherald.com)
 
-I'm using [Netlify](https://app.netlify.com/sites/flamboyant-northcutt-4eefaf/overview) to host this website.
-
-## Flow
-
-Every new post should be a pull-request, will deploy a preview website to netlify, and merging will deploy the production site.
+Hosted on [Netlify](https://app.netlify.com/sites/flamboyant-northcutt-4eefaf/overview). Posts are committed directly to main and pushed.
 
 ## The font
 
 I love and use [Whitney](https://www.typography.com/fonts/whitney/overview).
 
-I use the book weight for normal text, the bold weight for, uh, bold, and the black weight for main headlines (h1s). I'll be honest, _my type scale isn't really sensible at the moment._ I'll eventually figure that out.
+Book weight for normal text, bold for bold, black for main headlines (h1s).
 
 ## Local setup
 
@@ -26,38 +22,24 @@ bin/serve
 
 ## Publishing Posts
 
-### Quick Method
-
-To publish a new post (markdown to HTML + add to homepage, archive, RSS):
-
 ```sh
-bin/publish-post public/posts/til/strudel/index.md
+bin/publish-post public/posts/links/my-post/index.md
 ```
 
-### Manual Steps
+This converts markdown to HTML, adds to RSS, homepage, and archive.
 
-If you prefer to run each step individually:
+### Pushing
+
+SSH requires Touch ID which doesn't work when using remote control. Use the HTTPS push script instead:
 
 ```sh
-# 1. Convert markdown to HTML
-bin/md2html public/posts/til/strudel/index.md
-
-# 2. Add to RSS feed
-bin/add-rss-item public/posts/til/strudel/index.md
-
-# 3. Add to homepage (latest 5 posts)
-bin/add-to-homepage public/posts/til/strudel/index.md
-
-# 4. Add to posts archive
-bin/add-to-archive public/posts/til/strudel/index.md
+./bin/git-https-push main
 ```
 
 ### Post Types
 
-The system automatically detects post types:
-
 - **Blog posts** (⭐️): Regular posts without `externalUrl` in frontmatter
-- **Link posts** (🔗): Posts with `externalUrl` field - title becomes clickable link
+- **Link posts** (🔗): Posts with `externalUrl` field, title becomes clickable link
 
 ### Frontmatter Formats
 
@@ -72,10 +54,28 @@ externalUrl: https://strudel.cc/workshop/getting-started/#examples
 ---
 ```
 
+### YouTube Embeds
+
+Use the nocookie domain, plain HTML (no Hugo shortcodes):
+
+```html
+<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/{video-id}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+```
+
 ### File Organization
 
 - `public/posts/til/` - Today I Learned posts
-- `public/posts/links/` - Link posts to external content  
+- `public/posts/links/` - Link posts to external content
 - `public/posts/` - Regular blog posts
 
 Each post should be in its own directory with `index.md` (and `index.html` after conversion).
+
+### Syndication
+
+Follow the POSSE approach: publish on the site first, then optionally syndicate to Mastodon using `toot`:
+
+```sh
+toot post "Comment here https://nathanherald.com/posts/links/my-post/"
+```
+
+Not every post gets syndicated. Decide per-post.
