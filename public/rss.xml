@@ -4,7 +4,27 @@
     <title>nathanherald.com feed</title>
     <link>https://nathanherald.com/</link>
     <description>Recent posts from nathanherald.com</description>
-    <lastBuildDate>Sat, 14 Mar 2026 18:06:24 +0100</lastBuildDate>
+    <lastBuildDate>Sun, 15 Mar 2026 13:09:51 +0100</lastBuildDate>
+
+    <item>
+      <title>OlmoTrace</title>
+      <link>https://nathanherald.com/posts/links/olmotrace/</link>
+      <pubDate>Sun, 15 Mar 2026 13:09:40 +0100</pubDate>
+      <guid isPermaLink="true">https://nathanherald.com/posts/links/olmotrace/</guid>
+      <description>&lt;p&gt;&lt;a href="https://allenai.org"&gt;Allen AI&lt;/a&gt; is a nonprofit that
+publishes everything: model weights, training data, training code,
+checkpoints. Their OlmoTrace tool lets you find verbatim matches between
+a model's output and its training corpus. You can actually see where the
+words came from. You can't do that with Claude, GPT, or even Qwen.&lt;/p&gt;
+&lt;p&gt;Their &lt;a href="https://allenai.org/olmo"&gt;Olmo model&lt;/a&gt; is the vegan
+impossible burger of AI models. Olmo isn't as capable as Qwen yet (their
+own coding agent &lt;a
+href="https://allenai.org/blog/open-coding-agents"&gt;SERA&lt;/a&gt; is built on
+a Qwen backbone, which tells you where things stand). It's fully
+transparent and fully traceable.&lt;/p&gt;
+&lt;p&gt;As I work toward owning and operating my own personal, private, local
+coding agent, I'll keep an eye on Olmo. Provenance matters.&lt;/p&gt;</description>
+    </item>
 
     <item>
       <title>The Killer | Official Trailer</title>
