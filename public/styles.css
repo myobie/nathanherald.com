@@ -115,6 +115,41 @@ header h1 {
   margin-top: 0;
 }
 
+.site-footer {
+  padding: 2em 3em 3em;
+}
+
+.site-footer a {
+  color: var(--primary-color);
+}
+
+.footer-logo {
+  width: 20px;
+  height: 20px;
+}
+
+.home-header {
+  position: relative;
+}
+
+.home-logo {
+  position: absolute;
+  width: 42px;
+  height: 42px;
+  top: 11px;
+  left: -64px;
+}
+
+@media (max-width: 600px) {
+  .home-logo {
+    position: static;
+  }
+
+  .home-logo {
+    position: static;
+  }
+}
+
 header h1 .annotation {
   margin-top: 0.5em;
   font-size: 50%;
@@ -289,7 +324,7 @@ details summary {
 
 
 @media (min-width: 971px) {
-  main, .section-nav {
+  main, .section-nav, .site-footer {
     max-width: 45em;
     margin-left: auto;
     margin-right: auto;
