@@ -4,7 +4,49 @@
     <title>nathanherald.com feed</title>
     <link>https://nathanherald.com/</link>
     <description>Recent posts from nathanherald.com</description>
-    <lastBuildDate>Sun, 15 Mar 2026 13:09:51 +0100</lastBuildDate>
+    <lastBuildDate>Mon, 16 Mar 2026 15:59:54 +0100</lastBuildDate>
+
+    <item>
+      <title>Florentine Floor</title>
+      <link>https://nathanherald.com/posts/florentine-floor/</link>
+      <pubDate>Mon, 16 Mar 2026 15:58:56 +0100</pubDate>
+      <guid isPermaLink="true">https://nathanherald.com/posts/florentine-floor/</guid>
+      <description>&lt;p&gt;Back in 2015 I visited &lt;a
+href="https://en.wikipedia.org/wiki/San_Miniato_al_Monte"&gt;San Miniato al
+Monte&lt;/a&gt; in Florence. The church floor is covered in memorial slabs,
+many of them so worn you can barely read the names and dates anymore,
+but the inlaid symbols are still bold and sharp.&lt;/p&gt;
+&lt;p&gt;I immediately recognized this cross:&lt;/p&gt;
+&lt;figure&gt;
+&lt;img src="coudal.jpg" alt="A cross inside a circle, inlaid in marble on the floor of San Miniato al Monte"&gt;
+&lt;/figure&gt;
+
+&lt;p&gt;That's the &lt;a
+href="https://web.archive.org/web/20210205042901/http://www.coudal.com/about.php"&gt;Coudal
+Partners&lt;/a&gt; logo. I knew it from watching way too much &lt;a
+href="https://web.archive.org/web/20130116073413/http://www.photoshoptennis.com/"&gt;Photoshop
+Tennis&lt;/a&gt; back in the day.&lt;/p&gt;
+&lt;p&gt;I kept walking and found this shield:&lt;/p&gt;
+&lt;figure&gt;
+&lt;img src="shield.jpg" alt="A shield with a cross-hatch pattern, inlaid in marble on the floor of San Miniato al Monte"&gt;
+&lt;/figure&gt;
+
+&lt;p&gt;I loved it. Something about it felt right, like it could be my
+logo.&lt;/p&gt;
+&lt;p&gt;When I got back home to Berlin I looked up the Coudal Partners story
+and I couldn't believe it: &lt;a
+href="https://web.archive.org/web/20210205042901/http://www.coudal.com/about.php"&gt;Jim
+Coudal had found his logo in that same church, on a vacation
+himself&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;I've tried to trace that shield a few times over the years, but it's
+a complex set of shapes and I never got it to a point where I was happy
+with it. Recently I decided to try one of those AI services that can
+draw SVGs from images, &lt;a href="https://quiver.ai/"&gt;Quiver&lt;/a&gt;, and it
+nailed it from my photo.&lt;/p&gt;
+&lt;p&gt;I asked claude code to add the logo to my homepage and to the footer
+of every page and now I couldn't be happier. Finally I got my shield on
+my site.&lt;/p&gt;</description>
+    </item>
 
     <item>
       <title>OlmoTrace</title>
