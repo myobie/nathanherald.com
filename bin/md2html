@@ -42,6 +42,12 @@ else
     OUTPUT_FILE="$DIR/index.html"
 fi
 
+# Detect if this is a src/ file (custom elements output)
+USE_CUSTOM_ELEMENTS=false
+case "$INPUT_FILE" in
+    src/*|*/src/*) USE_CUSTOM_ELEMENTS=true ;;
+esac
+
 # Extract frontmatter if present (between --- or +++ lines at start of file)
 FRONTMATTER=""
 CONTENT=""
@@ -123,6 +129,66 @@ fi
 
 # Convert markdown to HTML using pandoc
 HTML_CONTENT=$(echo "$CONTENT_WITHOUT_H1" | pandoc -f gfm+smart -t html)
+
+# Format the date for display
+FORMATTED_DATE=""
+if [ -n "$DATE" ]; then
+    YEAR=$(echo "$DATE" | cut -d'-' -f1)
+    MONTH_NUM=$(echo "$DATE" | cut -d'-' -f2)
+    DAY=$(echo "$DATE" | cut -d'T' -f1 | cut -d'-' -f3)
+
+    case $MONTH_NUM in
+        01) MONTH_NAME="January" ;;
+        02) MONTH_NAME="February" ;;
+        03) MONTH_NAME="March" ;;
+        04) MONTH_NAME="April" ;;
+        05) MONTH_NAME="May" ;;
+        06) MONTH_NAME="June" ;;
+        07) MONTH_NAME="July" ;;
+        08) MONTH_NAME="August" ;;
+        09) MONTH_NAME="September" ;;
+        10) MONTH_NAME="October" ;;
+        11) MONTH_NAME="November" ;;
+        12) MONTH_NAME="December" ;;
+        *) MONTH_NAME="Unknown" ;;
+    esac
+
+    FORMATTED_DATE="$DAY $MONTH_NAME, $YEAR"
+fi
+
+# --- Custom elements output (src/ files) ---
+if $USE_CUSTOM_ELEMENTS; then
+    # Build nh-page attributes
+    NH_PAGE_ATTRS="title=\"$TITLE\""
+    if [ -n "$DATE" ]; then
+        NH_PAGE_ATTRS="$NH_PAGE_ATTRS date=\"$DATE\" date-display=\"$FORMATTED_DATE\""
+    fi
+    if [ -n "$EXTERNAL_URL" ]; then
+        NH_PAGE_ATTRS="$NH_PAGE_ATTRS external-url=\"$EXTERNAL_URL\""
+    fi
+
+    cat > "$OUTPUT_FILE" << ENDOFFILE
+<!doctype html>
+<html>
+<head lang="en-us"><script type="importmap">{"imports":{"dom":"/elements/browser-dom.js"}}</script></head>
+<body class="default">
+  <nh-head title="$TITLE" description="$DESCRIPTION" syntax></nh-head>
+  <nh-page $NH_PAGE_ATTRS>
+$HTML_CONTENT
+  </nh-page>
+  <script type="module">import { NhHeadElement } from '/elements/nh-head.ts'; NhHeadElement.define(customElements)</script>
+  <script type="module">import { NhPageElement } from '/elements/nh-page.ts'; NhPageElement.define(customElements)</script>
+  <script type="module">import { NhHeaderElement } from '/elements/nh-header.ts'; NhHeaderElement.define(customElements)</script>
+  <script type="module">import { NhFooterElement } from '/elements/nh-footer.ts'; NhFooterElement.define(customElements)</script>
+</body>
+</html>
+ENDOFFILE
+
+    echo "✅ Converted: $INPUT_FILE → $OUTPUT_FILE (custom elements)"
+    exit 0
+fi
+
+# --- Legacy output (public/ files) ---
 
 # Generate the full HTML page
 cat > "$OUTPUT_FILE" << EOF
@@ -207,30 +273,6 @@ EOF
 
 # Add footer with date if available
 if [ -n "$DATE" ]; then
-    # Format the date nicely (same logic as add-to-archive)
-    YEAR=$(echo "$DATE" | cut -d'-' -f1)
-    MONTH_NUM=$(echo "$DATE" | cut -d'-' -f2)
-    DAY=$(echo "$DATE" | cut -d'T' -f1 | cut -d'-' -f3)
-
-    # Convert month number to name
-    case $MONTH_NUM in
-        01) MONTH_NAME="January" ;;
-        02) MONTH_NAME="February" ;;
-        03) MONTH_NAME="March" ;;
-        04) MONTH_NAME="April" ;;
-        05) MONTH_NAME="May" ;;
-        06) MONTH_NAME="June" ;;
-        07) MONTH_NAME="July" ;;
-        08) MONTH_NAME="August" ;;
-        09) MONTH_NAME="September" ;;
-        10) MONTH_NAME="October" ;;
-        11) MONTH_NAME="November" ;;
-        12) MONTH_NAME="December" ;;
-        *) MONTH_NAME="Unknown" ;;
-    esac
-
-    FORMATTED_DATE="$DAY $MONTH_NAME, $YEAR"
-
     cat >> "$OUTPUT_FILE" << EOF
         <footer>
           <p>

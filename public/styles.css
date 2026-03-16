@@ -1,3 +1,7 @@
+nh-page, nh-header, nh-footer {
+  display: contents;
+}
+
 :root {
   --font: 'Whitney SSm A', 'Whitney SSm B', Helvetica Neue, sans-serif;
   --monospace-font: SFMono-Regular, 'SF Mono', Menlo, monospace;

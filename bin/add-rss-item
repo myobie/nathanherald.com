@@ -29,8 +29,8 @@ if [ ! -f "$INPUT_FILE" ]; then
 fi
 
 # Generate GUID from file path
-# Remove 'public/' prefix and 'index.md' or '.md' suffix to get the URL path
-REL_PATH=$(echo "$INPUT_FILE" | sed "s|^$REPO_ROOT/||" | sed 's|^public/||' | sed 's|/index\.md$||' | sed 's|/rss\.md$||' | sed 's|\.md$||')
+# Remove 'public/' or 'src/' prefix and 'index.md' or '.md' suffix to get the URL path
+REL_PATH=$(echo "$INPUT_FILE" | sed "s|^$REPO_ROOT/||" | sed 's|^public/||' | sed 's|^src/||' | sed 's|/index\.md$||' | sed 's|/rss\.md$||' | sed 's|\.md$||')
 GUID="https://nathanherald.com/$REL_PATH"
 
 # Clean up double slashes and trailing slashes in GUID

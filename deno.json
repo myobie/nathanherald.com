@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "lib": ["deno.ns", "dom"]
+  },
+  "tasks": {
+    "build": "deno run -A src/build.ts",
+    "dev": "deno run -A --watch src/dev.ts",
+    "test": "cd tests && deno run -A npm:@playwright/test test --config playwright.config.ts"
+  },
+  "imports": {
+    "dom": "./src/elements/dom.ts"
+  }
+}

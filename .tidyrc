@@ -3,3 +3,5 @@ wrap: 100
 indent: yes
 indent-spaces: 2
 sort-attributes: alpha
+custom-tags: blocklevel
+new-blocklevel-tags: nh-head, nh-header, nh-footer, nh-page

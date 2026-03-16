@@ -5,7 +5,7 @@ set -e
 # Check arguments
 if [ $# -eq 0 ]; then
     echo "Usage: $0 <markdown-file>"
-    echo "Example: $0 public/posts/til/strudel/index.md"
+    echo "Example: $0 src/posts/my-post/index.md"
     echo ""
     echo "This script will:"
     echo "1. Convert the markdown to HTML"
@@ -34,6 +34,15 @@ echo ""
 echo "📄 Step 1: Converting markdown to HTML..."
 "$REPO_ROOT/bin/md2html" "$INPUT_FILE"
 echo ""
+
+# Step 1b: If src/ file, run the build to serialize to public/
+case "$INPUT_FILE" in
+    src/*|*/src/*)
+        echo "🔨 Step 1b: Building src/ to public/..."
+        cd "$REPO_ROOT" && deno task build
+        echo ""
+        ;;
+esac
 
 # Step 2: Add to RSS feed
 echo "📡 Step 2: Adding to RSS feed..."

@@ -4,44 +4,58 @@ This file contains information for Claude Code about how to work with this websi
 
 ## Project Overview
 
-This is a personal website built with plain HTML, CSS, and bash scripts. No build tools like Hugo or Jekyll - just markdown-to-HTML conversion and manual HTML editing.
+This is a personal website built with plain HTML, CSS, and bash scripts. Pages can be authored two ways:
+
+1. **Source HTML with custom elements** (`src/`): Markdown files in `src/` are converted to minimal HTML using `<nh-head>`, `<nh-page>`, `<nh-header>`, `<nh-footer>` custom elements via `bin/md2html`. A Deno build step (`deno task build`) uses linkedom to serialize these to fully expanded static HTML in `public/`. Non-HTML assets (markdown, images) are copied from `src/` to `public/` during build.
+2. **Direct to public**: Markdown files in `public/` are converted to full HTML with all boilerplate inline via `bin/md2html`. No build step needed.
+
+Files in `public/` that don't have a `src/` counterpart are untouched by the build. Migration is incremental.
 
 ## Post Publishing Workflow
 
-### Quick Publishing
-To publish a new post, use the master script:
+### New posts (src/ path)
+
+Write a markdown file in `src/`, convert it, build, then add to RSS/homepage/archive:
+
+```bash
+# Convert markdown to src/ HTML (custom elements)
+./bin/md2html src/posts/my-post/index.md
+
+# Build src/ to public/
+deno task build
+
+# Add to RSS feed, homepage, and archive
+./bin/add-rss-item src/posts/my-post/index.md
+./bin/add-to-homepage src/posts/my-post/index.md
+./bin/add-to-archive src/posts/my-post/index.md
+```
+
+### Quick Publishing (public/ path, still works)
+
 ```bash
 ./bin/publish-post public/posts/til/new-post/index.md
 ```
 
-This will:
-1. Convert markdown to HTML
-2. Add to RSS feed  
-3. Add to homepage (latest 5 posts)
-4. Add to posts archive
+This will convert markdown to HTML (with full boilerplate), add to RSS feed, homepage, and posts archive.
 
-### Manual Steps
-If you need to run individual steps:
+## Custom Elements
 
-```bash
-# Convert markdown to HTML
-./bin/md2html public/posts/til/new-post/index.md
+Server-side custom elements live in `src/elements/`. They expand during the linkedom build and their inline `<script>` tags are removed from the serialized output. In the browser (dev mode), the scripts define the elements and they expand client-side.
 
-# Add to RSS feed
-./bin/add-rss-item public/posts/til/new-post/index.md
+- **`nh-head`** - Populates `<head>` with meta tags, title, stylesheets, favicon, RSS link. Self-removes from DOM after running.
+- **`nh-page`** - Full post page wrapper: header nav, article with h1/content/date footer, scripts, site footer. Supports `external-url` for link posts.
+- **`nh-header`** - Section header with wave emoji, home link, archive/RSS nav.
+- **`nh-footer`** - Site footer with inline SVG logo.
 
-# Add to homepage
-./bin/add-to-homepage public/posts/til/new-post/index.md
+Each element exposes `static define(registry)` and is registered by the caller (the build creates per-document subclasses for linkedom, the browser uses inline scripts with `customElements`).
 
-# Add to archive
-./bin/add-to-archive public/posts/til/new-post/index.md
-```
+Elements are idempotent: if they detect content is already expanded (from server serialization), they remove their script tag and skip rendering.
 
 ## Post Types
 
 The system supports two post types, determined by frontmatter:
 
-### Blog Posts (⭐️)
+### Blog Posts
 Regular posts without `externalUrl`:
 ```yaml
 ---
@@ -51,7 +65,7 @@ description: A great blog post
 ---
 ```
 
-### Link Posts (🔗)
+### Link Posts
 Posts that link to external content, identified by `externalUrl`:
 ```yaml
 ---
@@ -82,7 +96,7 @@ externalUrl: https://example.com
 ```toml
 +++
 title = "Post Title"
-date = "2025-09-14T22:23:25+02:00"  
+date = "2025-09-14T22:23:25+02:00"
 description = "Description here"
 externalUrl = "https://example.com"
 +++
@@ -90,24 +104,51 @@ externalUrl = "https://example.com"
 
 ## File Structure
 
-Posts should be organized as:
-- `public/posts/til/post-name/index.md` - TIL (Today I Learned) posts
-- `public/posts/links/post-name/index.md` - Link posts  
-- `public/posts/post-name/index.md` - Regular blog posts
+```
+nathanherald.com/
+  deno.json                              # import map + tasks (build, dev, test)
+  src/
+    elements/
+      dom.ts                             # linkedom adapter (server)
+      browser-dom.js                     # globalThis adapter (browser)
+      nh-head.ts, nh-page.ts, etc.       # custom element definitions
+      register.ts                        # defines all elements (browser convenience)
+    serialize.ts                         # async HTML serializer
+    build.ts                             # walks src/, serializes to public/
+    dev.ts                               # dev server (port 8787)
+    strip-ts-types.ts                    # serves .ts as .js for dev
+    index.html                           # homepage (hand-authored, uses nh-head only)
+    posts/
+      post-name/index.md                 # markdown source
+      post-name/index.html               # generated by md2html (custom elements)
+      links/post-name/index.md           # link post markdown
+      links/post-name/index.html         # generated by md2html
+  public/                                # served to visitors, output of build
+  tests/
+    playwright.config.ts
+    serialize.test.ts                    # browser vs linkedom comparison
+  bin/
+    md2html                              # markdown to HTML (detects src/ vs public/)
+    build                                # runs deno task build
+    publish-post                         # md2html + RSS + homepage + archive
+    serve                                # local HTTP server
+```
 
 ## Testing Commands
 
-After publishing, run these to verify:
 ```bash
+# Build src/ to public/
+deno task build
+
+# Dev server (serves src/ with TS type stripping, port 8787)
+deno task dev
+
 # Check git status to see what changed
 git status
 git diff
 
 # Test locally
 ./bin/serve
-
-# Build/tidy HTML
-./bin/build
 ```
 
 ## Writing Style
@@ -148,6 +189,7 @@ Not every post gets syndicated. Only when asked.
 
 - Always read existing posts to understand the site's style and conventions
 - The homepage shows the latest 5 posts only
-- Link posts get 🔗 emoji, blog posts get ⭐️ emoji
+- Link posts get the link emoji, blog posts get the star emoji
 - RSS feed is automatically updated with proper URLs
 - All HTML is tidied automatically with the configured .tidyrc settings
+- `bin/md2html` auto-detects `src/` vs `public/` paths and outputs the appropriate format

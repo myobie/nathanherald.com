@@ -87,7 +87,7 @@ if [ -z "$TITLE" ]; then
 fi
 
 # Generate URL path from file path
-REL_PATH=$(echo "$INPUT_FILE" | sed "s|^$REPO_ROOT/||" | sed 's|^public/||' | sed 's|/index\.md$||' | sed 's|\.md$||')
+REL_PATH=$(echo "$INPUT_FILE" | sed "s|^$REPO_ROOT/||" | sed 's|^public/||' | sed 's|^src/||' | sed 's|/index\.md$||' | sed 's|\.md$||')
 URL_PATH="/$REL_PATH/"
 
 # Determine post type
