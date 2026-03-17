@@ -176,10 +176,10 @@ if $USE_CUSTOM_ELEMENTS; then
   <nh-page $NH_PAGE_ATTRS>
 $HTML_CONTENT
   </nh-page>
-  <script type="module">import { NhHeadElement } from '/elements/nh-head.ts'; NhHeadElement.define(customElements)</script>
-  <script type="module">import { NhPageElement } from '/elements/nh-page.ts'; NhPageElement.define(customElements)</script>
-  <script type="module">import { NhHeaderElement } from '/elements/nh-header.ts'; NhHeaderElement.define(customElements)</script>
-  <script type="module">import { NhFooterElement } from '/elements/nh-footer.ts'; NhFooterElement.define(customElements)</script>
+  <script type="module">import { NhHeadElement } from '/elements/nh-head.js'; NhHeadElement.define(customElements)</script>
+  <script type="module">import { NhPageElement } from '/elements/nh-page.js'; NhPageElement.define(customElements)</script>
+  <script type="module">import { NhHeaderElement } from '/elements/nh-header.js'; NhHeaderElement.define(customElements)</script>
+  <script type="module">import { NhFooterElement } from '/elements/nh-footer.js'; NhFooterElement.define(customElements)</script>
 </body>
 </html>
 ENDOFFILE

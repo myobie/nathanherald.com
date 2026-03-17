@@ -2,6 +2,7 @@
 <html>
 <head lang="en-us"><script type="importmap">{"imports":{"dom":"/elements/browser-dom.js"}}</script></head>
 <body class="default">
+  <nh-ready></nh-ready>
   <nh-head title="Florentine Floor" description="How a marble floor slab in a Florentine church became my logo." syntax></nh-head>
   <nh-page title="Florentine Floor" date="2026-03-16T12:00:00+01:00" date-display="16 March, 2026">
 <p>Back in 2015 I visited <a
@@ -40,9 +41,10 @@ nailed it from my photo.</p>
 of every page and now I couldn’t be happier. Finally I got my shield on
 my site.</p>
   </nh-page>
-  <script type="module">import { NhHeadElement } from '/elements/nh-head.ts'; NhHeadElement.define(customElements)</script>
-  <script type="module">import { NhPageElement } from '/elements/nh-page.ts'; NhPageElement.define(customElements)</script>
-  <script type="module">import { NhHeaderElement } from '/elements/nh-header.ts'; NhHeaderElement.define(customElements)</script>
-  <script type="module">import { NhFooterElement } from '/elements/nh-footer.ts'; NhFooterElement.define(customElements)</script>
+  <script type="module">import { NhHeadElement } from '/elements/nh-head.js'; NhHeadElement.define(customElements)</script>
+  <script type="module">import { NhPageElement } from '/elements/nh-page.js'; NhPageElement.define(customElements)</script>
+  <script type="module">import { NhHeaderElement } from '/elements/nh-header.js'; NhHeaderElement.define(customElements)</script>
+  <script type="module">import { NhFooterElement } from '/elements/nh-footer.js'; NhFooterElement.define(customElements)</script>
+  <script type="module">import { NhReadyElement } from '/elements/nh-ready.js'; NhReadyElement.define(customElements)</script>
 </body>
 </html>

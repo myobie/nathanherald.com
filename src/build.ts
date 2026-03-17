@@ -7,6 +7,7 @@ import { NhHeadElement } from './elements/nh-head.ts'
 import { NhHeaderElement } from './elements/nh-header.ts'
 import { NhFooterElement } from './elements/nh-footer.ts'
 import { NhPageElement } from './elements/nh-page.ts'
+import { NhReadyElement } from './elements/nh-ready.ts'
 
 const srcDir = new URL('.', import.meta.url).pathname
 const projectRoot = join(srcDir, '..')
@@ -40,6 +41,9 @@ function registerElements(linkie: ReturnType<typeof parseHTML>) {
 
   const KNhPage = class extends NhPageElement {}
   linkie.customElements.define(NhPageElement.defaultName, KNhPage)
+
+  const KNhReady = class extends NhReadyElement {}
+  linkie.customElements.define(NhReadyElement.defaultName, KNhReady)
 }
 
 let count = 0
@@ -79,6 +83,28 @@ for await (const entry of walk(srcDir, { skip: [/\/elements\//] })) {
 
   await ensureDir(dirname(outPath))
   await Deno.copyFile(entry.path, outPath)
+}
+
+// Compile element .ts files to .js in public/elements/
+import { stripTSTypes } from './strip-ts-types.ts'
+
+const elementsDir = join(srcDir, 'elements')
+const publicElementsDir = join(publicDir, 'elements')
+await ensureDir(publicElementsDir)
+
+for await (const entry of walk(elementsDir)) {
+  if (entry.isDirectory) continue
+  const relPath = relative(elementsDir, entry.path)
+
+  if (entry.path.endsWith('.js')) {
+    await Deno.copyFile(entry.path, join(publicElementsDir, relPath))
+    console.log(`Copied: elements/${relPath}`)
+  } else if (entry.path.endsWith('.ts') && relPath !== 'dom.ts') {
+    const outName = relPath.replace(/\.ts$/, '.js')
+    const js = await stripTSTypes(entry.path)
+    await Deno.writeTextFile(join(publicElementsDir, outName), js)
+    console.log(`Compiled: elements/${relPath} → elements/${outName}`)
+  }
 }
 
 console.log(`\nBuilt ${count} HTML file(s).`)

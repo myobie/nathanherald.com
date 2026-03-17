@@ -34,6 +34,7 @@
     "application/rss+xml">
   </head>
   <body class="default">
+    <nh-ready data-ready="true"></nh-ready>
     <nh-page date="2026-03-16T12:00:00+01:00" date-display="16 March, 2026" title=
     "Florentine Floor">
       <nh-header>
@@ -142,5 +143,8 @@
         </footer>
       </nh-footer>
     </nh-page>
+    <script type="module">
+    import { NhReadyElement } from '/elements/nh-ready.js'; NhReadyElement.define(customElements)
+    </script>
   </body>
 </html>
