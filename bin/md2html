@@ -286,7 +286,6 @@ fi
 cat >> "$OUTPUT_FILE" << EOF
       </article>
     </main>
-    <script async src="/behavior.js"></script>
     <script async src="/assets/details-controls.js"></script>
     <script data-domain="nathanherald.com" defer src="https://stats.myobie.wtf/script.js"></script>
     <footer class="site-footer">

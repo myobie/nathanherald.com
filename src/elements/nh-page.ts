@@ -85,10 +85,6 @@ export class NhPageElement extends HTMLElement {
     main.append(article)
 
     // Scripts
-    const behaviorScript = doc.createElement('script')
-    behaviorScript.setAttribute('async', '')
-    behaviorScript.setAttribute('src', '/behavior.js')
-
     const detailsScript = doc.createElement('script')
     detailsScript.setAttribute('async', '')
     detailsScript.setAttribute('src', '/assets/details-controls.js')
@@ -101,7 +97,7 @@ export class NhPageElement extends HTMLElement {
     const footer = doc.createElement('nh-footer')
 
     // Assemble everything
-    this.append(header, main, behaviorScript, detailsScript, statsScript, footer)
+    this.append(header, main, detailsScript, statsScript, footer)
     this.#removeScript()
   }
 
