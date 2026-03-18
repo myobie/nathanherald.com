@@ -1,4 +1,4 @@
-import { defineConfig } from 'npm:@playwright/test'
+import { defineConfig } from '@playwright/test'
 
 export default defineConfig({
   testDir: '.',
@@ -8,8 +8,9 @@ export default defineConfig({
     baseURL: 'http://localhost:8787',
   },
   webServer: {
-    command: 'deno run -A ../src/dev.ts',
+    command: 'deno run --allow-net --allow-read jsr:@std/http/file-server ../public -p 8787',
     port: 8787,
     reuseExistingServer: true,
+    timeout: 10_000,
   },
 })

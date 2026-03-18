@@ -2,12 +2,6 @@
 
 set -e
 
-# Check if pandoc is installed
-if ! command -v pandoc &> /dev/null; then
-    echo "Error: pandoc is not installed. Run: brew install pandoc"
-    exit 1
-fi
-
 # Check arguments
 if [ $# -eq 0 ]; then
     echo "Usage: $0 <markdown-file> [output-file]"
@@ -116,20 +110,6 @@ if [ -z "$TITLE" ]; then
     fi
 fi
 
-# Remove the first H1 from content if it matches the title (to avoid duplication)
-CONTENT_WITHOUT_H1="$CONTENT"
-if [ -n "$TITLE" ]; then
-    # Check if first H1 matches the title
-    FIRST_H1=$(echo "$CONTENT" | grep -E "^#[[:space:]]" | head -1 | sed 's/^#[[:space:]]*//')
-    if [ "$FIRST_H1" = "$TITLE" ]; then
-        # Remove the first H1 line
-        CONTENT_WITHOUT_H1=$(echo "$CONTENT" | sed '1,/^#[[:space:]]/{ /^#[[:space:]]/d; }')
-    fi
-fi
-
-# Convert markdown to HTML using pandoc
-HTML_CONTENT=$(echo "$CONTENT_WITHOUT_H1" | pandoc -f gfm+smart -t html)
-
 # Format the date for display
 FORMATTED_DATE=""
 if [ -n "$DATE" ]; then
@@ -156,39 +136,31 @@ if [ -n "$DATE" ]; then
     FORMATTED_DATE="$DAY $MONTH_NAME, $YEAR"
 fi
 
-# --- Custom elements output (src/ files) ---
+# --- src/ files: no conversion needed, the build handles it via the post template ---
 if $USE_CUSTOM_ELEMENTS; then
-    # Build nh-page attributes
-    NH_PAGE_ATTRS="title=\"$TITLE\""
-    if [ -n "$DATE" ]; then
-        NH_PAGE_ATTRS="$NH_PAGE_ATTRS date=\"$DATE\" date-display=\"$FORMATTED_DATE\""
-    fi
-    if [ -n "$EXTERNAL_URL" ]; then
-        NH_PAGE_ATTRS="$NH_PAGE_ATTRS external-url=\"$EXTERNAL_URL\""
-    fi
-
-    cat > "$OUTPUT_FILE" << ENDOFFILE
-<!doctype html>
-<html>
-<head lang="en-us"><script type="importmap">{"imports":{"dom":"/elements/browser-dom.js"}}</script></head>
-<body class="default">
-  <nh-head title="$TITLE" description="$DESCRIPTION" syntax></nh-head>
-  <nh-page $NH_PAGE_ATTRS>
-$HTML_CONTENT
-  </nh-page>
-  <script type="module">import { NhHeadElement } from '/elements/nh-head.js'; NhHeadElement.define(customElements)</script>
-  <script type="module">import { NhPageElement } from '/elements/nh-page.js'; NhPageElement.define(customElements)</script>
-  <script type="module">import { NhHeaderElement } from '/elements/nh-header.js'; NhHeaderElement.define(customElements)</script>
-  <script type="module">import { NhFooterElement } from '/elements/nh-footer.js'; NhFooterElement.define(customElements)</script>
-</body>
-</html>
-ENDOFFILE
-
-    echo "✅ Converted: $INPUT_FILE → $OUTPUT_FILE (custom elements)"
+    echo "✅ Markdown ready: $INPUT_FILE (will be built by deno task build)"
     exit 0
 fi
 
 # --- Legacy output (public/ files) ---
+
+# Check if pandoc is installed (only needed for public/ path)
+if ! command -v pandoc &> /dev/null; then
+    echo "Error: pandoc is not installed. Run: brew install pandoc"
+    exit 1
+fi
+
+# Remove the first H1 from content if it matches the title (to avoid duplication)
+CONTENT_WITHOUT_H1="$CONTENT"
+if [ -n "$TITLE" ]; then
+    FIRST_H1=$(echo "$CONTENT" | grep -E "^#[[:space:]]" | head -1 | sed 's/^#[[:space:]]*//')
+    if [ "$FIRST_H1" = "$TITLE" ]; then
+        CONTENT_WITHOUT_H1=$(echo "$CONTENT" | sed '1,/^#[[:space:]]/{ /^#[[:space:]]/d; }')
+    fi
+fi
+
+# Convert markdown to HTML using pandoc
+HTML_CONTENT=$(echo "$CONTENT_WITHOUT_H1" | pandoc -f gfm+smart -t html)
 
 # Generate the full HTML page
 cat > "$OUTPUT_FILE" << EOF

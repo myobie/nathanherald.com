@@ -11,3 +11,6 @@ public/fonts/*
 .vercel
 .netlify
 *.profraw
+tests/node_modules/
+tests/test-results/
+bakeoff/

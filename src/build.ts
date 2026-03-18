@@ -8,6 +8,7 @@ import { NhHeaderElement } from './elements/nh-header.ts'
 import { NhFooterElement } from './elements/nh-footer.ts'
 import { NhPageElement } from './elements/nh-page.ts'
 import { NhReadyElement } from './elements/nh-ready.ts'
+import { NhMarkdownElement } from './elements/nh-markdown.ts'
 
 const srcDir = new URL('.', import.meta.url).pathname
 const projectRoot = join(srcDir, '..')
@@ -28,8 +29,6 @@ async function tidy(filepath: string) {
 }
 
 function registerElements(linkie: ReturnType<typeof parseHTML>) {
-  // Each custom element must be unique per document because
-  // customElements are per document in linkedom
   const KNhHead = class extends NhHeadElement {}
   linkie.customElements.define(NhHeadElement.defaultName, KNhHead)
 
@@ -44,13 +43,20 @@ function registerElements(linkie: ReturnType<typeof parseHTML>) {
 
   const KNhReady = class extends NhReadyElement {}
   linkie.customElements.define(NhReadyElement.defaultName, KNhReady)
+
+  const KNhMarkdown = class extends NhMarkdownElement {}
+  linkie.customElements.define(NhMarkdownElement.defaultName, KNhMarkdown)
 }
 
 let count = 0
 
+// Build standalone HTML files (like the homepage)
 for await (const entry of walk(srcDir, { exts: ['.html'] })) {
-  // Skip the elements directory
   if (entry.path.includes('/elements/')) continue
+  // Skip the post template — it's used by the markdown build below
+  if (entry.name === 'post.html') continue
+  // Skip per-post HTML files (they're now generated from template + markdown)
+  if (entry.path.includes('/posts/')) continue
 
   const relPath = relative(srcDir, entry.path)
   const outPath = join(publicDir, relPath)
@@ -59,6 +65,7 @@ for await (const entry of walk(srcDir, { exts: ['.html'] })) {
 
   const code = await Deno.readTextFile(entry.path)
   const linkie = parseHTML(code)
+  linkie.location = new URL(`file://${entry.path}`)
 
   registerElements(linkie)
 
@@ -66,6 +73,38 @@ for await (const entry of walk(srcDir, { exts: ['.html'] })) {
   const html = `<!DOCTYPE html>\n${result}`
 
   await ensureDir(dirname(outPath))
+  await Deno.writeTextFile(outPath, html)
+
+  await tidy(outPath)
+
+  count++
+}
+
+// Build markdown posts using the post template
+const templatePath = join(srcDir, 'post.html')
+const templateCode = await Deno.readTextFile(templatePath)
+
+for await (const entry of walk(join(srcDir, 'posts'), { exts: ['.md'] })) {
+  const relPath = relative(srcDir, entry.path)
+  const outDir = dirname(join(publicDir, relPath))
+  const outPath = join(outDir, 'index.html')
+
+  console.log(`Building: ${relPath}`)
+
+  // Parse the template with the markdown file as a query param
+  const mdFileUrl = new URL(`file://${entry.path}`)
+  const templateUrl = new URL(`file://${templatePath}`)
+  templateUrl.searchParams.set('md', mdFileUrl.href)
+
+  const linkie = parseHTML(templateCode)
+  linkie.location = templateUrl
+
+  registerElements(linkie)
+
+  const result = await serializeAsync(linkie.document.documentElement)
+  const html = `<!DOCTYPE html>\n${result}`
+
+  await ensureDir(outDir)
   await Deno.writeTextFile(outPath, html)
 
   await tidy(outPath)
@@ -107,4 +146,4 @@ for await (const entry of walk(elementsDir)) {
   }
 }
 
-console.log(`\nBuilt ${count} HTML file(s).`)
+console.log(`\nBuilt ${count} file(s).`)

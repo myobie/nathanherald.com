@@ -121,11 +121,40 @@ async function* serializeChildrenOfNode(parent: Element | ShadowRoot, maxAwait: 
   const children = Array.from(parent.childNodes)
 
   for (const child of children) {
+    // Skip nodes that were removed from the document during serialization
+    if (!child.parentNode) continue
     yield* serializerAsync(child, maxAwait)
   }
 }
 
+async function waitForReady(node: Node, maxAwait: number): Promise<void> {
+  if (node.nodeType === 1) {
+    const el = node as Element
+    if ('isReady' in el) {
+      try {
+        await Promise.race([
+          el.isReady,
+          new Promise((_, reject) => setTimeout(() => reject('timeout'), maxAwait))
+        ])
+      } catch {
+        // timeout or error, continue
+      }
+    }
+    for (const child of Array.from(el.childNodes)) {
+      await waitForReady(child, maxAwait)
+    }
+  }
+}
+
 export async function serializeAsync(node: Node | Node[], maxAwait = 1_000) {
+  // First pass: wait for all async elements to finish
+  if (Array.isArray(node)) {
+    for (const n of node) await waitForReady(n, maxAwait)
+  } else {
+    await waitForReady(node, maxAwait)
+  }
+
+  // Second pass: serialize the now-stable DOM
   let buffer = ''
 
   for await (const string of serializerAsync(node, maxAwait)) {
