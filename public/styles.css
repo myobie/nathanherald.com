@@ -1,4 +1,4 @@
-nh-page, nh-header, nh-footer, nh-ready, nh-markdown {
+nh-page, nh-header, nh-footer, nh-ready, nh-markdown, nh-include {
   display: contents;
 }
 

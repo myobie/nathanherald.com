@@ -176,6 +176,46 @@ test('nh-markdown: script removed', async ({ page }) => {
   expect(scripts.some(s => s?.includes('NhMarkdownElement'))).toBe(false)
 })
 
+// --- nh-include ---
+
+test('nh-include: includes HTML content from file', async ({ page }) => {
+  await page.goto('/posts/wave-interference/')
+
+  const included = await page.$eval('nh-include', el => el.hasAttribute('data-included'))
+  expect(included).toBe(true)
+
+  const canvas = await page.$('nh-include canvas#wave-canvas')
+  expect(canvas).toBeTruthy()
+})
+
+test('nh-include: script removed', async ({ page }) => {
+  await page.goto('/posts/wave-interference/')
+  const scripts = await page.$$eval('script[type="module"]', els =>
+    els.map(el => el.textContent)
+  )
+  expect(scripts.some(s => s?.includes('NhIncludeElement'))).toBe(false)
+})
+
+test('nh-include: canvas script preserved', async ({ page }) => {
+  await page.goto('/posts/wave-interference/')
+
+  // The canvas inline script should still be there (it's content, not an element script)
+  const scripts = await page.$$eval('script:not([type])', els =>
+    els.map(el => el.textContent)
+  )
+  expect(scripts.some(s => s?.includes('wave-canvas'))).toBe(true)
+})
+
+test('wave-interference: frontmatter applied', async ({ page }) => {
+  await page.goto('/posts/wave-interference/')
+
+  const title = await page.$eval('title', el => el.textContent?.trim())
+  expect(title).toContain('Wave Interference')
+
+  const h1 = await page.$eval('article header h1', el => el.textContent?.trim())
+  expect(h1).toBe('Wave Interference')
+})
+
 // --- Homepage ---
 
 test('homepage: head populated, no nh-head in body', async ({ page }) => {

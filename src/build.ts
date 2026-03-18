@@ -9,6 +9,7 @@ import { NhFooterElement } from './elements/nh-footer.ts'
 import { NhPageElement } from './elements/nh-page.ts'
 import { NhReadyElement } from './elements/nh-ready.ts'
 import { NhMarkdownElement } from './elements/nh-markdown.ts'
+import { NhIncludeElement } from './elements/nh-include.ts'
 
 const srcDir = new URL('.', import.meta.url).pathname
 const projectRoot = join(srcDir, '..')
@@ -46,6 +47,9 @@ function registerElements(linkie: ReturnType<typeof parseHTML>) {
 
   const KNhMarkdown = class extends NhMarkdownElement {}
   linkie.customElements.define(NhMarkdownElement.defaultName, KNhMarkdown)
+
+  const KNhInclude = class extends NhIncludeElement {}
+  linkie.customElements.define(NhIncludeElement.defaultName, KNhInclude)
 }
 
 let count = 0
