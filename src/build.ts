@@ -10,6 +10,8 @@ import { NhPageElement } from './elements/nh-page.ts'
 import { NhReadyElement } from './elements/nh-ready.ts'
 import { NhMarkdownElement } from './elements/nh-markdown.ts'
 import { NhIncludeElement } from './elements/nh-include.ts'
+import { NhArchiveListElement } from './elements/nh-archive-list.ts'
+import { NhLatestPostsElement } from './elements/nh-latest-posts.ts'
 
 const srcDir = new URL('.', import.meta.url).pathname
 const projectRoot = join(srcDir, '..')
@@ -50,17 +52,34 @@ function registerElements(linkie: ReturnType<typeof parseHTML>) {
 
   const KNhInclude = class extends NhIncludeElement {}
   linkie.customElements.define(NhIncludeElement.defaultName, KNhInclude)
+
+  const KNhArchiveList = class extends NhArchiveListElement {}
+  linkie.customElements.define(NhArchiveListElement.defaultName, KNhArchiveList)
+
+  const KNhLatestPosts = class extends NhLatestPostsElement {}
+  linkie.customElements.define(NhLatestPostsElement.defaultName, KNhLatestPosts)
 }
 
 let count = 0
 
-// Build standalone HTML files (like the homepage)
+// Generate posts.json before building HTML (archive page depends on it)
+const genJsonCmd = new Deno.Command(Deno.execPath(), {
+  args: ['run', '--allow-read', '--allow-write', join(projectRoot, 'bin', 'gen-posts-json')],
+  cwd: projectRoot,
+  stdout: 'piped',
+  stderr: 'piped',
+})
+const genJsonOutput = await genJsonCmd.output()
+console.log(new TextDecoder().decode(genJsonOutput.stdout).trim())
+
+// Copy posts.json to src/ so the archive element can resolve it during build
+await Deno.copyFile(join(publicDir, 'posts.json'), join(srcDir, 'posts.json'))
+
+// Build standalone HTML files (homepage, archive, etc.)
 for await (const entry of walk(srcDir, { exts: ['.html'] })) {
   if (entry.path.includes('/elements/')) continue
-  // Skip the post template — it's used by the markdown build below
-  if (entry.name === 'post.html') continue
-  // Skip per-post HTML files (they're now generated from template + markdown)
-  if (entry.path.includes('/posts/')) continue
+  // Only build index.html files (skip templates and partials like canvas.html)
+  if (entry.name !== 'index.html') continue
 
   const relPath = relative(srcDir, entry.path)
   const outPath = join(publicDir, relPath)

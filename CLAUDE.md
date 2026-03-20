@@ -50,6 +50,8 @@ Server-side custom elements live in `src/elements/`. They expand during the link
 - **`nh-markdown`** - Renders markdown to HTML using markdown-it. Supports `src` (URL), `param` (read URL from query param), and `page` (apply frontmatter to nh-head/nh-page). Used by the post template.
 - **`nh-header`** - Section header with wave emoji, home link, archive/RSS nav.
 - **`nh-footer`** - Site footer with inline SVG logo.
+- **`nh-include`** - Fetches an HTML file and includes its content. Resolves relative URLs against the nearest `nh-markdown` source. Used for embedding interactive demos (canvas, etc.) in markdown posts.
+- **`nh-archive-list`** - Fetches `posts.json` and renders the grouped-by-month archive list. Used by the archive page (`src/posts/index.html`).
 - **`nh-ready`** - Test/canary element. Sets `data-ready` attribute on server, detects it in browser.
 
 Each element exposes `static define(registry)` and is registered by the caller (the build creates per-document subclasses for linkedom, the browser uses inline scripts with `customElements`).
@@ -118,6 +120,8 @@ nathanherald.com/
       browser-dom.js                     # globalThis adapter (browser)
       nh-head.ts, nh-page.ts, etc.       # custom element definitions
       nh-markdown.ts                     # markdown renderer (markdown-it)
+      nh-include.ts                      # HTML file includer
+      nh-archive-list.ts                 # archive page list from posts.json
     serialize.ts                         # async HTML serializer (two-pass)
     build.ts                             # walks src/, serializes to public/
     dev.ts                               # dev server (port 8787)
@@ -125,6 +129,7 @@ nathanherald.com/
     post.html                            # reusable post template
     index.html                           # homepage (hand-authored, uses nh-head only)
     posts/
+      index.html                         # archive page (uses nh-archive-list)
       post-name/index.md                 # markdown source (only file needed per post)
       links/post-name/index.md           # link post markdown
   public/                                # served to visitors, output of build
@@ -134,6 +139,7 @@ nathanherald.com/
   bin/
     md2html                              # markdown to HTML (detects src/ vs public/)
     build                                # runs deno task build
+    gen-posts-json                       # generates public/posts.json from all post metadata
     publish-post                         # md2html + RSS + homepage + archive
     serve                                # local HTTP server
 ```
@@ -144,7 +150,7 @@ nathanherald.com/
 # Build src/ to public/
 deno task build
 
-# Run Playwright tests (18 tests covering each custom element)
+# Run Playwright tests (22 tests covering each custom element)
 deno task test
 
 # Dev server (serves src/ with TS type stripping, port 8787)

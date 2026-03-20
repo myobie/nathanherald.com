@@ -1,0 +1,1535 @@
+[
+  {
+    "title": "Christie’s Rostrum",
+    "date": "2026-03-19T12:00:00+01:00",
+    "description": "Jony Ive redesigned the Christie’s auction rostrum. The video is almost cringe, and yet it actually is a good podium and a good video.",
+    "url": "/posts/links/christies-rostrum/",
+    "type": "link",
+    "externalUrl": "https://www.youtube.com/watch?v=HLXDxx06_EM"
+  },
+  {
+    "title": "Wave Interference",
+    "date": "2026-03-18T18:00:00+01:00",
+    "description": "Click to drop waves. Watch them ripple, overlap, and interfere.",
+    "url": "/posts/wave-interference/",
+    "type": "blog"
+  },
+  {
+    "title": "Florentine Floor",
+    "date": "2026-03-16T12:00:00+01:00",
+    "description": "How a marble floor slab in a Florentine church became my logo.",
+    "url": "/posts/florentine-floor/",
+    "type": "blog"
+  },
+  {
+    "title": "OlmoTrace",
+    "date": "2026-03-15T12:00:00+01:00",
+    "description": "Allen AI's OlmoTrace lets you trace model outputs back to their training data. This is what fully open AI can look like.",
+    "url": "/posts/links/olmotrace/",
+    "type": "link",
+    "externalUrl": "https://allenai.org/blog/olmotrace"
+  },
+  {
+    "title": "The Killer | Official Trailer",
+    "date": "2026-03-14T13:00:00+01:00",
+    "description": "👀",
+    "url": "/posts/links/the-killer-trailer/",
+    "type": "link",
+    "externalUrl": "https://www.youtube.com/watch?v=bdLwJ2-zxDA"
+  },
+  {
+    "title": "Jargalant Altai (Special Version)",
+    "date": "2026-03-14T12:00:00+01:00",
+    "description": "I've never heard anything quite like this before and it is awesome.",
+    "url": "/posts/links/jargalant-altai/",
+    "type": "link",
+    "externalUrl": "https://www.youtube.com/watch?v=sU4Q2IRIlow"
+  },
+  {
+    "title": "Generative AI Vegetarianism",
+    "date": "2026-03-13T12:00:00+01:00",
+    "description": "Some people are going to choose to be AI vegans and that is cool.",
+    "url": "/posts/links/generative-ai-vegetarianism/",
+    "type": "link",
+    "externalUrl": "https://sboots.ca/2026/03/11/generative-ai-vegetarianism/"
+  },
+  {
+    "title": "Gaining Agency",
+    "date": "2026-03-12T09:00:00+01:00",
+    "description": "Coding agents can expand who can create, who can publish, who can use their tech how they want.",
+    "url": "/posts/coding-agents-and-agency/",
+    "type": "blog"
+  },
+  {
+    "title": "Gugusse et l'Automate",
+    "date": "2026-03-11T14:00:00+01:00",
+    "description": "Possibly the very first film with a robot, and probably the first sci fi film.",
+    "url": "/posts/links/gugusse-et-lautomate/",
+    "type": "link",
+    "externalUrl": "https://www.youtube.com/watch?v=ojqcjzzjN2Q"
+  },
+  {
+    "title": "dandelions forever",
+    "date": "2026-03-11T12:00:00+01:00",
+    "description": "2000s dreamcore vibes",
+    "url": "/posts/links/dandelions-forever/",
+    "type": "link",
+    "externalUrl": "https://www.youtube.com/watch?v=RUsUQ9tRHHQ"
+  },
+  {
+    "title": "csesh – monitoring and reconnecting Claude Code sessions",
+    "date": "2026-03-10T12:00:00+01:00",
+    "description": "A set of bash utilities for monitoring Claude Code sessions and forcing them to reconnect when remote control disconnects.",
+    "url": "/posts/csesh/",
+    "type": "blog"
+  },
+  {
+    "title": "pty – a wrapper for detaching from long running processes",
+    "date": "2026-03-09T12:00:00+01:00",
+    "description": "I made a pty wrapper that lets you detach from and reconnect to long running processes, without needing tmux or zellij.",
+    "url": "/posts/pty/",
+    "type": "blog"
+  },
+  {
+    "title": "TIL Acorn can screenshot with layers",
+    "date": "2026-03-05T12:00:00+01:00",
+    "description": "Acorn can take a screenshot and every window is on its own layer",
+    "url": "/posts/til/acorn-screenshot-layers/",
+    "type": "link",
+    "externalUrl": "https://flyingmeat.com/acorn/docs/screen_shots.html"
+  },
+  {
+    "title": "toe – Distance Sessions 2020",
+    "date": "2026-03-04T12:00:00+01:00",
+    "description": "One of my favorite shoegaze music videos. Hoping to see toe in Berlin later this year.",
+    "url": "/posts/links/toe-distance-sessions-2020/",
+    "type": "link",
+    "externalUrl": "https://www.youtube.com/watch?v=jDHmg8Mb9wo"
+  },
+  {
+    "title": "Hazel Dickens: They'll Never Keep Us Down and Which Side Are You On?",
+    "date": "2026-03-02T12:00:00+01:00",
+    "description": "If someone were to ask me what my politics were, I'd probably point them to this video to start.",
+    "url": "/posts/links/hazel-dickens-theyll-never-keep-us-down/",
+    "type": "link",
+    "externalUrl": "https://www.youtube.com/watch?v=wnGCVSWrqs0"
+  },
+  {
+    "title": "Leica T Leather Holster",
+    "date": "2026-02-26T12:00:00+01:00",
+    "description": "Finally picked up the leather holster for my Leica T",
+    "url": "/posts/links/leica-t-leather-holster/",
+    "type": "link",
+    "externalUrl": "https://leicacamera-shop.com/product/leica-leather-holster-for-leica-t-camera-stonegray/"
+  },
+  {
+    "title": "CRDT File Sync",
+    "date": "2026-02-25T13:05:54+01:00",
+    "description": "A clever approach to syncing: each device writes its own file to a synced folder, then reads all the others to build up the full state",
+    "url": "/posts/links/crdt-filesync/",
+    "type": "link",
+    "externalUrl": "https://tonsky.me/blog/crdt-filesync/"
+  },
+  {
+    "title": "Claude Code Remote Control",
+    "date": "2026-02-25T12:00:00+01:00",
+    "description": "Control a local Claude Code session from your phone or any browser",
+    "url": "/posts/links/claude-code-remote-control/",
+    "type": "link",
+    "externalUrl": "https://code.claude.com/docs/en/remote-control"
+  },
+  {
+    "title": "The 4 things that make an \"agent\" today",
+    "date": "2026-02-24T15:52:16+01:00",
+    "description": "The definition of an \"agent\" has expanded beyond just an LLM with tools in a loop. Today it's four things — tools in a loop, scheduled tasks, memory, and skills. Plus why coding agents on your own hardware are the future.",
+    "url": "/posts/the-4-things-that-make-an-agent/",
+    "type": "blog"
+  },
+  {
+    "title": "Two interesting AI developments",
+    "date": "2026-02-09T12:00:00+01:00",
+    "description": "OpenClaw is a self-hosted AI agent with 179k GitHub stars and a wild naming saga. Mitchell Hashimoto wrote the best post I've read about learning to work with AI coding agents.",
+    "url": "/posts/two-interesting-ai-developments/",
+    "type": "blog"
+  },
+  {
+    "title": "SwiftUI @State Considered Harmful",
+    "date": "2025-12-02T12:00:00+01:00",
+    "description": "Why @State for collections causes performance problems and how to fix it with observable classes and identity preservation",
+    "url": "/posts/swiftui-state-considered-harmful/",
+    "type": "blog"
+  },
+  {
+    "title": "I Don't Have a CMS Anymore",
+    "date": "2025-11-19T16:00:00+01:00",
+    "description": "I replaced hugo with plain HTML + Claude Code. Now Claude maintains my website. No CMS, no build pipeline. Just plain files and an AI agent that does the work “by hand.”",
+    "url": "/posts/no-cms/",
+    "type": "blog"
+  },
+  {
+    "title": "The Library Doesn't Just Have a Card Catalog… it has a full-time staff",
+    "date": "2025-11-18T15:08:59+01:00",
+    "description": "The library card catalog works because it's maintained by a full-time staff. Personal knowledge management fails because we're trying to be both user and librarian. Local AI agents can finally become our personal library staff.",
+    "url": "/posts/libraries-have-staff/",
+    "type": "blog"
+  },
+  {
+    "title": "The Capability Gradient",
+    "date": "2025-11-04T11:48:04+01:00",
+    "description": "A framework for understanding how we build capability and adaptability through four levels: consume, curate, collaborate, and create.",
+    "url": "/posts/capability-gradient/",
+    "type": "blog"
+  },
+  {
+    "title": "TIL about Git Notes",
+    "date": "2025-10-23T00:00:00+00:00",
+    "description": "Git has a notes feature for annotating commits",
+    "url": "/posts/til/git-notes/",
+    "type": "link",
+    "externalUrl": "https://git-scm.com/docs/git-notes"
+  },
+  {
+    "title": "TIL about strudel",
+    "date": "2025-09-14T22:23:25+02:00",
+    "description": "An amazing music programming tol made for live coding performances",
+    "url": "/posts/til/strudel/",
+    "type": "link",
+    "externalUrl": "https://strudel.cc/workshop/getting-started/#examples"
+  },
+  {
+    "title": "Server-side DOM serialization with a weather app example",
+    "date": "2025-09-01T12:00:00+02:00",
+    "description": "A practical demonstration of server-side DOM serialization using custom elements, built with Bun, Deno, and Cloudflare Workers",
+    "url": "/posts/server-side-dom-serialization-weather-app/",
+    "type": "blog"
+  },
+  {
+    "title": "Removing Hugo",
+    "date": "2025-03-09T21:45:21+01:00",
+    "description": " ",
+    "url": "/posts/removing-hugo/",
+    "type": "blog"
+  },
+  {
+    "title": "Before the BF, there was the T – my first mirrorless camera 🖤",
+    "date": "2025-02-28T01:02:20+01:00",
+    "description": "",
+    "url": "/posts/before-the-bf-there-was-the-t/",
+    "type": "blog"
+  },
+  {
+    "title": "You Could Configure Your App with Markdown",
+    "date": "2025-01-27T12:00:00+01:00",
+    "description": "Using Apple's Foundation Models to parse a config.md file into a Swift struct. Small local models can solve small, interesting problems - all on-device.",
+    "url": "/posts/configure-app-with-markdown/",
+    "type": "blog"
+  },
+  {
+    "title": "Reactive DOM nodes + reactive templates for custom elements (web components)",
+    "date": "2024-12-08T11:15:20+01:00",
+    "description": "",
+    "url": "/posts/reactive-dom-nodes-and-templates-for-custom-elements/",
+    "type": "blog"
+  },
+  {
+    "title": "Building templates for custom elements (web components)",
+    "date": "2024-12-07T21:51:46+01:00",
+    "description": "",
+    "url": "/posts/building-templates/",
+    "type": "blog"
+  },
+  {
+    "title": "How to build custom elements that work no matter what order things are loaded",
+    "date": "2024-11-26T19:28:55+01:00",
+    "description": "",
+    "url": "/posts/how-to-build-custom-elements-that-work-no-matter-what-order-things-are-loaded/",
+    "type": "blog"
+  },
+  {
+    "title": "How to manage reactive state using Custom Elements (Web Components)",
+    "date": "2024-11-17T11:39:10+01:00",
+    "description": "",
+    "url": "/posts/reactive-state-in-custom-elements/",
+    "type": "blog"
+  },
+  {
+    "title": "Why passkeys are good and you should be advocating for their use",
+    "date": "2024-11-04T15:41:58+01:00",
+    "description": "",
+    "url": "/posts/passkeys/",
+    "type": "blog"
+  },
+  {
+    "title": "The disharmony between “web components” (custom elements) and react-like “framework components” is real",
+    "date": "2024-10-30T11:08:47+01:00",
+    "description": "",
+    "url": "/posts/disharmony-between-components/",
+    "type": "blog"
+  },
+  {
+    "title": "Reminded of the past, and to not repeat it",
+    "date": "2024-10-27T20:35:57+01:00",
+    "description": "",
+    "url": "/posts/reminded-of-the-past/",
+    "type": "blog"
+  },
+  {
+    "title": "How I (Now) Backup My Photos",
+    "date": "2024-05-14T23:13:30+02:00",
+    "description": "",
+    "url": "/posts/backup-your-photos/",
+    "type": "blog"
+  },
+  {
+    "title": "How I restored and setup my new (to me) $10 iPod shuffle (2nd Gen) with my M1 Mac running Sonoma",
+    "date": "2024-04-30T00:21:41+02:00",
+    "description": "",
+    "url": "/posts/ipod-shuffle/",
+    "type": "blog"
+  },
+  {
+    "title": "Content Authenticity Initiative",
+    "date": "2024-01-27T12:02:23+01:00",
+    "description": "",
+    "url": "/posts/links/content-authenticity/",
+    "type": "blog"
+  },
+  {
+    "title": "1984",
+    "date": "2024-01-23T10:37:35+01:00",
+    "description": "",
+    "url": "/posts/links/1984/",
+    "type": "blog"
+  },
+  {
+    "title": "Don’t Be a Sucker (1947)",
+    "date": "2024-01-15T10:29:33+01:00",
+    "description": "",
+    "url": "/posts/links/dont-be-a-sucker/",
+    "type": "blog"
+  },
+  {
+    "title": "TIL about Promise.withResolvers()",
+    "date": "2023-12-18T11:38:06+01:00",
+    "description": "",
+    "url": "/posts/til/promise-resolvers/",
+    "type": "link",
+    "externalUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/withResolvers"
+  },
+  {
+    "title": "Creating an immediate stereo mute in Eurorack 🤔",
+    "date": "2023-11-13T13:40:55+01:00",
+    "description": "",
+    "url": "/posts/eurorack-stereo-mute/",
+    "type": "blog"
+  },
+  {
+    "title": "Jordan Ward: Tiny Desk Concert",
+    "date": "2023-11-09T18:36:46+01:00",
+    "description": "",
+    "url": "/posts/links/jordan-ward-tiny-desk/",
+    "type": "link",
+    "externalUrl": "https://www.youtube.com/watch?v=RcINbc0ye-o"
+  },
+  {
+    "title": "Cover of Backwater Blues by Sabrina, originally by Lightnin’ Hopkins",
+    "date": "2023-11-05T17:46:04+01:00",
+    "description": "",
+    "url": "/posts/links/backwater-blues/",
+    "type": "link",
+    "externalUrl": "https://www.youtube.com/watch?v=b1YZO1yrCAs"
+  },
+  {
+    "title": "TIL about “Weltschmerz”",
+    "date": "2023-11-03T11:03:40+01:00",
+    "description": "",
+    "url": "/posts/til/weltschmerz/",
+    "type": "link",
+    "externalUrl": "https://www.psychologytoday.com/au/blog/soul-console/202301/if-youre-feeling-world-wearied-you-may-have-weltschmerz"
+  },
+  {
+    "title": "That photograph on the side of the house on Gartenstraße in Berlin…",
+    "date": "2023-10-30T11:14:27+01:00",
+    "description": "",
+    "url": "/posts/gartenstraße/",
+    "type": "blog"
+  },
+  {
+    "title": "Unbundling AI by Benedict Evans",
+    "date": "2023-10-27T15:43:42+02:00",
+    "description": "",
+    "url": "/posts/links/unbundling-ai/",
+    "type": "blog"
+  },
+  {
+    "title": "Possibly Maybe poster by Dotto",
+    "date": "2023-10-18T13:24:41+02:00",
+    "description": "",
+    "url": "/posts/links/possibly-maybe/",
+    "type": "link",
+    "externalUrl": "https://www.dotto.studio/store/p/possibly-maybe-screenprint"
+  },
+  {
+    "title": "NASA astronaut back on Earth after record-breaking spaceflight",
+    "date": "2023-10-17T11:07:09+02:00",
+    "description": "",
+    "url": "/posts/links/nasa-astronaut-back-on-earth-after-record-breaking-spaceflight/",
+    "type": "blog"
+  },
+  {
+    "title": "Fazerdaze – Bigger",
+    "date": "2023-10-11T13:55:02+02:00",
+    "description": "",
+    "url": "/posts/links/fazerdaze-bigger/",
+    "type": "blog"
+  },
+  {
+    "title": "Why Rappers Stopped Writing",
+    "date": "2023-10-10T10:50:30+02:00",
+    "description": "",
+    "url": "/posts/links/why-rappers-stopped-writing/",
+    "type": "blog"
+  },
+  {
+    "title": "electric-sql – Local-first sync for Postgres from the inventors of CRDTs",
+    "date": "2023-10-09T10:18:56+02:00",
+    "description": "",
+    "url": "/posts/links/electric-sql/",
+    "type": "link",
+    "externalUrl": "https://electric-sql.com/blog/2023/09/20/introducing-electricsql-v0.6"
+  },
+  {
+    "title": "Desalination system could produce freshwater that is cheaper than tap water",
+    "date": "2023-10-05T23:21:51+02:00",
+    "description": "",
+    "url": "/posts/links/desalination-system/",
+    "type": "blog"
+  },
+  {
+    "title": "Convenience and scams",
+    "date": "2023-10-05T11:41:18+02:00",
+    "description": "",
+    "url": "/posts/links/convenience-and-scams/",
+    "type": "blog"
+  },
+  {
+    "title": "Little Desktop Sculptures by Mohit Bhoite",
+    "date": "2023-09-29T11:42:50+02:00",
+    "description": "",
+    "url": "/posts/links/tiny-sculptures/",
+    "type": "blog"
+  },
+  {
+    "title": "Oslo Transit Diagram",
+    "date": "2023-09-27T10:32:23+02:00",
+    "description": "",
+    "url": "/posts/links/oslo-transit-diagram/",
+    "type": "link",
+    "externalUrl": "https://t2design.no/oslo-transit-diagram-2022"
+  },
+  {
+    "title": "Water-Resistant “Research Notes” Notebook",
+    "date": "2023-09-25T13:45:53+02:00",
+    "description": "",
+    "url": "/posts/links/research-notes/",
+    "type": "blog"
+  },
+  {
+    "title": "new AsyncFunction – the async version of new Function",
+    "date": "2023-09-20T20:56:58+02:00",
+    "description": "",
+    "url": "/posts/links/new-async-function/",
+    "type": "link",
+    "externalUrl": "https://picostitch.com/tidbits/2023/09/new-async-function-the-async-version-of-new-function/"
+  },
+  {
+    "title": "Galileo Galilei’s First Drawings of the Moon After Seeing It Through the Telescope in 1609",
+    "date": "2023-09-18T15:56:54+02:00",
+    "description": "",
+    "url": "/posts/links/galileo-first-drawings-of-the-moon/",
+    "type": "blog"
+  },
+  {
+    "title": "Learning about Web Components: Part 4 – Researching pre-rendering custom elements and/or SSR",
+    "date": "2023-09-17T21:13:50+02:00",
+    "description": "",
+    "url": "/posts/web-components-4/",
+    "type": "blog"
+  },
+  {
+    "title": "Learning about Web Components: Part 3 – Define in a static initialization block",
+    "date": "2023-09-13T09:50:09+02:00",
+    "description": "",
+    "url": "/posts/web-components-3/",
+    "type": "blog"
+  },
+  {
+    "title": "50 Short Rules for a Better Life (From the Stoics)",
+    "date": "2023-09-12T10:01:32+02:00",
+    "description": "",
+    "url": "/posts/links/50-short-rules-for-a-better-life/",
+    "type": "link",
+    "externalUrl": "https://www.swiss-miss.com/2023/09/50-short-rules-for-a-better-life-from-the-stoics.html"
+  },
+  {
+    "title": "The Feather Atlas at the US Fish and Wildlife Service",
+    "date": "2023-09-11T09:57:35+02:00",
+    "description": "",
+    "url": "/posts/links/the-feather-atlas/",
+    "type": "blog"
+  },
+  {
+    "title": "“We’re All Just Temporarily Abled”",
+    "date": "2023-09-05T11:10:45+02:00",
+    "description": "",
+    "url": "/posts/links/we-are-all-just-temporarily-abled/",
+    "type": "blog"
+  },
+  {
+    "title": "Supavisor: Scaling Postgres to 1 Million Connections",
+    "date": "2023-09-04T15:10:52+02:00",
+    "description": "",
+    "url": "/posts/links/one-million-postgres-connections/",
+    "type": "blog"
+  },
+  {
+    "title": "Learning about Web Components: Part 2 – Data access and UI updates",
+    "date": "2023-08-27T13:02:22+02:00",
+    "description": "",
+    "url": "/posts/web-components-2/",
+    "type": "blog"
+  },
+  {
+    "title": "S.js and some thoughts about reactive state",
+    "date": "2023-08-17T15:09:37+02:00",
+    "description": "",
+    "url": "/posts/links/s-dot-js/",
+    "type": "blog"
+  },
+  {
+    "title": "She Was 300 Yards From the Atomic Bomb Center - and Survived Op-Docs",
+    "date": "2023-08-10T10:00:27+02:00",
+    "description": "",
+    "url": "/posts/links/akiko-takakura/",
+    "type": "blog"
+  },
+  {
+    "title": "Ólafur Arnalds live from Hafursey, in Iceland for Cercle",
+    "date": "2023-08-03T10:53:31+02:00",
+    "description": "",
+    "url": "/posts/links/ólafur-arnalds-hafursey/",
+    "type": "blog"
+  },
+  {
+    "title": "Getting started with View Transitions on multi-page apps by Dave Rupert",
+    "date": "2023-07-21T14:15:18+02:00",
+    "description": "",
+    "url": "/posts/links/getting-started-with-view-transitions/",
+    "type": "blog"
+  },
+  {
+    "title": "Omega Sports Apple Computer Sneakers • Size 10.5 • on Sotheby’s",
+    "date": "2023-07-20T22:40:06+02:00",
+    "description": "",
+    "url": "/posts/links/vintage-omega-apple-sneakers/",
+    "type": "blog"
+  },
+  {
+    "title": "Dive – Olivia Dean",
+    "date": "2023-07-17T13:34:57+02:00",
+    "description": "",
+    "url": "/posts/links/dive-olivia-dean/",
+    "type": "blog"
+  },
+  {
+    "title": "Embrace Complexity; Tighten Your Feedback Loops",
+    "date": "2023-06-21T14:56:01+02:00",
+    "description": "",
+    "url": "/posts/links/embrace-complexity/",
+    "type": "blog"
+  },
+  {
+    "title": "Today – Q",
+    "date": "2023-06-07T10:31:14+02:00",
+    "description": "",
+    "url": "/posts/links/q-today/",
+    "type": "blog"
+  },
+  {
+    "title": "Nation of Language - Full Performance (Live on KEXP)",
+    "date": "2023-06-05T16:30:26+02:00",
+    "description": "",
+    "url": "/posts/links/nation-of-language-live/",
+    "type": "blog"
+  },
+  {
+    "title": "Nopia",
+    "date": "2023-05-31T14:35:50+02:00",
+    "description": "",
+    "url": "/posts/links/nopia/",
+    "type": "blog"
+  },
+  {
+    "title": "Jordan Ward – CHERIMOYA",
+    "date": "2023-05-18T11:09:03+02:00",
+    "description": "",
+    "url": "/posts/links/cherimoya-jordan-ward/",
+    "type": "blog"
+  },
+  {
+    "title": "Rich Girl – Scary Pockets – featuring Arielle Kasnetz",
+    "date": "2023-05-15T22:13:05+02:00",
+    "description": "",
+    "url": "/posts/links/scary-pockets-rich-girl/",
+    "type": "blog"
+  },
+  {
+    "title": "Great Wave Off Kanagawa As Pixel Art by James Weiner",
+    "date": "2023-05-12T10:20:29+02:00",
+    "description": "",
+    "url": "/posts/links/the-great-wave/",
+    "type": "link",
+    "externalUrl": "https://www.hypertalking.com/2023/05/08/1-bit-pixel-art-of-hokusais-the-great-wave-off-kanagawa/"
+  },
+  {
+    "title": "The Man from Laramie",
+    "date": "2023-05-08T22:38:47+02:00",
+    "description": "",
+    "url": "/posts/the-man-from-laramie/",
+    "type": "blog"
+  },
+  {
+    "title": "Learning about Web Components: Part 1 – Getting Started",
+    "date": "2023-05-06T15:35:45+02:00",
+    "description": "",
+    "url": "/posts/web-components-1/",
+    "type": "blog"
+  },
+  {
+    "title": "Mighty Vibe",
+    "date": "2023-05-03T21:44:11+02:00",
+    "description": "",
+    "url": "/posts/links/mighty-vibe/",
+    "type": "link",
+    "externalUrl": "https://www.mightyaudio.co.uk/products/mighty-vibe"
+  },
+  {
+    "title": "Generate a QR Code in your shell with npx, qrcode-svg, and svgo",
+    "date": "2023-05-01T17:54:58+02:00",
+    "description": "",
+    "url": "/posts/links/cli-qrcode/",
+    "type": "blog"
+  },
+  {
+    "title": "Testing the Web Share API",
+    "date": "2023-04-28T15:08:40+02:00",
+    "description": "",
+    "url": "/posts/links/web-share-api/",
+    "type": "blog"
+  },
+  {
+    "title": "Urth Explorer Filter Kit",
+    "date": "2023-04-26T23:02:45+02:00",
+    "description": "",
+    "url": "/posts/links/urth-explorer-filter-kit/",
+    "type": "link",
+    "externalUrl": "https://urth.co/products/the-explorer-filter-kit"
+  },
+  {
+    "title": "GaeaStar",
+    "date": "2023-04-24T23:15:05+02:00",
+    "description": "",
+    "url": "/posts/links/gaea/",
+    "type": "link",
+    "externalUrl": "https://gaeastar.com"
+  },
+  {
+    "title": "The original Wilhelm Scream recording session",
+    "date": "2023-04-21T10:25:56+02:00",
+    "description": "",
+    "url": "/posts/links/wilhelm-scream/",
+    "type": "blog"
+  },
+  {
+    "title": "Moving, a Short Film",
+    "date": "2023-04-20T10:14:35+02:00",
+    "description": "",
+    "url": "/posts/links/moving/",
+    "type": "blog"
+  },
+  {
+    "title": "An Interview With Massimo Vitali",
+    "date": "2023-04-19T12:28:40+02:00",
+    "description": "",
+    "url": "/posts/links/interview-with-massimo-vitali/",
+    "type": "blog"
+  },
+  {
+    "title": "Dreamy Photography Settings",
+    "date": "2023-04-18T21:03:33+02:00",
+    "description": "",
+    "url": "/posts/links/dreamy-photography-settings/",
+    "type": "blog"
+  },
+  {
+    "title": "VIKING Trailer",
+    "date": "2023-04-17T16:19:58+02:00",
+    "description": "",
+    "url": "/posts/links/viking-trailer/",
+    "type": "blog"
+  },
+  {
+    "title": "Ship the wrong thing to learn what’s right",
+    "date": "2023-04-14T12:23:55+02:00",
+    "description": "",
+    "url": "/posts/ship-the-wrong-thing/",
+    "type": "blog"
+  },
+  {
+    "title": "Who invented vector clocks?",
+    "date": "2023-04-12T11:03:24+02:00",
+    "description": "",
+    "url": "/posts/links/who-invented-vector-clocks/",
+    "type": "blog"
+  },
+  {
+    "title": "Gawthorne’s Hut",
+    "date": "2023-04-11T08:10:10+02:00",
+    "description": "",
+    "url": "/posts/links/gawthornes-hut/",
+    "type": "link",
+    "externalUrl": "https://wilgowrah.com.au/gawthornes-hut-mudgee/"
+  },
+  {
+    "title": "You Are Not Okay and Tomorrow Will Come",
+    "date": "2023-04-05T11:22:27+02:00",
+    "description": "",
+    "url": "/posts/links/you-are-not-okay-and-tomorrow-will-come/",
+    "type": "link",
+    "externalUrl": "https://humanparts.medium.com/you-are-not-ok-and-tomorrow-will-come-23d7c6fec171"
+  },
+  {
+    "title": "Art by Nathan Walsh",
+    "date": "2023-04-04T10:41:05+02:00",
+    "description": "",
+    "url": "/posts/links/nathan-walsh/",
+    "type": "link",
+    "externalUrl": "https://www.nathanwalsh.net"
+  },
+  {
+    "title": "Slow Learning",
+    "date": "2023-04-03T14:02:01+02:00",
+    "description": "",
+    "url": "/posts/links/slow-learning/",
+    "type": "blog"
+  },
+  {
+    "title": "The Art of the Copyist by The Met",
+    "date": "2023-03-31T11:24:35+02:00",
+    "description": "",
+    "url": "/posts/links/the-copyist/",
+    "type": "blog"
+  },
+  {
+    "title": "Polaroid Lab",
+    "date": "2023-03-29T12:05:34+02:00",
+    "description": "",
+    "url": "/posts/links/polaroid-lab/",
+    "type": "link",
+    "externalUrl": "https://www.polaroid.com/products/polaroid-lab"
+  },
+  {
+    "title": "Inside Out. Understanding the art of furniture making",
+    "date": "2023-03-28T11:10:45+02:00",
+    "description": "",
+    "url": "/posts/links/inside-out-furniture-making/",
+    "type": "blog"
+  },
+  {
+    "title": "Men I Trust - Show Me How (garage session)",
+    "date": "2023-03-27T13:29:43+02:00",
+    "description": "",
+    "url": "/posts/links/men-i-trust/",
+    "type": "blog"
+  },
+  {
+    "title": "Olamide Ogunade’s art",
+    "date": "2023-03-22T10:45:30+01:00",
+    "description": "",
+    "url": "/posts/links/olamide-ogunade/",
+    "type": "blog"
+  },
+  {
+    "title": "Behringer TORO",
+    "date": "2023-03-21T10:45:30+01:00",
+    "description": "",
+    "url": "/posts/links/toro/",
+    "type": "blog"
+  },
+  {
+    "title": "Chompi",
+    "date": "2023-03-20T10:50:30+01:00",
+    "description": "",
+    "url": "/posts/links/chompi/",
+    "type": "blog"
+  },
+  {
+    "title": "Enhancing Directed Content Sharing on the Web (PDF)",
+    "date": "2023-03-16T11:57:04+01:00",
+    "description": "",
+    "url": "/posts/links/feed-me-paper/",
+    "type": "link",
+    "externalUrl": "https://hci.stanford.edu/publications/2010/feedme/feedme-chi2010.pdf"
+  },
+  {
+    "title": "Largest known prime number",
+    "date": "2023-03-15T12:20:55+01:00",
+    "description": "",
+    "url": "/posts/links/largest-known-prime-number/",
+    "type": "link",
+    "externalUrl": "https://en.wikipedia.org/wiki/Largest_known_prime_number"
+  },
+  {
+    "title": "GPT-4",
+    "date": "2023-03-15T11:13:46+01:00",
+    "description": "",
+    "url": "/posts/links/gpt4/",
+    "type": "link",
+    "externalUrl": "https://openai.com/research/gpt-4"
+  },
+  {
+    "title": "MathGPT",
+    "date": "2023-03-14T12:20:55+01:00",
+    "description": "",
+    "url": "/posts/links/math-gpt/",
+    "type": "link",
+    "externalUrl": "https://mathgpt.streamlit.app"
+  },
+  {
+    "title": "Cargobox by Meelis Lillemets",
+    "date": "2023-03-13T13:19:36+01:00",
+    "description": "",
+    "url": "/posts/links/cargobox/",
+    "type": "link",
+    "externalUrl": "https://lmets.carbonmade.com/cargobox"
+  },
+  {
+    "title": "TIL how to allow notifications when screen recording on macOS",
+    "date": "2023-03-11T12:03:22+01:00",
+    "description": "",
+    "url": "/posts/til/how-to-allow-notifications-when-recording-the-screen/",
+    "type": "blog"
+  },
+  {
+    "title": "TIL about Beamer for LaTeX",
+    "date": "2023-03-09T19:20:36+01:00",
+    "description": "",
+    "url": "/posts/til/beamer/",
+    "type": "link",
+    "externalUrl": "https://en.wikipedia.org/wiki/Beamer_(LaTeX)"
+  },
+  {
+    "title": "Notes art",
+    "date": "2023-03-08T17:24:34+01:00",
+    "description": "",
+    "url": "/posts/links/notes-art/",
+    "type": "link",
+    "externalUrl": "https://notes.art/"
+  },
+  {
+    "title": "Patch Notes: Hélène Vogelsinger",
+    "date": "2023-03-07T10:17:58+01:00",
+    "description": "",
+    "url": "/posts/links/patch-notes/",
+    "type": "blog"
+  },
+  {
+    "title": "The Full Frod Story! Building a frog house for a Frod.",
+    "date": "2023-03-06T23:19:35+01:00",
+    "description": "",
+    "url": "/posts/links/frods/",
+    "type": "blog"
+  },
+  {
+    "title": "The Shortcut",
+    "date": "2023-03-03T08:58:58+01:00",
+    "description": "",
+    "url": "/posts/links/the-shortcut/",
+    "type": "link",
+    "externalUrl": "https://www.bewitched.com/art/shortcut/"
+  },
+  {
+    "title": "I really love these paintings by John Gannam",
+    "date": "2023-03-02T21:23:04+01:00",
+    "description": "",
+    "url": "/posts/john-gannam/",
+    "type": "blog"
+  },
+  {
+    "title": "Cassette mixing 🤯",
+    "date": "2023-02-28T20:40:22+01:00",
+    "description": "",
+    "url": "/posts/links/cassette-mixing/",
+    "type": "link",
+    "externalUrl": "https://www.youtube.com/watch?v=trlYlJU4YQc"
+  },
+  {
+    "title": "Dublin Goth New Wave Movement, 1989",
+    "date": "2023-02-27T21:50:12+01:00",
+    "description": "",
+    "url": "/posts/links/dublin-goth-new-wave-movement-1989/",
+    "type": "link",
+    "externalUrl": "https://www.youtube.com/watch?v=Uv6Sxh1hi7w"
+  },
+  {
+    "title": "The Circle (Shortfilm)",
+    "date": "2023-02-26T22:52:46+01:00",
+    "description": "",
+    "url": "/posts/links/the-circle/",
+    "type": "link",
+    "externalUrl": "https://vimeo.com/709514622"
+  },
+  {
+    "title": "TIL about the useUnknownInCatchVariables compiler flag for TypeScript",
+    "date": "2023-02-11T00:08:28+01:00",
+    "description": "",
+    "url": "/posts/til/use-unknown-in-catch-variables/",
+    "type": "link",
+    "externalUrl": "https://www.typescriptlang.org/docs/handbook/release-notes/typescript-4-4.html#defaulting-to-the-unknown-type-in-catch-variables---useunknownincatchvariables"
+  },
+  {
+    "title": "Mid-day ☀️ 📸",
+    "date": "2023-02-07T20:20:32+01:00",
+    "description": "",
+    "url": "/posts/mid-day-sunny-photo/",
+    "type": "blog"
+  },
+  {
+    "title": "Living Alone in the Wild Siberian Forest for 20 years in Yakutia",
+    "date": "2023-02-07T19:51:53+01:00",
+    "description": "",
+    "url": "/posts/links/living-alone-in-siberian-forest-for-20-years/",
+    "type": "blog"
+  },
+  {
+    "title": "Everyone thinks everyone is a scammer these days",
+    "date": "2023-02-07T13:30:54+01:00",
+    "description": "",
+    "url": "/posts/scammer/",
+    "type": "blog"
+  },
+  {
+    "title": "Love Trip – Takako Mamiya",
+    "date": "2023-01-12T21:05:05+01:00",
+    "description": "",
+    "url": "/posts/links/takako-mamiya-love-trip/",
+    "type": "blog"
+  },
+  {
+    "title": "Had to update Whitney – the font here",
+    "date": "2023-01-08T11:28:25+01:00",
+    "description": "",
+    "url": "/posts/updated-the-font/",
+    "type": "blog"
+  },
+  {
+    "title": "Ana Vidović playing classical guitar",
+    "date": "2023-01-08T11:05:00+01:00",
+    "description": "",
+    "url": "/posts/links/ana-vidović-classical-guitar/",
+    "type": "blog"
+  },
+  {
+    "title": "Robohands - Green",
+    "date": "2023-01-07T18:53:36+01:00",
+    "description": "",
+    "url": "/posts/links/robohands-green/",
+    "type": "link",
+    "externalUrl": "https://robohands.bandcamp.com/album/robohands-green"
+  },
+  {
+    "title": "Casiopea - Mint Jams",
+    "date": "2023-01-06T11:50:04+01:00",
+    "description": "",
+    "url": "/posts/links/casiopea-mint-jams/",
+    "type": "link",
+    "externalUrl": "https://music.apple.com/us/album/mint-jams-live/1535034571"
+  },
+  {
+    "title": "Hydraulic Press Interpretive Dance",
+    "date": "2023-01-05T09:45:11+01:00",
+    "description": "",
+    "url": "/posts/links/hydraulic-press-interpretive-dance/",
+    "type": "link",
+    "externalUrl": "https://www.youtube.com/channel/UCZuDcDy5AXUx3BO80woqWZA"
+  },
+  {
+    "title": "Modular Office Unit",
+    "date": "2023-01-04T13:56:35+01:00",
+    "description": "",
+    "url": "/posts/links/modular-office-unit/",
+    "type": "link",
+    "externalUrl": "https://guglielmopoletti.com/modular-office-unit/"
+  },
+  {
+    "title": "TIL about IndieKit",
+    "date": "2023-01-04T10:01:01+01:00",
+    "description": "",
+    "url": "/posts/links/indie-kit/",
+    "type": "link",
+    "externalUrl": "https://getindiekit.com/"
+  },
+  {
+    "title": "NO THANK YOU – Little Sims",
+    "date": "2022-12-17T18:18:09+01:00",
+    "description": "",
+    "url": "/posts/links/little-sims-no-thank-you/",
+    "type": "blog"
+  },
+  {
+    "title": "God’s Country Trailer",
+    "date": "2022-08-11T11:04:43+02:00",
+    "description": "",
+    "url": "/posts/links/gods-country-trailer/",
+    "type": "blog"
+  },
+  {
+    "title": "New ❤️ album: Invisible Cities by A Winged Victory For The Sullen",
+    "date": "2022-05-09T11:02:58+02:00",
+    "description": "",
+    "url": "/posts/links/a-winged-victory-for-the-sullen/",
+    "type": "link",
+    "externalUrl": "https://music.apple.com/us/album/invisible-cities/1538188398"
+  },
+  {
+    "title": "Some technologies last",
+    "date": "2022-01-26T08:33:00Z",
+    "description": "",
+    "url": "/posts/links/some-technologies-last/",
+    "type": "blog"
+  },
+  {
+    "title": "TIL about explain (analyze, buffers) in postgresql",
+    "date": "2022-01-23T18:55:28Z",
+    "description": "",
+    "url": "/posts/til/postgres-buffers/",
+    "type": "link",
+    "externalUrl": "https://www.pgmustard.com/docs/explain/buffers"
+  },
+  {
+    "title": "3 out of 3 💉💉💉",
+    "date": "2022-01-12T14:20:18+02:00",
+    "description": "",
+    "url": "/posts/3-out-of-3/",
+    "type": "blog"
+  },
+  {
+    "title": "TIL about Gaia",
+    "date": "2022-01-07T22:30:57Z",
+    "description": "",
+    "url": "/posts/til/gaia/",
+    "type": "link",
+    "externalUrl": "https://en.wikipedia.org/wiki/Gaia_%28spacecraft%29"
+  },
+  {
+    "title": "Where Is Webb?",
+    "date": "2022-01-03T11:05:50Z",
+    "description": "",
+    "url": "/posts/links/where-is-webb/",
+    "type": "link",
+    "externalUrl": "https://webb.nasa.gov/content/webbLaunch/whereIsWebb.html"
+  },
+  {
+    "title": "The Dark Forest",
+    "date": "2022-01-02T11:54:19Z",
+    "description": "",
+    "url": "/posts/links/the-dark-forest/",
+    "type": "link",
+    "externalUrl": "https://youtube.com/watch?v=xAUJYP8tnRE&feature=share"
+  },
+  {
+    "title": "The James Webb Space Telescope",
+    "date": "2022-01-01T11:33:19Z",
+    "description": "",
+    "url": "/posts/links/james-web-space-telescope/",
+    "type": "link",
+    "externalUrl": "https://www.youtube.com/watch?v=lrY04VPDg8I"
+  },
+  {
+    "title": "Collaboration through software: digital paper and card catalogs",
+    "date": "2021-05-04T08:22:42+02:00",
+    "description": "",
+    "url": "/posts/digital-card-catalog/",
+    "type": "blog"
+  },
+  {
+    "title": "TIL about less -S",
+    "date": "2021-02-12T12:55:10+01:00",
+    "description": "",
+    "url": "/posts/til/less-dash-s/",
+    "type": "blog"
+  },
+  {
+    "title": "Wonderful Portraits by Otis Kwame Kye Quaicoe",
+    "date": "2021-01-17T23:03:15+01:00",
+    "description": "",
+    "url": "/posts/links/otis-kwame-kye-quaicoe/",
+    "type": "link",
+    "externalUrl": "https://www.thisiscolossal.com/2021/01/otis-kwame-kye-quaicoe-portraits/"
+  },
+  {
+    "title": "TIL how to fix a formula conflict when updating brew",
+    "date": "2020-12-31T12:39:48+01:00",
+    "description": "",
+    "url": "/posts/til/fix-brew-formula-conflict/",
+    "type": "blog"
+  },
+  {
+    "title": "TIL about HTTP Client Hints",
+    "date": "2020-12-16T12:30:08+01:00",
+    "description": "",
+    "url": "/posts/til/client-hints/",
+    "type": "blog"
+  },
+  {
+    "title": "TIL about ELIXIR_CLI_DRY_RUN for elixir and iex",
+    "date": "2020-12-08T14:28:38+01:00",
+    "description": "",
+    "url": "/posts/til/elixir-dry-run/",
+    "type": "blog"
+  },
+  {
+    "title": "TIL ⌃\\\\ sends SIGQUIT to the foreground process",
+    "date": "2020-11-05T15:05:38+01:00",
+    "description": "",
+    "url": "/posts/til/iex-control-backslash-2/",
+    "type": "blog"
+  },
+  {
+    "title": "TIL one can exit iex with ⌃\\\\",
+    "date": "2020-11-01T22:00:27+01:00",
+    "description": "",
+    "url": "/posts/links/iex-control-backslash/",
+    "type": "link",
+    "externalUrl": "https://hexdocs.pm/iex/IEx.html#module-exiting-the-shell"
+  },
+  {
+    "title": "Beogram 4000c • Recreated by Bang & Olufsen",
+    "date": "2020-10-25T21:15:45+01:00",
+    "description": "",
+    "url": "/posts/links/beogram-4000c/",
+    "type": "link",
+    "externalUrl": "https://www.bang-olufsen.com/en/speakers/beogram-4000c"
+  },
+  {
+    "title": "“I am excessively slothful, and wonderfully industrious—by fits.”",
+    "date": "2020-10-22T10:50:12+02:00",
+    "description": "",
+    "url": "/posts/edgar-allen-poe-quote/",
+    "type": "blog"
+  },
+  {
+    "title": "Dieter Rams Wallpapers",
+    "date": "2020-09-02T10:22:03+02:00",
+    "description": "",
+    "url": "/posts/links/dieter-rams-wallpapers/",
+    "type": "link",
+    "externalUrl": "https://www.arun.is/dieter-rams-wallpapers/"
+  },
+  {
+    "title": "Connect, No Matter the Speed",
+    "date": "2020-09-02T10:06:48+02:00",
+    "description": "",
+    "url": "/posts/links/connect-no-matter/",
+    "type": "link",
+    "externalUrl": "https://medium.com/google-design/connect-no-matter-the-speed-3b81cfd3355a"
+  },
+  {
+    "title": "GitHub Profile README",
+    "date": "2020-08-31T16:46:49+02:00",
+    "description": "",
+    "url": "/posts/github-profile-readme/",
+    "type": "blog"
+  },
+  {
+    "title": "TIL about hub-sync",
+    "date": "2020-07-15T10:55:35+02:00",
+    "description": "",
+    "url": "/posts/links/til-hub-sync/",
+    "type": "link",
+    "externalUrl": "https://hub.github.com/hub-sync.1.html"
+  },
+  {
+    "title": "29 automata in 6 minutes",
+    "date": "2020-06-13T10:56:28+02:00",
+    "description": "",
+    "url": "/posts/links/29-automata/",
+    "type": "link",
+    "externalUrl": "https://m.youtube.com/watch?feature=youtu.be&v=-OJ1Yc2SwAs"
+  },
+  {
+    "title": "TIL about AbortController",
+    "date": "2020-06-12T14:58:16+02:00",
+    "description": "",
+    "url": "/posts/links/abortcontroller/",
+    "type": "link",
+    "externalUrl": "https://developer.mozilla.org/en-US/docs/Web/API/AbortController"
+  },
+  {
+    "title": "Your metrics might be lying to you – an example from Wunderlist",
+    "date": "2020-06-10T14:48:33+02:00",
+    "description": "",
+    "url": "/posts/your-metrics-might-be-lying-to-you/",
+    "type": "blog"
+  },
+  {
+    "title": "TIL about vim’s spellcheck",
+    "date": "2020-05-21T16:05:13+02:00",
+    "description": "",
+    "url": "/posts/til/vim-spellcheck/",
+    "type": "blog"
+  },
+  {
+    "title": "TIL about :term ++curwin",
+    "date": "2020-05-18T13:43:07+02:00",
+    "description": "",
+    "url": "/posts/til/vim-term-curwin/",
+    "type": "blog"
+  },
+  {
+    "title": "TIL about :lcd in vim",
+    "date": "2020-05-15T14:25:59+02:00",
+    "description": "",
+    "url": "/posts/til/lcd-vim/",
+    "type": "blog"
+  },
+  {
+    "title": "This Video Has ___ Views",
+    "date": "2020-04-09T14:11:13+02:00",
+    "description": "",
+    "url": "/posts/links/this-video-has-___-views/",
+    "type": "blog"
+  },
+  {
+    "title": "Retail fonts · Klim Type Foundry",
+    "date": "2020-02-12T10:29:00+01:00",
+    "description": "",
+    "url": "/posts/links/klim-type-foundry/",
+    "type": "link",
+    "externalUrl": "https://klim.co.nz/retail-fonts/"
+  },
+  {
+    "title": "A richer canvas",
+    "date": "2020-01-22T16:27:37+01:00",
+    "description": "",
+    "url": "/posts/links/a-richer-canvas/",
+    "type": "link",
+    "externalUrl": "https://markboulton.co.uk/journal/a-richer-canvas/"
+  },
+  {
+    "title": "Realistic pillows sculpted from blocks of white marble",
+    "date": "2020-01-18T15:54:09+01:00",
+    "description": "",
+    "url": "/posts/links/realistic-pillows-sculpted-from-blocks-of-white-marble/",
+    "type": "link",
+    "externalUrl": "https://www.thisiscolossal.com/2020/01/marble-pillows-by-hakon-anton-fageras/"
+  },
+  {
+    "title": "Going public",
+    "date": "2020-01-15T14:08:05+01:00",
+    "description": "",
+    "url": "/posts/going-public/",
+    "type": "blog"
+  },
+  {
+    "title": "Elements of AI",
+    "date": "2019-12-24T09:48:15+01:00",
+    "description": "",
+    "url": "/posts/links/elements-of-ai/",
+    "type": "link",
+    "externalUrl": "https://course.elementsofai.com/"
+  },
+  {
+    "title": "The world's most remote buildings on YouTube 📺",
+    "date": "2019-12-23T08:55:12+01:00",
+    "description": "",
+    "url": "/posts/links/the-worlds-most-remote-buildings/",
+    "type": "link",
+    "externalUrl": "https://m.youtube.com/watch?v=wGS53t8ZbO8&feature=share"
+  },
+  {
+    "title": "A ryokan",
+    "date": "2019-12-18T15:52:04+01:00",
+    "description": "",
+    "url": "/posts/a-ryokan/",
+    "type": "blog"
+  },
+  {
+    "title": "asipai ＋ Hibi Coffee in Kyoto",
+    "date": "2019-11-30T15:26:17+09:00",
+    "description": "",
+    "url": "/posts/links/asipai-hibicoffee-kyoto/",
+    "type": "link",
+    "externalUrl": "https://andcoffee.net/shop/asipai-hibicoffee-kyoto/"
+  },
+  {
+    "title": "Music I love for traveling",
+    "date": "2019-11-22T21:54:46+01:00",
+    "description": "",
+    "url": "/posts/travel-songs/",
+    "type": "blog"
+  },
+  {
+    "title": "Petrichor by Artist Jean Jullien",
+    "date": "2019-11-21T16:00:00.099Z",
+    "description": "",
+    "url": "/posts/links/petrichor-by-jean-jullien/",
+    "type": "link",
+    "externalUrl": "https://www.booooooom.com/2019/11/20/petrichor-by-artist-jean-jullien/"
+  },
+  {
+    "title": "I've migrated off medium",
+    "date": "2019-11-21T08:12:27.010Z",
+    "description": "",
+    "url": "/posts/moved-off-medium/",
+    "type": "blog"
+  },
+  {
+    "title": "How to install the macOS Catalina Beta alongside Mojave",
+    "date": "2019-06-17T11:21:13.316Z",
+    "description": "",
+    "url": "/posts/legacy/how-to-install-the-macos-catalina-beta-alongside-mojave/",
+    "type": "blog"
+  },
+  {
+    "title": "Build your MVP today",
+    "date": "2018-05-17T14:13:58Z",
+    "description": " ",
+    "url": "/posts/legacy/build-your-mvp-today-b31192e1c920/",
+    "type": "blog"
+  },
+  {
+    "title": "I still don’t know how to use a debugger",
+    "date": "2018-05-14T21:59:16.124Z",
+    "description": "",
+    "url": "/posts/legacy/i-still-dont-know-how-to-use-a-debugger/",
+    "type": "blog"
+  },
+  {
+    "title": "Puma RS-0",
+    "date": "2018-04-16T12:08:40.565Z",
+    "description": "",
+    "url": "/posts/legacy/puma-rs-0/",
+    "type": "blog"
+  },
+  {
+    "title": "Karhu Synchron Classic",
+    "date": "2018-04-06T21:48:32.517Z",
+    "description": "My latest sneakers",
+    "url": "/posts/legacy/karhu-synchron-classic/",
+    "type": "blog"
+  },
+  {
+    "title": "One week with the Atom text editor",
+    "date": "2018-03-26T21:09:16.271Z",
+    "description": "",
+    "url": "/posts/legacy/one-week-with-the-atom-text-editor/",
+    "type": "blog"
+  },
+  {
+    "title": "Twenty-second Postmortem",
+    "date": "2017-09-22T16:45:06.760Z",
+    "description": "Take some time to document what happened.",
+    "url": "/posts/legacy/twenty-second-postmortem/",
+    "type": "blog"
+  },
+  {
+    "title": "A quick tip to help remember where you left off",
+    "date": "2017-07-28T07:46:34.663Z",
+    "description": "",
+    "url": "/posts/legacy/a-quick-tip-to-help-remember-where-you-left-off/",
+    "type": "blog"
+  },
+  {
+    "title": "A newsletter",
+    "date": "2017-07-25T08:26:39.888Z",
+    "description": "",
+    "url": "/posts/legacy/a-newsletter/",
+    "type": "blog"
+  },
+  {
+    "title": "Design a Minimal Product Roadmap instead of building an MVP",
+    "date": "2017-07-18T09:12:55.913Z",
+    "description": "You don’t need to build everything. You might not need to build anything.",
+    "url": "/posts/legacy/design-a-minimal-roadmap-instead-of-building-an-mvp/",
+    "type": "blog"
+  },
+  {
+    "title": "On queueing",
+    "date": "2017-06-29T10:28:44.433Z",
+    "description": "Things can get backed up.",
+    "url": "/posts/legacy/on-queueing/",
+    "type": "blog"
+  },
+  {
+    "title": "ElixirConf EU 2017 in Barcelona",
+    "date": "2017-06-27T10:01:17.027Z",
+    "description": "A distillation of my conference talk.",
+    "url": "/posts/legacy/elixirconf-eu-2017-in-barcelona/",
+    "type": "blog"
+  },
+  {
+    "title": "A way to procrastinate",
+    "date": "2017-06-22T23:53:43.600Z",
+    "description": "Get more done, just not right now.",
+    "url": "/posts/legacy/a-way-to-procrastinate/",
+    "type": "blog"
+  },
+  {
+    "title": "Swift already has a Result type",
+    "date": "2017-01-23T11:13:32.360Z",
+    "description": "Maybe.",
+    "url": "/posts/legacy/swift-already-has-a-result-type/",
+    "type": "blog"
+  },
+  {
+    "title": "I’m getting “engagement”",
+    "date": "2016-11-11T10:48:45.183Z",
+    "description": "My notifications are blowing up after I tweeted a link to a moment",
+    "url": "/posts/legacy/im-getting-engagement/",
+    "type": "blog"
+  },
+  {
+    "title": "CloudKit",
+    "date": "2016-08-12T17:45:48.404Z",
+    "description": "Serverless Collaboration",
+    "url": "/posts/legacy/cloudkit/",
+    "type": "blog"
+  },
+  {
+    "title": "Be.",
+    "date": "2016-05-19T09:35:57.131Z",
+    "description": "",
+    "url": "/posts/legacy/be/",
+    "type": "blog"
+  },
+  {
+    "title": "The Network Is Never There for You",
+    "date": "2016-02-26T12:33:36.898Z",
+    "description": "",
+    "url": "/posts/legacy/the-network-is-never-there-for-you/",
+    "type": "blog"
+  },
+  {
+    "title": "Winter and small coffee",
+    "date": "2015-11-04T10:40:00.775Z",
+    "description": "",
+    "url": "/posts/legacy/winter-and-small-coffee/",
+    "type": "blog"
+  },
+  {
+    "title": "Two years in Berlin",
+    "date": "2015-10-13T10:06:09.647Z",
+    "description": "",
+    "url": "/posts/legacy/two-years-in-berlin/",
+    "type": "blog"
+  },
+  {
+    "title": "Morning",
+    "date": "2015-10-12T08:59:52.393Z",
+    "description": "",
+    "url": "/posts/legacy/morning/",
+    "type": "blog"
+  },
+  {
+    "title": "How we allow any request to be safely repeated at anytime for Wunderlist",
+    "date": "2015-03-24T12:17:09.248Z",
+    "description": "",
+    "url": "/posts/legacy/how-we-allow-any-request-to-be-safely-repeated-at-anytime-for-wunderlist/",
+    "type": "blog"
+  },
+  {
+    "title": "My core values",
+    "date": "2015-03-18T10:39:52.234Z",
+    "description": "",
+    "url": "/posts/legacy/my-core-values/",
+    "type": "blog"
+  },
+  {
+    "title": "Make workflows for complicated tasks",
+    "date": "2015-01-26T09:20:52.001Z",
+    "description": "",
+    "url": "/posts/legacy/make-workflows-for-complicated-tasks/",
+    "type": "blog"
+  },
+  {
+    "title": "Object Oriented System Architecture",
+    "date": "2015-01-23T15:41:30.500Z",
+    "description": "",
+    "url": "/posts/legacy/object-oriented-server-architecture/",
+    "type": "blog"
+  },
+  {
+    "title": "Always use a CDN",
+    "date": "2015-01-17T16:11:09.600Z",
+    "description": "",
+    "url": "/posts/legacy/use-a-cdn-for-every-site-you-build/",
+    "type": "blog"
+  },
+  {
+    "title": "Why make a Mash?",
+    "date": "2014-12-19T07:45:09.600Z",
+    "description": "",
+    "url": "/posts/legacy/why-make-a-mash/",
+    "type": "blog"
+  },
+  {
+    "title": "Notes on Contentment",
+    "date": "2014-08-10T20:39:48.370Z",
+    "description": "",
+    "url": "/posts/legacy/notes-on-contentment/",
+    "type": "blog"
+  },
+  {
+    "title": "Document semi-wacky — wacky things",
+    "date": "2013-12-05T09:42:53.595Z",
+    "description": "Sometimes, there are things that need to be documented.",
+    "url": "/posts/legacy/document-semi-wacky-wacky-things/",
+    "type": "blog"
+  },
+  {
+    "title": "Use technologies the rest of your team is motivated to use",
+    "date": "2013-07-28T15:56:02.105Z",
+    "description": "For great justice",
+    "url": "/posts/legacy/use-technologies-the-rest-of-your-team-is-motivated-to-use/",
+    "type": "blog"
+  },
+  {
+    "title": "Refactor only when you have some sort of tests",
+    "date": "2013-07-11T14:22:50.677Z",
+    "description": "Refactor tractor, as Jess says",
+    "url": "/posts/legacy/refactor-only-when-you-have-some-sort-of-tests/",
+    "type": "blog"
+  },
+  {
+    "title": "Change as little as possible to fix a problem",
+    "date": "2013-06-03T15:00:42.178Z",
+    "description": "Fix problems. One at a time. Be good.",
+    "url": "/posts/legacy/change-as-little-as-possible-to-fix-a-problem/",
+    "type": "blog"
+  },
+  {
+    "title": "Be a good programmer",
+    "date": "2013-05-29T00:07:37.904Z",
+    "description": "",
+    "url": "/posts/legacy/be-a-good-programmer/",
+    "type": "blog"
+  },
+  {
+    "title": "The Cost of Education",
+    "date": "2013-05-08T01:39:40.279Z",
+    "description": "",
+    "url": "/posts/legacy/the-cost-of-education/",
+    "type": "blog"
+  }
+]

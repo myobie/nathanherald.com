@@ -4,4 +4,4 @@ indent: yes
 indent-spaces: 2
 sort-attributes: alpha
 custom-tags: blocklevel
-new-blocklevel-tags: nh-head, nh-header, nh-footer, nh-page, nh-ready, nh-markdown, nh-include
+new-blocklevel-tags: nh-head, nh-header, nh-footer, nh-page, nh-ready, nh-markdown, nh-include, nh-archive-list, nh-latest-posts

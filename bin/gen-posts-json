@@ -1,0 +1,67 @@
+#!/usr/bin/env -S deno run --allow-read --allow-write
+
+import { walk } from 'jsr:@std/fs/walk'
+import { join, relative } from 'jsr:@std/path'
+
+const postsDir = join(Deno.cwd(), 'public', 'posts')
+const outputPath = join(Deno.cwd(), 'public', 'posts.json')
+
+interface Post {
+  title: string
+  date: string
+  description: string
+  url: string
+  type: 'blog' | 'link'
+  externalUrl?: string
+}
+
+function parseFrontmatter(text: string): Record<string, string> {
+  const lines = text.split('\n')
+  const delim = lines[0]
+  if (delim !== '---' && delim !== '+++') return {}
+
+  const end = lines.indexOf(delim, 1)
+  if (end < 0) return {}
+
+  const fmLines = lines.slice(1, end)
+  const result: Record<string, string> = {}
+
+  for (const line of fmLines) {
+    if (delim === '---') {
+      const match = line.match(/^(\w+):\s*(.+)/)
+      if (match) result[match[1]] = match[2]
+    } else {
+      const match = line.match(/^(\w+)\s*=\s*"(.+?)"/)
+      if (match) result[match[1]] = match[2]
+    }
+  }
+
+  return result
+}
+
+const posts: Post[] = []
+
+for await (const entry of walk(postsDir, { exts: ['.md'], match: [/index\.md$/] })) {
+  const text = await Deno.readTextFile(entry.path)
+  const fm = parseFrontmatter(text)
+
+  if (!fm.title || !fm.date) continue
+
+  const relPath = relative(postsDir, entry.path).replace(/\/index\.md$/, '')
+  const url = `/posts/${relPath}/`
+
+  posts.push({
+    title: fm.title,
+    date: fm.date,
+    description: fm.description || '',
+    url,
+    type: fm.externalUrl ? 'link' : 'blog',
+    ...(fm.externalUrl ? { externalUrl: fm.externalUrl } : {}),
+  })
+}
+
+// Sort by date descending
+posts.sort((a, b) => b.date.localeCompare(a.date))
+
+await Deno.writeTextFile(outputPath, JSON.stringify(posts, null, 2))
+console.log(`Generated ${posts.length} posts → public/posts.json`)

@@ -194,10 +194,17 @@ while IFS= read -r line; do
     
     if $IN_MONTH_LIST && [[ "$line" =~ ^[[:space:]]*\<h3\> ]]; then
         # Extract the month/year from the h3
+        # Handle both single-line <h3>March 2026</h3> and multi-line (tidy-formatted)
         CURRENT_MONTH=$(echo "$line" | sed 's|.*<h3>||' | sed 's|</h3>.*||' | xargs)
+        echo "$line" >> "$TEMP_FILE"
+        # If h3 content is on the next line, read it
+        if [ -z "$CURRENT_MONTH" ]; then
+            IFS= read -r next_line
+            CURRENT_MONTH=$(echo "$next_line" | xargs)
+            echo "$next_line" >> "$TEMP_FILE"
+        fi
         if [ "$CURRENT_MONTH" = "$MONTH_YEAR" ]; then
             FOUND_MONTH=true
-            echo "$line" >> "$TEMP_FILE"
             continue
         elif [ "$FOUND_MONTH" = false ]; then
             # This is a month that comes after our target month chronologically
@@ -212,7 +219,6 @@ while IFS= read -r line; do
             echo "          </li>" >> "$TEMP_FILE"
             FOUND_MONTH=true
         fi
-        echo "$line" >> "$TEMP_FILE"
         continue
     fi
     

@@ -1,4 +1,4 @@
-nh-page, nh-header, nh-footer, nh-ready, nh-markdown, nh-include {
+nh-page, nh-header, nh-footer, nh-ready, nh-markdown, nh-include, nh-archive-list, nh-latest-posts {
   display: contents;
 }
 
@@ -262,19 +262,15 @@ details summary {
   max-width: 40em;
 }
 
-.listing dl > div {
-  display: flex;
-  gap: 1em;
-  margin-bottom: 1em;
+.listing dl {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0 1em;
 }
 
-.listing dl dt {
-  flex: 0;
-}
-
+.listing dl dt,
 .listing dl dd {
-  flex: 1;
-  margin: 0;
+  margin: 0 0 0.5em;
 }
 
 .listing .permalink, .listing .host {

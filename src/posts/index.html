@@ -1,0 +1,37 @@
+<!doctype html>
+<html>
+<head lang="en-us"><script type="importmap">{"imports":{"dom":"/elements/browser-dom.js"}}</script></head>
+<body>
+  <nh-head title="Archive of all the posts on this site" description="" canonical="https://nathanherald.com/posts/"></nh-head>
+  <header class="section-header">
+    <div class="section-nav">
+      <h1 class="home-link">
+        <a class="never-underline" data-nospan="" href="/"><abbr title="Hello">&#x1F44B;</abbr></a>
+        <a href="/">I&#x2019;m Nathan</a>
+      </h1>
+      <nav>
+        <p>
+          Find more in the <a href="/posts/">archive of all the posts on this site</a> or
+          <a href="/rss.xml">subscribe with RSS</a>.
+        </p>
+      </nav>
+    </div>
+  </header>
+  <main class="section">
+    <header>
+      <h1>Archive of all the posts on this site</h1>
+    </header>
+    <div class="listing">
+      <dl class="legend">
+        <dt>&#x2B50;&#xFE0F;</dt>
+        <dd>means &#x201C;blog post&#x201D; I&#x2019;ve written</dd>
+        <dt>&#x1F517;</dt>
+        <dd>means &#x201C;link post&#x201D; linking to another site on the web, <i>that I&#x2019;m not affiliated with,</i> which is cool and you should check out</dd>
+      </dl>
+      <nh-archive-list src="../posts.json"></nh-archive-list>
+    </div>
+  </main>
+  <script type="module">import { NhHeadElement } from '/elements/nh-head.js'; NhHeadElement.define(customElements)</script>
+  <script type="module">import { NhArchiveListElement } from '/elements/nh-archive-list.js'; NhArchiveListElement.define(customElements)</script>
+</body>
+</html>

@@ -31,25 +31,7 @@
         Occasionally I <a href="/posts">write a short post or post a cool link I find on the
         web</a>, the most recent posts being:
       </p>
-      <nav class="latest-posts listing">
-        <ol>
-          <li>
-            <abbr title="blog post">⭐️</abbr> <a class="title" href="/posts/florentine-floor/">Florentine Floor</a>
-          </li>
-          <li>
-            <abbr title="link post">🔗</abbr> <a class="title" href="/posts/links/olmotrace/">OlmoTrace</a>
-          </li>
-          <li>
-            <abbr title="link post">🔗</abbr> <a class="title" href="/posts/links/the-killer-trailer/">The Killer | Official Trailer</a>
-          </li>
-          <li>
-            <abbr title="link post">🔗</abbr> <a class="title" href="/posts/links/jargalant-altai/">Jargalant Altai (Special Version)</a>
-          </li>
-          <li>
-            <abbr title="link post">🔗</abbr> <a class="title" href="/posts/links/generative-ai-vegetarianism/">Generative AI Vegetarianism</a>
-          </li>
-        </ol>
-      </nav>
+      <nh-latest-posts src="posts.json" count="5"></nh-latest-posts>
       <p>
         Find more in the <a href="/posts/">archive of all the posts on this site</a> or <a href="/rss.xml">subscribe with RSS</a>.
       </p>
@@ -100,5 +82,6 @@
   <script data-domain="nathanherald.com" defer src="https://stats.myobie.wtf/script.js"></script>
   <script async src="/transitions.js"></script>
   <script type="module">import { NhHeadElement } from '/elements/nh-head.js'; NhHeadElement.define(customElements)</script>
+  <script type="module">import { NhLatestPostsElement } from '/elements/nh-latest-posts.js'; NhLatestPostsElement.define(customElements)</script>
 </body>
 </html>

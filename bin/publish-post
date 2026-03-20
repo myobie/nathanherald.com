@@ -8,10 +8,9 @@ if [ $# -eq 0 ]; then
     echo "Example: $0 src/posts/my-post/index.md"
     echo ""
     echo "This script will:"
-    echo "1. Convert the markdown to HTML"
+    echo "1. Build the site (for src/ posts) or convert markdown to HTML (for public/ posts)"
     echo "2. Add the post to the RSS feed"
-    echo "3. Add the post to the homepage (latest 5)"
-    echo "4. Add the post to the posts archive"
+    echo "3. For public/ posts: add to homepage and archive (src/ posts use custom elements)"
     exit 1
 fi
 
@@ -30,34 +29,39 @@ fi
 echo "🚀 Publishing post: $INPUT_FILE"
 echo ""
 
-# Step 1: Convert markdown to HTML
-echo "📄 Step 1: Converting markdown to HTML..."
-"$REPO_ROOT/bin/md2html" "$INPUT_FILE"
-echo ""
-
-# Step 1b: If src/ file, run the build to serialize to public/
+# Detect src/ vs public/ path
+USE_SRC=false
 case "$INPUT_FILE" in
-    src/*|*/src/*)
-        echo "🔨 Step 1b: Building src/ to public/..."
-        cd "$REPO_ROOT" && deno task build
-        echo ""
-        ;;
+    src/*|*/src/*) USE_SRC=true ;;
 esac
 
-# Step 2: Add to RSS feed
-echo "📡 Step 2: Adding to RSS feed..."
-"$REPO_ROOT/bin/add-rss-item" "$INPUT_FILE"
-echo ""
+if $USE_SRC; then
+    # src/ path: build handles everything except RSS
+    echo "🔨 Step 1: Building src/ to public/..."
+    cd "$REPO_ROOT" && deno task build
+    echo ""
 
-# Step 3: Add to homepage
-echo "🏠 Step 3: Adding to homepage..."
-"$REPO_ROOT/bin/add-to-homepage" "$INPUT_FILE"
-echo ""
+    echo "📡 Step 2: Adding to RSS feed..."
+    "$REPO_ROOT/bin/add-rss-item" "$INPUT_FILE"
+    echo ""
+else
+    # public/ path: md2html + RSS + homepage + archive
+    echo "📄 Step 1: Converting markdown to HTML..."
+    "$REPO_ROOT/bin/md2html" "$INPUT_FILE"
+    echo ""
 
-# Step 4: Add to archive
-echo "📚 Step 4: Adding to posts archive..."
-"$REPO_ROOT/bin/add-to-archive" "$INPUT_FILE"
-echo ""
+    echo "📡 Step 2: Adding to RSS feed..."
+    "$REPO_ROOT/bin/add-rss-item" "$INPUT_FILE"
+    echo ""
+
+    echo "🏠 Step 3: Adding to homepage..."
+    "$REPO_ROOT/bin/add-to-homepage" "$INPUT_FILE"
+    echo ""
+
+    echo "📚 Step 4: Adding to posts archive..."
+    "$REPO_ROOT/bin/add-to-archive" "$INPUT_FILE"
+    echo ""
+fi
 
 echo "✅ Post published successfully!"
 echo ""
