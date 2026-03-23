@@ -2,6 +2,7 @@
 title: Kanemaki Yoshitoshi’s Sixteen-Faced Woman
 date: 2026-03-23T15:00:00+01:00
 description: Mesmerizing.
+image: /posts/links/kanemaki-sculpture/screenshot.jpg
 externalUrl: https://www.youtube.com/watch?v=74jtS3zrEPU
 ---
 

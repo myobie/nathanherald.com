@@ -85,6 +85,10 @@ export class NhMarkdownElement extends HTMLElement {
       if (ogTitle) ogTitle.setAttribute('content', title);
       const ogDesc = head.querySelector('meta[property="og:description"]');
       if (ogDesc) ogDesc.setAttribute('content', description);
+      if (fm.image) {
+        const ogImage = head.querySelector('meta[property="og:image"]');
+        if (ogImage) ogImage.setAttribute('content', fm.image);
+      }
     }
     // Set attributes on nh-page — it reacts to its own attributes
     const nhPage = doc.querySelector('nh-page');
@@ -158,4 +162,4 @@ export class NhMarkdownElement extends HTMLElement {
   }
 }
 
-// denoCacheMetadata=11828289682354961397,17294198635135770855
+// denoCacheMetadata=1875476947766887666,2544970468866684109

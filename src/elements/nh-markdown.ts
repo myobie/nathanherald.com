@@ -104,6 +104,11 @@ export class NhMarkdownElement extends HTMLElement {
 
       const ogDesc = head.querySelector('meta[property="og:description"]')
       if (ogDesc) ogDesc.setAttribute('content', description)
+
+      if (fm.image) {
+        const ogImage = head.querySelector('meta[property="og:image"]')
+        if (ogImage) ogImage.setAttribute('content', fm.image)
+      }
     }
 
     // Set attributes on nh-page — it reacts to its own attributes
