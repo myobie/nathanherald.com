@@ -62,6 +62,19 @@ function registerElements(linkie: ReturnType<typeof parseHTML>) {
 
 let count = 0
 
+// Copy non-HTML, non-TS assets from src/ to public/ first
+// (posts.json generation needs .md files in public/)
+for await (const entry of walk(srcDir, { skip: [/\/elements\//] })) {
+  if (entry.isDirectory) continue
+  if (entry.path.endsWith('.html') || entry.path.endsWith('.ts')) continue
+
+  const relPath = relative(srcDir, entry.path)
+  const outPath = join(publicDir, relPath)
+
+  await ensureDir(dirname(outPath))
+  await Deno.copyFile(entry.path, outPath)
+}
+
 // Generate posts.json before building HTML (archive page depends on it)
 const genJsonCmd = new Deno.Command(Deno.execPath(), {
   args: ['run', '--allow-read', '--allow-write', join(projectRoot, 'bin', 'gen-posts-json')],
@@ -133,18 +146,6 @@ for await (const entry of walk(join(srcDir, 'posts'), { exts: ['.md'] })) {
   await tidy(outPath)
 
   count++
-}
-
-// Copy non-HTML, non-TS assets from src/ to public/
-for await (const entry of walk(srcDir, { skip: [/\/elements\//] })) {
-  if (entry.isDirectory) continue
-  if (entry.path.endsWith('.html') || entry.path.endsWith('.ts')) continue
-
-  const relPath = relative(srcDir, entry.path)
-  const outPath = join(publicDir, relPath)
-
-  await ensureDir(dirname(outPath))
-  await Deno.copyFile(entry.path, outPath)
 }
 
 // Compile element .ts files to .js in public/elements/
