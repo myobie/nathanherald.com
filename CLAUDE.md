@@ -171,6 +171,27 @@ git diff
 - Casual, direct tone. Short paragraphs.
 - Forward looking and positive. Don't over-romanticize the past or frame the web negatively.
 
+## Image Optimization
+
+For photos and screenshots, convert to JPEG. For logos and line art, keep as PNG and optimize.
+
+**Photos/screenshots (lossy, convert to JPEG):**
+```bash
+# Convert PNG to JPEG at quality 85 (best balance of size and quality)
+magick input.png -quality 85 output.jpg
+```
+
+**PNGs that must stay PNG (logos, line art, transparency):**
+```bash
+# Lossy PNG compression (reduces to 8-bit palette, huge savings)
+pngquant --quality=65-80 --output output.png input.png
+
+# Lossless PNG optimization (smaller savings, no quality loss)
+oxipng -o 4 input.png
+```
+
+Tools: `brew install pngquant oxipng` (ImageMagick already installed via `brew install imagemagick`)
+
 ## YouTube Embeds
 
 Use the nocookie domain with plain HTML:
