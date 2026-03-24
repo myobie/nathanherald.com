@@ -1,5 +1,13 @@
 [
   {
+    "title": "Introducing pty",
+    "date": "2026-03-24T12:00:00+01:00",
+    "description": "Persistent terminal sessions. Detach, reconnect, peek, drive, and test real terminal processes.",
+    "url": "/posts/introducing-pty/",
+    "type": "link",
+    "externalUrl": "https://www.npmjs.com/package/@myobie/pty"
+  },
+  {
     "title": "Kanemaki Yoshitoshi’s Sixteen-Faced Woman",
     "date": "2026-03-23T15:00:00+01:00",
     "description": "Mesmerizing.",
@@ -97,13 +105,6 @@
     "date": "2026-03-10T12:00:00+01:00",
     "description": "A set of bash utilities for monitoring Claude Code sessions and forcing them to reconnect when remote control disconnects.",
     "url": "/posts/csesh/",
-    "type": "blog"
-  },
-  {
-    "title": "pty – a wrapper for detaching from long running processes",
-    "date": "2026-03-09T12:00:00+01:00",
-    "description": "I made a pty wrapper that lets you detach from and reconnect to long running processes, without needing tmux or zellij.",
-    "url": "/posts/pty/",
     "type": "blog"
   },
   {

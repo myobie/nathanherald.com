@@ -9,7 +9,51 @@
       <title>nathanherald.com feed</title>
       <link>https://nathanherald.com/</link>
     </image>
-    <lastBuildDate>Mon, 23 Mar 2026 13:29:09 +0100</lastBuildDate>
+    <lastBuildDate>Wed, 25 Mar 2026 00:04:37 +0100</lastBuildDate>
+
+    <item>
+      <title>Introducing pty</title>
+      <link>https://nathanherald.com/posts/introducing-pty/</link>
+      <pubDate>Wed, 25 Mar 2026 00:04:20 +0100</pubDate>
+      <guid isPermaLink="true">https://nathanherald.com/posts/introducing-pty/</guid>
+      <description>&lt;p&gt;I’ve been using &lt;a href="https://zellij.dev/"&gt;zellij&lt;/a&gt; full time
+for a while and while I liked it better than tmux, I kept running into
+weird issues. I couldn’t scroll when using the &lt;a
+href="https://github.com/openai/codex"&gt;codex CLI&lt;/a&gt;. It would use 300%
+CPU on my Mac while doing almost nothing. Loading sessions from my
+iPhone over SSH didn’t render well.&lt;/p&gt;
+&lt;p&gt;I use &lt;a href="https://sw.kovidgoyal.net/kitty/"&gt;kitty&lt;/a&gt; which
+already supports &lt;a
+href="https://sw.kovidgoyal.net/kitty/layouts/"&gt;splits, tabs, and
+layouts&lt;/a&gt;, so all I really need from a multiplexer is the ability to
+detach from long running processes and come back to them later.&lt;/p&gt;
+&lt;p&gt;You don’t need tmux, zellij, or any of those other problematic
+multiplexers. You just need pty.&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://github.com/myobie/pty"&gt;pty&lt;/a&gt; uses &lt;a
+href="https://github.com/xtermjs/xterm.js/tree/master/headless"&gt;@xterm/headless&lt;/a&gt;
+to run processes inside a real terminal emulator with a real width,
+height, full interactivity. Run vim, hx, mactop, dev servers, claude
+code, codex, whatever. Detach, it keeps running. Attach, you are back in
+it. Attach from multiple clients at once, perfectly fine. Type on one
+client, shows up on every attached client.&lt;/p&gt;
+&lt;p&gt;I took it further: pty resizes to the smallest currently connected
+client, so my phone never tries to render a shell that is meant for my
+XDR display.&lt;/p&gt;
+&lt;p&gt;I added a &lt;code&gt;peek&lt;/code&gt; command where you can spy on a running
+process without fully attaching, just get a snapshot (ANSI or plain
+text). And I made it possible to send text or key combos into a
+background shell from the outside without attaching.&lt;/p&gt;
+&lt;p&gt;And then I realized: if we can remotely spy on and drive a real xterm
+session, then we could make a playwright-like terminal testing
+framework. And so &lt;a
+href="https://github.com/myobie/pty/blob/main/docs/testing.md"&gt;pty has a
+testing library&lt;/a&gt;. Test your CLI or TUI with vitest. Assert on the
+real output your users see.&lt;/p&gt;
+&lt;p&gt;I’m excited to share this first version of pty and I’m looking for
+feedback. Hit me up on &lt;a
+href="https://www.threads.net/@myobie"&gt;threads&lt;/a&gt; or &lt;a
+href="https://indieweb.social/@myobie"&gt;mastodon&lt;/a&gt;.&lt;/p&gt;</description>
+    </item>
 
     <item>
       <title>Kanemaki Yoshitoshi’s Sixteen-Faced Woman</title>
@@ -283,31 +327,7 @@ own my inference, so I can use a local, open source model instead of
 Claude for this website. One step at a time.&lt;/p&gt;</description>
     </item>
 
-    <item>
-      <title>pty – a wrapper for detaching from long running processes</title>
-      <link>https://nathanherald.com/posts/pty/</link>
-      <pubDate>Mon, 09 Mar 2026 20:49:13 +0100</pubDate>
-      <guid isPermaLink="true">https://nathanherald.com/posts/pty/</guid>
-      <description>&lt;p&gt;I opened my laptop this morning and my existing zellij sessions were
-using 300% CPU and tons of memory. And it occurred to me: I don't really
-need all this multiplexing. I just need to detach from a few important
-long running processes.&lt;/p&gt;
-&lt;p&gt;So I made &lt;a href="https://github.com/myobie/pty"&gt;a pty wrapper&lt;/a&gt;
-for exactly that. No session management, no window splitting, no status
-bar, just the ability to keep long running processes alive and reconnect
-to them. It uses xterm/headless for compatibility with applications like
-vim.&lt;/p&gt;
-&lt;p&gt;The goal is you can connect to processes from any kind of shell:
-ghostty, tmux, iTerm, a terminal over ssh, and all at the same time. The
-server allows multiple connections per process. This has felt way more
-flexible to me and therefore more unix-like.&lt;/p&gt;
-&lt;p&gt;I'm also working on a websocket API for the pty server. I plan to
-keep iterating on this over the next month. Is this something you'd be
-interested in using? Try it out and &lt;a
-href="https://indieweb.social/@myobie"&gt;let me know how it goes on
-Mastodon&lt;/a&gt;.&lt;/p&gt;</description>
-    </item>
-
+    
     <item>
       <title>TIL Acorn can screenshot with layers</title>
       <link>https://nathanherald.com/posts/til/acorn-screenshot-layers/</link>
