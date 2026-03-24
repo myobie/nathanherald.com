@@ -29,7 +29,7 @@ function parseFrontmatter(text: string): Record<string, string> {
   for (const line of fmLines) {
     if (delim === '---') {
       const match = line.match(/^(\w+):\s*(.+)/)
-      if (match) result[match[1]] = match[2]
+      if (match) result[match[1]] = match[2].replace(/^["'](.*)["']$/, '$1')
     } else {
       const match = line.match(/^(\w+)\s*=\s*"(.+?)"/)
       if (match) result[match[1]] = match[2]
