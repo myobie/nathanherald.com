@@ -132,9 +132,9 @@ export class NhMarkdownElement extends HTMLElement {
     const result = {};
     for (const line of fmLines){
       if (delim === '---') {
-        // YAML: key: value
+        // YAML: key: value (strip surrounding quotes if present)
         const match = line.match(/^(\w+):\s*(.+)/);
-        if (match) result[match[1]] = match[2];
+        if (match) result[match[1]] = match[2].replace(/^["'](.*)["']$/, '$1');
       } else {
         // TOML: key = "value"
         const match = line.match(/^(\w+)\s*=\s*"(.+?)"/);
@@ -162,4 +162,4 @@ export class NhMarkdownElement extends HTMLElement {
   }
 }
 
-// denoCacheMetadata=1875476947766887666,2544970468866684109
+// denoCacheMetadata=7878485863242203275,3274610594734477118

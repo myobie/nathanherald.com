@@ -146,9 +146,9 @@ export class NhMarkdownElement extends HTMLElement {
 
     for (const line of fmLines) {
       if (delim === '---') {
-        // YAML: key: value
+        // YAML: key: value (strip surrounding quotes if present)
         const match = line.match(/^(\w+):\s*(.+)/)
-        if (match) result[match[1]] = match[2]
+        if (match) result[match[1]] = match[2].replace(/^["'](.*)["']$/, '$1')
       } else {
         // TOML: key = "value"
         const match = line.match(/^(\w+)\s*=\s*"(.+?)"/)

@@ -1,5 +1,12 @@
 [
   {
+    "title": "\"TIL: at, atq, and atrun\"",
+    "date": "2026-03-25T01:00:00+01:00",
+    "description": "Schedule one-off commands to run later from the terminal. Built into Unix.",
+    "url": "/posts/til/at-atq-atrun/",
+    "type": "blog"
+  },
+  {
     "title": "Introducing pty",
     "date": "2026-03-24T12:00:00+01:00",
     "description": "Persistent terminal sessions. Detach, reconnect, peek, drive, and test real terminal processes.",

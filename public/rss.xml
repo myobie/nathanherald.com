@@ -9,7 +9,35 @@
       <title>nathanherald.com feed</title>
       <link>https://nathanherald.com/</link>
     </image>
-    <lastBuildDate>Wed, 25 Mar 2026 00:04:37 +0100</lastBuildDate>
+    <lastBuildDate>Wed, 25 Mar 2026 00:15:02 +0100</lastBuildDate>
+
+    <item>
+      <title>"TIL: at, atq, and atrun"</title>
+      <link>https://nathanherald.com/posts/til/at-atq-atrun/</link>
+      <pubDate>Wed, 25 Mar 2026 00:14:26 +0100</pubDate>
+      <guid isPermaLink="true">https://nathanherald.com/posts/til/at-atq-atrun/</guid>
+      <description>&lt;p&gt;Today I learned about &lt;code&gt;at&lt;/code&gt;, a built-in Unix command that
+schedules a one-off command to run at a specific time. Unlike cron,
+which is for recurring tasks, &lt;code&gt;at&lt;/code&gt; runs something once and
+then the job is gone.&lt;/p&gt;
+&lt;div class="sourceCode" id="cb1"&gt;&lt;pre
+class="sourceCode bash"&gt;&lt;code class="sourceCode bash"&gt;&lt;span id="cb1-1"&gt;&lt;a href="#cb1-1" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;span class="co"&gt;# Schedule a command for 10am&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb1-2"&gt;&lt;a href="#cb1-2" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;span class="bu"&gt;echo&lt;/span&gt; &lt;span class="st"&gt;&amp;#39;toot post &amp;quot;Hello from the future&amp;quot;&amp;#39;&lt;/span&gt;  &lt;span class="kw"&gt;|&lt;/span&gt; &lt;span class="ex"&gt;at&lt;/span&gt; 10:00&lt;/span&gt;
+&lt;span id="cb1-3"&gt;&lt;a href="#cb1-3" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;/span&gt;
+&lt;span id="cb1-4"&gt;&lt;a href="#cb1-4" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;span class="co"&gt;# List pending jobs&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb1-5"&gt;&lt;a href="#cb1-5" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;span class="ex"&gt;atq&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb1-6"&gt;&lt;a href="#cb1-6" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;/span&gt;
+&lt;span id="cb1-7"&gt;&lt;a href="#cb1-7" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;span class="co"&gt;# See what a job will run&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb1-8"&gt;&lt;a href="#cb1-8" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;span class="ex"&gt;at&lt;/span&gt; &lt;span class="at"&gt;-c&lt;/span&gt; 1&lt;/span&gt;
+&lt;span id="cb1-9"&gt;&lt;a href="#cb1-9" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;/span&gt;
+&lt;span id="cb1-10"&gt;&lt;a href="#cb1-10" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;span class="co"&gt;# Cancel a job&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb1-11"&gt;&lt;a href="#cb1-11" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;span class="ex"&gt;atrm&lt;/span&gt; 1&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;On macOS, you need to enable &lt;code&gt;atrun&lt;/code&gt; first:&lt;/p&gt;
+&lt;div class="sourceCode" id="cb2"&gt;&lt;pre
+class="sourceCode bash"&gt;&lt;code class="sourceCode bash"&gt;&lt;span id="cb2-1"&gt;&lt;a href="#cb2-1" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;span class="fu"&gt;sudo&lt;/span&gt; launchctl load &lt;span class="at"&gt;-w&lt;/span&gt; /System/Library/LaunchDaemons/com.apple.atrun.plist&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;That’s it. No config files, no services to manage. Just
+&lt;code&gt;echo "command" | at TIME&lt;/code&gt; and walk away.&lt;/p&gt;</description>
+    </item>
 
     <item>
       <title>Introducing pty</title>
