@@ -1,5 +1,13 @@
 [
   {
+    "title": "This ‘89 Pistons Cable Outro Goes Unnecessarily Hard",
+    "date": "2026-03-25T12:00:00+01:00",
+    "description": "This really does go hard.",
+    "url": "/posts/links/89-pistons-outro/",
+    "type": "link",
+    "externalUrl": "https://www.youtube.com/watch?v=mCm1SMaL1YY"
+  },
+  {
     "title": "TIL: at, atq, and atrun",
     "date": "2026-03-25T01:00:00+01:00",
     "description": "Schedule one-off commands to run later from the terminal. Built into Unix.",
