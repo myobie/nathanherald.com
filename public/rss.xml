@@ -9,7 +9,28 @@
       <title>nathanherald.com feed</title>
       <link>https://nathanherald.com/</link>
     </image>
-    <lastBuildDate>Sat, 28 Mar 2026 11:50:43 +0100</lastBuildDate>
+    <lastBuildDate>Sat, 28 Mar 2026 13:11:30 +0100</lastBuildDate>
+
+    <item>
+      <title>airdrop CLI</title>
+      <link>https://nathanherald.com/posts/airdrop-cli/</link>
+      <pubDate>Sat, 28 Mar 2026 13:09:14 +0100</pubDate>
+      <guid isPermaLink="true">https://nathanherald.com/posts/airdrop-cli/</guid>
+      <description>&lt;p&gt;I made a tiny macOS CLI that opens the AirDrop sharing flow from the
+terminal. Just &lt;code&gt;airdrop file.txt&lt;/code&gt; and the system share sheet
+pops up.&lt;/p&gt;
+&lt;video width="560" controls&gt;
+&lt;source src="demo.mp4" type="video/mp4"&gt;
+&lt;/video&gt;
+
+&lt;p&gt;It’s a few lines of Swift, built with SwiftPM. Install it with
+&lt;code&gt;./install.sh&lt;/code&gt; and it drops a binary into
+&lt;code&gt;~/bin/airdrop&lt;/code&gt;.&lt;/p&gt;
+&lt;div class="sourceCode" id="cb1"&gt;&lt;pre
+class="sourceCode bash"&gt;&lt;code class="sourceCode bash"&gt;&lt;span id="cb1-1"&gt;&lt;a href="#cb1-1" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;span class="ex"&gt;airdrop&lt;/span&gt; /path/to/file&lt;/span&gt;
+&lt;span id="cb1-2"&gt;&lt;a href="#cb1-2" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;span class="ex"&gt;airdrop&lt;/span&gt; /path/to/file1 /path/to/file2&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Source on &lt;a href="https://github.com/myobie/airdrop"&gt;GitHub&lt;/a&gt;.&lt;/p&gt;</description>
+    </item>
 
     <item>
       <title>ひとひら - 円 (Official Music Video)</title>

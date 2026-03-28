@@ -1,5 +1,12 @@
 [
   {
+    "title": "airdrop CLI",
+    "date": "2026-03-28T13:00:00+01:00",
+    "description": "A small macOS CLI that opens the system AirDrop sharing flow for one or more files.",
+    "url": "/posts/airdrop-cli/",
+    "type": "blog"
+  },
+  {
     "title": "ひとひら - 円 (Official Music Video)",
     "date": "2026-03-27T15:00:00+01:00",
     "description": "I’ve been jamming to this all morning.",
