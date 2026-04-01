@@ -9,7 +9,15 @@
       <title>nathanherald.com feed</title>
       <link>https://nathanherald.com/</link>
     </image>
-    <lastBuildDate>Sat, 28 Mar 2026 13:11:30 +0100</lastBuildDate>
+    <lastBuildDate>Wed, 01 Apr 2026 13:26:42 +0200</lastBuildDate>
+
+    <item>
+      <title>Artemis II Launches to the Moon</title>
+      <link>https://nathanherald.com/posts/links/artemis-ii/</link>
+      <pubDate>Wed, 01 Apr 2026 13:24:33 +0200</pubDate>
+      <guid isPermaLink="true">https://nathanherald.com/posts/links/artemis-ii/</guid>
+      <description>&lt;p&gt;Humans are heading back to the Moon. How incredible.&lt;/p&gt;</description>
+    </item>
 
     <item>
       <title>airdrop CLI</title>
