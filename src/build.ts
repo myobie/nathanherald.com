@@ -66,7 +66,7 @@ let count = 0
 // (posts.json generation needs .md files in public/)
 for await (const entry of walk(srcDir, { skip: [/\/elements\//] })) {
   if (entry.isDirectory) continue
-  if (entry.path.endsWith('.html') || entry.path.endsWith('.ts')) continue
+  if (entry.name === 'index.html' || entry.name === 'post.html' || entry.path.endsWith('.ts')) continue
 
   const relPath = relative(srcDir, entry.path)
   const outPath = join(publicDir, relPath)

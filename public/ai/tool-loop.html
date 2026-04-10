@@ -1,0 +1,145 @@
+<pre id="tool-loop-display" style="
+  background: #0a0c12;
+  color: #c9cdd5;
+  padding: 1.5rem;
+  font-size: 13px;
+  line-height: 1.6;
+  min-height: 280px;
+  overflow: hidden;
+"></pre>
+<script>
+(function() {
+  const el = document.getElementById('tool-loop-display')
+  if (!el) return
+
+  const accent = '\x1b[32m'  // not real ansi, just markers
+  const link = '\x1b[36m'
+  const warn = '\x1b[33m'
+  const dim = '\x1b[90m'
+  const reset = '\x1b[0m'
+
+  // We just use plain text, no ANSI. Color via CSS on the pre element.
+  // For "color" we use unicode symbols and spacing.
+
+  const frames = []
+
+  function frame(loopNum, stepNum, lines) {
+    const header = 'loop ' + loopNum + ', step ' + stepNum + '/4'
+    const bar = '\u2500'.repeat(40)
+    frames.push(header + '\n' + bar + '\n\n' + lines.join('\n'))
+  }
+
+  // Loop 1
+  frame(1, 1, [
+    '  context \u2192 LLM',
+    '  Sending conversation so far...',
+  ])
+  frame(1, 2, [
+    '  LLM generating tokens',
+    '',
+    '  Let me look at the login',
+  ])
+  frame(1, 2, [
+    '  LLM generating tokens',
+    '',
+    '  Let me look at the login',
+    '  handler to find the bug.',
+  ])
+  frame(1, 3, [
+    '  \u25b6 tool: read_file("src/auth.ts")',
+    '',
+    '  running...',
+  ])
+  frame(1, 4, [
+    '  \u2190 tool result',
+    '',
+    '  export function login(email) {',
+    '    const token = createSession()',
+    '    // BUG: token not returned',
+    '  }',
+  ])
+
+  // Loop 2
+  frame(2, 1, [
+    '  context + result \u2192 LLM',
+    '  Feeding tool output back in...',
+  ])
+  frame(2, 2, [
+    '  LLM generating tokens',
+    '',
+    '  Found it. The session token',
+  ])
+  frame(2, 2, [
+    '  LLM generating tokens',
+    '',
+    '  Found it. The session token',
+    '  is created but never returned.',
+  ])
+  frame(2, 3, [
+    '  \u25b6 tool: edit_file("src/auth.ts", ...)',
+    '',
+    '  running...',
+  ])
+  frame(2, 4, [
+    '  \u2190 tool result',
+    '',
+    '  \u2713 File edited successfully',
+  ])
+
+  // Loop 3
+  frame(3, 1, [
+    '  context + result \u2192 LLM',
+    '  Feeding tool output back in...',
+  ])
+  frame(3, 2, [
+    '  LLM generating tokens',
+    '',
+    '  Now let me verify the fix.',
+  ])
+  frame(3, 3, [
+    '  \u25b6 tool: run_tests()',
+    '',
+    '  running...',
+  ])
+  frame(3, 4, [
+    '  \u2190 tool result',
+    '',
+    '  \u2713 47 tests passed',
+  ])
+
+  // Loop 4 (final)
+  frame(4, 1, [
+    '  context + result \u2192 LLM',
+    '  Feeding tool output back in...',
+  ])
+  frame(4, 2, [
+    '  LLM generating tokens',
+    '',
+    '  The login bug is fixed.',
+    '  All tests pass. \u2713',
+  ])
+
+  let index = 0
+  let cursorVisible = true
+
+  function render() {
+    const text = frames[index]
+    const cursor = cursorVisible ? '\u2588' : ' '
+    el.textContent = text + cursor
+  }
+
+  // Cursor blink
+  setInterval(function() {
+    cursorVisible = !cursorVisible
+    render()
+  }, 400)
+
+  // Frame advance
+  setInterval(function() {
+    index = (index + 1) % frames.length
+    render()
+  }, 1800)
+
+  render()
+})()
+</script>

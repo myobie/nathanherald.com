@@ -1,0 +1,452 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>The current state of AI, as I see it – Nathan Herald</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Where AI actually is in April 2026, how I use it daily, and how this stuff actually works.">
+  <meta property="og:title" content="The current state of AI, as I see it">
+  <meta property="og:description" content="Where AI actually is in April 2026, how I use it daily, and how this stuff actually works.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="/og.png">
+  <meta property="og:site_name" content="I’m Nathan Herald">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+  <link href="/rss.xml" rel="alternate" title="Feed of all the posts on nathanherald.com" type="application/rss+xml">
+  <style>
+    :root {
+      --bg: #0f1117;
+      --text: #c9cdd5;
+      --dim: #5c6370;
+      --accent: #56d6a0;
+      --accent-dim: #2a6e52;
+      --link: #67d4e8;
+      --surface: #161922;
+      --border: #2a2e3a;
+      --mono: SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+      --body: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--body);
+      font-size: 18px;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      max-width: 72ch;
+      margin: 0 auto;
+      padding: 3rem 1.5rem 6rem;
+    }
+
+    /* ── Title block ── */
+
+    .title-box {
+      font-family: var(--mono);
+      font-size: 0.85rem;
+      line-height: 1.6;
+      color: var(--accent);
+      white-space: pre;
+      margin-bottom: 4rem;
+      border: 1px solid var(--accent);
+      padding: 1.2rem 1.5rem;
+      display: inline-block;
+    }
+
+    /* ── Section headers ── */
+
+    .section-header {
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      line-height: 1.4;
+      color: var(--accent);
+      white-space: pre;
+      margin: 4rem 0 2rem;
+      letter-spacing: 0.05em;
+      border: 1px solid var(--accent);
+      padding: 0.6rem 1rem;
+      display: inline-block;
+    }
+
+    /* ── Sub-headers ── */
+
+    h3 {
+      font-family: var(--mono);
+      font-size: 0.9rem;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin: 2.5rem 0 1rem;
+    }
+
+    /* ── Body text ── */
+
+    p {
+      margin-bottom: 1.2rem;
+    }
+
+    /* ── Links ── */
+
+    a {
+      color: var(--link);
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+
+    a:hover {
+      color: var(--accent);
+    }
+
+    /* ── Block links (URLs on their own line) ── */
+
+    .link-block {
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      display: block;
+      margin: 0.8rem 0 1.2rem 2ch;
+      color: var(--link);
+      word-break: break-all;
+    }
+
+    /* ── Blockquotes ── */
+
+    blockquote {
+      border-left: 2px solid var(--accent-dim);
+      padding: 0.5rem 0 0.5rem 1.5rem;
+      margin: 1.2rem 0;
+      color: var(--dim);
+      font-family: var(--mono);
+      font-size: 0.85rem;
+      line-height: 1.5;
+    }
+
+    blockquote p {
+      margin-bottom: 0.5rem;
+    }
+
+    /* ── Tool list ── */
+
+    .tool-list {
+      font-family: var(--mono);
+      font-size: 0.85rem;
+      line-height: 1.8;
+      margin: 1rem 0 1.5rem 2ch;
+      color: var(--text);
+    }
+
+    .tool-list li {
+      list-style: none;
+      padding-left: 2ch;
+      position: relative;
+    }
+
+    .tool-list li::before {
+      content: "\25B8";
+      position: absolute;
+      left: 0;
+      color: var(--accent-dim);
+    }
+
+    /* ── Numbered steps ── */
+
+    .steps {
+      font-family: var(--mono);
+      font-size: 0.85rem;
+      line-height: 1.8;
+      margin: 1rem 0 1.5rem 2ch;
+      list-style: none;
+      counter-reset: step;
+    }
+
+    .steps li {
+      counter-increment: step;
+      padding-left: 3ch;
+      position: relative;
+    }
+
+    .steps li::before {
+      content: counter(step) ".";
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+    }
+
+    /* ── Tier labels ── */
+
+    .tier-label {
+      font-family: var(--mono);
+      font-size: 0.85rem;
+      color: var(--accent);
+      letter-spacing: 0.05em;
+      margin: 2.5rem 0 1rem;
+      padding-bottom: 0.3rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* ── Horizontal rules ── */
+
+    hr {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 2rem 0;
+    }
+
+    /* ── Emphasis ── */
+
+    strong {
+      color: #e8e8ee;
+      font-weight: 700;
+    }
+
+    em {
+      color: var(--dim);
+      font-style: italic;
+    }
+
+    /* ── Inline code ── */
+
+    code {
+      font-family: var(--mono);
+      font-size: 0.85em;
+      background: var(--surface);
+      padding: 0.15em 0.4em;
+      border-radius: 3px;
+      color: var(--accent);
+    }
+
+    /* ── Animation container ── */
+
+    .animation-container {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      margin: 2rem 0;
+      overflow: hidden;
+    }
+
+    .animation-container canvas {
+      display: block;
+      width: 100%;
+    }
+
+    /* ── Footer nav ── */
+
+    .page-footer {
+      margin-top: 5rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border);
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      color: var(--dim);
+    }
+
+    .page-footer a {
+      color: var(--dim);
+    }
+
+    /* ── Pull quote ── */
+
+    .pull-quote {
+      font-size: 1.15rem;
+      line-height: 1.6;
+      color: #e8e8ee;
+      margin: 2rem 0;
+      padding: 1rem 0 1rem 1.5rem;
+      border-left: 3px solid var(--accent);
+    }
+
+    /* ── Responsive ── */
+
+    @media (max-width: 600px) {
+      html { font-size: 16px; }
+      body { padding: 2rem 1rem 4rem; }
+      .title-box { font-size: 0.7rem; }
+      .section-header { font-size: 0.7rem; }
+    }
+  </style>
+</head>
+<body>
+
+<pre class="title-box" role="banner">The current state of AI, as I see it
+
+by Nathan Herald · April 2026</pre>
+
+<main>
+
+<!-- ════════════════════════════════════════════ -->
+<pre class="section-header" role="heading" aria-level="2">WHERE WE ARE AT</pre>
+
+<section id="where-we-are">
+
+<p class="pull-quote">We are past the “is AI useful?” debate.</p>
+
+<p>On April 7, Anthropic announced Claude Mythos Preview, a new frontier model they are not releasing to the public. They are holding it back because it finds software vulnerabilities too well. A 27-year-old bug in OpenBSD. Zero-days in every major browser and operating system. Mythos is being given to a small group of launch partners and nobody else.</p>
+
+<a class="link-block" href="https://www.threads.com/@claudeai/post/DW1vn9nEfk_">threads.com/@claudeai – Introducing Project Glasswing</a>
+
+<p>Meanwhile Daniel Stenberg, the maintainer of curl, posted this a few days ago:</p>
+
+<blockquote>
+<p>“I ran a quick git log grep just now. Over the last ~6 months or so, we have fixed over 200 bugs in curl found with AI tools.”</p>
+</blockquote>
+
+<p>Stenberg used to be the loudest voice against AI-generated security reports. His position has shifted. The slop is basically gone. What is left is a flood of real reports. Curl has received more security reports in the first quarter of 2026 than in all of 2024, at four times the weekly volume. Maintainers across the ecosystem (Apache, Django, Firefox, git, glibc, the Linux kernel, Python, Wireshark) are drowning in legitimate AI-assisted work they cannot absorb fast enough.</p>
+
+<p>And it is not only about security. Real software is shipping. Mitchell Hashimoto has been writing about his adoption journey at HashiCorp and on Ghostty:</p>
+
+<a class="link-block" href="https://mitchellh.com/writing/my-ai-adoption-journey">mitchellh.com – My AI Adoption Journey</a>
+
+<p>Simon Willison has been writing consistently about patterns that actually work for professional engineers using agents:</p>
+
+<a class="link-block" href="https://simonwillison.net/2026/Feb/23/agentic-engineering-patterns/">simonwillison.net – Agentic Engineering Patterns</a>
+
+<p>They are building with it, in public, and documenting what is working and what is not.</p>
+
+<p>Capable models are finding real bugs in critical infrastructure and real software is shipping. The ecosystem that has to absorb all of this is not moving at the same speed. That is the real tension in April 2026, and it is not going away.</p>
+
+</section>
+
+<!-- ════════════════════════════════════════════ -->
+<pre class="section-header" role="heading" aria-level="2">HOW I USE AI DAILY</pre>
+
+<section id="how-i-use-ai">
+
+<p>I use Claude Code and Codex every day.</p>
+
+<p>I don’t have a CMS for this website anymore. I ask Claude Code to publish things and it does. I wrote about that <a href="/posts/no-cms/">here</a>.</p>
+
+<p>I run every project at the level of automation that fits it. I think of it as three tiers.</p>
+
+<div class="tier-label">Tier 1, Hands Off</div>
+
+<p>I am the CEO, the agent is the developer. I never read the code. I describe what I want and use the thing. I have a personal journal app, a podcast listening app, and a handful of CLI tools in this tier. I have never looked at the source for any of them and I don’t plan to.</p>
+
+<p>The point of this tier is that if the software is just for me and nobody gets hurt when it breaks, then the code is not the artifact. The artifact is the experience of using it. If the experience is good, the code is good enough.</p>
+
+<div class="tier-label">Tier 2, Hands On</div>
+
+<p>Anything that ships to other people lives here. <a href="https://new.space/">new.space</a> is in this tier. My cofounder and I review everything carefully. Sometimes I write the code myself, especially in areas where the current generation of coding agents struggle. Sometimes I will have an agent do a spike, telling it to do whatever it takes to get it to work and giving it a verification loop (even if that means UI testing or simulation). After I see the spike working I throw all of that code away and start over. Then I work with an agent more closely to build a real version of the feature, with the spike as my reference.</p>
+
+<p>This tier is the one people struggle to talk about honestly. You can move fast with an agent and you can also ship dangerous code fast with an agent. Both are true at the same time. The answer is process, not ideology.</p>
+
+<div class="tier-label">Tier 3, Hands Only</div>
+
+<p>For projects in this tier: I write near 90% of the code myself. Usually because I want to learn something, or I genuinely enjoy the problem, or both. I keep an agent open in another window and ask it questions as I work, like a coworker I can interrupt for free. Sometimes I will let it generate something tedious: fixture data, a batch of repetitive tests, a pattern I have already established that I don’t want to type a hundred more times.</p>
+
+<p>The code is mine. The agent is a reference that can also type.</p>
+
+<hr>
+
+<p>The thing that matters more than any single tier is letting each project live at the level of automation that fits it. A personal CLI does not need code review. A mobile app that handles other people’s data absolutely does. A side project where the goal is to learn should not be fully automated away.</p>
+
+</section>
+
+<!-- ════════════════════════════════════════════ -->
+<pre class="section-header" role="heading" aria-level="2">HOW THIS STUFF ACTUALLY WORKS</pre>
+
+<section id="how-it-works">
+
+<p><em>If you are not using AI much yet, here is the minimum you need to understand what people mean when they say “agent.”</em></p>
+
+<h3>LLMs generate one token at a time</h3>
+
+<p>A large language model takes a pile of text (a “context”) and generates the next token. A token is roughly a word or part of a word. Then it takes the context plus that new token and generates the next one. And the next. It is doing statistics on enormous amounts of training data to guess what should come next.</p>
+
+<p>That is the entire thing the model itself does. Predict the next token.</p>
+
+<h3>We can give the LLM tools</h3>
+
+<p>A “tool” is just a function the model is allowed to ask for. We tell the model, in its context, what tools exist and what their arguments look like. Some examples of tools:</p>
+
+<ul class="tool-list">
+<li>read a file at a given path</li>
+<li>write a file with some contents</li>
+<li>run a shell command and capture the output</li>
+<li>search the web</li>
+<li>query a database</li>
+<li>send an HTTP request</li>
+<li>take a screenshot of a running app</li>
+<li>run the test suite</li>
+</ul>
+
+<p>When we give the model a list of tools, we are not giving it new abilities. We are giving it permission to ask for help. The model itself still only knows how to predict the next token. What has changed is that now some of the tokens it can predict are structured requests like “I want to call the <code>run_tests</code> tool with no arguments.” That request is just more text. Something outside the model has to actually run the test suite and then put the result back into the context for the model to see.</p>
+
+<h3>An agent is tools in a loop</h3>
+
+<p>An agent is a harness, a regular program, not magic, that does this in a loop:</p>
+
+<ol class="steps">
+<li>Send the current context to the LLM</li>
+<li>If the LLM writes a tool call, run the tool</li>
+<li>Take the tool’s output and append it to the context</li>
+<li>Go to 1</li>
+</ol>
+
+<p>The harness is where the engineering happens. It decides which tools are available, how errors are handled, when to stop, how to keep the context from getting too big, what to log. Two agents running on the same model can feel completely different because their harnesses are different.</p>
+
+<div class="animation-container">
+  <nh-include src="tool-loop.html"></nh-include>
+</div>
+
+<h3>Verification loops are how agents get good</h3>
+
+<p>An agent writing code will be wrong a lot of times. A verification loop gives it a way to notice. Run the tests, check the types, compile, lint, take a screenshot of the running app. If something fails, the failure becomes part of the context. The next pass has new information to work with.</p>
+
+<p>This is why TDD matters more now than ever. A test suite is a machine-readable spec that the agent can hit repeatedly. Without a verification loop, the agent is guessing. With one, it is iterating toward something correct.</p>
+
+<p>Everything interesting that agents do today comes from this pattern: tools in a loop, checked by more tools.</p>
+
+<p>Agents don’t get tired, don’t care if you throw away their work and start over, and so they can accomplish things that people normally wouldn’t. The more tedious, the more likely an agent is a good choice to handle it. A lot of the increased productivity people are seeing with agents right now is not doing their normal work faster, it is doing work they never would have even considered before because of the tedium or similar. This type of productivity increase is easy to overlook.</p>
+
+</section>
+
+<!-- ════════════════════════════════════════════ -->
+<pre class="section-header" role="heading" aria-level="2">PROVENANCE MATTERS</pre>
+
+<section id="provenance">
+
+<p>Not all AI is trained the same way.</p>
+
+<p>There is a loud and correct argument that the big frontier models were trained on scraped content without permission. The courts are not going to unscramble this. The UK and Germany have already ruled in opposite directions on essentially the same question.</p>
+
+<p>But “all AI is stolen” is wrong. There are models trained differently and they prove the ethical version is possible.</p>
+
+<p>Adobe Firefly is trained only on content Adobe has licensed. Microsoft’s Phi-4 family is trained on a mix of filtered public data, licensed books, and academic sources, and it is small enough to run on a laptop or a phone. Allen AI’s Olmo publishes its weights, its training data, its training code, and its checkpoints. Their OlmoTrace tool lets you find verbatim matches between a model’s output and its training corpus. You can actually see where the words came from.</p>
+
+<p class="pull-quote">Provenance is possible. Provenance is a choice.</p>
+
+</section>
+
+<!-- ════════════════════════════════════════════ -->
+<pre class="section-header" role="heading" aria-level="2">WHERE I LAND</pre>
+
+<section id="where-i-land">
+
+<p class="pull-quote">I don’t want to rent brainpower forever.</p>
+
+<p>I am working on my own agent harness. I use Qwen 3.5 and Gemma 4 locally on my Mac today and both of them are genuinely good. The top local models right now are roughly where Sonnet 4 was a year ago, and I was using Claude Code with Sonnet 4 to one-shot and ship production code. That was enough then and it is enough now.</p>
+
+<p>My goal for the end of this year is a local-first coding agent that can do 80 to 90 percent of what I need day to day. On my machine. No subscription. No network required for the work I care about.</p>
+
+<p>The point is not ideology. The point is control. AI is moving faster than any regulator, any court, any maintainer, and any company’s ability to contain it. The answer is not to hide from it and it is not to hand everything to a handful of cloud providers. The answer is to own the tools we depend on, run them ourselves when we can, review them when we can’t, and be honest about which projects deserve which amount of care.</p>
+
+<p>That is the current state of AI, as I see it, in April 2026.</p>
+
+</section>
+
+</main>
+
+<footer class="page-footer">
+  <a href="/">nathanherald.com</a> · <a href="/posts/">archive</a> · <a href="/rss.xml">rss</a>
+</footer>
+
+<script type="importmap">{"imports":{"dom":"/elements/browser-dom.js"}}</script>
+<script type="module">import { NhIncludeElement } from '/elements/nh-include.js'; NhIncludeElement.define(customElements)</script>
+
+</body>
+</html>
