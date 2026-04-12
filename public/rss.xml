@@ -9,7 +9,154 @@
       <title>nathanherald.com feed</title>
       <link>https://nathanherald.com/</link>
     </image>
-    <lastBuildDate>Fri, 10 Apr 2026 13:07:33 +0200</lastBuildDate>
+    <lastBuildDate>Sun, 12 Apr 2026 11:41:28 +0200</lastBuildDate>
+
+    <item>
+      <title>"THE BLADE (1995): The Edges of Wuxia"</title>
+      <link>https://nathanherald.com/posts/links/every-frame-a-painting-the-blade/</link>
+      <pubDate>Sun, 12 Apr 2026 11:40:57 +0200</pubDate>
+      <guid isPermaLink="true">https://nathanherald.com/posts/links/every-frame-a-painting-the-blade/</guid>
+      <description>&lt;iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/ttehPZsNcxI" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen&gt;&lt;/iframe&gt;
+
+&lt;p&gt;Always great to see another Every Frame A Painting, it makes a
+&lt;em&gt;ton&lt;/em&gt; of sense for Criterion to work with Tony, and the
+comparison of kung fu movies to westerns is so good!&lt;/p&gt;</description>
+    </item>
+
+    <item>
+      <title>How I use AI daily, April 2026</title>
+      <link>https://nathanherald.com/posts/how-i-use-ai-daily-april-2026/</link>
+      <pubDate>Fri, 10 Apr 2026 15:46:06 +0200</pubDate>
+      <guid isPermaLink="true">https://nathanherald.com/posts/how-i-use-ai-daily-april-2026/</guid>
+      <description>&lt;p&gt;I keep a list in Reminders for every project I work on. When I sit
+down in the morning I scan through those lists and pick what to work on.
+Usually I make a git worktree for the task, spin up Claude Code, tell it
+the goals, and ask it to propose how best to achieve them. Then I
+decide: am I writing code, or is the agent spiking it out?&lt;/p&gt;
+&lt;p&gt;All of my agent sessions run inside &lt;a
+href="https://github.com/myobie/pty"&gt;pty&lt;/a&gt;, a tool I built for
+persistent terminal sessions. I can detach from anything, come back
+later, and the conversation is right where I left it. The conversation
+itself is how I remember what I was doing. I jump between pty sessions
+throughout the day as things need attention.&lt;/p&gt;
+&lt;p&gt;Some days I have ten things going like a reactor pattern, bouncing
+between sessions all day. Some days I go deep on one thing and only
+touch the other sessions during breaks. I let the work decide the shape.
+It takes real mental energy to context switch this much, like playing
+multiple chess boards at once. But the sessions are patient. They will
+be there when I have brain space freed up.&lt;/p&gt;
+&lt;h2 id="sub-agents"&gt;Sub-agents&lt;/h2&gt;
+&lt;p&gt;I rarely run Codex directly these days. I have a skill configured in
+Claude Code that lets Claude drive Codex as a sub-agent. Codex is better
+at unwinding very complex code or noticing nuanced things, so I let
+Claude dispatch to it and report back the results. My main context stays
+at the project level and most of the heavy work happens in sub-agents
+underneath.&lt;/p&gt;
+&lt;h2 id="three-tiers"&gt;Three tiers&lt;/h2&gt;
+&lt;p&gt;I wrote about this on my &lt;a href="/ai/"&gt;AI page&lt;/a&gt;, but the short
+version: I run every project at the level of automation that fits
+it.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Tier 1, Hands Off.&lt;/strong&gt; I am the CEO, the agent is the
+developer. I never read the code. My personal journal app, my podcast
+listening app, a handful of CLI tools. The code is not the artifact. The
+experience of using it is.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Tier 2, Hands On.&lt;/strong&gt; Anything that ships to other
+people. &lt;a href="https://new.space/"&gt;new.space&lt;/a&gt; is in this tier. My
+cofounder and I review everything carefully. Sometimes I write the code,
+sometimes the agent spikes it, sometimes we throw the spike away and
+start over properly.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Tier 3, Hands Only.&lt;/strong&gt; I write near 90% of the code
+myself because I want to learn. The agent watches, answers questions,
+handles tedium.&lt;/p&gt;
+&lt;h2 id="things-that-would-not-exist-without-an-agent"&gt;Things that would
+not exist without an agent&lt;/h2&gt;
+&lt;p&gt;For &lt;a href="https://new.space/"&gt;new.space&lt;/a&gt; we have a JavaScript
+file that runs on the page in Safari when someone uses the Share Sheet.
+It extracts metadata from the page, creates a readable version, handles
+all the edge cases. Building and testing that across dozens of different
+sites would have been too much effort for our small two-person team. But
+letting Claude hack on it and prove to us it was working with test case
+after test case made it a project we could actually do. A real increase
+in quality of life for our users.&lt;/p&gt;
+&lt;p&gt;Any friend I have who maintains a popular open source library
+probably has hundreds of open issues. That is just too much work to
+actually go through. But having an agent pre-triage them, make concise
+action lists, write replies, test merges, that can make dealing with the
+backlog actually possible. This kind of productivity increase is easy to
+overlook. It is not doing normal work faster. It is doing work you never
+would have considered before.&lt;/p&gt;
+&lt;h2 id="a-spike-from-today"&gt;A spike from today&lt;/h2&gt;
+&lt;p&gt;Today I was working on a potential approval flow for dangerous tool
+calls in new.space (like "send an email for me"). Instead of sweating
+the details myself I pushed Claude to build it, use &lt;a
+href="https://github.com/nicklama/xcodebuildmcp"&gt;xcodebuildmcp&lt;/a&gt; to
+actually test it in the iOS Simulator, and prove to me that it works.
+Then I can try the UI concept myself, give feedback, let it go again.
+Later today I will test the prototype on my real phone and decide if
+this is even the direction I want to go.&lt;/p&gt;
+&lt;p&gt;I do not have to waste time getting the details right just to figure
+out if the direction is correct. I can have a tireless agent implement
+it, try it, then decide. And I always have the agent document what it
+learned and what it would do differently if it had the chance.&lt;/p&gt;
+&lt;p&gt;It will have the chance.&lt;/p&gt;
+&lt;h2 id="what-i-am-building-by-hand"&gt;What I am building by hand&lt;/h2&gt;
+&lt;p&gt;I am building a web crawler in Elixir to power my own local search
+engine. I want to combine that with a full download of Wikipedia to give
+my local coding agent fast, up-to-date answers without hitting any API.
+Crawling millions of sites with a Mac Mini is very possible these days,
+and with an external drive I think I can easily get to hundreds of
+millions of pages. I seed it with sites I trust and it crawls out from
+there, so the inputs are higher quality than trying to index the entire
+internet.&lt;/p&gt;
+&lt;p&gt;This is a Tier 3 project. I am writing the code myself because I want
+to learn Elixir deeply and I enjoy the problem.&lt;/p&gt;
+&lt;h2 id="the-harness"&gt;The harness&lt;/h2&gt;
+&lt;p&gt;I have built a couple of prototypes for my own agent harness, but
+nothing good yet. One is in Swift. I think building in a native language
+and talking to local models natively (not over HTTP) will be a huge
+advantage, but it limits extensibility and contributions from
+others.&lt;/p&gt;
+&lt;p&gt;I look at &lt;a href="https://github.com/myobie/pty"&gt;pty&lt;/a&gt; and Claude
+Code to learn from. Claude Code is a great harness, probably my favorite
+right now. But it does a lot of things I probably do not need for every
+task.&lt;/p&gt;
+&lt;p&gt;For running local models, we built &lt;a
+href="https://github.com/shareup/shllm"&gt;SHLLM&lt;/a&gt;, a Swift library for
+talking to models directly. I also use Ollama for models that are too
+big for my current machine. Qwen 3.5 and Gemma 4 are both genuinely good
+locally. I plan to get an M5 Mac Studio later this year so I can run
+larger models myself.&lt;/p&gt;
+&lt;p&gt;My goal: a local-first coding agent that handles 80 to 90 percent of
+my day-to-day by the end of this year.&lt;/p&gt;
+&lt;h2 id="identity"&gt;Identity&lt;/h2&gt;
+&lt;p&gt;I am a builder. I have never identified as "a programmer." My first
+job was graphic design, which led to websites, which led to programming.
+I have led teams where almost all of the code was written by others and
+I contributed very little by hand, so reviewing lots of code and merging
+it in is familiar.&lt;/p&gt;
+&lt;p&gt;I enjoy programming, but it is not important to me to preserve it as
+"my job." Typing has never been the goal. Anyone who thinks they should
+fight for the right to type is not on my side. I am fine with someone
+else typing.&lt;/p&gt;
+&lt;p&gt;I am not 100% thrilled about being a manager of robots, but it is
+possible to make it fun and keep it lively with a bit of effort.&lt;/p&gt;
+&lt;h2 id="git-is-the-hard-boundary"&gt;Git is the hard boundary&lt;/h2&gt;
+&lt;p&gt;The worst things that happen with agents are when they use git. For
+most projects I handle all the git stuff myself. I do not let the robot
+do it unless it is a throwaway project. Git is hard for most humans and
+I would not trust them to use it for me either.&lt;/p&gt;
+&lt;h2 id="clear-eyed"&gt;Clear eyed&lt;/h2&gt;
+&lt;p&gt;I have been pretty clear eyed about AI. I am always skeptical until I
+see evidence. When I saw Claude Code I knew I needed to try it myself,
+and when it was able to do a few things I asked it to do, completely by
+itself, I knew I could mold that into a lot of other projects.&lt;/p&gt;
+&lt;p&gt;A random text generator running fast enough can do anything with a
+verification loop. Monkeys on typewriters writing Shakespeare. The
+verification loop is what makes it real.&lt;/p&gt;
+&lt;p&gt;If you want a longer version of how I think about all of this, I keep
+an &lt;a href="/ai/"&gt;AI page&lt;/a&gt; on this site that I update as things
+change.&lt;/p&gt;</description>
+    </item>
 
     <item>
       <title>Too Old Not To</title>
