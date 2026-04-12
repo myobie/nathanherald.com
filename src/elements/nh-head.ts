@@ -71,7 +71,7 @@ export class NhHeadElement extends HTMLElement {
     els.push(meta({ content: title, property: 'og:title' }))
     els.push(meta({ content: 'website', property: 'og:type' }))
     els.push(meta({ content: description, property: 'og:description' }))
-    els.push(meta({ content: '/og.png', property: 'og:image' }))
+    els.push(meta({ content: 'https://nathanherald.com/og.png', property: 'og:image' }))
     els.push(meta({ content: 'I\u2019m Nathan Herald', property: 'og:site_name' }))
     els.push(link({ rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }))
     els.push(link({ rel: 'icon', type: 'image/png', sizes: '32x32', href: '/favicon-32.png' }))

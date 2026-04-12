@@ -2,6 +2,7 @@
 title: How I use AI daily, April 2026
 date: 2026-04-12T18:00:00+02:00
 description: Multiple agent sessions, three tiers of automation, a web crawler in elixir, and the goal of a local-first coding agent by the end of the year.
+image: /posts/how-i-use-ai-daily-april-2026/og.jpg
 ---
 
 I keep a list in Reminders for every project I work on. When I sit down in the morning I scan through and pick what to work on. Usually I make a git worktree for the task, spin up [claude code](https://claude.ai/code), and ask it to propose how best to achieve what I’m after. Then I decide: am I writing code or is the agent spiking it out?

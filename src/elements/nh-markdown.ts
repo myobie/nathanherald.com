@@ -107,7 +107,8 @@ export class NhMarkdownElement extends HTMLElement {
 
       if (fm.image) {
         const ogImage = head.querySelector('meta[property="og:image"]')
-        if (ogImage) ogImage.setAttribute('content', fm.image)
+        const imageUrl = fm.image.startsWith('/') ? 'https://nathanherald.com' + fm.image : fm.image
+        if (ogImage) ogImage.setAttribute('content', imageUrl)
       }
     }
 

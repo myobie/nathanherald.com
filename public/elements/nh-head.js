@@ -98,7 +98,7 @@ export class NhHeadElement extends HTMLElement {
       property: 'og:description'
     }));
     els.push(meta({
-      content: '/og.png',
+      content: 'https://nathanherald.com/og.png',
       property: 'og:image'
     }));
     els.push(meta({
@@ -140,4 +140,4 @@ export class NhHeadElement extends HTMLElement {
   }
 }
 
-// denoCacheMetadata=16098907613900746076,7233815386379381413
+// denoCacheMetadata=2559140303791263684,13266033448443484380

@@ -87,7 +87,8 @@ export class NhMarkdownElement extends HTMLElement {
       if (ogDesc) ogDesc.setAttribute('content', description);
       if (fm.image) {
         const ogImage = head.querySelector('meta[property="og:image"]');
-        if (ogImage) ogImage.setAttribute('content', fm.image);
+        const imageUrl = fm.image.startsWith('/') ? 'https://nathanherald.com' + fm.image : fm.image;
+        if (ogImage) ogImage.setAttribute('content', imageUrl);
       }
     }
     // Set attributes on nh-page — it reacts to its own attributes
@@ -162,4 +163,4 @@ export class NhMarkdownElement extends HTMLElement {
   }
 }
 
-// denoCacheMetadata=7878485863242203275,3274610594734477118
+// denoCacheMetadata=17179794971280817634,11351451326606757764
