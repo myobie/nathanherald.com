@@ -108,13 +108,13 @@ export class NhHeadElement extends HTMLElement {
     els.push(link({
       rel: 'icon',
       type: 'image/svg+xml',
-      href: '/favicon.svg'
+      href: 'https://nathanherald.com/favicon.svg'
     }));
     els.push(link({
       rel: 'icon',
       type: 'image/png',
       sizes: '32x32',
-      href: '/favicon-32.png'
+      href: 'https://nathanherald.com/favicon-32.png'
     }));
     els.push(link({
       href: '/rss.xml',
@@ -140,4 +140,4 @@ export class NhHeadElement extends HTMLElement {
   }
 }
 
-// denoCacheMetadata=2559140303791263684,13266033448443484380
+// denoCacheMetadata=14439638256659583730,12976111588965617172
