@@ -12,41 +12,34 @@
     <script>
     if ((new URL(window.location.href)).host === 'myobie.com') { window.location.assign('https://nathanherald.com') }
     </script>
-    <link href="https://cloud.typography.com/6836312/761366/css/fonts.css" rel="stylesheet" type=
-    "text/css">
+    <link href="https://cloud.typography.com/6836312/761366/css/fonts.css" rel="stylesheet" type="text/css">
     <link href="/styles.css" rel="stylesheet" type="text/css">
     <link href="/syntax-light.css" rel="stylesheet" type="text/css">
     <link href="/syntax-dark.css" rel="stylesheet" type="text/css">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="IE=edge" http-equiv="X-UA-Compatible">
     <meta content="I’m Nathan Herald → TIL: at, atq, and atrun" name="title">
-    <meta content="Schedule one-off commands to run later from the terminal. Built into Unix."
-    name="description">
+    <meta content="Schedule one-off commands to run later from the terminal. Built into Unix." name="description">
     <meta content="TIL: at, atq, and atrun" property="og:title">
     <meta content="website" property="og:type">
-    <meta content="Schedule one-off commands to run later from the terminal. Built into Unix."
-    property="og:description">
+    <meta content="Schedule one-off commands to run later from the terminal. Built into Unix." property="og:description">
     <meta content="https://nathanherald.com/posts/til/at-atq-atrun/og.jpg" property="og:image">
     <meta content="I’m Nathan Herald" property="og:site_name">
     <link href="/favicon.svg" rel="icon" type="image/svg+xml">
     <link href="/favicon-32.png" rel="icon" sizes="32x32" type="image/png">
-    <link href="/rss.xml" rel="alternate" title="Feed of all the posts on nathanherald.com" type=
-    "application/rss+xml">
+    <link href="/rss.xml" rel="alternate" title="Feed of all the posts on nathanherald.com" type="application/rss+xml">
   </head>
   <body class="default">
-    <nh-page date="2026-03-25T01:00:00+01:00" date-display="25 March, 2026" title=
-    "TIL: at, atq, and atrun">
+    <nh-page date="2026-03-25T01:00:00+01:00" date-display="25 March, 2026" title="TIL: at, atq, and atrun">
       <nh-header>
         <header class="section-header">
           <div class="section-nav">
             <h1 class="home-link">
-              <a class="never-underline" data-nospan="" href="/"><abbr title="Hello">👋</abbr></a>
-              <a href="/">I’m Nathan</a>
+              <a class="never-underline" data-nospan="" href="/"><abbr title="Hello">👋</abbr></a> <a href="/">I’m Nathan</a>
             </h1>
             <nav>
               <p>
-                Find more in the <a href="/posts/">archive of all the posts on this site</a> or
-                <a href="/rss.xml">subscribe with RSS</a>.
+                Find more in the <a href="/posts/">archive of all the posts on this site</a> or <a href="/rss.xml">subscribe with RSS</a>.
               </p>
             </nav>
           </div>
@@ -62,9 +55,8 @@
           <div class="content">
             <nh-markdown data-rendered page param="md">
               <p>
-                Today I learned about <code>at</code>, a built-in Unix command that schedules a
-                one-off command to run at a specific time. Unlike cron, which is for recurring
-                tasks, <code>at</code> runs something once and then the job is gone.
+                Today I learned about <code>at</code>, a built-in Unix command that schedules a one-off command to run at a specific time. Unlike cron, which is for recurring tasks, <code>at</code>
+                runs something once and then the job is gone.
               </p>
               <pre><code class="language-bash"># Schedule a command for 10am
 echo 'toot post "Hello from the future"'  | at 10:00
@@ -81,12 +73,10 @@ atrm 1
               <p>
                 On macOS, you need to enable <code>atrun</code> first:
               </p>
-              <pre><code class=
-              "language-bash">sudo launchctl load -w /System/Library/LaunchDaemons/com.apple.atrun.plist
+              <pre><code class="language-bash">sudo launchctl load -w /System/Library/LaunchDaemons/com.apple.atrun.plist
 </code></pre>
               <p>
-                That’s it. No config files, no services to manage. Just <code>echo "command" | at
-                TIME</code> and walk away. Incredible.
+                That’s it. No config files, no services to manage. Just <code>echo "command" | at TIME</code> and walk away. Incredible.
               </p>
             </nh-markdown>
           </div>
@@ -98,18 +88,15 @@ atrm 1
         </article>
       </main>
       <script async src="/assets/details-controls.js"></script>
-      <script data-domain="nathanherald.com" defer src=
-      "https://stats.myobie.wtf/script.js"></script>
+      <script data-domain="nathanherald.com" defer src="https://stats.myobie.wtf/script.js"></script>
       <nh-footer>
         <footer class="site-footer">
-          <a class="never-underline" href="/"><svg class="footer-logo" viewbox="0 0 256 256" xmlns=
-          "http://www.w3.org/2000/svg">
+          <a class="never-underline" href="/"><svg class="footer-logo" viewbox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
           <g fill="currentColor" fill-rule="evenodd" stroke="none">
             <path d=
             "M20.19,7.28 L20.01,35.44 L33.82,20.97 L47.24,35.05 L33.66,48.61 L47.98,62.92 L61.49,49.19 L73.61,62.12 L60.89,75.81 L73.99,89.71 L88.74,76.37 L100.76,89.71 L87.55,103.48 L100.94,117.5 L114.61,104.12 L127.03,116.86 L114.19,129.92 L127.41,144.21 L140.66,130.16 L152.93,143.61 L140.01,157.51 L153.71,171.63 L167.94,157.34 L180.21,171.21 L166.92,184.9 L180.62,199.19 L193.91,185.32 L197.65,188.93 C206.68,177.83 214.27,165.78 218.41,154.55 L208.19,143.41 L193.86,156.91 L181.84,143.53 L194.19,130.08 L181.08,116.66 L167.57,129.6 L153.87,116.66 L167.98,103.2 L153.99,88.91 L140.29,102.79 L127.83,89.71 L141.53,75.81 L127.78,61.52 L114.11,74.93 L102.05,62.12 L115.38,48.61 L101.75,34.69 L88.42,47.99 L74.72,34.69 L88.63,20.22 L74.31,6.72 L61.31,19.69 L48.02,7.28 L20.19,7.28 Z">
             </path>
-            <path d=
-            "M20.14,60.82 C19.91,72.94 19.78,82.72 20.62,90.04 L34.61,75.36 L20.14,60.82 Z"></path>
+            <path d="M20.14,60.82 C19.91,72.94 19.78,82.72 20.62,90.04 L34.61,75.36 L20.14,60.82 Z"></path>
             <path d=
             "M20.62,90.04 L33.91,102.42 L48.23,88.62 L61.93,102.91 L48.64,117.2 L61.18,129.56 L74.47,116.11 L88.58,129.96 L74.72,143.86 L87.72,156.62 L101.42,143.16 L115.12,157.43 L101.75,171.63 L114.61,183.87 L127.86,170.72 L141.61,184.9 L128.03,198.12 L141.18,210.59 L153.87,197.21 L172.69,215.59 C159.67,227.81 141.81,240.91 127.53,249 C121.44,245.76 117.01,242.89 113.51,239.36 L127.14,225.11 L114.68,211.21 L98.3,228.91 L82.95,215.46 L100.51,197.91 L88.42,184.9 L88.04,185.11 L69.48,203.41 C63.86,197.83 60.16,193.45 57.49,188.69 L73.21,171.21 L61.31,157.88 L48.1,171.63 L40.67,163.95 L35.82,154.63 L47.11,143.78 L33.78,130.08 L28.93,135.21 C24.75,122.45 21.88,107.01 20.62,90.04 Z">
             </path>

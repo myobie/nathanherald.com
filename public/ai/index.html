@@ -7,20 +7,15 @@
       The current state of AI, as I see it – Nathan Herald
     </title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <meta content=
-    "Where AI actually is in April 2026, how I use it daily, and how this stuff actually works."
-    name="description">
+    <meta content="Where AI actually is in April 2026, how I use it daily, and how this stuff actually works." name="description">
     <meta content="The current state of AI, as I see it" property="og:title">
-    <meta content=
-    "Where AI actually is in April 2026, how I use it daily, and how this stuff actually works."
-    property="og:description">
+    <meta content="Where AI actually is in April 2026, how I use it daily, and how this stuff actually works." property="og:description">
     <meta content="website" property="og:type">
     <meta content="/og.png" property="og:image">
     <meta content="I’m Nathan Herald" property="og:site_name">
     <link href="/favicon.svg" rel="icon" type="image/svg+xml">
     <link href="/favicon-32.png" rel="icon" sizes="32x32" type="image/png">
-    <link href="/rss.xml" rel="alternate" title="Feed of all the posts on nathanherald.com" type=
-    "application/rss+xml">
+    <link href="/rss.xml" rel="alternate" title="Feed of all the posts on nathanherald.com" type="application/rss+xml">
     <style>
     :root {
       --bg: #0f1117;
@@ -290,50 +285,34 @@ by Nathan Herald · April 2026</pre>
           We are past the “is AI useful?” debate.
         </p>
         <p>
-          On April 7, Anthropic announced Claude Mythos Preview, a new frontier model they are not
-          releasing to the public. They are holding it back because it finds software
-          vulnerabilities too well. A 27-year-old bug in OpenBSD. Zero-days in every major browser
-          and operating system. Mythos is being given to a small group of launch partners and
-          nobody else.
-        </p><a class="link-block" href=
-        "https://www.threads.com/@claudeai/post/DW1vn9nEfk_">threads.com/@claudeai – Introducing
-        Project Glasswing</a>
+          On April 7, Anthropic announced Claude Mythos Preview, a new frontier model they are not releasing to the public. They are holding it back because it finds software vulnerabilities too
+          well. A 27-year-old bug in OpenBSD. Zero-days in every major browser and operating system. Mythos is being given to a small group of launch partners and nobody else.
+        </p><a class="link-block" href="https://www.threads.com/@claudeai/post/DW1vn9nEfk_">threads.com/@claudeai – Introducing Project Glasswing</a>
         <p>
           Meanwhile Daniel Stenberg, the maintainer of curl, posted this a few days ago:
         </p>
         <blockquote>
           <p>
-            “I ran a quick git log grep just now. Over the last ~6 months or so, we have fixed over
-            200 bugs in curl found with AI tools.”
+            “I ran a quick git log grep just now. Over the last ~6 months or so, we have fixed over 200 bugs in curl found with AI tools.”
           </p>
         </blockquote>
         <p>
-          Stenberg used to be the loudest voice against AI-generated security reports. His position
-          has shifted. The slop is basically gone. What is left is a flood of real reports. Curl
-          has received more security reports in the first quarter of 2026 than in all of 2024, at
-          four times the weekly volume. Maintainers across the ecosystem (Apache, Django, Firefox,
-          git, glibc, the Linux kernel, Python, Wireshark) are drowning in legitimate AI-assisted
-          work they cannot absorb fast enough.
+          Stenberg used to be the loudest voice against AI-generated security reports. His position has shifted. The slop is basically gone. What is left is a flood of real reports. Curl has received
+          more security reports in the first quarter of 2026 than in all of 2024, at four times the weekly volume. Maintainers across the ecosystem (Apache, Django, Firefox, git, glibc, the Linux
+          kernel, Python, Wireshark) are drowning in legitimate AI-assisted work they cannot absorb fast enough.
         </p>
         <p>
-          And it is not only about security. Real software is shipping. Mitchell Hashimoto has been
-          writing about his adoption journey at HashiCorp and on Ghostty:
-        </p><a class="link-block" href=
-        "https://mitchellh.com/writing/my-ai-adoption-journey">mitchellh.com – My AI Adoption
-        Journey</a>
+          And it is not only about security. Real software is shipping. Mitchell Hashimoto has been writing about his adoption journey at HashiCorp and on Ghostty:
+        </p><a class="link-block" href="https://mitchellh.com/writing/my-ai-adoption-journey">mitchellh.com – My AI Adoption Journey</a>
         <p>
-          Simon Willison has been writing consistently about patterns that actually work for
-          professional engineers using agents:
-        </p><a class="link-block" href=
-        "https://simonwillison.net/2026/Feb/23/agentic-engineering-patterns/">simonwillison.net –
-        Agentic Engineering Patterns</a>
+          Simon Willison has been writing consistently about patterns that actually work for professional engineers using agents:
+        </p><a class="link-block" href="https://simonwillison.net/2026/Feb/23/agentic-engineering-patterns/">simonwillison.net – Agentic Engineering Patterns</a>
         <p>
           They are building with it, in public, and documenting what is working and what is not.
         </p>
         <p>
-          Capable models are finding real bugs in critical infrastructure and real software is
-          shipping. The ecosystem that has to absorb all of this is not moving at the same speed.
-          That is the real tension in April 2026, and it is not going away.
+          Capable models are finding real bugs in critical infrastructure and real software is shipping. The ecosystem that has to absorb all of this is not moving at the same speed. That is the real
+          tension in April 2026, and it is not going away.
         </p>
       </section><!-- ════════════════════════════════════════════ -->
       <pre aria-level="2" class="section-header" role="heading">HOW I USE AI DAILY</pre>
@@ -342,81 +321,63 @@ by Nathan Herald · April 2026</pre>
           I use Claude Code and Codex every day.
         </p>
         <p>
-          I don’t have a CMS for this website anymore. I ask Claude Code to publish things and it
-          does. I wrote about that <a href="/posts/no-cms/">here</a>.
+          I don’t have a CMS for this website anymore. I ask Claude Code to publish things and it does. I wrote about that <a href="/posts/no-cms/">here</a>.
         </p>
         <p>
-          I run every project at the level of automation that fits it. I think of it as three
-          tiers.
+          I run every project at the level of automation that fits it. I think of it as three tiers.
         </p>
         <div class="tier-label" id="tiers">
           Tier 1, Hands Off
         </div>
         <p>
-          I am the CEO, the agent is the developer. I never read the code. I describe what I want
-          and use the thing. I have a personal journal app, a podcast listening app, and a handful
-          of CLI tools in this tier. I have never looked at the source for any of them and I don’t
-          plan to.
+          I am the CEO, the agent is the developer. I never read the code. I describe what I want and use the thing. I have a personal journal app, a podcast listening app, and a handful of CLI tools
+          in this tier. I have never looked at the source for any of them and I don’t plan to.
         </p>
         <p>
-          The point of this tier is that if the software is just for me and nobody gets hurt when
-          it breaks, then the code is not the artifact. The artifact is the experience of using it.
-          If the experience is good, the code is good enough.
+          The point of this tier is that if the software is just for me and nobody gets hurt when it breaks, then the code is not the artifact. The artifact is the experience of using it. If the
+          experience is good, the code is good enough.
         </p>
         <div class="tier-label">
           Tier 2, Hands On
         </div>
         <p>
-          Anything that ships to other people lives here. <a href=
-          "https://new.space/">new.space</a> is in this tier. My cofounder and I review everything
-          carefully. Sometimes I write the code myself, especially in areas where the current
-          generation of coding agents struggle. Sometimes I will have an agent do a spike, telling
-          it to do whatever it takes to get it to work and giving it a verification loop (even if
-          that means UI testing or simulation). After I see the spike working I throw all of that
-          code away and start over. Then I work with an agent more closely to build a real version
-          of the feature, with the spike as my reference.
+          Anything that ships to other people lives here. <a href="https://new.space/">new.space</a> is in this tier. My cofounder and I review everything carefully. Sometimes I write the code
+          myself, especially in areas where the current generation of coding agents struggle. Sometimes I will have an agent do a spike, telling it to do whatever it takes to get it to work and
+          giving it a verification loop (even if that means UI testing or simulation). After I see the spike working I throw all of that code away and start over. Then I work with an agent more
+          closely to build a real version of the feature, with the spike as my reference.
         </p>
         <p>
-          This tier is the one people struggle to talk about honestly. You can move fast with an
-          agent and you can also ship dangerous code fast with an agent. Both are true at the same
-          time. The answer is process, not ideology.
+          This tier is the one people struggle to talk about honestly. You can move fast with an agent and you can also ship dangerous code fast with an agent. Both are true at the same time. The
+          answer is process, not ideology.
         </p>
         <div class="tier-label">
           Tier 3, Hands Only
         </div>
         <p>
-          For projects in this tier: I write near 90% of the code myself. Usually because I want to
-          learn something, or I genuinely enjoy the problem, or both. I keep an agent open in
-          another window and ask it questions as I work, like a coworker I can interrupt for free.
-          Sometimes I will let it generate something tedious: fixture data, a batch of repetitive
-          tests, a pattern I have already established that I don’t want to type a hundred more
-          times.
+          For projects in this tier: I write near 90% of the code myself. Usually because I want to learn something, or I genuinely enjoy the problem, or both. I keep an agent open in another window
+          and ask it questions as I work, like a coworker I can interrupt for free. Sometimes I will let it generate something tedious: fixture data, a batch of repetitive tests, a pattern I have
+          already established that I don’t want to type a hundred more times.
         </p>
         <p>
           The code is mine. The agent is a reference that can also type.
         </p>
         <hr>
         <p>
-          The thing that matters more than any single tier is letting each project live at the
-          level of automation that fits it. A personal CLI does not need code review. A mobile app
-          that handles other people’s data absolutely does. A side project where the goal is to
-          learn should not be fully automated away.
+          The thing that matters more than any single tier is letting each project live at the level of automation that fits it. A personal CLI does not need code review. A mobile app that handles
+          other people’s data absolutely does. A side project where the goal is to learn should not be fully automated away.
         </p>
       </section><!-- ════════════════════════════════════════════ -->
       <pre aria-level="2" class="section-header" role="heading">HOW THIS STUFF ACTUALLY WORKS</pre>
       <section id="how-it-works">
         <p>
-          <em>If you are not using AI much yet, here is the minimum you need to understand what
-          people mean when they say “agent.”</em>
+          <em>If you are not using AI much yet, here is the minimum you need to understand what people mean when they say “agent.”</em>
         </p>
         <h3>
           LLMs generate one token at a time
         </h3>
         <p>
-          A large language model takes a pile of text (a “context”) and generates the next token. A
-          token is roughly a word or part of a word. Then it takes the context plus that new token
-          and generates the next one. And the next. It is doing statistics on enormous amounts of
-          training data to guess what should come next.
+          A large language model takes a pile of text (a “context”) and generates the next token. A token is roughly a word or part of a word. Then it takes the context plus that new token and
+          generates the next one. And the next. It is doing statistics on enormous amounts of training data to guess what should come next.
         </p>
         <p>
           That is the entire thing the model itself does. Predict the next token.
@@ -425,8 +386,7 @@ by Nathan Herald · April 2026</pre>
           We can give the LLM tools
         </h3>
         <p>
-          A “tool” is just a function the model is allowed to ask for. We tell the model, in its
-          context, what tools exist and what their arguments look like. Some examples of tools:
+          A “tool” is just a function the model is allowed to ask for. We tell the model, in its context, what tools exist and what their arguments look like. Some examples of tools:
         </p>
         <ul class="tool-list">
           <li>read a file at a given path
@@ -447,12 +407,9 @@ by Nathan Herald · April 2026</pre>
           </li>
         </ul>
         <p>
-          When we give the model a list of tools, we are not giving it new abilities. We are giving
-          it permission to ask for help. The model itself still only knows how to predict the next
-          token. What has changed is that now some of the tokens it can predict are structured
-          requests like “I want to call the <code>run_tests</code> tool with no arguments.” That
-          request is just more text. Something outside the model has to actually run the test suite
-          and then put the result back into the context for the model to see.
+          When we give the model a list of tools, we are not giving it new abilities. We are giving it permission to ask for help. The model itself still only knows how to predict the next token.
+          What has changed is that now some of the tokens it can predict are structured requests like “I want to call the <code>run_tests</code> tool with no arguments.” That request is just more
+          text. Something outside the model has to actually run the test suite and then put the result back into the context for the model to see.
         </p>
         <h3>
           An agent is tools in a loop
@@ -471,16 +428,12 @@ by Nathan Herald · April 2026</pre>
           </li>
         </ol>
         <p>
-          The harness is where the engineering happens. It decides which tools are available, how
-          errors are handled, when to stop, how to keep the context from getting too big, what to
-          log. Two agents running on the same model can feel completely different because their
-          harnesses are different.
+          The harness is where the engineering happens. It decides which tools are available, how errors are handled, when to stop, how to keep the context from getting too big, what to log. Two
+          agents running on the same model can feel completely different because their harnesses are different.
         </p>
         <div class="animation-container">
           <nh-include data-included src="tool-loop.html">
-            <pre id="tool-loop-display" style=
-            "background: #0a0c12; color: #c9cdd5; padding: 1.5rem; font-size: 13px; line-height: 1.6; min-height: 280px; overflow: hidden;">
-            </pre>
+            <pre id="tool-loop-display" style="background: #0a0c12; color: #c9cdd5; padding: 1.5rem; font-size: 13px; line-height: 1.6; min-height: 280px; overflow: hidden;"></pre>
             <script>
             (function() {
             const el = document.getElementById('tool-loop-display')
@@ -623,27 +576,20 @@ by Nathan Herald · April 2026</pre>
           Verification loops are how agents get good
         </h3>
         <p>
-          An agent writing code will be wrong a lot of times. A verification loop gives it a way to
-          notice. Run the tests, check the types, compile, lint, take a screenshot of the running
-          app. If something fails, the failure becomes part of the context. The next pass has new
-          information to work with.
+          An agent writing code will be wrong a lot of times. A verification loop gives it a way to notice. Run the tests, check the types, compile, lint, take a screenshot of the running app. If
+          something fails, the failure becomes part of the context. The next pass has new information to work with.
         </p>
         <p>
-          This is why TDD matters more now than ever. A test suite is a machine-readable spec that
-          the agent can hit repeatedly. Without a verification loop, the agent is guessing. With
-          one, it is iterating toward something correct.
+          This is why TDD matters more now than ever. A test suite is a machine-readable spec that the agent can hit repeatedly. Without a verification loop, the agent is guessing. With one, it is
+          iterating toward something correct.
         </p>
         <p>
-          Everything interesting that agents do today comes from this pattern: tools in a loop,
-          checked by more tools.
+          Everything interesting that agents do today comes from this pattern: tools in a loop, checked by more tools.
         </p>
         <p>
-          Agents don’t get tired, don’t care if you throw away their work and start over, and so
-          they can accomplish things that people normally wouldn’t. The more tedious, the more
-          likely an agent is a good choice to handle it. A lot of the increased productivity people
-          are seeing with agents right now is not doing their normal work faster, it is doing work
-          they never would have even considered before because of the tedium or similar. This type
-          of productivity increase is easy to overlook.
+          Agents don’t get tired, don’t care if you throw away their work and start over, and so they can accomplish things that people normally wouldn’t. The more tedious, the more likely an agent
+          is a good choice to handle it. A lot of the increased productivity people are seeing with agents right now is not doing their normal work faster, it is doing work they never would have even
+          considered before because of the tedium or similar. This type of productivity increase is easy to overlook.
         </p>
       </section><!-- ════════════════════════════════════════════ -->
       <pre aria-level="2" class="section-header" role="heading">PROVENANCE MATTERS</pre>
@@ -652,21 +598,16 @@ by Nathan Herald · April 2026</pre>
           Not all AI is trained the same way.
         </p>
         <p>
-          There is a loud and correct argument that the big frontier models were trained on scraped
-          content without permission. The courts are not going to unscramble this. The UK and
-          Germany have already ruled in opposite directions on essentially the same question.
+          There is a loud and correct argument that the big frontier models were trained on scraped content without permission. The courts are not going to unscramble this. The UK and Germany have
+          already ruled in opposite directions on essentially the same question.
         </p>
         <p>
-          But “all AI is stolen” is wrong. There are models trained differently and they prove the
-          ethical version is possible.
+          But “all AI is stolen” is wrong. There are models trained differently and they prove the ethical version is possible.
         </p>
         <p>
-          Adobe Firefly is trained only on content Adobe has licensed. Microsoft’s Phi-4 family is
-          trained on a mix of filtered public data, licensed books, and academic sources, and it is
-          small enough to run on a laptop or a phone. Allen AI’s Olmo publishes its weights, its
-          training data, its training code, and its checkpoints. Their OlmoTrace tool lets you find
-          verbatim matches between a model’s output and its training corpus. You can actually see
-          where the words came from.
+          Adobe Firefly is trained only on content Adobe has licensed. Microsoft’s Phi-4 family is trained on a mix of filtered public data, licensed books, and academic sources, and it is small
+          enough to run on a laptop or a phone. Allen AI’s Olmo publishes its weights, its training data, its training code, and its checkpoints. Their OlmoTrace tool lets you find verbatim matches
+          between a model’s output and its training corpus. You can actually see where the words came from.
         </p>
         <p class="pull-quote">
           Provenance is possible. Provenance is a choice.
@@ -678,22 +619,17 @@ by Nathan Herald · April 2026</pre>
           I don’t want to rent brainpower forever.
         </p>
         <p>
-          I am working on my own agent harness. I use Qwen 3.5 and Gemma 4 locally on my Mac today
-          and both of them are genuinely good. The top local models right now are roughly where
-          Sonnet 4 was a year ago, and I was using Claude Code with Sonnet 4 to one-shot and ship
-          production code. That was enough then and it is enough now.
+          I am working on my own agent harness. I use Qwen 3.5 and Gemma 4 locally on my Mac today and both of them are genuinely good. The top local models right now are roughly where Sonnet 4 was a
+          year ago, and I was using Claude Code with Sonnet 4 to one-shot and ship production code. That was enough then and it is enough now.
         </p>
         <p>
-          My goal for the end of this year is a local-first coding agent that can do 80 to 90
-          percent of what I need day to day. On my machine. No subscription. No network required
-          for the work I care about.
+          My goal for the end of this year is a local-first coding agent that can do 80 to 90 percent of what I need day to day. On my machine. No subscription. No network required for the work I
+          care about.
         </p>
         <p>
-          The point is not ideology. The point is control. AI is moving faster than any regulator,
-          any court, any maintainer, and any company’s ability to contain it. The answer is not to
-          hide from it and it is not to hand everything to a handful of cloud providers. The answer
-          is to own the tools we depend on, run them ourselves when we can, review them when we
-          can’t, and be honest about which projects deserve which amount of care.
+          The point is not ideology. The point is control. AI is moving faster than any regulator, any court, any maintainer, and any company’s ability to contain it. The answer is not to hide from
+          it and it is not to hand everything to a handful of cloud providers. The answer is to own the tools we depend on, run them ourselves when we can, review them when we can’t, and be honest
+          about which projects deserve which amount of care.
         </p>
         <p>
           That is the current state of AI, as I see it, in April 2026.

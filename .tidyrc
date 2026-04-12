@@ -1,5 +1,5 @@
 quiet: true
-wrap: 100
+wrap: 200
 indent: yes
 indent-spaces: 2
 sort-attributes: alpha

@@ -12,44 +12,34 @@
     <script>
     if ((new URL(window.location.href)).host === 'myobie.com') { window.location.assign('https://nathanherald.com') }
     </script>
-    <link href="https://cloud.typography.com/6836312/761366/css/fonts.css" rel="stylesheet" type=
-    "text/css">
+    <link href="https://cloud.typography.com/6836312/761366/css/fonts.css" rel="stylesheet" type="text/css">
     <link href="/styles.css" rel="stylesheet" type="text/css">
     <link href="/syntax-light.css" rel="stylesheet" type="text/css">
     <link href="/syntax-dark.css" rel="stylesheet" type="text/css">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="IE=edge" http-equiv="X-UA-Compatible">
     <meta content="I’m Nathan Herald → How I use AI daily, April 2026" name="title">
-    <meta content=
-    "Multiple agent sessions, three tiers of automation, a web crawler in elixir, and the goal of a local-first coding agent by the end of the year."
-    name="description">
+    <meta content="Multiple agent sessions, three tiers of automation, a web crawler in elixir, and the goal of a local-first coding agent by the end of the year." name="description">
     <meta content="How I use AI daily, April 2026" property="og:title">
     <meta content="website" property="og:type">
-    <meta content=
-    "Multiple agent sessions, three tiers of automation, a web crawler in elixir, and the goal of a local-first coding agent by the end of the year."
-    property="og:description">
-    <meta content="https://nathanherald.com/posts/how-i-use-ai-daily-april-2026/og.jpg" property=
-    "og:image">
+    <meta content="Multiple agent sessions, three tiers of automation, a web crawler in elixir, and the goal of a local-first coding agent by the end of the year." property="og:description">
+    <meta content="https://nathanherald.com/posts/how-i-use-ai-daily-april-2026/og.jpg" property="og:image">
     <meta content="I’m Nathan Herald" property="og:site_name">
     <link href="/favicon.svg" rel="icon" type="image/svg+xml">
     <link href="/favicon-32.png" rel="icon" sizes="32x32" type="image/png">
-    <link href="/rss.xml" rel="alternate" title="Feed of all the posts on nathanherald.com" type=
-    "application/rss+xml">
+    <link href="/rss.xml" rel="alternate" title="Feed of all the posts on nathanherald.com" type="application/rss+xml">
   </head>
   <body class="default">
-    <nh-page date="2026-04-12T18:00:00+02:00" date-display="12 April, 2026" title=
-    "How I use AI daily, April 2026">
+    <nh-page date="2026-04-12T18:00:00+02:00" date-display="12 April, 2026" title="How I use AI daily, April 2026">
       <nh-header>
         <header class="section-header">
           <div class="section-nav">
             <h1 class="home-link">
-              <a class="never-underline" data-nospan="" href="/"><abbr title="Hello">👋</abbr></a>
-              <a href="/">I’m Nathan</a>
+              <a class="never-underline" data-nospan="" href="/"><abbr title="Hello">👋</abbr></a> <a href="/">I’m Nathan</a>
             </h1>
             <nav>
               <p>
-                Find more in the <a href="/posts/">archive of all the posts on this site</a> or
-                <a href="/rss.xml">subscribe with RSS</a>.
+                Find more in the <a href="/posts/">archive of all the posts on this site</a> or <a href="/rss.xml">subscribe with RSS</a>.
               </p>
             </nav>
           </div>
@@ -65,190 +55,129 @@
           <div class="content">
             <nh-markdown data-rendered page param="md">
               <p>
-                I keep a list in Reminders for every project I work on. When I sit down in the
-                morning I scan through and pick what to work on. Usually I make a git worktree for
-                the task, spin up <a href="https://claude.ai/code">claude code</a>, and ask it to
-                propose how best to achieve what I’m after. Then I decide: am I writing code or is
-                the agent spiking it out?
+                I keep a list in Reminders for every project I work on. When I sit down in the morning I scan through and pick what to work on. Usually I make a git worktree for the task, spin up
+                <a href="https://claude.ai/code">claude code</a>, and ask it to propose how best to achieve what I’m after. Then I decide: am I writing code or is the agent spiking it out?
               </p>
               <p>
-                All of my work sessions run inside <a href="https://github.com/myobie/pty">pty</a>,
-                a tool I built for persistent terminal sessions. I can detach when I switch or take
-                a break, reattach later, and the conversation is right where I left it and
-                reminding me what I was doing. I jump between pty sessions throughout the day as
-                things need attention – even remotely from my MacBook Air and iPhone.
+                All of my work sessions run inside <a href="https://github.com/myobie/pty">pty</a>, a tool I built for persistent terminal sessions. I can detach when I switch or take a break,
+                reattach later, and the conversation is right where I left it and reminding me what I was doing. I jump between pty sessions throughout the day as things need attention – even
+                remotely from my MacBook Air and iPhone.
               </p>
               <p>
-                Some days I have ten things going like a reactor pattern, bouncing between sessions
-                all day. Some days I go deep on one thing and only touch the other sessions during
-                breaks. I let the work decide the shape. It takes real mental energy to context
-                switch this much, like playing multiple chess boards at once. But the sessions are
-                patient. They will be there when I have brain space freed up.
+                Some days I have ten things going like a reactor pattern, bouncing between sessions all day. Some days I go deep on one thing and only touch the other sessions during breaks. I let
+                the work decide the shape. It takes real mental energy to context switch this much, like playing multiple chess boards at once. But the sessions are patient. They will be there when I
+                have brain space freed up.
               </p>
               <hr>
               <p>
-                I rarely run <a href="https://github.com/openai/codex">codex</a> directly these
-                days, I use it as a sub-agent. I have a skill configured in claude code to let
-                claude drive codex as a sub-agent. Codex is better at unwinding very complex code
-                or noticing nuanced things, so I let claude dispatch to it and report back the
-                results. My main context stays at the project level and most of the heavy work
-                happens in sub-agents underneath.
+                I rarely run <a href="https://github.com/openai/codex">codex</a> directly these days, I use it as a sub-agent. I have a skill configured in claude code to let claude drive codex as a
+                sub-agent. Codex is better at unwinding very complex code or noticing nuanced things, so I let claude dispatch to it and report back the results. My main context stays at the project
+                level and most of the heavy work happens in sub-agents underneath.
               </p>
               <hr>
               <p>
-                While I started, like everyone else, trying to build up docs and skills and
-                workflows to prevent claude from making mistakes, I’ve ended up relaxing almost all
-                of it. I’ve removed most of my CLAUDE.md files. Why do I need docs for the robot
-                and not for me? Now I document things for myself and the robot can read those when
-                it needs to.
+                While I started, like everyone else, trying to build up docs and skills and workflows to prevent claude from making mistakes, I’ve ended up relaxing almost all of it. I’ve removed
+                most of my CLAUDE.md files. Why do I need docs for the robot and not for me? Now I document things for myself and the robot can read those when it needs to.
               </p>
               <p>
-                Everything is context management now. The transformer architecture computes
-                attention weights across the entire context to decide what to generate next. Every
-                token in the context influences the probability distribution of the next token. So
-                when you carefully set up the context, clear problem statement, relevant code, good
-                examples, prior conversation, you are literally shifting the probability
-                distribution toward the output you want.
+                Everything is context management now. The transformer architecture computes attention weights across the entire context to decide what to generate next. Every token in the context
+                influences the probability distribution of the next token. So when you carefully set up the context, clear problem statement, relevant code, good examples, prior conversation, you are
+                literally shifting the probability distribution toward the output you want.
               </p>
               <p>
-                You are not actually <em>talking</em> to claude. You are attempting to drag the
-                weight of the context into the right starting point so it generates next tokens
-                appropriately to solve your problem. A longer, more detailed context is heavier to
-                drag but lands more precisely. A short vague prompt is light but lands anywhere.
-                The skill is knowing how much context to load and what kind.
+                You are not actually <em>talking</em> to claude. You are attempting to drag the weight of the context into the right starting point so it generates next tokens appropriately to solve
+                your problem. A longer, more detailed context is heavier to drag but lands more precisely. A short vague prompt is light but lands anywhere. The skill is knowing how much context to
+                load and what kind.
               </p>
               <p>
-                <a href="https://simonwillison.net/2025/jun/27/context-engineering/">Context</a>
-                <a href=
-                "https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents">
-                engineering</a> is <a href="https://www.philschmid.de/context-engineering">real</a>
-                and it is a skill, just like some people are better at googling than others.
+                <a href="https://simonwillison.net/2025/jun/27/context-engineering/">Context</a> <a href=
+                "https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents">engineering</a> is <a href="https://www.philschmid.de/context-engineering">real</a> and it is a
+                skill, just like some people are better at googling than others.
               </p>
               <hr>
               <p>
-                I wrote about this on my <a href="/ai/#tiers">AI page</a>, but the short version: I
-                run every project at the level of automation that fits it.
+                I wrote about this on my <a href="/ai/#tiers">AI page</a>, but the short version: I run every project at the level of automation that fits it.
               </p>
               <p>
-                <strong>Tier 1, Hands Off.</strong> I am the CEO, the agent is the developer. I
-                never read the code. My personal journal app, my podcast listening app, a handful
-                of CLI tools. The code is not the artifact. The experience of using it is.
+                <strong>Tier 1, Hands Off.</strong> I am the CEO, the agent is the developer. I never read the code. My personal journal app, my podcast listening app, a handful of CLI tools. The
+                code is not the artifact. The experience of using it is.
               </p>
               <p>
-                <strong>Tier 2, Hands On.</strong> Anything that ships to other people. <a href=
-                "https://new.space/">new.space</a> is in this tier. My cofounder and I review
-                everything carefully. Sometimes I write the code, sometimes the agent spikes it,
-                sometimes we throw the spike away and start over properly.
+                <strong>Tier 2, Hands On.</strong> Anything that ships to other people. <a href="https://new.space/">new.space</a> is in this tier. My cofounder and I review everything carefully.
+                Sometimes I write the code, sometimes the agent spikes it, sometimes we throw the spike away and start over properly.
               </p>
               <p>
-                <strong>Tier 3, Hands Only.</strong> I write near 90% of the code myself because I
-                want to learn. The agent watches, answers questions, handles tedium.
+                <strong>Tier 3, Hands Only.</strong> I write near 90% of the code myself because I want to learn. The agent watches, answers questions, handles tedium.
               </p>
               <hr>
               <p>
-                My side projects in Tier 1 simply would not exist. A podcast listening app, a
-                personal journal, an image EXIF data manager. I described what I wanted, the agent
-                built them, and I use them every day. I have never looked at the source code for
-                any of them.
+                My side projects in Tier 1 simply would not exist. A podcast listening app, a personal journal, an image EXIF data manager. I described what I wanted, the agent built them, and I use
+                them every day. I have never looked at the source code for any of them.
               </p>
               <p>
-                For <a href="https://new.space/">new.space</a> we have a JavaScript file that runs
-                on the page in Safari when someone uses the iOS Share Sheet. It extracts metadata
-                from the page, creates a readable version, handles all the edge cases. Building and
-                testing across dozens of different sites would have been too much effort for our
-                small two-person team, but letting claude hack on it and prove to us it was working
-                made it a project we could actually do. A real increase in quality of life for our
-                users.
+                For <a href="https://new.space/">new.space</a> we have a JavaScript file that runs on the page in Safari when someone uses the iOS Share Sheet. It extracts metadata from the page,
+                creates a readable version, handles all the edge cases. Building and testing across dozens of different sites would have been too much effort for our small two-person team, but
+                letting claude hack on it and prove to us it was working made it a project we could actually do. A real increase in quality of life for our users.
               </p>
               <hr>
               <p>
-                Today I was working on a potential approval flow for dangerous tool calls in
-                <a href="https://new.space/">new.space</a> (like “send an email for me”). I pushed
-                claude to build it and use <a href=
-                "https://github.com/nicklama/xcodebuildmcp">xcodebuildmcp</a> to actually test it
-                in the iOS Simulator and prove to me that it works. Then I can try the UI concept
-                myself, give feedback, let it go again. Later today I will test the prototype on my
-                real phone and decide if this is even the direction I want to go.
+                Today I was working on a potential approval flow for dangerous tool calls in <a href="https://new.space/">new.space</a> (like “send an email for me”). I pushed claude to build it and
+                use <a href="https://github.com/nicklama/xcodebuildmcp">xcodebuildmcp</a> to actually test it in the iOS Simulator and prove to me that it works. Then I can try the UI concept myself,
+                give feedback, let it go again. Later today I will test the prototype on my real phone and decide if this is even the direction I want to go.
               </p>
               <p>
-                I do not have to waste time getting the details right just to figure out if the
-                direction is correct. I can have a tireless agent implement it, try it, then
-                decide. And I always have the agent document what it learned and what it would do
-                differently if it had the chance, so if I want to start over I am not starting from
-                zero.
+                I do not have to waste time getting the details right just to figure out if the direction is correct. I can have a tireless agent implement it, try it, then decide. And I always have
+                the agent document what it learned and what it would do differently if it had the chance, so if I want to start over I am not starting from zero.
               </p>
               <hr>
               <p>
-                I am building a web crawler and search engine in elixir by hand. I want to combine
-                it with a <a href="https://dumps.wikimedia.org/">full download of Wikipedia</a> for
-                a local offline agent. Crawling millions of sites with a Mac Mini is very possible
-                these days, and with an external drive I think I can easily get to hundreds of
-                millions of pages. I will seed it with sites I trust and it crawls out from there
-                so the inputs are higher quality than trying to index the entire internet.
+                I am building a web crawler and search engine in elixir by hand. I want to combine it with a <a href="https://dumps.wikimedia.org/">full download of Wikipedia</a> for a local offline
+                agent. Crawling millions of sites with a Mac Mini is very possible these days, and with an external drive I think I can easily get to hundreds of millions of pages. I will seed it
+                with sites I trust and it crawls out from there so the inputs are higher quality than trying to index the entire internet.
               </p>
               <hr>
               <p>
-                I have built a couple of prototypes for my own agent harness, but nothing good yet.
-                One is in Swift. I think building in a native language and talking to local models
-                natively (not over HTTP) might be a huge advantage, but it limits extensibility and
-                contributions from others.
+                I have built a couple of prototypes for my own agent harness, but nothing good yet. One is in Swift. I think building in a native language and talking to local models natively (not
+                over HTTP) might be a huge advantage, but it limits extensibility and contributions from others.
               </p>
               <p>
-                claude code is my favorite harness right now, but it does a lot of things I
-                probably do not need for every task and might not be optimized for a smaller local
-                model.
+                claude code is my favorite harness right now, but it does a lot of things I probably do not need for every task and might not be optimized for a smaller local model.
               </p>
               <p>
-                For running local models, we built <a href=
-                "https://github.com/shareup/shllm">SHLLM</a>, a Swift library for talking to models
-                directly. I also use <a href="https://ollama.com/">ollama</a> for models too big
-                for my current machine. Qwen 3.5 and Gemma 4 are both genuinely good locally. I
-                plan to get an M5 Mac Studio later this year so I can run larger models myself.
+                For running local models, we built <a href="https://github.com/shareup/shllm">SHLLM</a>, a Swift library for talking to models directly. I also use <a href=
+                "https://ollama.com/">ollama</a> for models too big for my current machine. Qwen 3.5 and Gemma 4 are both genuinely good locally. I plan to get an M5 Mac Studio later this year so I
+                can run larger models myself.
               </p>
               <p>
-                My goal: a local-first coding agent that handles 80 to 90 percent of my day-to-day
-                by the end of this year.
+                My goal: a local-first coding agent that handles 80 to 90 percent of my day-to-day by the end of this year.
               </p>
               <hr>
               <p>
-                I enjoy programming, but it is not important to me to preserve it as “my job.”
-                Typing has never been the goal. Anyone who thinks they should fight for the right
-                to type is not on my side. I am fine with someone else typing. I am not 100%
-                thrilled about being a manager of robots, but it is possible to make it fun and
-                keep it lively with a bit of enthusiasm.
+                I enjoy programming, but it is not important to me to preserve it as “my job.” Typing has never been the goal. Anyone who thinks they should fight for the right to type is not on my
+                side. I am fine with someone else typing. I am not 100% thrilled about being a manager of robots, but it is possible to make it fun and keep it lively with a bit of enthusiasm.
               </p>
               <hr>
               <p>
-                The worst things that happen with agents are when they touch git. For most projects
-                I handle all the git stuff myself. I do not let the robot do it unless it is a
-                throwaway project. Git is hard for most humans and I would not trust them to use it
-                for me either.
+                The worst things that happen with agents are when they touch git. For most projects I handle all the git stuff myself. I do not let the robot do it unless it is a throwaway project.
+                Git is hard for most humans and I would not trust them to use it for me either.
               </p>
               <hr>
               <p>
-                I have been pretty clear eyed about AI. I am always skeptical of claims until I see
-                evidence. When I saw claude code when it first came out I knew I needed to try it
-                myself. And when it was able to do a few things I asked it to do, completely by
-                itself, I knew I could mold it into a lot of other projects.
+                I have been pretty clear eyed about AI. I am always skeptical of claims until I see evidence. When I saw claude code when it first came out I knew I needed to try it myself. And when
+                it was able to do a few things I asked it to do, completely by itself, I knew I could mold it into a lot of other projects.
               </p>
               <p>
-                A random text generator running fast enough can do anything with a verification
-                loop. <a href="https://en.wikipedia.org/wiki/Infinite_monkey_theorem">Monkeys on
-                typewriters writing Shakespeare.</a> The verification loop is what makes it real.
+                A random text generator running fast enough can do anything with a verification loop. <a href="https://en.wikipedia.org/wiki/Infinite_monkey_theorem">Monkeys on typewriters writing
+                Shakespeare.</a> The verification loop is what makes it real.
               </p>
               <hr>
               <p>
-                This is how I use AI today and I expect things to evolve and change as the tools
-                and models evolve and change. If someone is telling you that AI can’t do anything
-                useful, ignore them. If someone is telling you that AI can do everything, ignore
-                them. Both types of people do not have your best interest in mind.
+                This is how I use AI today and I expect things to evolve and change as the tools and models evolve and change. If someone is telling you that AI can’t do anything useful, ignore them.
+                If someone is telling you that AI can do everything, ignore them. Both types of people do not have your best interest in mind.
               </p>
               <p>
-                Try one of the high quality AI coding agent harnesses with a capable model and see
-                for yourself. Be aware: free or low paid tiers are not good enough yet. You are
-                getting worse models running on worse hardware with worse limits. This is
-                unfortunate right now and part of why I am pushing to build a local-first,
-                offline-first setup for myself that is capable.
+                Try one of the high quality AI coding agent harnesses with a capable model and see for yourself. Be aware: free or low paid tiers are not good enough yet. You are getting worse models
+                running on worse hardware with worse limits. This is unfortunate right now and part of why I am pushing to build a local-first, offline-first setup for myself that is capable.
               </p>
             </nh-markdown>
           </div>
@@ -260,18 +189,15 @@
         </article>
       </main>
       <script async src="/assets/details-controls.js"></script>
-      <script data-domain="nathanherald.com" defer src=
-      "https://stats.myobie.wtf/script.js"></script>
+      <script data-domain="nathanherald.com" defer src="https://stats.myobie.wtf/script.js"></script>
       <nh-footer>
         <footer class="site-footer">
-          <a class="never-underline" href="/"><svg class="footer-logo" viewbox="0 0 256 256" xmlns=
-          "http://www.w3.org/2000/svg">
+          <a class="never-underline" href="/"><svg class="footer-logo" viewbox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
           <g fill="currentColor" fill-rule="evenodd" stroke="none">
             <path d=
             "M20.19,7.28 L20.01,35.44 L33.82,20.97 L47.24,35.05 L33.66,48.61 L47.98,62.92 L61.49,49.19 L73.61,62.12 L60.89,75.81 L73.99,89.71 L88.74,76.37 L100.76,89.71 L87.55,103.48 L100.94,117.5 L114.61,104.12 L127.03,116.86 L114.19,129.92 L127.41,144.21 L140.66,130.16 L152.93,143.61 L140.01,157.51 L153.71,171.63 L167.94,157.34 L180.21,171.21 L166.92,184.9 L180.62,199.19 L193.91,185.32 L197.65,188.93 C206.68,177.83 214.27,165.78 218.41,154.55 L208.19,143.41 L193.86,156.91 L181.84,143.53 L194.19,130.08 L181.08,116.66 L167.57,129.6 L153.87,116.66 L167.98,103.2 L153.99,88.91 L140.29,102.79 L127.83,89.71 L141.53,75.81 L127.78,61.52 L114.11,74.93 L102.05,62.12 L115.38,48.61 L101.75,34.69 L88.42,47.99 L74.72,34.69 L88.63,20.22 L74.31,6.72 L61.31,19.69 L48.02,7.28 L20.19,7.28 Z">
             </path>
-            <path d=
-            "M20.14,60.82 C19.91,72.94 19.78,82.72 20.62,90.04 L34.61,75.36 L20.14,60.82 Z"></path>
+            <path d="M20.14,60.82 C19.91,72.94 19.78,82.72 20.62,90.04 L34.61,75.36 L20.14,60.82 Z"></path>
             <path d=
             "M20.62,90.04 L33.91,102.42 L48.23,88.62 L61.93,102.91 L48.64,117.2 L61.18,129.56 L74.47,116.11 L88.58,129.96 L74.72,143.86 L87.72,156.62 L101.42,143.16 L115.12,157.43 L101.75,171.63 L114.61,183.87 L127.86,170.72 L141.61,184.9 L128.03,198.12 L141.18,210.59 L153.87,197.21 L172.69,215.59 C159.67,227.81 141.81,240.91 127.53,249 C121.44,245.76 117.01,242.89 113.51,239.36 L127.14,225.11 L114.68,211.21 L98.3,228.91 L82.95,215.46 L100.51,197.91 L88.42,184.9 L88.04,185.11 L69.48,203.41 C63.86,197.83 60.16,193.45 57.49,188.69 L73.21,171.21 L61.31,157.88 L48.1,171.63 L40.67,163.95 L35.82,154.63 L47.11,143.78 L33.78,130.08 L28.93,135.21 C24.75,122.45 21.88,107.01 20.62,90.04 Z">
             </path>
