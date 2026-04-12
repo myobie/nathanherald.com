@@ -107,14 +107,20 @@ export class NhHeadElement extends HTMLElement {
     }));
     els.push(link({
       rel: 'icon',
-      type: 'image/svg+xml',
-      href: 'https://nathanherald.com/favicon.svg'
+      type: 'image/png',
+      sizes: '256x256',
+      href: 'https://nathanherald.com/favicon-256.png'
     }));
     els.push(link({
       rel: 'icon',
       type: 'image/png',
       sizes: '32x32',
       href: 'https://nathanherald.com/favicon-32.png'
+    }));
+    els.push(link({
+      rel: 'icon',
+      type: 'image/svg+xml',
+      href: 'https://nathanherald.com/favicon.svg'
     }));
     els.push(link({
       rel: 'apple-touch-icon',
@@ -145,4 +151,4 @@ export class NhHeadElement extends HTMLElement {
   }
 }
 
-// denoCacheMetadata=12466659178588371932,12758384277840837966
+// denoCacheMetadata=5859763148313130863,7497631797546905318
