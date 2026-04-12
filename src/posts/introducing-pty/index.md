@@ -3,6 +3,7 @@ title: Introducing pty
 date: 2026-03-24T12:00:00+01:00
 description: Persistent terminal sessions. Detach, reconnect, peek, drive, and test real terminal processes.
 externalUrl: https://www.npmjs.com/package/@myobie/pty
+image: /posts/introducing-pty/og.jpg
 ---
 
 I’ve been using [zellij](https://zellij.dev/) full time for a while and while I liked it better than tmux, I kept running into weird issues. I couldn’t scroll when using the [codex CLI](https://github.com/openai/codex). It would use 300% CPU on my Mac while doing almost nothing. Loading sessions from my iPhone over SSH didn’t render well.

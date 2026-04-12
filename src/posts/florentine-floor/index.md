@@ -2,6 +2,7 @@
 title: Florentine Floor
 date: 2026-03-16T12:00:00+01:00
 description: How a marble floor slab in a Florentine church became my logo.
+image: /posts/florentine-floor/og.jpg
 ---
 
 Back in 2015 I visited [San Miniato al Monte](https://en.wikipedia.org/wiki/San_Miniato_al_Monte) in Florence. The church floor is covered in memorial slabs, many of them so worn you can barely read the names and dates anymore, but the inlaid symbols are still bold and sharp.

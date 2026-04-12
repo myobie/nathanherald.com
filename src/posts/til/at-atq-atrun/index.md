@@ -2,6 +2,7 @@
 title: "TIL: at, atq, and atrun"
 date: 2026-03-25T01:00:00+01:00
 description: Schedule one-off commands to run later from the terminal. Built into Unix.
+image: /posts/til/at-atq-atrun/og.jpg
 ---
 
 Today I learned about `at`, a built-in Unix command that schedules a one-off command to run at a specific time. Unlike cron, which is for recurring tasks, `at` runs something once and then the job is gone.

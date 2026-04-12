@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+set -e
+
+REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+
+TITLE="$1"
+DATE="$2"
+OUT="$3"
+
+if [ -z "$TITLE" ] || [ -z "$OUT" ]; then
+    echo "Usage: $0 <title> [date] <output-path>"
+    exit 1
+fi
+
+TEMPLATE="file://$REPO_ROOT/public/.system/og/index.html"
+
+ENCODED_TITLE=$(python3 -c "import urllib.parse,sys; print(urllib.parse.quote_plus(sys.argv[1]))" "$TITLE")
+PARAMS="title=$ENCODED_TITLE"
+if [ -n "$DATE" ]; then
+    ENCODED_DATE=$(python3 -c "import urllib.parse,sys; print(urllib.parse.quote_plus(sys.argv[1]))" "$DATE")
+    PARAMS="$PARAMS&date=$ENCODED_DATE"
+fi
+
+URL="$TEMPLATE?$PARAMS"
+PNG_PATH="$REPO_ROOT/${OUT%.jpg}.png"
+
+(cd "$REPO_ROOT/tests" && PLAYWRIGHT_BROWSERS_PATH=/tmp/pw-browsers npx playwright screenshot --viewport-size="1200,630" --full-page "$URL" "$PNG_PATH" 2>/dev/null)
+
+magick "$PNG_PATH" -gravity Center -crop 1200x630+0+0 +repage -quality 85 "$REPO_ROOT/$OUT"
+rm -f "$PNG_PATH"
+
+SIZE=$(ls -lh "$REPO_ROOT/$OUT" | awk '{print $5}')
+echo "Generated: $OUT ($SIZE)"

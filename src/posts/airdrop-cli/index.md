@@ -2,6 +2,7 @@
 title: airdrop CLI
 date: 2026-03-28T13:00:00+01:00
 description: A small macOS CLI that opens the system AirDrop sharing flow for one or more files.
+image: /posts/airdrop-cli/og.jpg
 ---
 
 I was surprised there wasn’t already an AirDrop CLI on macOS, so I made one. A tiny CLI that opens the AirDrop sharing flow from the terminal. `airdrop file.txt` and the system AirDrop sheet pops up.
