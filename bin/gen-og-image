@@ -12,8 +12,6 @@ if [ -z "$TITLE" ] || [ -z "$OUT" ]; then
     exit 1
 fi
 
-TEMPLATE="file://$REPO_ROOT/public/.system/og/index.html"
-
 ENCODED_TITLE=$(python3 -c "import urllib.parse,sys; print(urllib.parse.quote_plus(sys.argv[1]))" "$TITLE")
 PARAMS="title=$ENCODED_TITLE"
 if [ -n "$DATE" ]; then
@@ -21,12 +19,23 @@ if [ -n "$DATE" ]; then
     PARAMS="$PARAMS&date=$ENCODED_DATE"
 fi
 
-URL="$TEMPLATE?$PARAMS"
+# Start the server if not already running on 8000
+STARTED_SERVER=false
+if ! curl -s http://localhost:8000/ > /dev/null 2>&1; then
+    "$REPO_ROOT/bin/serve" &>/dev/null &
+    SERVER_PID=$!
+    STARTED_SERVER=true
+    trap "kill $SERVER_PID 2>/dev/null" EXIT
+    sleep 1
+fi
+
+URL="http://localhost:8000/.system/og/?$PARAMS"
 PNG_PATH="$REPO_ROOT/${OUT%.jpg}.png"
 
-(cd "$REPO_ROOT/tests" && PLAYWRIGHT_BROWSERS_PATH=/tmp/pw-browsers npx playwright screenshot --viewport-size="1200,630" --full-page "$URL" "$PNG_PATH" 2>/dev/null)
+cd "$REPO_ROOT/tests"
+NODE_PATH="$REPO_ROOT/tests/node_modules" PLAYWRIGHT_BROWSERS_PATH=/tmp/pw-browsers node "$REPO_ROOT/bin/og-screenshot.js" "$URL" "$PNG_PATH"
 
-magick "$PNG_PATH" -gravity Center -crop 1200x630+0+0 +repage -quality 85 "$REPO_ROOT/$OUT"
+magick "$PNG_PATH" -quality 85 "$REPO_ROOT/$OUT"
 rm -f "$PNG_PATH"
 
 SIZE=$(ls -lh "$REPO_ROOT/$OUT" | awk '{print $5}')
