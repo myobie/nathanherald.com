@@ -117,6 +117,11 @@ export class NhHeadElement extends HTMLElement {
       href: 'https://nathanherald.com/favicon-32.png'
     }));
     els.push(link({
+      rel: 'apple-touch-icon',
+      sizes: '180x180',
+      href: 'https://nathanherald.com/apple-touch-icon.png'
+    }));
+    els.push(link({
       href: '/rss.xml',
       rel: 'alternate',
       title: 'Feed of all the posts on nathanherald.com',
@@ -140,4 +145,4 @@ export class NhHeadElement extends HTMLElement {
   }
 }
 
-// denoCacheMetadata=14439638256659583730,12976111588965617172
+// denoCacheMetadata=12466659178588371932,12758384277840837966

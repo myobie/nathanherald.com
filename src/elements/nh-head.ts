@@ -75,6 +75,7 @@ export class NhHeadElement extends HTMLElement {
     els.push(meta({ content: 'I\u2019m Nathan Herald', property: 'og:site_name' }))
     els.push(link({ rel: 'icon', type: 'image/svg+xml', href: 'https://nathanherald.com/favicon.svg' }))
     els.push(link({ rel: 'icon', type: 'image/png', sizes: '32x32', href: 'https://nathanherald.com/favicon-32.png' }))
+    els.push(link({ rel: 'apple-touch-icon', sizes: '180x180', href: 'https://nathanherald.com/apple-touch-icon.png' }))
     els.push(link({ href: '/rss.xml', rel: 'alternate', title: 'Feed of all the posts on nathanherald.com', type: 'application/rss+xml' }))
 
     // Append to <head>, not to this element
