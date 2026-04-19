@@ -4,7 +4,55 @@
     <title>nathanherald.com feed</title>
     <link>https://nathanherald.com/</link>
     <description>Recent posts from nathanherald.com</description>
-    <lastBuildDate>Sun, 19 Apr 2026 16:39:36 +0200</lastBuildDate>
+    <lastBuildDate>Sun, 19 Apr 2026 20:29:27 +0200</lastBuildDate>
+
+    <item>
+      <title>Making Chrome livable</title>
+      <link>https://nathanherald.com/posts/making-chrome-livable/</link>
+      <pubDate>Sun, 19 Apr 2026 20:29:19 +0200</pubDate>
+      <guid isPermaLink="true">https://nathanherald.com/posts/making-chrome-livable/</guid>
+      <description>&lt;p&gt;I’ve used Safari consistently since it came out. I’ve only maybe used
+something different like &lt;a
+href="https://en.wikipedia.org/wiki/OmniWeb"&gt;OmniWeb&lt;/a&gt; or &lt;a
+href="https://en.wikipedia.org/wiki/Camino_%28web_browser%29"&gt;Camino&lt;/a&gt;
+or Firefox or whatever, but always returning to Safari.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Enter vertical tabs in Chrome.&lt;/strong&gt; I’ve wanted vertical
+tabs in my browser since OmniWeb. Chrome’s version isn’t perfect, but it
+is very good. Combined with split views in windows and I am a happy
+camper. I’ve been using Chrome Beta to get access to the vertical tabs
+(which should be shipped out in regular Chrome now) for weeks and I love
+them.&lt;/p&gt;
+&lt;p&gt;But there are 3 things I miss from Safari and I &lt;em&gt;had&lt;/em&gt; to find
+a way to fix them.&lt;/p&gt;
+&lt;ol type="1"&gt;
+&lt;li&gt;&lt;p&gt;&lt;a
+href="https://github.com/myobie/translate-selected-chrome-extension"&gt;Right
+click, Translate. Fixed with my own extension.&lt;/a&gt; Chrome wants to
+translate a whole page, but it misses iframes, dynamic content, etc. I
+almost always only want to translate a small part and in Safari I can
+select, right click, and Translate. Well, now I can do the same in
+Chrome using my own extension.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;When a link opens a new tab in Safari, the back button is enabled
+and click back closes the new tab and returns to the original tab.
+Apparently this is something I use 100s of times a day and it has driven
+me crazy. So I made a &lt;a
+href="https://github.com/myobie/back-to-opener-chrome-extension"&gt;back to
+opener chrome extension&lt;/a&gt; that does exactly this. This has made things
+sooo much better for me.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;I miss 1Blocker. It’s my fav content blocker and I want to have
+it in Chrome as well. So I built &lt;a
+href="https://github.com/myobie/unofficial-1blocker-rule-converter-for-chrome"&gt;a
+python script to analyze the rules inside 1Blocker.app and churn out a
+custom chrome extension&lt;/a&gt; that contains basically the same rules.
+After some trial and error, it works!&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Fixing these three things has made Chrome really livable for me. They
+also have synced tab groups, just like Safari, so that works too.&lt;/p&gt;
+&lt;p&gt;Chrome still doesn’t feel like a Mac app, it feels like a Linux app
+running on my Mac, but it is much closer to my ideal browser now. I’ve
+been daily-ing Chrome for a few weeks and I anticipate keeping it as my
+default browser for many more.&lt;/p&gt;</description>
+    </item>
 
     <item>
       <title>Same beans, different cups</title>
