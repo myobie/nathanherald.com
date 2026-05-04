@@ -4,12 +4,12 @@
     <title>nathanherald.com feed</title>
     <link>https://nathanherald.com/</link>
     <description>Recent posts from nathanherald.com</description>
-    <lastBuildDate>Tue, 05 May 2026 00:09:10 +0200</lastBuildDate>
+    <lastBuildDate>Tue, 05 May 2026 00:13:21 +0200</lastBuildDate>
 
     <item>
-      <title>Principles driven development is more useful now with agents than ever</title>
+      <title>Principles matter more with agents</title>
       <link>https://nathanherald.com/posts/principles-driven-development/</link>
-      <pubDate>Tue, 05 May 2026 00:09:07 +0200</pubDate>
+      <pubDate>Tue, 05 May 2026 00:13:18 +0200</pubDate>
       <guid isPermaLink="true">https://nathanherald.com/posts/principles-driven-development/</guid>
       <description>&lt;p&gt;Whether working with humans or robots, it always helps to have your
 core principles documented and defined. I find most programmers think
@@ -81,6 +81,11 @@ empty state while fetching. Keep some sort of isFetching in AppState if
 you need to. Even better: model your state machine with an enum so you
 can transition through different states which drive the UI. And unit
 test everything.&lt;/p&gt;
+&lt;p&gt;Even with strong principles defined, you have to review the agent’s
+work regularly and make sure it’s still adhering. Drift happens. An
+agent will start mocking things it shouldn’t, mutating state from
+outside AppActions, or sneaking in some online-only call. Catch it early
+and pull the work back in line.&lt;/p&gt;
 &lt;p&gt;This is enough to get started. And sure, one could say SwiftUI only,
 Swift 6.2 only, MainActor by default, and one can even start talking
 about data modeling and schemas… but those should be defined in a

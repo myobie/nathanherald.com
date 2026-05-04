@@ -1,5 +1,5 @@
 ---
-title: Principles driven development is more useful now with agents than ever
+title: Principles matter more with agents
 date: 2026-05-05T00:08:28+02:00
 description: Why core principles matter more than architecture, especially when working with coding agents.
 ---
@@ -35,6 +35,8 @@ This should make sense.
 5) Local first, offline first all the time.
 
 Don’t ever allow a coding agent to start building some sort of _online only_ feature. If you want to show something from a remote server, expose it via AppState. Then have a way to read from disk into AppState. Then have a way to fetch from the network and write to disk. And now you can hit the remote server, write to disk, assign into AppState, and the UI reacts automatically and everyone is good. Leave the old version cached on disk if at all possible. Don’t revert to an empty state while fetching. Keep some sort of isFetching in AppState if you need to. Even better: model your state machine with an enum so you can transition through different states which drive the UI. And unit test everything.
+
+Even with strong principles defined, you have to review the agent’s work regularly and make sure it’s still adhering. Drift happens. An agent will start mocking things it shouldn’t, mutating state from outside AppActions, or sneaking in some online-only call. Catch it early and pull the work back in line.
 
 This is enough to get started. And sure, one could say SwiftUI only, Swift 6.2 only, MainActor by default, and one can even start talking about data modeling and schemas… but those should be defined in a different file.
 

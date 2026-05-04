@@ -7,7 +7,7 @@
     </script>
     <meta charset="UTF-8">
     <title>
-      I’m Nathan Herald → Principles driven development is more useful now with agents than ever
+      I’m Nathan Herald → Principles matter more with agents
     </title>
     <script>
     if ((new URL(window.location.href)).host === 'myobie.com') { window.location.assign('https://nathanherald.com') }
@@ -18,9 +18,9 @@
     <link href="/syntax-dark.css" rel="stylesheet" type="text/css">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="IE=edge" http-equiv="X-UA-Compatible">
-    <meta content="I’m Nathan Herald → Principles driven development is more useful now with agents than ever" name="title">
+    <meta content="I’m Nathan Herald → Principles matter more with agents" name="title">
     <meta content="Why core principles matter more than architecture, especially when working with coding agents." name="description">
-    <meta content="Principles driven development is more useful now with agents than ever" property="og:title">
+    <meta content="Principles matter more with agents" property="og:title">
     <meta content="website" property="og:type">
     <meta content="Why core principles matter more than architecture, especially when working with coding agents." property="og:description">
     <meta content="https://nathanherald.com/og.png" property="og:image">
@@ -32,7 +32,7 @@
     <link href="/rss.xml" rel="alternate" title="Feed of all the posts on nathanherald.com" type="application/rss+xml">
   </head>
   <body class="default">
-    <nh-page date="2026-05-05T00:08:28+02:00" date-display="5 May, 2026" title="Principles driven development is more useful now with agents than ever">
+    <nh-page date="2026-05-05T00:08:28+02:00" date-display="5 May, 2026" title="Principles matter more with agents">
       <nh-header>
         <header class="section-header">
           <div class="section-nav">
@@ -51,7 +51,7 @@
         <article>
           <header>
             <h1>
-              Principles driven development is more useful now with agents than ever
+              Principles matter more with agents
             </h1>
           </header>
           <div class="content">
@@ -121,6 +121,10 @@
                 way to read from disk into AppState. Then have a way to fetch from the network and write to disk. And now you can hit the remote server, write to disk, assign into AppState, and the
                 UI reacts automatically and everyone is good. Leave the old version cached on disk if at all possible. Don’t revert to an empty state while fetching. Keep some sort of isFetching in
                 AppState if you need to. Even better: model your state machine with an enum so you can transition through different states which drive the UI. And unit test everything.
+              </p>
+              <p>
+                Even with strong principles defined, you have to review the agent’s work regularly and make sure it’s still adhering. Drift happens. An agent will start mocking things it shouldn’t,
+                mutating state from outside AppActions, or sneaking in some online-only call. Catch it early and pull the work back in line.
               </p>
               <p>
                 This is enough to get started. And sure, one could say SwiftUI only, Swift 6.2 only, MainActor by default, and one can even start talking about data modeling and schemas… but those
