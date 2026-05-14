@@ -4,7 +4,55 @@
     <title>nathanherald.com feed</title>
     <link>https://nathanherald.com/</link>
     <description>Recent posts from nathanherald.com</description>
-    <lastBuildDate>Sun, 10 May 2026 21:31:38 +0200</lastBuildDate>
+    <lastBuildDate>Thu, 14 May 2026 11:52:04 +0200</lastBuildDate>
+
+    <item>
+      <title>Mastodon kinda hates AI</title>
+      <link>https://nathanherald.com/posts/mastodon-kinda-hates-ai/</link>
+      <pubDate>Thu, 14 May 2026 11:51:57 +0200</pubDate>
+      <guid isPermaLink="true">https://nathanherald.com/posts/mastodon-kinda-hates-ai/</guid>
+      <description>&lt;p&gt;Mastodon, as a network, leans pretty strongly anti-AI. Not just the
+people I follow, but the network overall. It’s something I see every
+day, but today I saw a very clear single example.&lt;/p&gt;
+&lt;p&gt;&lt;a
+href="https://1password.social/@1password/116569353856438624"&gt;1Password
+posted a link to a blog post about how they use AI for backend dev on
+Masto&lt;/a&gt; which showed up in my feed and I immediately noticed the
+amount of negative replies: 42 replies, 41 of which were negative. Here
+is a representative slice, paraphrased so I’m not singling anyone
+out:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;“No. Just no.”&lt;/li&gt;
+&lt;li&gt;Equating any AI use with deliberately introducing security
+flaws.&lt;/li&gt;
+&lt;li&gt;“Stochastic parrots.” “AI slop.” “Grey goo.”&lt;/li&gt;
+&lt;li&gt;“The ideal agent-to-human ratio is 0.”&lt;/li&gt;
+&lt;li&gt;A lot of “I’m canceling my subscription” / “guess I need to find a
+new password manager.”&lt;/li&gt;
+&lt;li&gt;“Set itself on fire in the race to shove AI into everything.”&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;I went to see if they posted that blog link anywhere else. They
+posted the same blog post link &lt;a
+href="https://www.linkedin.com/posts/1password_ai-softwareengineering-agenticai-activity-7458229249091612672-luun"&gt;on
+LinkedIn&lt;/a&gt; and &lt;a
+href="https://x.com/1Password/status/2046397330396692940"&gt;on X&lt;/a&gt;, but
+not on their Threads or Bluesky accounts. There are a lot fewer replies
+on both and they are mostly just engaging with the topic or asking for
+support.&lt;/p&gt;
+&lt;p&gt;I mainly read through Mastodon to learn about cool tech stuff + a lot
+of my real-life friends are on there, but Masto seems to be getting more
+anti-tech in general these days and I am finding less cool stuff there
+recently.&lt;/p&gt;
+&lt;p&gt;I find Threads is better for photography and general interest. How
+weird that photographers have migrated over to Threads from Instagram
+since Insta is all about Reels now…&lt;/p&gt;
+&lt;p&gt;The norms building up inside the post-twitter text-based social
+networks are fascinating to watch. I honestly never would have assumed a
+large network could have visible biases like this.&lt;/p&gt;
+&lt;p&gt;Is there an online space that is pro-“tech to help people”? Or
+pro-this-stuff-is-cool-check-it-out? Or just generally biased towards
+constructive convos?&lt;/p&gt;</description>
+    </item>
 
     <item>
       <title>"1990: Whatever Happened to the Cameras of the Future? | Tomorrow’s World | BBC Archive"</title>
