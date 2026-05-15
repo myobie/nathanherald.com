@@ -1,5 +1,12 @@
 [
   {
+    "title": "Practical example of how cool RDF is",
+    "date": "2026-05-15T15:14:00+02:00",
+    "description": "A small maritime walkthrough of how an agent can answer real questions when every fact, action, and result is a claim.",
+    "url": "/posts/practical-rdf-example/",
+    "type": "blog"
+  },
+  {
     "title": "Mastodon kinda hates AI",
     "date": "2026-05-14T11:51:45+02:00",
     "description": "One stark example of how Mastodon’s reply culture treats AI, compared to LinkedIn and X.",

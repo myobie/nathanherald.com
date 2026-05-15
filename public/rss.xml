@@ -4,7 +4,354 @@
     <title>nathanherald.com feed</title>
     <link>https://nathanherald.com/</link>
     <description>Recent posts from nathanherald.com</description>
-    <lastBuildDate>Thu, 14 May 2026 11:52:04 +0200</lastBuildDate>
+    <lastBuildDate>Fri, 15 May 2026 15:21:53 +0200</lastBuildDate>
+
+    <item>
+      <title>Practical example of how cool RDF is</title>
+      <link>https://nathanherald.com/posts/practical-rdf-example/</link>
+      <pubDate>Fri, 15 May 2026 15:21:24 +0200</pubDate>
+      <guid isPermaLink="true">https://nathanherald.com/posts/practical-rdf-example/</guid>
+      <description>&lt;p&gt;Imagine we’ve ingested a ton of maritime data. (I couldn’t come up
+with a better example today.)&lt;/p&gt;
+&lt;p&gt;Someone asks us “Can shipment 8821 go through the Suez Canal?”&lt;/p&gt;
+&lt;p&gt;Before: someone has to query different systems for regulations,
+jurisdictions, routes, cargo manifests, and permits. JOIN them if
+possible. Paste them into an LLM to synthesize, and hope the answer is
+complete.&lt;/p&gt;
+&lt;p&gt;What we &lt;em&gt;could&lt;/em&gt; do: we can ingest all our data into a semantic
+knowledge system and let an agent query through at the semantic
+level.&lt;/p&gt;
+&lt;p&gt;Our agent might get a list of tools it can call:&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;Lots of JSON&lt;/summary&gt;
+
+&lt;pre&gt;&lt;code&gt;{
+  &amp;quot;actions&amp;quot;: [
+    {
+      &amp;quot;name&amp;quot;: &amp;quot;CanTransitAction&amp;quot;,
+      &amp;quot;description&amp;quot;: &amp;quot;Determine whether a shipment may transit a jurisdiction under active maritime policy.&amp;quot;,
+      &amp;quot;input&amp;quot;: {
+        &amp;quot;type&amp;quot;: &amp;quot;object&amp;quot;,
+        &amp;quot;required&amp;quot;: [&amp;quot;shipment&amp;quot;, &amp;quot;jurisdiction&amp;quot;, &amp;quot;validTime&amp;quot;],
+        &amp;quot;properties&amp;quot;: {
+          &amp;quot;shipment&amp;quot;: {
+            &amp;quot;type&amp;quot;: &amp;quot;string&amp;quot;,
+            &amp;quot;description&amp;quot;: &amp;quot;IRI of the shipment entity.&amp;quot;,
+            &amp;quot;examples&amp;quot;: [&amp;quot;cargo:shipment-8821&amp;quot;]
+          },
+          &amp;quot;jurisdiction&amp;quot;: {
+            &amp;quot;type&amp;quot;: &amp;quot;string&amp;quot;,
+            &amp;quot;description&amp;quot;: &amp;quot;IRI of the jurisdiction entity.&amp;quot;,
+            &amp;quot;examples&amp;quot;: [&amp;quot;jurisdiction:egypt-suez&amp;quot;]
+          },
+          &amp;quot;validTime&amp;quot;: {
+            &amp;quot;type&amp;quot;: &amp;quot;string&amp;quot;,
+            &amp;quot;format&amp;quot;: &amp;quot;date-time&amp;quot;,
+            &amp;quot;description&amp;quot;: &amp;quot;The real-world time for which the transit decision should be evaluated.&amp;quot;
+          }
+        },
+        &amp;quot;additionalProperties&amp;quot;: false
+      },
+      &amp;quot;output&amp;quot;: {
+        &amp;quot;type&amp;quot;: &amp;quot;object&amp;quot;,
+        &amp;quot;required&amp;quot;: [&amp;quot;type&amp;quot;, &amp;quot;allowed&amp;quot;, &amp;quot;reason&amp;quot;, &amp;quot;citesClaim&amp;quot;, &amp;quot;usedPolicy&amp;quot;],
+        &amp;quot;properties&amp;quot;: {
+          &amp;quot;type&amp;quot;: {
+            &amp;quot;const&amp;quot;: &amp;quot;CanTransitResult&amp;quot;
+          },
+          &amp;quot;allowed&amp;quot;: {
+            &amp;quot;type&amp;quot;: &amp;quot;boolean&amp;quot;
+          },
+          &amp;quot;reason&amp;quot;: {
+            &amp;quot;type&amp;quot;: &amp;quot;string&amp;quot;
+          },
+          &amp;quot;citesClaim&amp;quot;: {
+            &amp;quot;type&amp;quot;: &amp;quot;array&amp;quot;,
+            &amp;quot;items&amp;quot;: { &amp;quot;type&amp;quot;: &amp;quot;string&amp;quot; }
+          },
+          &amp;quot;usedPolicy&amp;quot;: {
+            &amp;quot;type&amp;quot;: &amp;quot;string&amp;quot;
+          }
+        },
+        &amp;quot;additionalProperties&amp;quot;: false
+      }
+    },
+    {
+      &amp;quot;name&amp;quot;: &amp;quot;ResolveEntityAction&amp;quot;,
+      &amp;quot;description&amp;quot;: &amp;quot;Resolve a human phrase like &amp;#39;shipment 8821&amp;#39; or &amp;#39;Suez Canal&amp;#39; into a substrate IRI.&amp;quot;,
+      &amp;quot;input&amp;quot;: {
+        &amp;quot;type&amp;quot;: &amp;quot;object&amp;quot;,
+        &amp;quot;required&amp;quot;: [&amp;quot;mention&amp;quot;, &amp;quot;expectedType&amp;quot;],
+        &amp;quot;properties&amp;quot;: {
+          &amp;quot;mention&amp;quot;: {
+            &amp;quot;type&amp;quot;: &amp;quot;string&amp;quot;,
+            &amp;quot;description&amp;quot;: &amp;quot;The phrase supplied by the user.&amp;quot;,
+            &amp;quot;examples&amp;quot;: [&amp;quot;shipment 8821&amp;quot;, &amp;quot;Suez Canal&amp;quot;]
+          },
+          &amp;quot;expectedType&amp;quot;: {
+            &amp;quot;type&amp;quot;: &amp;quot;string&amp;quot;,
+            &amp;quot;description&amp;quot;: &amp;quot;The expected entity type.&amp;quot;,
+            &amp;quot;enum&amp;quot;: [&amp;quot;Shipment&amp;quot;, &amp;quot;Jurisdiction&amp;quot;, &amp;quot;Port&amp;quot;, &amp;quot;Vessel&amp;quot;, &amp;quot;Permit&amp;quot;, &amp;quot;CargoType&amp;quot;]
+          }
+        },
+        &amp;quot;additionalProperties&amp;quot;: false
+      },
+      &amp;quot;output&amp;quot;: {
+        &amp;quot;type&amp;quot;: &amp;quot;object&amp;quot;,
+        &amp;quot;required&amp;quot;: [&amp;quot;status&amp;quot;],
+        &amp;quot;properties&amp;quot;: {
+          &amp;quot;status&amp;quot;: {
+            &amp;quot;type&amp;quot;: &amp;quot;string&amp;quot;,
+            &amp;quot;enum&amp;quot;: [&amp;quot;resolved&amp;quot;, &amp;quot;ambiguous&amp;quot;, &amp;quot;not_found&amp;quot;]
+          },
+          &amp;quot;iri&amp;quot;: {
+            &amp;quot;type&amp;quot;: &amp;quot;string&amp;quot;,
+            &amp;quot;description&amp;quot;: &amp;quot;Resolved entity IRI when status is resolved.&amp;quot;
+          },
+          &amp;quot;confidence&amp;quot;: {
+            &amp;quot;type&amp;quot;: &amp;quot;number&amp;quot;,
+            &amp;quot;minimum&amp;quot;: 0,
+            &amp;quot;maximum&amp;quot;: 1
+          },
+          &amp;quot;matchedBy&amp;quot;: {
+            &amp;quot;type&amp;quot;: &amp;quot;array&amp;quot;,
+            &amp;quot;items&amp;quot;: { &amp;quot;type&amp;quot;: &amp;quot;string&amp;quot; },
+            &amp;quot;examples&amp;quot;: [[&amp;quot;exact shipmentId&amp;quot;], [&amp;quot;label&amp;quot;, &amp;quot;alias&amp;quot;]]
+          },
+          &amp;quot;citedClaims&amp;quot;: {
+            &amp;quot;type&amp;quot;: &amp;quot;array&amp;quot;,
+            &amp;quot;items&amp;quot;: { &amp;quot;type&amp;quot;: &amp;quot;string&amp;quot; }
+          },
+          &amp;quot;candidates&amp;quot;: {
+            &amp;quot;type&amp;quot;: &amp;quot;array&amp;quot;,
+            &amp;quot;description&amp;quot;: &amp;quot;Candidate entities when status is ambiguous.&amp;quot;,
+            &amp;quot;items&amp;quot;: {
+              &amp;quot;type&amp;quot;: &amp;quot;object&amp;quot;,
+              &amp;quot;required&amp;quot;: [&amp;quot;iri&amp;quot;, &amp;quot;label&amp;quot;, &amp;quot;confidence&amp;quot;],
+              &amp;quot;properties&amp;quot;: {
+                &amp;quot;iri&amp;quot;: { &amp;quot;type&amp;quot;: &amp;quot;string&amp;quot; },
+                &amp;quot;label&amp;quot;: { &amp;quot;type&amp;quot;: &amp;quot;string&amp;quot; },
+                &amp;quot;confidence&amp;quot;: {
+                  &amp;quot;type&amp;quot;: &amp;quot;number&amp;quot;,
+                  &amp;quot;minimum&amp;quot;: 0,
+                  &amp;quot;maximum&amp;quot;: 1
+                }
+              },
+              &amp;quot;additionalProperties&amp;quot;: false
+            }
+          }
+        },
+        &amp;quot;additionalProperties&amp;quot;: false
+      }
+    }
+  ]
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/details&gt;
+
+&lt;p&gt;The &lt;code&gt;CanTransitAction&lt;/code&gt; looks correct, but the agent needs
+to first resolve the entities from plain text to IDs first:&lt;/p&gt;
+&lt;div class="sourceCode" id="cb2"&gt;&lt;pre
+class="sourceCode elixir"&gt;&lt;code class="sourceCode elixir"&gt;&lt;span id="cb2-1"&gt;&lt;a href="#cb2-1" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;action&lt;span class="fu"&gt;(&lt;/span&gt;%&lt;span class="fu"&gt;{&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb2-2"&gt;&lt;a href="#cb2-2" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;  &lt;span class="va"&gt;action:&lt;/span&gt; &lt;span class="st"&gt;&amp;quot;ResolveEntityAction&amp;quot;&lt;/span&gt;,&lt;/span&gt;
+&lt;span id="cb2-3"&gt;&lt;a href="#cb2-3" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;  &lt;span class="va"&gt;expectedType:&lt;/span&gt; &lt;span class="st"&gt;&amp;quot;Shipment&amp;quot;&lt;/span&gt;,&lt;/span&gt;
+&lt;span id="cb2-4"&gt;&lt;a href="#cb2-4" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;  &lt;span class="va"&gt;mention:&lt;/span&gt; &lt;span class="st"&gt;&amp;quot;shipment 8821&amp;quot;&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb2-5"&gt;&lt;a href="#cb2-5" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;span class="fu"&gt;})&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div class="sourceCode" id="cb3"&gt;&lt;pre
+class="sourceCode elixir"&gt;&lt;code class="sourceCode elixir"&gt;&lt;span id="cb3-1"&gt;&lt;a href="#cb3-1" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;action&lt;span class="fu"&gt;(&lt;/span&gt;%&lt;span class="fu"&gt;{&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb3-2"&gt;&lt;a href="#cb3-2" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;  &lt;span class="va"&gt;action:&lt;/span&gt; &lt;span class="st"&gt;&amp;quot;ResolveEntityAction&amp;quot;&lt;/span&gt;,&lt;/span&gt;
+&lt;span id="cb3-3"&gt;&lt;a href="#cb3-3" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;  &lt;span class="va"&gt;expectedType:&lt;/span&gt; &lt;span class="st"&gt;&amp;quot;Jurisdiction&amp;quot;&lt;/span&gt;,&lt;/span&gt;
+&lt;span id="cb3-4"&gt;&lt;a href="#cb3-4" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;  &lt;span class="va"&gt;mention:&lt;/span&gt; &lt;span class="st"&gt;&amp;quot;Suez Canal&amp;quot;&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb3-5"&gt;&lt;a href="#cb3-5" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;span class="fu"&gt;})&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Then it can try to run the action:&lt;/p&gt;
+&lt;div class="sourceCode" id="cb4"&gt;&lt;pre
+class="sourceCode elixir"&gt;&lt;code class="sourceCode elixir"&gt;&lt;span id="cb4-1"&gt;&lt;a href="#cb4-1" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;action&lt;span class="fu"&gt;(&lt;/span&gt;%&lt;span class="fu"&gt;{&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb4-2"&gt;&lt;a href="#cb4-2" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;  &lt;span class="st"&gt;&amp;quot;action&amp;quot;&lt;/span&gt;: &lt;span class="st"&gt;&amp;quot;CanTransitAction&amp;quot;&lt;/span&gt;,&lt;/span&gt;
+&lt;span id="cb4-3"&gt;&lt;a href="#cb4-3" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;  &lt;span class="st"&gt;&amp;quot;shipment&amp;quot;&lt;/span&gt;: &lt;span class="st"&gt;&amp;quot;cargo:shipment-8821&amp;quot;&lt;/span&gt;,&lt;/span&gt;
+&lt;span id="cb4-4"&gt;&lt;a href="#cb4-4" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;  &lt;span class="st"&gt;&amp;quot;jurisdiction&amp;quot;&lt;/span&gt;: &lt;span class="st"&gt;&amp;quot;jurisdiction:egypt-suez&amp;quot;&lt;/span&gt;,&lt;/span&gt;
+&lt;span id="cb4-5"&gt;&lt;a href="#cb4-5" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;  &lt;span class="st"&gt;&amp;quot;validTime&amp;quot;&lt;/span&gt;: &lt;span class="st"&gt;&amp;quot;2026-05-12T00:00:00Z&amp;quot;&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb4-6"&gt;&lt;a href="#cb4-6" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;span class="fu"&gt;})&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Pretty straightforward and it &lt;em&gt;should&lt;/em&gt; get back an answer.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;But what is actually in our “database” though?&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;The &lt;em&gt;claims&lt;/em&gt; we have might look like:&lt;/p&gt;
+&lt;pre class="trig"&gt;&lt;code&gt;# @prefix declarations left out on purpose
+
+GRAPH :CargoTransitPolicy-v12 {
+  :CargoTransitPolicy-v12 a :TransitPolicy ;
+    :blocksCargoType :SanctionedGoods ;
+    :requiresPermit [
+      :forCargoType :HazardousCargo ;
+      :throughJurisdiction :EgyptSuez ;
+      :permitType :SuezHazmatPermit ;
+    ] .
+}
+
+GRAPH cargo:claim-100 {
+  cargo:shipment-8821 a onto:Shipment ;
+    onto:contains cargo:diesel-fuel ;
+    onto:origin port:singapore ;
+    onto:destination port:rotterdam .
+}
+
+GRAPH cargo:claim-101 {
+  cargo:diesel-fuel a onto:HazardousCargo ;
+    onto:hazardClass &amp;quot;flammable-liquid&amp;quot; .
+}
+
+GRAPH route:claim-200 {
+  route:singapore-to-rotterdam onto:transitsThrough jurisdiction:egypt-suez .
+}
+
+GRAPH reg:claim-300 {
+  jurisdiction:egypt-suez onto:allowsTransitOf onto:HazardousCargo ;
+    onto:requiresPermit permit:suez-hazmat-permit .
+}
+
+GRAPH permit:claim-400 {
+  cargo:shipment-8821 onto:hasPermit permit:suez-hazmat-permit-778 .
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We would likely persist “quads” which is a “triple” + named graph.
+(&lt;a
+href="https://sphn-semantic-framework.readthedocs.io/en/latest/background_information/nquads.html"&gt;RDF
+Quads&lt;/a&gt; has a nice graphic that kinda helps illustrate this.)&lt;/p&gt;
+&lt;p&gt;A &lt;a href="https://en.wikipedia.org/wiki/Semantic_triple"&gt;triple&lt;/a&gt;
+is the smallest assertion in our system. A triple is always subject,
+predicate, and object.
+&lt;code&gt;Nathan → hasEmail → &amp;lt;myobie@duck.com&amp;gt;&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;That last quad in the above &lt;code&gt;.trig&lt;/code&gt; document says:
+“shipment 8821 has permit 778.” By itself, it does not say what the
+permit allows. The meaning comes from combining it with the other
+claims: Suez requires a hazmat permit for hazardous cargo, the shipment
+contains hazardous cargo, and the shipment has the required permit.
+Being able to combine these claims lets us build up a world of facts
+which we can then answer questions from.&lt;/p&gt;
+&lt;p&gt;A quad is the smallest stored assertion: subject, predicate, object,
+and named graph. In this type of system, a "claim" is typically a named
+graph / claim packet containing one or more quads plus metadata such as
+provenance, policy, validation, and signatures. The subjects and objects
+are nodes. The predicates are the edges.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;GRAPH&lt;/code&gt; names a collection of triples inside an RDF
+dataset. The graph name itself is an IRI, so the system can make
+statements about the graph elsewhere. A line ending in a &lt;code&gt;;&lt;/code&gt;
+means the next line still applies to the same subject. A line ending in
+&lt;code&gt;.&lt;/code&gt; means that’s it for this subject.&lt;/p&gt;
+&lt;p&gt;Actions are also claims in the &lt;em&gt;database&lt;/em&gt;:&lt;/p&gt;
+&lt;pre class="trig"&gt;&lt;code&gt;GRAPH :CanTransitAction {
+  :CanTransitAction a :ExecutableAction ;
+  :inputShape :CanTransitActionShape ;
+  :outputShape :CanTransitResultShape ;
+  :runtime &amp;quot;elixir&amp;quot; ;
+  :mfa &amp;quot;Maritime.Actions.CanTransit.run/2&amp;quot; ;
+  :requiredCapability :CanEvaluateTransitPolicy ;
+  :usesPolicy :CargoTransitPolicy-v12 .
+}
+
+GRAPH :ResolveEntityAction {
+  :ResolveEntityAction a :ExecutableAction ;
+    :inputShape :ResolveEntityInputShape ;
+    :outputShape :ResolveEntityResultShape ;
+    :runtime &amp;quot;elixir&amp;quot; ;
+    :mfa &amp;quot;Substrate.Actions.ResolveEntity.run/2&amp;quot; ;
+    :requiredCapability :CanResolveEntities .
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;And here is some elixir pseudo-code that the persisted MFA might
+point to:&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;`Maritime.Actions.CanTransit`&lt;/summary&gt;
+
+&lt;div class="sourceCode" id="cb7"&gt;&lt;pre
+class="sourceCode elixir"&gt;&lt;code class="sourceCode elixir"&gt;&lt;span id="cb7-1"&gt;&lt;a href="#cb7-1" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;span class="kw"&gt;defmodule&lt;/span&gt; &lt;span class="cn"&gt;Maritime&lt;/span&gt;&lt;span class="op"&gt;.&lt;/span&gt;&lt;span class="cn"&gt;Actions&lt;/span&gt;&lt;span class="op"&gt;.&lt;/span&gt;&lt;span class="cn"&gt;CanTransit&lt;/span&gt; &lt;span class="kw"&gt;do&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb7-2"&gt;&lt;a href="#cb7-2" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;  &lt;span class="ot"&gt;@moduledoc &amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb7-3"&gt;&lt;a href="#cb7-3" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;span class="co"&gt;  Evaluates whether a shipment may transit a jurisdiction.&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb7-4"&gt;&lt;a href="#cb7-4" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;/span&gt;
+&lt;span id="cb7-5"&gt;&lt;a href="#cb7-5" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;span class="co"&gt;  Input shape:  :CanTransitActionShape&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb7-6"&gt;&lt;a href="#cb7-6" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;span class="co"&gt;  Output shape: :CanTransitResultShape&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb7-7"&gt;&lt;a href="#cb7-7" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;span class="co"&gt;  Policy:       :CargoTransitPolicy-v12&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb7-8"&gt;&lt;a href="#cb7-8" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;span class="co"&gt;  &lt;/span&gt;&lt;span class="ot"&gt;&amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb7-9"&gt;&lt;a href="#cb7-9" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;/span&gt;
+&lt;span id="cb7-10"&gt;&lt;a href="#cb7-10" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;  &lt;span class="kw"&gt;def&lt;/span&gt; run&lt;span class="fu"&gt;(&lt;/span&gt;input, ctx&lt;span class="fu"&gt;)&lt;/span&gt; &lt;span class="kw"&gt;do&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb7-11"&gt;&lt;a href="#cb7-11" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;    projection &lt;span class="op"&gt;=&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb7-12"&gt;&lt;a href="#cb7-12" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;      ctx&lt;span class="op"&gt;.&lt;/span&gt;open_projection!&lt;span class="fu"&gt;(&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb7-13"&gt;&lt;a href="#cb7-13" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;        &lt;span class="va"&gt;ontology:&lt;/span&gt; &lt;span class="st"&gt;&amp;quot;maritime-compliance-v4&amp;quot;&lt;/span&gt;,&lt;/span&gt;
+&lt;span id="cb7-14"&gt;&lt;a href="#cb7-14" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;        &lt;span class="va"&gt;valid_time:&lt;/span&gt; input&lt;span class="op"&gt;.&lt;/span&gt;validTime,&lt;/span&gt;
+&lt;span id="cb7-15"&gt;&lt;a href="#cb7-15" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;        &lt;span class="va"&gt;capability_envelope:&lt;/span&gt; ctx&lt;span class="op"&gt;.&lt;/span&gt;capabilities&lt;/span&gt;
+&lt;span id="cb7-16"&gt;&lt;a href="#cb7-16" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;      &lt;span class="fu"&gt;)&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb7-17"&gt;&lt;a href="#cb7-17" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;/span&gt;
+&lt;span id="cb7-18"&gt;&lt;a href="#cb7-18" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;    shipment &lt;span class="op"&gt;=&lt;/span&gt; projection&lt;span class="op"&gt;.&lt;/span&gt;entity!&lt;span class="fu"&gt;(&lt;/span&gt;input&lt;span class="op"&gt;.&lt;/span&gt;shipment&lt;span class="fu"&gt;)&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb7-19"&gt;&lt;a href="#cb7-19" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;    jurisdiction &lt;span class="op"&gt;=&lt;/span&gt; projection&lt;span class="op"&gt;.&lt;/span&gt;entity!&lt;span class="fu"&gt;(&lt;/span&gt;input&lt;span class="op"&gt;.&lt;/span&gt;jurisdiction&lt;span class="fu"&gt;)&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb7-20"&gt;&lt;a href="#cb7-20" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;/span&gt;
+&lt;span id="cb7-21"&gt;&lt;a href="#cb7-21" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;    cargo_types &lt;span class="op"&gt;=&lt;/span&gt; projection&lt;span class="op"&gt;.&lt;/span&gt;types_for_contained_cargo&lt;span class="fu"&gt;(&lt;/span&gt;shipment&lt;span class="fu"&gt;)&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb7-22"&gt;&lt;a href="#cb7-22" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;    permits &lt;span class="op"&gt;=&lt;/span&gt; projection&lt;span class="op"&gt;.&lt;/span&gt;permits_for&lt;span class="fu"&gt;(&lt;/span&gt;shipment&lt;span class="fu"&gt;)&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb7-23"&gt;&lt;a href="#cb7-23" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;/span&gt;
+&lt;span id="cb7-24"&gt;&lt;a href="#cb7-24" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;    required_permit &lt;span class="op"&gt;=&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb7-25"&gt;&lt;a href="#cb7-25" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;      projection&lt;span class="op"&gt;.&lt;/span&gt;required_permit_for&lt;span class="fu"&gt;(&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb7-26"&gt;&lt;a href="#cb7-26" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;        &lt;span class="va"&gt;cargo_types:&lt;/span&gt; cargo_types,&lt;/span&gt;
+&lt;span id="cb7-27"&gt;&lt;a href="#cb7-27" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;        &lt;span class="va"&gt;jurisdiction:&lt;/span&gt; jurisdiction,&lt;/span&gt;
+&lt;span id="cb7-28"&gt;&lt;a href="#cb7-28" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;        &lt;span class="va"&gt;policy:&lt;/span&gt; &lt;span class="st"&gt;&amp;quot;:CargoTransitPolicy-v12&amp;quot;&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb7-29"&gt;&lt;a href="#cb7-29" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;      &lt;span class="fu"&gt;)&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb7-30"&gt;&lt;a href="#cb7-30" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;/span&gt;
+&lt;span id="cb7-31"&gt;&lt;a href="#cb7-31" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;    &lt;span class="cf"&gt;cond&lt;/span&gt; &lt;span class="kw"&gt;do&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb7-32"&gt;&lt;a href="#cb7-32" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;      required_permit &lt;span class="op"&gt;&amp;amp;&amp;amp;&lt;/span&gt; required_permit &lt;span class="kw"&gt;not&lt;/span&gt; &lt;span class="kw"&gt;in&lt;/span&gt; permits &lt;span class="op"&gt;-&amp;gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb7-33"&gt;&lt;a href="#cb7-33" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;        %&lt;span class="fu"&gt;{&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb7-34"&gt;&lt;a href="#cb7-34" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;          &lt;span class="va"&gt;type:&lt;/span&gt; &lt;span class="st"&gt;&amp;quot;:CanTransitResult&amp;quot;&lt;/span&gt;,&lt;/span&gt;
+&lt;span id="cb7-35"&gt;&lt;a href="#cb7-35" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;          &lt;span class="va"&gt;allowed:&lt;/span&gt; &lt;span class="cn"&gt;false&lt;/span&gt;,&lt;/span&gt;
+&lt;span id="cb7-36"&gt;&lt;a href="#cb7-36" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;          &lt;span class="va"&gt;reason:&lt;/span&gt; &lt;span class="st"&gt;&amp;quot;Shipment requires &lt;/span&gt;&lt;span class="ot"&gt;#{&lt;/span&gt;required_permit&lt;span class="ot"&gt;}&lt;/span&gt;&lt;span class="st"&gt; for transit through &lt;/span&gt;&lt;span class="ot"&gt;#{&lt;/span&gt;input&lt;span class="op"&gt;.&lt;/span&gt;jurisdiction&lt;span class="ot"&gt;}&lt;/span&gt;&lt;span class="st"&gt;.&amp;quot;&lt;/span&gt;,&lt;/span&gt;
+&lt;span id="cb7-37"&gt;&lt;a href="#cb7-37" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;          &lt;span class="va"&gt;citesClaim:&lt;/span&gt; &lt;span class="ot"&gt;[&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb7-38"&gt;&lt;a href="#cb7-38" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;            &lt;span class="st"&gt;&amp;quot;cargo:claim-100&amp;quot;&lt;/span&gt;,&lt;/span&gt;
+&lt;span id="cb7-39"&gt;&lt;a href="#cb7-39" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;            &lt;span class="st"&gt;&amp;quot;cargo:claim-101&amp;quot;&lt;/span&gt;,&lt;/span&gt;
+&lt;span id="cb7-40"&gt;&lt;a href="#cb7-40" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;            &lt;span class="st"&gt;&amp;quot;route:claim-200&amp;quot;&lt;/span&gt;,&lt;/span&gt;
+&lt;span id="cb7-41"&gt;&lt;a href="#cb7-41" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;            &lt;span class="st"&gt;&amp;quot;reg:claim-300&amp;quot;&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb7-42"&gt;&lt;a href="#cb7-42" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;          &lt;span class="ot"&gt;]&lt;/span&gt;,&lt;/span&gt;
+&lt;span id="cb7-43"&gt;&lt;a href="#cb7-43" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;          &lt;span class="va"&gt;usedPolicy:&lt;/span&gt; &lt;span class="st"&gt;&amp;quot;:CargoTransitPolicy-v12&amp;quot;&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb7-44"&gt;&lt;a href="#cb7-44" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;        &lt;span class="fu"&gt;}&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb7-45"&gt;&lt;a href="#cb7-45" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;/span&gt;
+&lt;span id="cb7-46"&gt;&lt;a href="#cb7-46" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;      &lt;span class="cn"&gt;true&lt;/span&gt; &lt;span class="op"&gt;-&amp;gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb7-47"&gt;&lt;a href="#cb7-47" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;        %&lt;span class="fu"&gt;{&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb7-48"&gt;&lt;a href="#cb7-48" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;          &lt;span class="va"&gt;type:&lt;/span&gt; &lt;span class="st"&gt;&amp;quot;:CanTransitResult&amp;quot;&lt;/span&gt;,&lt;/span&gt;
+&lt;span id="cb7-49"&gt;&lt;a href="#cb7-49" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;          &lt;span class="va"&gt;allowed:&lt;/span&gt; &lt;span class="cn"&gt;true&lt;/span&gt;,&lt;/span&gt;
+&lt;span id="cb7-50"&gt;&lt;a href="#cb7-50" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;          &lt;span class="va"&gt;reason:&lt;/span&gt; &lt;span class="st"&gt;&amp;quot;Shipment may transit because all required permits are present.&amp;quot;&lt;/span&gt;,&lt;/span&gt;
+&lt;span id="cb7-51"&gt;&lt;a href="#cb7-51" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;          &lt;span class="va"&gt;citesClaim:&lt;/span&gt; &lt;span class="ot"&gt;[&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb7-52"&gt;&lt;a href="#cb7-52" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;            &lt;span class="st"&gt;&amp;quot;cargo:claim-100&amp;quot;&lt;/span&gt;,&lt;/span&gt;
+&lt;span id="cb7-53"&gt;&lt;a href="#cb7-53" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;            &lt;span class="st"&gt;&amp;quot;cargo:claim-101&amp;quot;&lt;/span&gt;,&lt;/span&gt;
+&lt;span id="cb7-54"&gt;&lt;a href="#cb7-54" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;            &lt;span class="st"&gt;&amp;quot;route:claim-200&amp;quot;&lt;/span&gt;,&lt;/span&gt;
+&lt;span id="cb7-55"&gt;&lt;a href="#cb7-55" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;            &lt;span class="st"&gt;&amp;quot;reg:claim-300&amp;quot;&lt;/span&gt;,&lt;/span&gt;
+&lt;span id="cb7-56"&gt;&lt;a href="#cb7-56" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;            &lt;span class="st"&gt;&amp;quot;permit:claim-400&amp;quot;&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb7-57"&gt;&lt;a href="#cb7-57" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;          &lt;span class="ot"&gt;]&lt;/span&gt;,&lt;/span&gt;
+&lt;span id="cb7-58"&gt;&lt;a href="#cb7-58" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;          &lt;span class="va"&gt;usedPolicy:&lt;/span&gt; &lt;span class="st"&gt;&amp;quot;:CargoTransitPolicy-v12&amp;quot;&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb7-59"&gt;&lt;a href="#cb7-59" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;        &lt;span class="fu"&gt;}&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb7-60"&gt;&lt;a href="#cb7-60" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;    &lt;span class="kw"&gt;end&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb7-61"&gt;&lt;a href="#cb7-61" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;  &lt;span class="kw"&gt;end&lt;/span&gt;&lt;/span&gt;
+&lt;span id="cb7-62"&gt;&lt;a href="#cb7-62" aria-hidden="true" tabindex="-1"&gt;&lt;/a&gt;&lt;span class="kw"&gt;end&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/details&gt;
+
+&lt;p&gt;The result of the action can itself become a claim:&lt;/p&gt;
+&lt;pre class="trig"&gt;&lt;code&gt;GRAPH :result-900 {
+  :result-900 a :CanTransitResult ;
+    :allowed true ;
+    :reason &amp;quot;Shipment 8821 may transit because hazardous cargo is allowed with the required Suez hazmat permit.&amp;quot; ;
+    :citesClaim cargo:claim-100 ;
+    :citesClaim cargo:claim-101 ;
+    :citesClaim route:claim-200 ;
+    :citesClaim reg:claim-300 ;
+    :citesClaim permit:claim-400 ;
+    :usedPolicy :CargoTransitPolicy-v12 .
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;So it’s claims all the way down.&lt;/p&gt;
+&lt;p&gt;By making everything in the system a claim we build up a world that
+is coherent and governed. Claims can describe policies and capabilities,
+and claims can also be governed by policies and capabilities. Which
+means every actor can only move through the substrate with their given
+capabilities: human or agent.&lt;/p&gt;
+&lt;p&gt;And to take it a bit further: an agent can “tend the garden of
+shapes” to help keep things tidy and coherent. If the system were built
+correctly, everything an agent does would be reviewable and reversible.
+Then all queries can operate at a well curated semantic layer and return
+real, trustable results.&lt;/p&gt;
+&lt;p&gt;This maritime example might seem far from your use cases, but this is
+applicable even for very personal data. Scanning PDFs and emails of all
+your medical records to build up the facts of your medical history,
+household knowledge base, job search / placement projects, etc. Pretty
+cool.&lt;/p&gt;</description>
+    </item>
 
     <item>
       <title>Mastodon kinda hates AI</title>
