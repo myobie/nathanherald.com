@@ -1,4 +1,14 @@
 import { HTMLElement } from 'dom';
+const TYPE_EMOJI = {
+  blog: '⭐️',
+  link: '🔗',
+  checkin: '📍'
+};
+const TYPE_TITLE = {
+  blog: 'blog post',
+  link: 'link post',
+  checkin: 'check-in'
+};
 export class NhLatestPostsElement extends HTMLElement {
   static defaultName = 'nh-latest-posts';
   static define(registry, name = this.defaultName) {
@@ -30,8 +40,8 @@ export class NhLatestPostsElement extends HTMLElement {
       const ol = doc.createElement('ol');
       for (const post of latest){
         const li = doc.createElement('li');
-        const emoji = post.type === 'link' ? '\uD83D\uDD17' : '\u2B50\uFE0F';
-        const emojiTitle = post.type === 'link' ? 'link post' : 'blog post';
+        const emoji = TYPE_EMOJI[post.type] || TYPE_EMOJI.blog;
+        const emojiTitle = TYPE_TITLE[post.type] || TYPE_TITLE.blog;
         const abbr = doc.createElement('abbr');
         abbr.setAttribute('title', emojiTitle);
         abbr.textContent = emoji;
@@ -61,4 +71,4 @@ export class NhLatestPostsElement extends HTMLElement {
   }
 }
 
-// denoCacheMetadata=3677759694298663150,11129568413013836591
+// denoCacheMetadata=16481154930723434487,7871897186175289062

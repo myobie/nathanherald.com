@@ -4,8 +4,8 @@
     "date": "2026-05-16T11:36:00+02:00",
     "description": " ",
     "url": "/posts/links/open-house/",
-    "type": "link",
-    "externalUrl": "https://openhouse.berlin/"
+    "type": "checkin",
+    "checkinUrl": "https://openhouse.berlin/"
   },
   {
     "title": "Practical example of how cool RDF is",

@@ -100,6 +100,10 @@ export class NhMarkdownElement extends HTMLElement {
         nhPage.setAttribute('date-display', this.#formatDate(fm.date));
       }
       if (fm.externalUrl) nhPage.setAttribute('external-url', fm.externalUrl);
+      if (fm.checkinUrl) nhPage.setAttribute('checkin-url', fm.checkinUrl);
+      if (fm.checkinLocality) nhPage.setAttribute('checkin-locality', fm.checkinLocality);
+      if (fm.checkinRegion) nhPage.setAttribute('checkin-region', fm.checkinRegion);
+      if (fm.checkinCountry) nhPage.setAttribute('checkin-country', fm.checkinCountry);
     }
   }
   #formatDate(dateStr) {
@@ -163,4 +167,4 @@ export class NhMarkdownElement extends HTMLElement {
   }
 }
 
-// denoCacheMetadata=17179794971280817634,11351451326606757764
+// denoCacheMetadata=8719579056743136660,14029746528204391283

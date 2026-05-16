@@ -11,8 +11,9 @@ interface Post {
   date: string
   description: string
   url: string
-  type: 'blog' | 'link'
+  type: 'blog' | 'link' | 'checkin'
   externalUrl?: string
+  checkinUrl?: string
 }
 
 function parseFrontmatter(text: string): Record<string, string> {
@@ -50,13 +51,16 @@ for await (const entry of walk(postsDir, { exts: ['.md'], match: [/index\.md$/] 
   const relPath = relative(postsDir, entry.path).replace(/\/index\.md$/, '')
   const url = `/posts/${relPath}/`
 
+  const type: Post['type'] = fm.checkinUrl ? 'checkin' : fm.externalUrl ? 'link' : 'blog'
+
   posts.push({
     title: fm.title,
     date: fm.date,
     description: fm.description || '',
     url,
-    type: fm.externalUrl ? 'link' : 'blog',
+    type,
     ...(fm.externalUrl ? { externalUrl: fm.externalUrl } : {}),
+    ...(fm.checkinUrl ? { checkinUrl: fm.checkinUrl } : {}),
   })
 }
 

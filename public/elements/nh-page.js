@@ -5,7 +5,11 @@ export class NhPageElement extends HTMLElement {
     'title',
     'date',
     'date-display',
-    'external-url'
+    'external-url',
+    'checkin-url',
+    'checkin-locality',
+    'checkin-region',
+    'checkin-country'
   ];
   static define(registry, name = this.defaultName) {
     if (!registry.get(name)) {
@@ -26,6 +30,7 @@ export class NhPageElement extends HTMLElement {
     const main = doc.createElement('main');
     main.className = 'single';
     const article = doc.createElement('article');
+    article.classList.add('h-entry');
     // Article header with title
     const articleHeader = doc.createElement('header');
     const h1 = doc.createElement('h1');
@@ -75,9 +80,56 @@ export class NhPageElement extends HTMLElement {
   #updateH1(h1) {
     const title = this.getAttribute('title') || '';
     const externalUrl = this.getAttribute('external-url') || '';
+    const checkinUrl = this.getAttribute('checkin-url') || '';
+    const checkinLocality = this.getAttribute('checkin-locality') || '';
+    const checkinRegion = this.getAttribute('checkin-region') || '';
+    const checkinCountry = this.getAttribute('checkin-country') || '';
+    const doc = this.ownerDocument;
     h1.textContent = '';
-    if (externalUrl && title) {
-      const a = this.ownerDocument.createElement('a');
+    if (checkinUrl && title) {
+      const hasExtras = !!(checkinLocality || checkinRegion || checkinCountry);
+      if (hasExtras) {
+        const wrap = doc.createElement('span');
+        wrap.setAttribute('class', 'p-checkin h-card');
+        const a = doc.createElement('a');
+        a.setAttribute('class', 'p-name u-url');
+        a.setAttribute('href', checkinUrl);
+        a.textContent = title;
+        wrap.append(a);
+        const small = doc.createElement('small');
+        small.className = 'checkin-locality';
+        small.append(doc.createTextNode(' · '));
+        const parts = [];
+        if (checkinLocality) parts.push({
+          cls: 'p-locality',
+          value: checkinLocality
+        });
+        if (checkinRegion) parts.push({
+          cls: 'p-region',
+          value: checkinRegion
+        });
+        if (checkinCountry) parts.push({
+          cls: 'p-country-name',
+          value: checkinCountry
+        });
+        parts.forEach((p, i)=>{
+          if (i > 0) small.append(doc.createTextNode(', '));
+          const span = doc.createElement('span');
+          span.setAttribute('class', p.cls);
+          span.textContent = p.value;
+          small.append(span);
+        });
+        wrap.append(small);
+        h1.append(wrap);
+      } else {
+        const a = doc.createElement('a');
+        a.setAttribute('class', 'p-checkin h-card');
+        a.setAttribute('href', checkinUrl);
+        a.textContent = title;
+        h1.append(a);
+      }
+    } else if (externalUrl && title) {
+      const a = doc.createElement('a');
       a.setAttribute('href', externalUrl);
       a.textContent = title;
       h1.append(a);
@@ -101,8 +153,9 @@ export class NhPageElement extends HTMLElement {
   }
   #updateReadMore(existing, contentDiv) {
     const externalUrl = this.getAttribute('external-url') || '';
+    const checkinUrl = this.getAttribute('checkin-url') || '';
     if (existing) existing.remove();
-    if (externalUrl) {
+    if (externalUrl && !checkinUrl) {
       const p = this.ownerDocument.createElement('p');
       p.className = 'read-more';
       const arrow = this.ownerDocument.createTextNode('\u2192 ');
@@ -123,4 +176,4 @@ export class NhPageElement extends HTMLElement {
   }
 }
 
-// denoCacheMetadata=15214106695296397753,1130181155755754595
+// denoCacheMetadata=7039735290023325544,16445113847089437124

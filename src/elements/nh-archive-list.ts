@@ -5,8 +5,21 @@ interface Post {
   date: string
   description: string
   url: string
-  type: 'blog' | 'link'
+  type: 'blog' | 'link' | 'checkin'
   externalUrl?: string
+  checkinUrl?: string
+}
+
+const TYPE_EMOJI: Record<Post['type'], string> = {
+  blog: '⭐️',
+  link: '🔗',
+  checkin: '📍',
+}
+
+const TYPE_TITLE: Record<Post['type'], string> = {
+  blog: 'blog post',
+  link: 'link post',
+  checkin: 'check-in',
 }
 
 export class NhArchiveListElement extends HTMLElement {
@@ -73,8 +86,8 @@ export class NhArchiveListElement extends HTMLElement {
           const p = doc.createElement('p')
           p.className = 'permalink'
 
-          const emoji = post.type === 'link' ? '\uD83D\uDD17' : '\u2B50\uFE0F'
-          const emojiTitle = post.type === 'link' ? 'link post' : 'blog post'
+          const emoji = TYPE_EMOJI[post.type] || TYPE_EMOJI.blog
+          const emojiTitle = TYPE_TITLE[post.type] || TYPE_TITLE.blog
 
           const abbr = doc.createElement('abbr')
           abbr.setAttribute('title', emojiTitle)

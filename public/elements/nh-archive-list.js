@@ -1,4 +1,14 @@
 import { HTMLElement } from 'dom';
+const TYPE_EMOJI = {
+  blog: '⭐️',
+  link: '🔗',
+  checkin: '📍'
+};
+const TYPE_TITLE = {
+  blog: 'blog post',
+  link: 'link post',
+  checkin: 'check-in'
+};
 export class NhArchiveListElement extends HTMLElement {
   static defaultName = 'nh-archive-list';
   static define(registry, name = this.defaultName) {
@@ -60,8 +70,8 @@ export class NhArchiveListElement extends HTMLElement {
           const itemLi = doc.createElement('li');
           const p = doc.createElement('p');
           p.className = 'permalink';
-          const emoji = post.type === 'link' ? '\uD83D\uDD17' : '\u2B50\uFE0F';
-          const emojiTitle = post.type === 'link' ? 'link post' : 'blog post';
+          const emoji = TYPE_EMOJI[post.type] || TYPE_EMOJI.blog;
+          const emojiTitle = TYPE_TITLE[post.type] || TYPE_TITLE.blog;
           const abbr = doc.createElement('abbr');
           abbr.setAttribute('title', emojiTitle);
           abbr.textContent = emoji;
@@ -103,4 +113,4 @@ export class NhArchiveListElement extends HTMLElement {
   }
 }
 
-// denoCacheMetadata=14928217448063414521,7250938917783442986
+// denoCacheMetadata=12974220155447050198,9864559308577041141
