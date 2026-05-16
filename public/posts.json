@@ -1,5 +1,13 @@
 [
   {
+    "title": "Open House",
+    "date": "2026-05-16T11:36:00+02:00",
+    "description": " ",
+    "url": "/posts/links/open-house/",
+    "type": "link",
+    "externalUrl": "https://openhouse.berlin/"
+  },
+  {
     "title": "Practical example of how cool RDF is",
     "date": "2026-05-15T15:14:00+02:00",
     "description": "A small maritime walkthrough of how an agent can answer real questions when every fact, action, and result is a claim.",

@@ -4,7 +4,15 @@
     <title>nathanherald.com feed</title>
     <link>https://nathanherald.com/</link>
     <description>Recent posts from nathanherald.com</description>
-    <lastBuildDate>Fri, 15 May 2026 15:21:53 +0200</lastBuildDate>
+    <lastBuildDate>Sat, 16 May 2026 15:18:10 +0200</lastBuildDate>
+
+    <item>
+      <title>Open House</title>
+      <link>https://nathanherald.com/posts/links/open-house/</link>
+      <pubDate>Sat, 16 May 2026 15:17:57 +0200</pubDate>
+      <guid isPermaLink="true">https://nathanherald.com/posts/links/open-house/</guid>
+      <description>&lt;p&gt;📍 Coffee in Berlin.&lt;/p&gt;</description>
+    </item>
 
     <item>
       <title>Practical example of how cool RDF is</title>
