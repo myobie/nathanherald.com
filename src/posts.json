@@ -1,11 +1,19 @@
 [
   {
+    "title": "Reel: Overview Walkthrough (Part 1)",
+    "date": "2026-05-16T16:42:00+02:00",
+    "description": " ",
+    "url": "/posts/links/reel-4-track-recorder/",
+    "type": "link",
+    "externalUrl": "https://www.youtube.com/watch?v=ThpLVsb1fWQ"
+  },
+  {
     "title": "Open House",
     "date": "2026-05-16T11:36:00+02:00",
     "description": " ",
     "url": "/posts/links/open-house/",
     "type": "checkin",
-    "checkinUrl": "https://openhouse.berlin/"
+    "checkinUrl": "https://www.instagram.com/openhouse.berlin"
   },
   {
     "title": "Practical example of how cool RDF is",
