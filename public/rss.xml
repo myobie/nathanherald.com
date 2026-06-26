@@ -4,7 +4,94 @@
     <title>nathanherald.com feed</title>
     <link>https://nathanherald.com/</link>
     <description>Recent posts from nathanherald.com</description>
-    <lastBuildDate>Sun, 21 Jun 2026 10:51:57 +0200</lastBuildDate>
+    <lastBuildDate>Fri, 26 Jun 2026 10:56:22 +0200</lastBuildDate>
+
+    <item>
+      <title>TIL about Solid and FOAF</title>
+      <link>https://nathanherald.com/posts/til-about-solid-and-foaf/</link>
+      <pubDate>Fri, 26 Jun 2026 10:56:07 +0200</pubDate>
+      <guid isPermaLink="true">https://nathanherald.com/posts/til-about-solid-and-foaf/</guid>
+      <description>&lt;h1 id="til-about-solid-and-foaf"&gt;TIL about Solid and FOAF&lt;/h1&gt;
+&lt;p&gt;I've had a note sitting in my reminders for a few days: &lt;em&gt;"write
+something about that solid thing and linked data and foaf."&lt;/em&gt; So I
+finally dug in. As I &lt;a
+href="https://nathanherald.com/posts/practical-rdf-example/"&gt;wrote about
+recently,&lt;/a&gt; I’m very interested in RDF-* and linked data and Solid and
+FOAF both come up in my searches every time. So…&lt;/p&gt;
+&lt;h2 id="solid"&gt;Solid&lt;/h2&gt;
+&lt;p&gt;Solid (Social Linked Data) is Tim Berners-Lee's project to fix the
+part of the web where your data lives inside someone else's box. Your
+stuff goes in a &lt;em&gt;pod&lt;/em&gt; which is a little datastore you own and
+“apps” get decoupled from the data. So instead of an app holding your
+data hostage, it asks your pod for permission to read it. Switch apps,
+keep everything. Flip a switch, revoke access.&lt;/p&gt;
+&lt;p&gt;Which, yeah. Obviously we should own and control our own data. So
+cool idea I guess.&lt;/p&gt;
+&lt;h2 id="its-rdf-underneath"&gt;It's RDF underneath&lt;/h2&gt;
+&lt;p&gt;The data in a pod is just RDF which is the same
+subject/predicate/object triples from my &lt;a
+href="https://nathanherald.com/posts/practical-rdf-example/"&gt;recent
+post.&lt;/a&gt; Solid doesn't reinvent how data is shaped, it only seems
+concerned about the container for the data.&lt;/p&gt;
+&lt;p&gt;RDF and linked data are about &lt;em&gt;what your data means and how it
+connects&lt;/em&gt;. Solid is about &lt;em&gt;where it lives and who gets to read
+it&lt;/em&gt;. A pod is just somewhere to keep your slice of the big graph,
+with a permission system bolted on.&lt;/p&gt;
+&lt;p&gt;“Linked data” is the glue: triples whose subjects and objects are
+URLs, and those URLs resolve to more triples. You follow from one fact
+to the next across the web.&lt;/p&gt;
+&lt;h2 id="foaf"&gt;FOAF&lt;/h2&gt;
+&lt;p&gt;FOAF (Friend of a Friend) is the oldest real example of linked data
+about &lt;em&gt;people&lt;/em&gt;. It’s a tiny RDF vocabulary:
+&lt;code&gt;foaf:Person&lt;/code&gt;, &lt;code&gt;foaf:name&lt;/code&gt;,
+&lt;code&gt;foaf:knows&lt;/code&gt;, &lt;code&gt;foaf:homepage&lt;/code&gt;. Dan Brickley and
+Libby Miller started it around 2000. Probably the first
+social-semantic-web thing.&lt;/p&gt;
+&lt;p&gt;The vocabulary's been basically frozen for two decades and the
+namespace still resolves. And it's what Solid leans on under the hood. A
+Solid identity is a &lt;em&gt;WebID&lt;/em&gt;, and a WebID profile is more or less
+a FOAF file describing you.&lt;/p&gt;
+&lt;p&gt;So FOAF is the whole idea shrunk to its smallest form. No pods, no
+server, no protocol. Just a file about you, linking to files about your
+friends.&lt;/p&gt;
+&lt;h2 id="a-real-solid-use-case"&gt;A real Solid use case&lt;/h2&gt;
+&lt;p&gt;In Flanders, the public data company &lt;a
+href="https://athumi.be/en/technologies/solid"&gt;Athumi&lt;/a&gt; put citizen
+data on Solid pods. The first real use case was: you share your diploma
+with a recruiter &lt;em&gt;on consent&lt;/em&gt;, for whatever scope and time window
+you pick. Before, only the government could pull your diploma from the
+official database. With a pod, you can hand it over yourself.&lt;/p&gt;
+&lt;p&gt;And it’s still going. They’ve &lt;a
+href="https://www.itsme-id.com/en-BE/business/blog/athumi-and-itsme-digital-student-certificate"&gt;extended
+the same platform to digital student certificates&lt;/a&gt; through the itsme
+app, with a student app called Dibbs as the first to use it.&lt;/p&gt;
+&lt;h2 id="cool-idea-and-im-not-sure-id-ever-use-it"&gt;Cool idea and I'm not
+sure I'd ever use it&lt;/h2&gt;
+&lt;p&gt;Even at that project in Belgium: their own research found people were
+confused by WebIDs and pods and that the main problem was
+&lt;em&gt;explainability&lt;/em&gt;. Which is why every shipping version hides Solid
+completely behind a normal-looking app like itsme.&lt;/p&gt;
+&lt;h2 id="foaf-me"&gt;FOAF me&lt;/h2&gt;
+&lt;p&gt;I’ve published a FOAF file, which looks kinda like this:&lt;/p&gt;
+&lt;pre class="turtle"&gt;&lt;code&gt;@prefix foaf: &amp;lt;http://xmlns.com/foaf/0.1/&amp;gt; .
+@prefix rdfs: &amp;lt;http://www.w3.org/2000/01/rdf-schema#&amp;gt; .
+
+&amp;lt;#me&amp;gt; a foaf:Person ;
+    foaf:name &amp;quot;Nathan Herald&amp;quot; ;
+    foaf:homepage &amp;lt;https://nathanherald.com/&amp;gt; ;
+    foaf:knows [
+        a foaf:Person ;
+        foaf:name &amp;quot;A Friend&amp;quot; ;
+        rdfs:seeAlso &amp;lt;https://afriend.example/profile.ttl&amp;gt;
+    ] .&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;It lives at &lt;a href="/profile.ttl"&gt;&lt;code&gt;/profile.ttl&lt;/code&gt;&lt;/a&gt;, so
+&lt;a
+href="https://nathanherald.com/profile.ttl#me"&gt;https://nathanherald.com/profile.ttl#me&lt;/a&gt;
+is my WebID. That &lt;code&gt;#me&lt;/code&gt; fragment matters: the file is a
+&lt;em&gt;document&lt;/em&gt;, and I'm a &lt;em&gt;person&lt;/em&gt; it describes.&lt;/p&gt;
+&lt;p&gt;So no pod for me. Just a little file and I’m now a little node in the
+web of people, pointing at my friends. Pretty cool.&lt;/p&gt;</description>
+    </item>
 
     <item>
       <title>"The Taste of Tea (茶の味) Trailer"</title>

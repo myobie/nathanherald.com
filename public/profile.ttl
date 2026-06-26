@@ -1,0 +1,26 @@
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+<#me> a foaf:Person ;
+    foaf:name "Nathan Herald" ;
+    foaf:homepage <https://nathanherald.com/> ;
+    foaf:knows
+        [ a foaf:Person ;
+          foaf:name "Johannes Schickling" ;
+          foaf:homepage <https://www.schickling.dev/> ;
+          rdfs:seeAlso <https://mas.to/@schickling> ],
+        [ a foaf:Person ;
+          foaf:name "Anthony Drendel" ;
+          foaf:homepage <https://anthonydrendel.com/> ;
+          rdfs:seeAlso <https://github.com/atdrendel> ],
+        [ a foaf:Person ;
+          foaf:name "Doug March" ;
+          foaf:homepage <https://dougmar.ch/> ;
+          rdfs:seeAlso <https://github.com/marchdoe> ],
+        [ a foaf:Person ;
+          foaf:name "Matthew Mansfield" ;
+          foaf:homepage <https://matthewmansfield.com/> ],
+        [ a foaf:Person ;
+          foaf:name "Benjamin Mateev" ;
+          foaf:homepage <https://benmateev.com/> ;
+          rdfs:seeAlso <https://github.com/benjaminmateev> ] .
