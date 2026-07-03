@@ -11,6 +11,14 @@ This is a personal website built with plain HTML, CSS, and bash scripts. Pages c
 
 Files in `public/` that don't have a `src/` counterpart are untouched by the build. Migration is incremental.
 
+## Deploy
+
+**The site is hosted on Netlify, NOT Cloudflare.** `netlify.toml` sets `publish = "public"` and `build = "bin/install"`. Pushing to GitHub `main` (via `./bin/git-https-push main`) auto-triggers a Netlify build and deploy. End-to-end time from push to live is roughly 30–90 seconds.
+
+Cloudflare appears in response headers (`server: cloudflare`, `cf-ray:`) because Cloudflare is the CDN in front of Netlify. The origin is still Netlify — `x-nf-request-id:` in the response confirms it.
+
+The `cloudflare.md` file in the repo root documents an *abandoned* self-hosting-via-cloudflared experiment. Do not treat it as the deploy setup.
+
 ## Post Publishing Workflow
 
 ### New posts (src/ path, preferred)
