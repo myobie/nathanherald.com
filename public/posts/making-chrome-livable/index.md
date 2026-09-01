@@ -10,11 +10,11 @@ I’ve used Safari consistently since it came out. I’ve only maybe used someth
 
 But there are 3 things I miss from Safari and I _had_ to find a way to fix them.
 
-1. [Right click, Translate. Fixed with my own extension.](https://github.com/myobie/translate-selected-chrome-extension) Chrome wants to translate a whole page, but it misses iframes, dynamic content, etc. I almost always only want to translate a small part and in Safari I can select, right click, and Translate. Well, now I can do the same in Chrome using my own extension.
+1) [Right click, Translate. Fixed with my own extension.](https://github.com/myobie/translate-selected-chrome-extension) Chrome wants to translate a whole page, but it misses iframes, dynamic content, etc. I almost always only want to translate a small part and in Safari I can select, right click, and Translate. Well, now I can do the same in Chrome using my own extension.
 
-2. When a link opens a new tab in Safari, the back button is enabled and click back closes the new tab and returns to the original tab. Apparently this is something I use 100s of times a day and it has driven me crazy. So I made a [back to opener chrome extension](https://github.com/myobie/back-to-opener-chrome-extension) that does exactly this. This has made things sooo much better for me.
+2) When a link opens a new tab in Safari, the back button is enabled and click back closes the new tab and returns to the original tab. Apparently this is something I use 100s of times a day and it has driven me crazy. So I made a [back to opener chrome extension](https://github.com/myobie/back-to-opener-chrome-extension) that does exactly this. This has made things sooo much better for me.
 
-3. I miss 1Blocker. It’s my fav content blocker and I want to have it in Chrome as well. So I built [a python script to analyze the rules inside 1Blocker.app and churn out a custom chrome extension](https://github.com/myobie/unofficial-1blocker-rule-converter-for-chrome) that contains basically the same rules. After some trial and error, it works!
+3) I miss 1Blocker. It’s my fav content blocker and I want to have it in Chrome as well. So I built [a python script to analyze the rules inside 1Blocker.app and churn out a custom chrome extension](https://github.com/myobie/unofficial-1blocker-rule-converter-for-chrome) that contains basically the same rules. After some trial and error, it works!
 
 Fixing these three things has made Chrome really livable for me. They also have synced tab groups, just like Safari, so that works too.
 

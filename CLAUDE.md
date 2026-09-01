@@ -241,3 +241,5 @@ Not every post gets syndicated. Only when asked.
 - RSS feed is automatically updated with proper URLs
 - All HTML is tidied automatically with the configured .tidyrc settings
 - `bin/md2html` auto-detects `src/` vs `public/` paths and outputs the appropriate format
+@PERSONA.md
+@DING-BUS.md
