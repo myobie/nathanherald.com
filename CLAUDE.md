@@ -2,6 +2,12 @@
 
 This file contains information for Claude Code about how to work with this website project.
 
+@.st2/CONTRACT.md
+
+The line above imports the agent contract for whichever st2 agent owns this workspace. That file is
+rendered by st2 and is not tracked here. If it does not exist you are not running as an st2 agent,
+and the import is harmless.
+
 ## Project Overview
 
 This is a personal website built with plain HTML, CSS, and bash scripts. Pages can be authored two ways:
