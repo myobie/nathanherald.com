@@ -14,3 +14,7 @@ public/fonts/*
 tests/node_modules/
 tests/test-results/
 bakeoff/
+
+.claude-session-id
+.pi-session-id
+.pi-session-path

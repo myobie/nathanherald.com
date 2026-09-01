@@ -1,0 +1,12 @@
+prefix = "nathanherald-com"
+
+[sessions.claude]
+command = "$HOME/bin/pty-claude-launcher.sh --dangerously-load-development-channels server:coord"
+tags = { role = "agent", strategy = "permanent" }
+
+[sessions.claude.env]
+COORD_IDENTITY = "nathanherald-com-claude"
+
+[sessions.serve]
+command = "bin/serve"
+tags = { role = "server", strategy = "permanent" }
