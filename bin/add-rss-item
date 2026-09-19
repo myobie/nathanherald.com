@@ -91,7 +91,7 @@ TITLE=""
 if [ -n "$FRONTMATTER" ]; then
     if [ "$FRONTMATTER_DELIMITER" = "---" ]; then
         # YAML format (key: value)
-        TITLE=$(echo "$FRONTMATTER" | grep -E "^title:" | sed 's/^title:[[:space:]]*//' | head -1)
+        TITLE=$(echo "$FRONTMATTER" | grep -E "^title:" | sed 's/^title:[[:space:]]*//' | sed 's/^"\(.*\)"$/\1/' | head -1)
     else
         # TOML format (key = "value")
         TITLE=$(echo "$FRONTMATTER" | grep -E "^title[[:space:]]*=" | sed 's/^title[[:space:]]*=[[:space:]]*//' | sed 's/^"\(.*\)"$/\1/' | head -1)
@@ -106,6 +106,9 @@ if [ -z "$TITLE" ]; then
         TITLE=$(basename "$INPUT_FILE" .md)
     fi
 fi
+
+# Escape the title for XML (& first, then < and >)
+TITLE=$(echo "$TITLE" | sed 's/&/\&amp;/g' | sed 's/</\&lt;/g' | sed 's/>/\&gt;/g')
 
 # Convert markdown to HTML using pandoc
 HTML_CONTENT=$(echo "$CONTENT" | pandoc -f gfm -t html)
