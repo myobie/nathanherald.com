@@ -1,12 +1,6 @@
-# Claude Code Configuration
+# Agent Instructions
 
-This file contains information for Claude Code about how to work with this website project.
-
-@.st3/boot.md
-
-The line above imports the runtime guidance for whichever st3 agent owns this workspace. That file is
-rendered by st3 and is not tracked here. If it does not exist you are not running as an st3 agent,
-and the import is harmless.
+This file contains information for coding agents about how to work with this website project.
 
 ## Project Overview
 

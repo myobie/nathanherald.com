@@ -1,4 +1,4 @@
-> ⚠️ **ABANDONED EXPERIMENT — NOT the live deploy.** This site is hosted on Netlify (see `netlify.toml` and the Deploy section in `CLAUDE.md`). This file documents an unused self-hosting-via-cloudflared idea that was explored but never shipped. Do not treat it as the deploy setup.
+> ⚠️ **ABANDONED EXPERIMENT — NOT the live deploy.** This site is hosted on Netlify (see `netlify.toml` and the Deploy section in `AGENTS.md`). This file documents an unused self-hosting-via-cloudflared idea that was explored but never shipped. Do not treat it as the deploy setup.
 
 # Self-hosting with cloudflared
 
