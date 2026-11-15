@@ -9,6 +9,7 @@
     "test:unit": "deno test -A --no-check tests/unit/"
   },
   "imports": {
-    "dom": "./src/elements/dom.ts"
+    "dom": "./src/elements/dom.ts",
+    "grease-pencil": "./src/elements/grease-pencil.ts"
   }
 }

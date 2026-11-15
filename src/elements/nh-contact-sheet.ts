@@ -1,4 +1,5 @@
 import { HTMLElement } from 'dom'
+import { drawInto, hashSeed, seeded, type MarkKind } from 'grease-pencil'
 
 // Renders a roll of film as a contact sheet: cut strips of frames with
 // sprocket holes and edge numbers, plus grease pencil marks from the
@@ -56,59 +57,9 @@ const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June',
 
 const SVG_NS = 'http://www.w3.org/2000/svg'
 
-// Small deterministic PRNG so marks wobble the same way on every build.
-function rng(seed: number) {
-  let s = (seed * 2654435761) >>> 0
-  return () => {
-    s = (s + 0x6D2B79F5) >>> 0
-    let t = s
-    t = Math.imul(t ^ (t >>> 15), t | 1)
-    t ^= t + Math.imul(t ^ (t >>> 7), t | 61)
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296
-  }
-}
-
 const f = (n: number) => n.toFixed(1)
 
-// A loose, hand drawn loop that overshoots where it started.
-function circlePath(seed: number) {
-  const r = rng(seed)
-  const cx = 50 + (r() - 0.5) * 4
-  const cy = 50 + (r() - 0.5) * 4
-  const rx = 44 + r() * 4
-  const ry = 40 + r() * 6
-  const start = r() * Math.PI * 2
-  const sweep = Math.PI * 2 * (1.08 + r() * 0.1)
-  const steps = 48
-  let d = ''
-  for (let i = 0; i <= steps; i++) {
-    const t = i / steps
-    const a = start + sweep * t
-    // drift outward a little as the pencil comes around
-    const grow = 1 + t * 0.06 + Math.sin(t * 9 + seed) * 0.012
-    const x = cx + Math.cos(a) * rx * grow
-    const y = cy + Math.sin(a) * ry * grow
-    d += `${i === 0 ? 'M' : 'L'}${f(x)} ${f(y)} `
-  }
-  return d.trim()
-}
-
-// Two quick strokes, slightly bowed.
-function crossPaths(seed: number) {
-  const r = rng(seed)
-  const j = () => (r() - 0.5) * 8
-  const stroke = (x1: number, y1: number, x2: number, y2: number) => {
-    const mx = (x1 + x2) / 2 + j()
-    const my = (y1 + y2) / 2 + j()
-    return `M${f(x1)} ${f(y1)} Q${f(mx)} ${f(my)} ${f(x2)} ${f(y2)}`
-  }
-  return [
-    stroke(12 + j(), 10 + j(), 88 + j(), 90 + j()),
-    stroke(88 + j(), 12 + j(), 14 + j(), 88 + j()),
-  ]
-}
-
-export function markFor(frame: Pick<Frame, 'rating'>): 'circle' | 'cross' | null {
+export function markFor(frame: Pick<Frame, 'rating'>): MarkKind | null {
   if (frame.rating >= 5) return 'circle'
   if (frame.rating >= 1 && frame.rating <= 2) return 'cross'
   return null
@@ -128,6 +79,7 @@ export class NhContactSheetElement extends HTMLElement {
   }
 
   #ready = Promise.withResolvers<void>()
+  #slug = ''
 
   async connectedCallback() {
     if (this.hasAttribute('data-rendered')) {
@@ -177,6 +129,7 @@ export class NhContactSheetElement extends HTMLElement {
   #render(roll: Roll, _base: string) {
     const doc = this.ownerDocument
     const spec = FORMATS[roll.format] ?? FORMATS['35mm']
+    this.#slug = roll.slug
     const el = (tag: string, attrs: Record<string, string> = {}, ...kids: (Node | string)[]) => {
       const e = doc.createElement(tag)
       for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, v)
@@ -218,10 +171,11 @@ export class NhContactSheetElement extends HTMLElement {
       sheet.append(strip)
     }
     article.append(sheet)
+    article.append(this.#pencilFilter())
 
     const legend = el('dl', { class: 'contact-sheet-legend' },
-      el('dt', {}, this.#markSvg('circle', 7, 'legend-mark')), el('dd', {}, 'five stars, a keeper'),
-      el('dt', {}, this.#markSvg('cross', 7, 'legend-mark')), el('dd', {}, 'one or two stars, a miss'),
+      el('dt', {}, this.#markSvg('circle', 7, 1.5, 'legend-mark')), el('dd', {}, 'five stars, a keeper'),
+      el('dt', {}, this.#markSvg('cross', 11, 1.5, 'legend-mark')), el('dd', {}, 'one or two stars, a miss'),
     )
     article.append(legend)
 
@@ -229,6 +183,12 @@ export class NhContactSheetElement extends HTMLElement {
     meta.push(`${roll.frames.length} frames`)
     if (roll.scanned) meta.push(`scanned ${this.#formatDay(roll.scanned)}`)
     article.append(el('p', { class: 'roll-meta' }, meta.join(', ')))
+
+    // In the browser, draw the marks again by hand, a little differently on
+    // every visit. Without JS the seeded marks from the build stay.
+    const redraw = el('script', { type: 'module' })
+    redraw.textContent = "import { redrawMarks } from 'grease-pencil'; redrawMarks()"
+    article.append(redraw)
 
     return article
   }
@@ -270,7 +230,11 @@ export class NhContactSheetElement extends HTMLElement {
     } else {
       exposure.append(el('span', { class: 'no-scan' }, 'no scan'))
     }
-    if (mark) exposure.append(this.#markSvg(mark, frame.n * 31 + frame.rating, 'mark'))
+    if (mark) {
+      // Seed from the photo, so each photo keeps its own mark across rolls and builds
+      const seed = hashSeed(frame.assetId ?? frame.filename ?? `${this.#slug}-${frame.n}`)
+      exposure.append(this.#markSvg(mark, seed, cellAspect, 'mark'))
+    }
 
     const bottom = el('div', { class: 'rebate rebate-bottom', 'aria-hidden': 'true' },
       el('span', { class: 'frame-number' }, String(frame.n)),
@@ -281,20 +245,47 @@ export class NhContactSheetElement extends HTMLElement {
     return fig
   }
 
-  #markSvg(kind: 'circle' | 'cross', seed: number, cls: string) {
-    const doc = this.ownerDocument
-    const svg = doc.createElementNS(SVG_NS, 'svg')
+  #markSvg(kind: MarkKind, seed: number, aspect: number, cls: string) {
+    const svg = this.ownerDocument.createElementNS(SVG_NS, 'svg')
     svg.setAttribute('class', `${cls} ${cls}-${kind}`)
-    svg.setAttribute('viewBox', '0 0 100 100')
     svg.setAttribute('preserveAspectRatio', 'none')
     svg.setAttribute('aria-hidden', 'true')
-    const paths = kind === 'circle' ? [circlePath(seed)] : crossPaths(seed)
-    for (const d of paths) {
-      const p = doc.createElementNS(SVG_NS, 'path')
-      p.setAttribute('d', d)
-      p.setAttribute('vector-effect', 'non-scaling-stroke')
-      svg.append(p)
-    }
+    svg.setAttribute('data-kind', kind)
+    svg.setAttribute('data-aspect', aspect.toFixed(4))
+    drawInto(svg, kind, seeded(seed), aspect)
+    return svg
+  }
+
+  // A rough, waxy edge for the strokes.
+  #pencilFilter() {
+    const doc = this.ownerDocument
+    const svg = doc.createElementNS(SVG_NS, 'svg')
+    svg.setAttribute('class', 'grease-pencil-defs')
+    svg.setAttribute('aria-hidden', 'true')
+    svg.setAttribute('width', '0')
+    svg.setAttribute('height', '0')
+    const filter = doc.createElementNS(SVG_NS, 'filter')
+    filter.setAttribute('id', 'grease-pencil')
+    filter.setAttribute('x', '-10%')
+    filter.setAttribute('y', '-10%')
+    filter.setAttribute('width', '120%')
+    filter.setAttribute('height', '120%')
+    const turbulence = doc.createElementNS(SVG_NS, 'feTurbulence')
+    turbulence.setAttribute('type', 'fractalNoise')
+    turbulence.setAttribute('baseFrequency', '0.9')
+    turbulence.setAttribute('numOctaves', '2')
+    turbulence.setAttribute('seed', '3')
+    turbulence.setAttribute('result', 'noise')
+    const displace = doc.createElementNS(SVG_NS, 'feDisplacementMap')
+    displace.setAttribute('in', 'SourceGraphic')
+    displace.setAttribute('in2', 'noise')
+    displace.setAttribute('scale', '1.6')
+    displace.setAttribute('xChannelSelector', 'R')
+    displace.setAttribute('yChannelSelector', 'G')
+    filter.append(turbulence, displace)
+    const defs = doc.createElementNS(SVG_NS, 'defs')
+    defs.append(filter)
+    svg.append(defs)
     return svg
   }
 

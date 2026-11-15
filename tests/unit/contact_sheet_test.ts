@@ -5,6 +5,7 @@ import { parseHTML } from 'npm:linkedom'
 import { join } from 'jsr:@std/path'
 import { serializeAsync } from '../../src/serialize.ts'
 import { NhContactSheetElement, markFor } from '../../src/elements/nh-contact-sheet.ts'
+import { circleStrokes, crossStrokes, hashSeed, seeded } from '../../src/elements/grease-pencil.ts'
 import { NhHeadElement } from '../../src/elements/nh-head.ts'
 import { NhHeaderElement } from '../../src/elements/nh-header.ts'
 import { NhFooterElement } from '../../src/elements/nh-footer.ts'
@@ -115,4 +116,43 @@ Deno.test('applies title, description and stylesheet to the page', async () => {
   assert(doc.querySelector('meta[name="description"]')?.getAttribute('content')?.includes('Kodak Portra 400'))
   assert(doc.querySelector('link[href="/contact-sheet.css"]'))
   assertEquals(doc.querySelector('.roll-facts')?.textContent, 'Kodak Portra 400 · Leica M7 · 35mm · September 2026')
+})
+
+Deno.test('marks are seeded per photo, not per position', async () => {
+  const a = await render({ ...base, frames: [frame(1, { rating: 5, assetId: 'photo-x' }), frame(2, { rating: 5, assetId: 'photo-y' })] })
+  const b = await render({ ...base, slug: 'other', frames: [frame(1, { rating: 5, assetId: 'photo-y' })] })
+  const d = (doc: Document, n: number) => doc.querySelector(`#frame-${n} .mark path`)?.getAttribute('d')
+  assert(d(a, 1) && d(a, 2) && d(a, 1) !== d(a, 2), 'different photos get different marks')
+  assertEquals(d(b, 1), d(a, 2), 'the same photo gets the same mark on any roll')
+})
+
+Deno.test('mark svgs match the frame shape and get redrawn in the browser', async () => {
+  const doc = await render({ ...base, frames: [frame(1, { rating: 1 })] })
+  const svg = doc.querySelector('#frame-1 svg.mark')!
+  assertEquals(svg.getAttribute('data-kind'), 'cross')
+  assertEquals(svg.getAttribute('viewBox'), '0 0 150 100')
+  assertEquals(Number(svg.getAttribute('data-aspect')), 1.5)
+  assert(svg.querySelector('path')?.getAttribute('style')?.startsWith('--weight: '))
+  assert(doc.querySelector('filter#grease-pencil feDisplacementMap, filter#grease-pencil fedisplacementmap'))
+  const scripts = [...doc.querySelectorAll('script[type="module"]')].map((s) => s.textContent)
+  assertEquals(scripts, ["import { redrawMarks } from 'grease-pencil'; redrawMarks()"])
+  assert(doc.querySelector('script[type="importmap"]')?.textContent?.includes('/elements/grease-pencil.js'))
+})
+
+Deno.test('grease pencil: deterministic per seed, varied across seeds', () => {
+  assertEquals(hashSeed('abc'), hashSeed('abc'))
+  assert(hashSeed('abc') !== hashSeed('abd'))
+  const one = circleStrokes(seeded(42), 1.5)
+  assertEquals(one, circleStrokes(seeded(42), 1.5))
+  assert(JSON.stringify(one) !== JSON.stringify(circleStrokes(seeded(43), 1.5)))
+  const seen = new Set<number>()
+  for (let i = 0; i < 200; i++) {
+    const c = circleStrokes(seeded(i), 1.5)
+    seen.add(c.length)
+    for (const s of c) assert(/^M[\d.-]+ [\d.-]+( L[\d.-]+ [\d.-]+)+$/.test(s.d), s.d)
+    const x = crossStrokes(seeded(i), 1.5)
+    assertEquals(x.length, 2)
+    for (const s of x) assert(s.weight >= 0.85 && s.weight <= 1.2)
+  }
+  assert(seen.has(1) && seen.has(2), 'some circles get a second pass')
 })
