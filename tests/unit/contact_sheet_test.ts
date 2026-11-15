@@ -94,8 +94,18 @@ Deno.test('handles frames without previews', async () => {
 Deno.test('portrait frames and formats', async () => {
   const doc = await render({ ...base, format: '120-6x6', frames: [frame(1, { width: 2000, height: 3000 }), frame(2), frame(3), frame(4)] })
   assert(doc.querySelector('#frame-1')?.classList.contains('portrait'))
+  assert(!doc.querySelector('#frame-1')?.classList.contains('rotated'), 'square frames never rotate')
   assertEquals(doc.querySelectorAll('.strip').length, 2)
   assert(doc.querySelector('.contact-sheet')?.classList.contains('no-perfs'))
+})
+
+Deno.test('sideways frames are rotated to fill the cell', async () => {
+  const doc = await render({ ...base, frames: [frame(1, { width: 2000, height: 3000 }), frame(2)] })
+  assert(doc.querySelector('#frame-1')?.classList.contains('rotated'))
+  assert(!doc.querySelector('#frame-2')?.classList.contains('rotated'))
+  const half = await render({ ...base, format: 'half-frame', frames: [frame(1, { width: 2000, height: 3000 }), frame(2)] })
+  assert(!half.querySelector('#frame-1')?.classList.contains('rotated'))
+  assert(half.querySelector('#frame-2')?.classList.contains('rotated'))
 })
 
 Deno.test('applies title, description and stylesheet to the page', async () => {

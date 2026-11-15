@@ -213,7 +213,7 @@ export class NhContactSheetElement extends HTMLElement {
     for (let i = 0; i < roll.frames.length; i += spec.perStrip) {
       const strip = el('div', { class: 'strip' })
       for (const frame of roll.frames.slice(i, i + spec.perStrip)) {
-        strip.append(this.#frame(frame, edge, el))
+        strip.append(this.#frame(frame, edge, spec.aspect, el))
       }
       sheet.append(strip)
     }
@@ -233,13 +233,17 @@ export class NhContactSheetElement extends HTMLElement {
     return article
   }
 
-  #frame(frame: Frame, edge: string, el: (tag: string, attrs?: Record<string, string>, ...kids: (Node | string)[]) => HTMLElement) {
+  #frame(frame: Frame, edge: string, cellAspect: number, el: (tag: string, attrs?: Record<string, string>, ...kids: (Node | string)[]) => HTMLElement) {
     const mark = markFor(frame)
     const portrait = frame.height > frame.width
+    // A vertical shot on a horizontal roll (or the reverse on half frame) sits
+    // sideways on the film, so it's drawn rotated to fill the frame, like a
+    // real contact sheet.
+    const rotated = cellAspect !== 1 && portrait === (cellAspect > 1)
     const label = `Frame ${frame.n}` + (frame.rating ? `, ${frame.rating} star${frame.rating === 1 ? '' : 's'}` : '')
 
     const fig = el('figure', {
-      class: 'frame' + (portrait ? ' portrait' : '') + (mark ? ` marked-${mark}` : ''),
+      class: 'frame' + (portrait ? ' portrait' : '') + (rotated ? ' rotated' : '') + (mark ? ` marked-${mark}` : ''),
       'data-rating': String(frame.rating),
       id: `frame-${frame.n}`,
     })

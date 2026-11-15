@@ -200,7 +200,7 @@ export class NhContactSheetElement extends HTMLElement {
         class: 'strip'
       });
       for (const frame of roll.frames.slice(i, i + spec.perStrip)){
-        strip.append(this.#frame(frame, edge, el));
+        strip.append(this.#frame(frame, edge, spec.aspect, el));
       }
       sheet.append(strip);
     }
@@ -217,12 +217,16 @@ export class NhContactSheetElement extends HTMLElement {
     }, meta.join(', ')));
     return article;
   }
-  #frame(frame, edge, el) {
+  #frame(frame, edge, cellAspect, el) {
     const mark = markFor(frame);
     const portrait = frame.height > frame.width;
+    // A vertical shot on a horizontal roll (or the reverse on half frame) sits
+    // sideways on the film, so it's drawn rotated to fill the frame, like a
+    // real contact sheet.
+    const rotated = cellAspect !== 1 && portrait === cellAspect > 1;
     const label = `Frame ${frame.n}` + (frame.rating ? `, ${frame.rating} star${frame.rating === 1 ? '' : 's'}` : '');
     const fig = el('figure', {
-      class: 'frame' + (portrait ? ' portrait' : '') + (mark ? ` marked-${mark}` : ''),
+      class: 'frame' + (portrait ? ' portrait' : '') + (rotated ? ' rotated' : '') + (mark ? ` marked-${mark}` : ''),
       'data-rating': String(frame.rating),
       id: `frame-${frame.n}`
     });
@@ -332,4 +336,4 @@ export class NhContactSheetElement extends HTMLElement {
   }
 }
 
-// denoCacheMetadata=9734510895418432019,10650662198650084828
+// denoCacheMetadata=4180329046317785866,12118558970242053135

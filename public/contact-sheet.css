@@ -166,6 +166,22 @@ main.roll-page {
   object-fit: contain;
 }
 
+/* Sideways frames: swap the box's width and height using container units,
+   then turn it a quarter so it fills the frame. */
+.frame.rotated .exposure,
+.frame.rotated .exposure > a {
+  container-type: size;
+}
+
+.frame.rotated .exposure img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100cqh;
+  height: 100cqw;
+  transform: translate(-50%, -50%) rotate(-90deg);
+}
+
 .no-scan {
   display: flex;
   align-items: center;
