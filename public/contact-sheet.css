@@ -250,3 +250,38 @@ main.roll-page {
   --pencil: 2px;
   overflow: visible;
 }
+
+/* Photos index: one short strip per roll */
+main.roll-page > header h1 {
+  margin-bottom: 0.2em;
+}
+
+.roll-intro {
+  margin-top: 0;
+}
+
+.roll-list {
+  list-style: none;
+  padding: 0;
+  margin: 2rem 0;
+}
+
+.roll-summary {
+  margin: 0 0 3rem;
+}
+
+.roll-summary h2 {
+  margin: 0 0 0.2em;
+}
+
+.roll-summary .roll-facts {
+  margin: 0;
+}
+
+.contact-sheet.roll-preview {
+  margin: 1rem 0 0.6rem;
+}
+
+.roll-summary .roll-meta {
+  margin: 0;
+}

@@ -10,6 +10,7 @@
   },
   "imports": {
     "dom": "./src/elements/dom.ts",
-    "grease-pencil": "./src/elements/grease-pencil.ts"
+    "grease-pencil": "./src/elements/grease-pencil.ts",
+    "film": "./src/elements/film.ts"
   }
 }

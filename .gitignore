@@ -25,3 +25,5 @@ public/photos/rolls/sample/
 
 # wrangler local cache (account id)
 .wrangler/
+src/photos/rolls.json
+public/photos/rolls.json

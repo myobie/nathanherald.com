@@ -140,5 +140,59 @@ const SVG_NS = 'http://www.w3.org/2000/svg';
     drawInto(svg, kind, Math.random, aspect);
   }
 }
+const SVG = 'http://www.w3.org/2000/svg';
+/** A mark <svg> for one frame, drawn from a seed. */ export function markElement(doc, kind, seed, aspect, cls = 'mark') {
+  const svg = doc.createElementNS(SVG, 'svg');
+  svg.setAttribute('class', `${cls} ${cls}-${kind}`);
+  svg.setAttribute('preserveAspectRatio', 'none');
+  svg.setAttribute('aria-hidden', 'true');
+  svg.setAttribute('data-kind', kind);
+  svg.setAttribute('data-aspect', aspect.toFixed(4));
+  drawInto(svg, kind, seeded(seed), aspect);
+  return svg;
+}
+/** Hidden <svg> holding the filter that gives strokes a rough, waxy edge. */ export function pencilFilterElement(doc) {
+  const make = (tag, attrs)=>{
+    const e = doc.createElementNS(SVG, tag);
+    for (const [k, v] of Object.entries(attrs))e.setAttribute(k, v);
+    return e;
+  };
+  const svg = make('svg', {
+    class: 'grease-pencil-defs',
+    'aria-hidden': 'true',
+    width: '0',
+    height: '0'
+  });
+  const filter = make('filter', {
+    id: 'grease-pencil',
+    x: '-10%',
+    y: '-10%',
+    width: '120%',
+    height: '120%'
+  });
+  filter.append(make('feTurbulence', {
+    type: 'fractalNoise',
+    baseFrequency: '0.9',
+    numOctaves: '2',
+    seed: '3',
+    result: 'noise'
+  }), make('feDisplacementMap', {
+    in: 'SourceGraphic',
+    in2: 'noise',
+    scale: '1.6',
+    xChannelSelector: 'R',
+    yChannelSelector: 'G'
+  }));
+  const defs = make('defs', {});
+  defs.append(filter);
+  svg.append(defs);
+  return svg;
+}
+/** The inline module that redraws marks in the browser. */ export const REDRAW_SCRIPT = "import { redrawMarks } from 'grease-pencil'; redrawMarks()";
+export function markFor(frame) {
+  if (frame.rating >= 5) return 'circle';
+  if (frame.rating >= 1 && frame.rating <= 2) return 'cross';
+  return null;
+}
 
-// denoCacheMetadata=10318940316258682504,5146236128441002992
+// denoCacheMetadata=7393148004325005321,5097895791842949696

@@ -1,70 +1,12 @@
 import { HTMLElement } from 'dom';
-import { drawInto, hashSeed, seeded } from 'grease-pencil';
-const FORMATS = {
-  '35mm': {
-    perStrip: 6,
-    perStripNarrow: 3,
-    aspect: 3 / 2,
-    perfs: 8,
-    label: '35mm'
-  },
-  'half-frame': {
-    perStrip: 12,
-    perStripNarrow: 6,
-    aspect: 2 / 3,
-    perfs: 4,
-    label: 'Half frame'
-  },
-  '120-6x6': {
-    perStrip: 3,
-    perStripNarrow: 3,
-    aspect: 1,
-    perfs: 0,
-    label: '120, 6×6'
-  },
-  '120-6x4.5': {
-    perStrip: 4,
-    perStripNarrow: 2,
-    aspect: 3 / 4,
-    perfs: 0,
-    label: '120, 6×4.5'
-  },
-  '120-6x7': {
-    perStrip: 3,
-    perStripNarrow: 2,
-    aspect: 7 / 6,
-    perfs: 0,
-    label: '120, 6×7'
-  },
-  '110': {
-    perStrip: 6,
-    perStripNarrow: 3,
-    aspect: 17 / 13,
-    perfs: 1,
-    label: '110'
-  }
-};
-const MONTHS = [
-  'January',
-  'February',
-  'March',
-  'April',
-  'May',
-  'June',
-  'July',
-  'August',
-  'September',
-  'October',
-  'November',
-  'December'
-];
-const SVG_NS = 'http://www.w3.org/2000/svg';
-const f = (n)=>n.toFixed(1);
-export function markFor(frame) {
-  if (frame.rating >= 5) return 'circle';
-  if (frame.rating >= 1 && frame.rating <= 2) return 'cross';
-  return null;
-}
+import { hashSeed, markElement, markFor, pencilFilterElement, REDRAW_SCRIPT } from 'grease-pencil';
+import { elFactory, factsLine, formatDay, formatSpec, frameElement, sheetElement } from 'film';
+// Renders a roll of film as a contact sheet: cut strips of frames with
+// sprocket holes and edge numbers, plus grease pencil marks from the
+// Lightroom star ratings (X for 1–2 stars, circle for 5 stars).
+//
+// Data comes from a roll.json written by bin/lr-roll (see src/photos/rolls/).
+export { markFor };
 export class NhContactSheetElement extends HTMLElement {
   static defaultName = 'nh-contact-sheet';
   static define(registry, name = this.defaultName) {
@@ -76,7 +18,6 @@ export class NhContactSheetElement extends HTMLElement {
     return this.#ready.promise;
   }
   #ready = Promise.withResolvers();
-  #slug = '';
   async connectedCallback() {
     if (this.hasAttribute('data-rendered')) {
       this.#removeScript();
@@ -88,11 +29,9 @@ export class NhContactSheetElement extends HTMLElement {
       if (!src) return;
       const resp = await fetch(src);
       const roll = await resp.json();
-      // Image paths in roll.json are relative to the roll.json itself
-      const base = src;
       this.textContent = '';
-      this.append(this.#render(roll, base));
-      if (this.hasAttribute('page')) this.#applyToPage(roll, base);
+      this.append(this.#render(roll));
+      if (this.hasAttribute('page')) this.#applyToPage(roll);
       this.setAttribute('data-rendered', '');
     } finally{
       this.#removeScript();
@@ -113,32 +52,16 @@ export class NhContactSheetElement extends HTMLElement {
   // https://photos.nathanherald.com/rolls/<slug>/01.jpg) or paths relative to
   // roll.json. The built page lives in the same folder as roll.json, so
   // relative paths can stay relative in the output.
-  #href(path) {
-    return path;
-  }
-  #render(roll, _base) {
+  #render(roll) {
     const doc = this.ownerDocument;
-    const spec = FORMATS[roll.format] ?? FORMATS['35mm'];
-    this.#slug = roll.slug;
-    const el = (tag, attrs = {}, ...kids)=>{
-      const e = doc.createElement(tag);
-      for (const [k, v] of Object.entries(attrs))e.setAttribute(k, v);
-      for (const k of kids)e.append(typeof k === 'string' ? doc.createTextNode(k) : k);
-      return e;
-    };
+    const el = elFactory(doc);
+    const spec = formatSpec(roll.format);
     const article = el('article', {
       class: 'roll'
     });
-    // Header: title + a short line of facts
-    const facts = [];
-    if (roll.film) facts.push(roll.film);
-    if (roll.camera) facts.push(roll.camera);
-    facts.push(spec.label);
-    if (roll.shot) facts.push(this.#formatMonth(roll.shot));
-    const header = el('header', {}, el('h1', {}, roll.title), el('p', {
+    article.append(el('header', {}, el('h1', {}, roll.title), el('p', {
       class: 'roll-facts'
-    }, facts.join(' · ')));
-    article.append(header);
+    }, factsLine(roll))));
     if (roll.notes) {
       for (const para of roll.notes.split(/\n{2,}/)){
         article.append(el('p', {
@@ -146,29 +69,25 @@ export class NhContactSheetElement extends HTMLElement {
         }, para.trim()));
       }
     }
-    const sheet = el('div', {
-      class: `contact-sheet format-${roll.format.replace(/[^a-z0-9-]/gi, '')}${spec.perfs ? '' : ' no-perfs'}`,
-      style: `--per-strip: ${spec.perStrip}; --per-strip-narrow: ${spec.perStripNarrow}; --frame-aspect: ${f(spec.aspect * 1000)} / 1000; --perfs: ${spec.perfs};`
-    });
+    const sheet = sheetElement(el, roll.format);
     const edge = (roll.film ?? '').toUpperCase();
     for(let i = 0; i < roll.frames.length; i += spec.perStrip){
       const strip = el('div', {
         class: 'strip'
       });
       for (const frame of roll.frames.slice(i, i + spec.perStrip)){
-        strip.append(this.#frame(frame, edge, spec.aspect, el));
+        strip.append(this.#frame(roll, frame, edge, spec.aspect));
       }
       sheet.append(strip);
     }
-    article.append(sheet);
-    article.append(this.#pencilFilter());
-    const legend = el('dl', {
+    article.append(sheet, pencilFilterElement(doc));
+    article.append(el('dl', {
       class: 'contact-sheet-legend'
-    }, el('dt', {}, this.#markSvg('circle', 7, 1.5, 'legend-mark')), el('dd', {}, 'five stars, a keeper'), el('dt', {}, this.#markSvg('cross', 11, 1.5, 'legend-mark')), el('dd', {}, 'one or two stars, a miss'));
-    article.append(legend);
-    const meta = [];
-    meta.push(`${roll.frames.length} frames`);
-    if (roll.scanned) meta.push(`scanned ${this.#formatDay(roll.scanned)}`);
+    }, el('dt', {}, markElement(doc, 'circle', 7, 1.5, 'legend-mark')), el('dd', {}, 'five stars, a keeper'), el('dt', {}, markElement(doc, 'cross', 11, 1.5, 'legend-mark')), el('dd', {}, 'one or two stars, a miss')));
+    const meta = [
+      `${roll.frames.length} frames`
+    ];
+    if (roll.scanned) meta.push(`scanned ${formatDay(roll.scanned)}`);
     article.append(el('p', {
       class: 'roll-meta'
     }, meta.join(', ')));
@@ -177,115 +96,26 @@ export class NhContactSheetElement extends HTMLElement {
     const redraw = el('script', {
       type: 'module'
     });
-    redraw.textContent = "import { redrawMarks } from 'grease-pencil'; redrawMarks()";
+    redraw.textContent = REDRAW_SCRIPT;
     article.append(redraw);
     return article;
   }
-  #frame(frame, edge, cellAspect, el) {
+  #frame(roll, frame, edge, cellAspect) {
     const mark = markFor(frame);
-    const portrait = frame.height > frame.width;
-    // A vertical shot on a horizontal roll (or the reverse on half frame) sits
-    // sideways on the film, so it's drawn rotated to fill the frame, like a
-    // real contact sheet.
-    const rotated = cellAspect !== 1 && portrait === cellAspect > 1;
-    const label = `Frame ${frame.n}` + (frame.rating ? `, ${frame.rating} star${frame.rating === 1 ? '' : 's'}` : '');
-    const fig = el('figure', {
-      class: 'frame' + (portrait ? ' portrait' : '') + (rotated ? ' rotated' : '') + (mark ? ` marked-${mark}` : ''),
-      'data-rating': String(frame.rating),
-      id: `frame-${frame.n}`
+    const { fig, exposure } = frameElement(elFactory(this.ownerDocument), frame, {
+      edge,
+      cellAspect,
+      id: `frame-${frame.n}`,
+      className: mark ? `marked-${mark}` : ''
     });
-    const top = el('div', {
-      class: 'rebate rebate-top',
-      'aria-hidden': 'true'
-    });
-    if (edge && frame.n % 2 === 1) top.append(el('span', {
-      class: 'edge-text'
-    }, edge));
-    const exposure = el('div', {
-      class: 'exposure'
-    });
-    const thumb = frame.thumb ?? frame.image;
-    if (thumb) {
-      const img = el('img', {
-        src: this.#href(thumb),
-        alt: label,
-        loading: 'lazy',
-        decoding: 'async',
-        width: String(portrait ? Math.round(640 * frame.width / frame.height) : 640),
-        height: String(portrait ? 640 : Math.round(640 * frame.height / frame.width))
-      });
-      if (frame.image) {
-        exposure.append(el('a', {
-          href: this.#href(frame.image),
-          class: 'never-underline'
-        }, img));
-      } else {
-        exposure.append(img);
-      }
-    } else {
-      exposure.append(el('span', {
-        class: 'no-scan'
-      }, 'no scan'));
-    }
     if (mark) {
       // Seed from the photo, so each photo keeps its own mark across rolls and builds
-      const seed = hashSeed(frame.assetId ?? frame.filename ?? `${this.#slug}-${frame.n}`);
-      exposure.append(this.#markSvg(mark, seed, cellAspect, 'mark'));
+      const seed = hashSeed(frame.assetId ?? frame.filename ?? `${roll.slug}-${frame.n}`);
+      exposure.append(markElement(this.ownerDocument, mark, seed, cellAspect));
     }
-    const bottom = el('div', {
-      class: 'rebate rebate-bottom',
-      'aria-hidden': 'true'
-    }, el('span', {
-      class: 'frame-number'
-    }, String(frame.n)), el('span', {
-      class: 'frame-number frame-number-a'
-    }, `${frame.n}A`));
-    fig.append(top, exposure, bottom);
     return fig;
   }
-  #markSvg(kind, seed, aspect, cls) {
-    const svg = this.ownerDocument.createElementNS(SVG_NS, 'svg');
-    svg.setAttribute('class', `${cls} ${cls}-${kind}`);
-    svg.setAttribute('preserveAspectRatio', 'none');
-    svg.setAttribute('aria-hidden', 'true');
-    svg.setAttribute('data-kind', kind);
-    svg.setAttribute('data-aspect', aspect.toFixed(4));
-    drawInto(svg, kind, seeded(seed), aspect);
-    return svg;
-  }
-  // A rough, waxy edge for the strokes.
-  #pencilFilter() {
-    const doc = this.ownerDocument;
-    const svg = doc.createElementNS(SVG_NS, 'svg');
-    svg.setAttribute('class', 'grease-pencil-defs');
-    svg.setAttribute('aria-hidden', 'true');
-    svg.setAttribute('width', '0');
-    svg.setAttribute('height', '0');
-    const filter = doc.createElementNS(SVG_NS, 'filter');
-    filter.setAttribute('id', 'grease-pencil');
-    filter.setAttribute('x', '-10%');
-    filter.setAttribute('y', '-10%');
-    filter.setAttribute('width', '120%');
-    filter.setAttribute('height', '120%');
-    const turbulence = doc.createElementNS(SVG_NS, 'feTurbulence');
-    turbulence.setAttribute('type', 'fractalNoise');
-    turbulence.setAttribute('baseFrequency', '0.9');
-    turbulence.setAttribute('numOctaves', '2');
-    turbulence.setAttribute('seed', '3');
-    turbulence.setAttribute('result', 'noise');
-    const displace = doc.createElementNS(SVG_NS, 'feDisplacementMap');
-    displace.setAttribute('in', 'SourceGraphic');
-    displace.setAttribute('in2', 'noise');
-    displace.setAttribute('scale', '1.6');
-    displace.setAttribute('xChannelSelector', 'R');
-    displace.setAttribute('yChannelSelector', 'G');
-    filter.append(turbulence, displace);
-    const defs = doc.createElementNS(SVG_NS, 'defs');
-    defs.append(filter);
-    svg.append(defs);
-    return svg;
-  }
-  #applyToPage(roll, _base) {
+  #applyToPage(roll) {
     const doc = this.ownerDocument;
     const head = doc.head;
     if (!head) return;
@@ -309,15 +139,6 @@ export class NhContactSheetElement extends HTMLElement {
       head.append(link);
     }
   }
-  #formatMonth(value) {
-    const [y, m] = value.split('-');
-    return m ? `${MONTHS[parseInt(m, 10) - 1]} ${y}` : y;
-  }
-  #formatDay(value) {
-    const [y, m, d] = value.split('T')[0].split('-');
-    if (!d) return this.#formatMonth(value);
-    return `${parseInt(d, 10)} ${MONTHS[parseInt(m, 10) - 1]}, ${y}`;
-  }
   #removeScript() {
     for (const s of this.ownerDocument.querySelectorAll('script[type="module"]')){
       if (s.textContent?.includes('NhContactSheetElement')) {
@@ -328,4 +149,4 @@ export class NhContactSheetElement extends HTMLElement {
   }
 }
 
-// denoCacheMetadata=6291212337638090445,13931992196188833147
+// denoCacheMetadata=16080146427319203465,8338157394026537587

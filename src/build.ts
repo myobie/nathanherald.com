@@ -13,6 +13,8 @@ import { NhIncludeElement } from './elements/nh-include.ts'
 import { NhArchiveListElement } from './elements/nh-archive-list.ts'
 import { NhLatestPostsElement } from './elements/nh-latest-posts.ts'
 import { NhContactSheetElement } from './elements/nh-contact-sheet.ts'
+import { NhRollListElement } from './elements/nh-roll-list.ts'
+import { formatSpec, type Roll, type RollSummary } from './elements/film.ts'
 
 const srcDir = new URL('.', import.meta.url).pathname
 const projectRoot = join(srcDir, '..')
@@ -62,6 +64,9 @@ function registerElements(linkie: ReturnType<typeof parseHTML>) {
 
   const KNhContactSheet = class extends NhContactSheetElement {}
   linkie.customElements.define(NhContactSheetElement.defaultName, KNhContactSheet)
+
+  const KNhRollList = class extends NhRollListElement {}
+  linkie.customElements.define(NhRollListElement.defaultName, KNhRollList)
 }
 
 let count = 0
@@ -91,6 +96,42 @@ console.log(new TextDecoder().decode(genJsonOutput.stdout).trim())
 
 // Copy posts.json to src/ so the archive element can resolve it during build
 await Deno.copyFile(join(publicDir, 'posts.json'), join(srcDir, 'posts.json'))
+
+// Generate src/photos/rolls.json, the index of all film rolls (photos page
+// depends on it). Newest first, each with a short preview strip of keepers.
+{
+  const rollsDir = join(srcDir, 'photos', 'rolls')
+  const summaries: RollSummary[] = []
+  try {
+    for await (const entry of walk(rollsDir, { match: [/\/roll\.json$/] })) {
+      const roll: Roll = JSON.parse(await Deno.readTextFile(entry.path))
+      const perStrip = formatSpec(roll.format).perStrip
+      const preview = [...roll.frames]
+        .filter((f) => f.thumb ?? f.image)
+        .sort((a, b) => b.rating - a.rating || a.n - b.n)
+        .slice(0, perStrip)
+        .sort((a, b) => a.n - b.n)
+      const { frames, notes: _notes, ...rest } = roll
+      const url = relative(join(srcDir, 'photos'), dirname(entry.path)) + '/'
+      // roll.json paths may be relative to the roll folder; the index lives
+      // one level up, so point those at the roll folder. Absolute URLs stay.
+      const fromIndex = (p: string | null) => (p && !/^([a-z]+:|\/)/i.test(p) ? url + p : p)
+      summaries.push({
+        ...rest,
+        url,
+        frameCount: frames.length,
+        keepers: frames.filter((f) => f.rating >= 5).length,
+        preview: preview.map((f) => ({ ...f, thumb: fromIndex(f.thumb), image: fromIndex(f.image) })),
+      })
+    }
+  } catch (e) {
+    if (!(e instanceof Deno.errors.NotFound)) throw e
+  }
+  const when = (r: RollSummary) => r.shot ?? r.scanned ?? ''
+  summaries.sort((a, b) => when(b).localeCompare(when(a)) || a.title.localeCompare(b.title))
+  await ensureDir(join(srcDir, 'photos'))
+  await Deno.writeTextFile(join(srcDir, 'photos', 'rolls.json'), JSON.stringify(summaries, null, 2) + '\n')
+}
 
 // Build standalone HTML files (homepage, archive, etc.)
 for await (const entry of walk(srcDir, { exts: ['.html'] })) {

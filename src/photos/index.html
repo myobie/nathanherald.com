@@ -1,0 +1,20 @@
+<!doctype html>
+<html>
+<head lang="en-us"><script type="importmap">{"imports":{"dom":"/elements/browser-dom.js","grease-pencil":"/elements/grease-pencil.js","film":"/elements/film.js"}}</script></head>
+<body class="default">
+  <nh-head title="Film" description="Contact sheets from rolls of film I&#x2019;ve shot." canonical="https://nathanherald.com/photos/"></nh-head>
+  <nh-header></nh-header>
+  <main class="roll-page">
+    <header>
+      <h1>Film</h1>
+      <p class="roll-intro">Contact sheets from rolls of film I&#x2019;ve shot. Circled frames are the keepers.</p>
+    </header>
+    <nh-roll-list src="rolls.json" page></nh-roll-list>
+  </main>
+  <nh-footer></nh-footer>
+  <script type="module">import { NhHeadElement } from '/elements/nh-head.js'; NhHeadElement.define(customElements)</script>
+  <script type="module">import { NhHeaderElement } from '/elements/nh-header.js'; NhHeaderElement.define(customElements)</script>
+  <script type="module">import { NhFooterElement } from '/elements/nh-footer.js'; NhFooterElement.define(customElements)</script>
+  <script type="module">import { NhRollListElement } from '/elements/nh-roll-list.js'; NhRollListElement.define(customElements)</script>
+</body>
+</html>
