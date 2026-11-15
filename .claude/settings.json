@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "mcp__claude-code-remote__send_message",
-      "SendMessage"
+      "SendMessage",
+      "Bash(npx wrangler@latest:*)"
     ]
   }
 }
