@@ -15,12 +15,19 @@
 #       --format 35mm --shot 2026-09 [--slug 2026-09-tegernsee-1] \
 #       [--export-dir ~/Desktop/tegernsee-export] [--include-rejected] \
 #       [--dry-run] [--force] [--out DIR (default src/photos/rolls)] \
-#       [--max 1280 (long side of the main image; thumbs are 640)]
+#       [--max 1280 (long side of the main image; thumbs are 640)] \
+#       [--local (write JPEGs next to roll.json instead of uploading)]
+#
+# By default the JPEGs are uploaded to the R2 bucket $LR_BUCKET
+# (nathanherald-photos) under rolls/<slug>/, named with a content hash so they
+# can be cached forever, and roll.json gets absolute URLs under $LR_BASE_URL
+# (https://photos.nathanherald.com). Only roll.json lands in the repo.
 #
 # Album names repeat ("Film", "Digital", "Ilford HP5+"). If a name matches
 # more than one album, the matches are listed and you pass --album-id.
 #
-# Requires: sqlite3, jq, magick (ImageMagick).
+# Requires: sqlite3, jq, magick (ImageMagick), and for uploads npx with a
+# logged in wrangler (npx wrangler@latest login).
 
 set -euo pipefail
 
@@ -29,12 +36,15 @@ LIB="${LR_LIBRARY:-$HOME/Pictures/Lightroom Library.lrlibrary}"
 
 die() { echo "lr-roll: $*" >&2; exit 1; }
 
-usage() { sed -n '3,24p' "$0" | sed 's/^# \{0,1\}//'; exit "${1:-0}"; }
+usage() { sed -n '3,31p' "$0" | sed 's/^# \{0,1\}//'; exit "${1:-0}"; }
 
 SUGGEST=false DRY_RUN=false FORCE=false INCLUDE_REJECTED=false
 ALBUM="" ALBUM_ID="" FROM="" TO="" SLUG="" TITLE="" FILM="" CAMERA=""
 FORMAT="35mm" SHOT="" NOTES="" EXPORT_DIR="" GAP=90 MAX=1280
 OUT_ROOT="$REPO_ROOT/src/photos/rolls"
+LOCAL=false
+BUCKET="${LR_BUCKET:-nathanherald-photos}"
+BASE_URL="${LR_BASE_URL:-https://photos.nathanherald.com}"
 
 while [ $# -gt 0 ]; do
   case "$1" in
@@ -54,6 +64,7 @@ while [ $# -gt 0 ]; do
     --gap) GAP="$2"; shift ;;
     --out) OUT_ROOT="$2"; shift ;;
     --max) MAX="$2"; shift ;;
+    --local) LOCAL=true ;;
     --include-rejected) INCLUDE_REJECTED=true ;;
     --dry-run) DRY_RUN=true ;;
     --force) FORCE=true ;;
@@ -64,6 +75,8 @@ while [ $# -gt 0 ]; do
 done
 
 for t in sqlite3 jq magick; do command -v "$t" >/dev/null || die "missing $t"; done
+$LOCAL || $SUGGEST || command -v npx >/dev/null || die "missing npx (needed to upload with wrangler, or pass --local)"
+BASE_URL="${BASE_URL%/}"
 [ -n "$ALBUM" ] || [ -n "$ALBUM_ID" ] || die "need --album or --album-id"
 [ -z "$EXPORT_DIR" ] || [ -d "$EXPORT_DIR" ] || die "no such export dir: $EXPORT_DIR"
 [[ "$MAX" =~ ^[0-9]+$ ]] && [ "$MAX" -ge 640 ] || die "--max must be a number >= 640"
@@ -209,6 +222,25 @@ if [ -e "$OUT" ]; then
 fi
 mkdir -p "$OUT"
 
+# Local mode writes JPEGs beside roll.json. Upload mode renders them in the
+# temp dir (removed on exit), uploads, and refers to them by absolute URL.
+if $LOCAL; then IMG_DIR="$OUT"; else IMG_DIR="$TMP/img"; mkdir -p "$IMG_DIR"; fi
+
+# finish_image file -> the value for roll.json (relative name or URL).
+# Uploaded names carry a short content hash, so a re-export never collides
+# with a cached older version and the objects can be cached as immutable.
+finish_image() {
+  local f="$1" name hash key
+  if $LOCAL; then basename "$f"; return; fi
+  name="$(basename "$f" .jpg)"
+  hash="$(shasum -a 256 "$f" | cut -c1-10)"
+  key="rolls/$SLUG/$name.$hash.jpg"
+  npx --yes wrangler@latest r2 object put "$BUCKET/$key" --remote --file "$f" \
+    --content-type image/jpeg --cache-control "public, max-age=31536000, immutable" \
+    >"$TMP/upload.log" 2>&1 || { cat "$TMP/upload.log" >&2; die "upload failed for $key"; }
+  echo "$BASE_URL/$key"
+}
+
 preview_path() { # docId longSide -> path of that rendition, or the largest if longSide is empty
   local order="longSide desc"
   if [ -n "$2" ]; then order="(longSide = $2) desc, longSide desc"; fi
@@ -243,11 +275,14 @@ while IFS= read -r row; do
     echo "  ⚠️  $filename has no preview, skipping image (open the album in Lightroom to render one)" >&2
     image=null thumb=null longest=null
   else
-    web_jpeg "$src" "$OUT/$num.jpg" "$MAX"
+    web_jpeg "$src" "$IMG_DIR/$num.jpg" "$MAX"
     thumb_src="$(preview_path "$docId" 640)"
     [ -f "$thumb_src" ] || thumb_src="$src"
-    web_jpeg "$thumb_src" "$OUT/$num.thumb.jpg" 640
-    image="\"$num.jpg\"" thumb="\"$num.thumb.jpg\"" longest="$(long_side "$OUT/$num.jpg")"
+    web_jpeg "$thumb_src" "$IMG_DIR/$num.thumb.jpg" 640
+    longest="$(long_side "$IMG_DIR/$num.jpg")"
+    image_ref="$(finish_image "$IMG_DIR/$num.jpg")" || exit 1
+    thumb_ref="$(finish_image "$IMG_DIR/$num.thumb.jpg")" || exit 1
+    image="$(jq -Rn --arg v "$image_ref" '$v')" thumb="$(jq -Rn --arg v "$thumb_ref" '$v')"
   fi
 
   # Lightroom's width/height are already post-crop and oriented (portrait
@@ -275,4 +310,9 @@ jq -s \
     frames: .
   }' "$FRAME_OBJS" > "$OUT/roll.json"
 
-echo "✅ Wrote $OUT/roll.json and $(find "$OUT" -name '*.jpg' | wc -l | tr -d ' ') images ($(du -sh "$OUT" | cut -f1))"
+n_img="$(find "$IMG_DIR" -name '*.jpg' | wc -l | tr -d ' ')"
+if $LOCAL; then
+  echo "✅ Wrote $OUT/roll.json and $n_img images ($(du -sh "$OUT" | cut -f1))"
+else
+  echo "✅ Uploaded $n_img images ($(du -sh "$IMG_DIR" | cut -f1)) to $BUCKET/rolls/$SLUG/ and wrote $OUT/roll.json"
+fi

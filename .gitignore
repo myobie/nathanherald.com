@@ -22,3 +22,6 @@ bakeoff/
 # sample roll from bin/gen-sample-roll
 src/photos/rolls/sample/
 public/photos/rolls/sample/
+
+# wrangler local cache (account id)
+.wrangler/

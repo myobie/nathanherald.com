@@ -213,6 +213,7 @@ bin/lr-roll --album "Tegernsee Film" --from P9250830 --to P9250867 \
   --title Tegernsee --film "Ilford HP5+" --camera "Leica M7" --shot 2026-09 --dry-run
 ```
 
+- Images live in Cloudflare R2, not git. By default lr-roll uploads `NN.<hash>.jpg` and `NN.thumb.<hash>.jpg` to the `nathanherald-photos` bucket under `rolls/<slug>/` (Nathan's personal Cloudflare account, `639c0fcd0e5bde025f5bd2eb6e70a6b3`) and writes absolute `https://photos.nathanherald.com/...` URLs into roll.json, so only roll.json is committed. The hash in the name means objects are cached as immutable; a re-export uploads new names. Uploads use `npx wrangler@latest` (allowed in `.claude/settings.json`; wrangler must be logged in on Silber). `--local` keeps the old behavior of writing JPEGs beside roll.json.
 - Recent film is camera scanned with an Olympus E-M5 II, so `captureDate` is the scan time, not the shot date, and the camera field is the scanner. Film stock and camera are given by hand.
 - The build turns every `src/photos/rolls/**/roll.json` into an `index.html` beside it, using `src/roll.html` and `<nh-contact-sheet>`. Styles live in `public/contact-sheet.css`.
 - `bin/gen-sample-roll [frames] [format]` writes a fake roll to `src/photos/rolls/sample/` (gitignored) for checking the layout. Unit tests for the element: `deno task test:unit`.
