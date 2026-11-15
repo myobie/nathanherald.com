@@ -1,0 +1,227 @@
+/* Contact sheet for a roll of film, rendered by <nh-contact-sheet>. */
+
+:root {
+  --film-base: #141210;
+  --film-edge: #8a8070;
+  --grease-pencil: #d7301f;
+  --cut: 0.9rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --film-base: #0b0a09;
+    --film-edge: #7a7264;
+    --grease-pencil: #ff5a43;
+  }
+}
+
+main.roll-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.roll header h1 {
+  margin-bottom: 0.2em;
+}
+
+.roll-facts,
+.roll-meta {
+  color: var(--film-edge);
+  font-family: var(--monospace-font);
+  font-size: 0.85rem;
+  letter-spacing: 0.02em;
+}
+
+.contact-sheet {
+  display: flex;
+  flex-direction: column;
+  gap: var(--cut);
+  margin: 2rem 0 1.5rem;
+}
+
+.strip {
+  display: grid;
+  grid-template-columns: repeat(var(--per-strip), minmax(0, 1fr));
+  row-gap: var(--cut);
+}
+
+@media (max-width: 700px) {
+  .strip {
+    grid-template-columns: repeat(var(--per-strip-narrow), minmax(0, 1fr));
+  }
+}
+
+.frame {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+/* The rebate: the film edge above and below each exposure. */
+.rebate {
+  position: relative;
+  background: var(--film-base);
+  height: 1.15rem;
+  color: var(--film-edge);
+  font-family: var(--monospace-font);
+  font-size: 0.6rem;
+  line-height: 1;
+  letter-spacing: 0.08em;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+/* Sprocket holes, cut out of the film with a mask so the page shows through.
+   Holes sit near the outer edge, edge text sits between them and the image. */
+.contact-sheet:not(.no-perfs) .rebate {
+  height: 1.35rem;
+  --holes: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10' preserveAspectRatio='none'%3E%3Crect x='2.6' y='0' width='4.8' height='10' rx='1.4'/%3E%3C/svg%3E");
+  -webkit-mask-image: linear-gradient(#000, #000), var(--holes);
+  mask-image: linear-gradient(#000, #000), var(--holes);
+  -webkit-mask-size: 100% 100%, calc(100% / var(--perfs)) 0.42rem;
+  mask-size: 100% 100%, calc(100% / var(--perfs)) 0.42rem;
+  -webkit-mask-repeat: no-repeat, repeat-x;
+  mask-repeat: no-repeat, repeat-x;
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+
+.contact-sheet:not(.no-perfs) .rebate-top {
+  -webkit-mask-position: 0 0, 0 0.18rem;
+  mask-position: 0 0, 0 0.18rem;
+}
+
+.contact-sheet:not(.no-perfs) .rebate-bottom {
+  -webkit-mask-position: 0 0, 0 calc(100% - 0.18rem);
+  mask-position: 0 0, 0 calc(100% - 0.18rem);
+}
+
+/* Roll film (120) has no perforations, just a wider plain edge. */
+.contact-sheet.no-perfs .rebate {
+  height: 1.4rem;
+}
+
+.edge-text,
+.frame-number {
+  position: absolute;
+  font-size: 0.5rem;
+}
+
+.rebate-top .edge-text {
+  left: 10%;
+  bottom: 0.12rem;
+}
+
+.rebate-bottom .frame-number {
+  top: 0.12rem;
+  left: 8%;
+}
+
+.rebate-bottom .frame-number-a {
+  left: auto;
+  right: 8%;
+}
+
+.contact-sheet.no-perfs .rebate-top .edge-text,
+.contact-sheet.no-perfs .rebate-bottom .frame-number {
+  top: 50%;
+  bottom: auto;
+  transform: translateY(-50%);
+}
+
+.exposure {
+  position: relative;
+  aspect-ratio: var(--frame-aspect);
+  min-height: 0;
+  background: var(--film-base);
+}
+
+/* The image sits inside the frame with a thin gap of film on either side, and
+   portrait shots are pillarboxed like a vertical frame on a horizontal roll. */
+.exposure > a,
+.exposure > img,
+.exposure > .no-scan {
+  position: absolute;
+  inset: 0 3%;
+}
+
+.exposure a,
+.exposure img {
+  display: block;
+}
+
+.exposure a img {
+  width: 100%;
+  height: 100%;
+}
+
+.exposure > img {
+  width: 94%;
+  height: 100%;
+}
+
+.exposure img {
+  object-fit: contain;
+}
+
+.no-scan {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--film-edge);
+  font-family: var(--monospace-font);
+  font-size: 0.6rem;
+}
+
+/* Grease pencil marks */
+.mark,
+.legend-mark {
+  fill: none;
+  stroke: var(--grease-pencil);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  pointer-events: none;
+}
+
+.mark {
+  position: absolute;
+  inset: -6% -5%;
+  width: 110%;
+  height: 112%;
+  stroke-width: 3px;
+  opacity: 0.88;
+  overflow: visible;
+}
+
+.mark-cross {
+  inset: 2% 4%;
+  width: 92%;
+  height: 96%;
+}
+
+@media (max-width: 700px) {
+  .mark { stroke-width: 2px; }
+}
+
+.contact-sheet-legend {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.4rem 0.6rem;
+  align-items: center;
+  font-size: 0.9rem;
+}
+
+.contact-sheet-legend dt,
+.contact-sheet-legend dd {
+  margin: 0;
+}
+
+.legend-mark {
+  display: block;
+  width: 1.6rem;
+  height: 1.1rem;
+  stroke-width: 2px;
+  overflow: visible;
+}

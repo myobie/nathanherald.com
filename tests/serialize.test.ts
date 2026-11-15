@@ -18,7 +18,7 @@ test('nh-head: head has title, meta, links', async ({ page }) => {
   const ogTitle = await page.$eval('meta[property="og:title"]', el => el.getAttribute('content'))
   expect(ogTitle).toBe('Florentine Floor')
 
-  const faviconSvg = await page.$('link[href="/favicon.svg"]')
+  const faviconSvg = await page.$('link[href="https://nathanherald.com/favicon.svg"]')
   expect(faviconSvg).toBeTruthy()
 
   const rss = await page.$('link[href="/rss.xml"]')

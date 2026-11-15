@@ -18,3 +18,7 @@ bakeoff/
 .claude-session-id
 .pi-session-id
 .pi-session-path
+
+# sample roll from bin/gen-sample-roll
+src/photos/rolls/sample/
+public/photos/rolls/sample/

@@ -12,6 +12,7 @@ import { NhMarkdownElement } from './elements/nh-markdown.ts'
 import { NhIncludeElement } from './elements/nh-include.ts'
 import { NhArchiveListElement } from './elements/nh-archive-list.ts'
 import { NhLatestPostsElement } from './elements/nh-latest-posts.ts'
+import { NhContactSheetElement } from './elements/nh-contact-sheet.ts'
 
 const srcDir = new URL('.', import.meta.url).pathname
 const projectRoot = join(srcDir, '..')
@@ -58,6 +59,9 @@ function registerElements(linkie: ReturnType<typeof parseHTML>) {
 
   const KNhLatestPosts = class extends NhLatestPostsElement {}
   linkie.customElements.define(NhLatestPostsElement.defaultName, KNhLatestPosts)
+
+  const KNhContactSheet = class extends NhContactSheetElement {}
+  linkie.customElements.define(NhContactSheetElement.defaultName, KNhContactSheet)
 }
 
 let count = 0
@@ -66,7 +70,7 @@ let count = 0
 // (posts.json generation needs .md files in public/)
 for await (const entry of walk(srcDir, { skip: [/\/elements\//] })) {
   if (entry.isDirectory) continue
-  if (entry.name === 'index.html' || entry.name === 'post.html' || entry.path.endsWith('.ts')) continue
+  if (entry.name === 'index.html' || entry.name === 'post.html' || entry.name === 'roll.html' || entry.path.endsWith('.ts')) continue
 
   const relPath = relative(srcDir, entry.path)
   const outPath = join(publicDir, relPath)
@@ -146,6 +150,40 @@ for await (const entry of walk(join(srcDir, 'posts'), { exts: ['.md'] })) {
   await tidy(outPath)
 
   count++
+}
+
+// Build film rolls (contact sheets) using the roll template
+const rollTemplatePath = join(srcDir, 'roll.html')
+const rollTemplateCode = await Deno.readTextFile(rollTemplatePath)
+const rollsDir = join(srcDir, 'photos', 'rolls')
+
+try {
+  for await (const entry of walk(rollsDir, { match: [/\/roll\.json$/] })) {
+    const relPath = relative(srcDir, entry.path)
+    const outDir = dirname(join(publicDir, relPath))
+    const outPath = join(outDir, 'index.html')
+
+    console.log(`Building: ${relPath}`)
+
+    // The page is served from the roll folder, so resolve the template there
+    // and image paths in roll.json stay relative to the page.
+    const pageUrl = new URL(`file://${dirname(entry.path)}/index.html`)
+    pageUrl.searchParams.set('roll', new URL(`file://${entry.path}`).href)
+
+    const linkie = parseHTML(rollTemplateCode)
+    linkie.location = pageUrl
+
+    registerElements(linkie)
+
+    const result = await serializeAsync(linkie.document.documentElement)
+    await ensureDir(outDir)
+    await Deno.writeTextFile(outPath, `<!DOCTYPE html>\n${result}`)
+    await tidy(outPath)
+
+    count++
+  }
+} catch (e) {
+  if (!(e instanceof Deno.errors.NotFound)) throw e
 }
 
 // Compile element .ts files to .js in public/elements/

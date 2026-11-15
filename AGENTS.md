@@ -60,6 +60,7 @@ Server-side custom elements live in `src/elements/`. They expand during the link
 - **`nh-footer`** - Site footer with inline SVG logo.
 - **`nh-include`** - Fetches an HTML file and includes its content. Resolves relative URLs against the nearest `nh-markdown` source. Used for embedding interactive demos (canvas, etc.) in markdown posts.
 - **`nh-archive-list`** - Fetches `posts.json` and renders the grouped-by-month archive list. Used by the archive page (`src/posts/index.html`).
+- **`nh-contact-sheet`** - Renders a roll of film from a `roll.json` as a contact sheet: cut strips with sprocket holes, edge printing, frame numbers, and grease pencil marks (circle for 5 stars, X for 1 to 2 stars). Supports `src` or `param`, and `page` (sets title and description, adds `/contact-sheet.css`). `thumb`/`image` may be paths relative to roll.json or absolute URLs (for a CDN), and may be null.
 - **`nh-ready`** - Test/canary element. Sets `data-ready` attribute on server, detects it in browser.
 
 Each element exposes `static define(registry)` and is registered by the caller (the build creates per-document subclasses for linkedom, the browser uses inline scripts with `customElements`).
@@ -213,6 +214,8 @@ bin/lr-roll --album "Tegernsee Film" --from P9250830 --to P9250867 \
 ```
 
 - Recent film is camera scanned with an Olympus E-M5 II, so `captureDate` is the scan time, not the shot date, and the camera field is the scanner. Film stock and camera are given by hand.
+- The build turns every `src/photos/rolls/**/roll.json` into an `index.html` beside it, using `src/roll.html` and `<nh-contact-sheet>`. Styles live in `public/contact-sheet.css`.
+- `bin/gen-sample-roll [frames] [format]` writes a fake roll to `src/photos/rolls/sample/` (gitignored) for checking the layout. Unit tests for the element: `deno task test:unit`.
 - `--suggest` guesses are rough. Confirm roll boundaries with Nathan (that's a photo question, not a code one).
 - Album names repeat. If a name matches several albums the script lists them and you pass `--album-id`.
 
