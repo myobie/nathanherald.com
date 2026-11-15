@@ -200,6 +200,22 @@ oxipng -o 4 input.png
 
 Tools: `brew install pngquant oxipng` (ImageMagick already installed via `brew install imagemagick`)
 
+## Film Rolls from Lightroom
+
+Nathan writes posts and takes photos; agents own the code in this repo and don't need his code review.
+
+`bin/lr-roll` (runs on Silber, where the Lightroom cloud library lives) turns a roll of film into `src/photos/rolls/<slug>/roll.json` plus web JPEGs (`NN.jpg` at `--max`, default 1280px, and `NN.thumb.jpg` at 640px). It is read only: it copies the library's index and `previews.db` to a temp dir, deletes them on exit, and never touches originals or RAWs. Images come from Lightroom's already edited previews, or from a folder of JPEGs exported from Lightroom (`--export-dir`).
+
+```bash
+bin/lr-roll --suggest --album "Tegernsee Film"     # propose roll splits, writes nothing
+bin/lr-roll --album "Tegernsee Film" --from P9250830 --to P9250867 \
+  --title Tegernsee --film "Ilford HP5+" --camera "Leica M7" --shot 2026-09 --dry-run
+```
+
+- Recent film is camera scanned with an Olympus E-M5 II, so `captureDate` is the scan time, not the shot date, and the camera field is the scanner. Film stock and camera are given by hand.
+- `--suggest` guesses are rough. Confirm roll boundaries with Nathan (that's a photo question, not a code one).
+- Album names repeat. If a name matches several albums the script lists them and you pass `--album-id`.
+
 ## YouTube Embeds
 
 Use the nocookie domain with plain HTML:

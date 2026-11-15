@@ -1,0 +1,278 @@
+#!/usr/bin/env bash
+#
+# lr-roll: turn a roll of film in the local Lightroom (cloud) library into
+# src/photos/rolls/<slug>/roll.json plus web JPEGs.
+#
+# Read only. It copies the library's index (Managed Catalog.wfindex) and
+# previews.db into a temp dir, queries the copies, and deletes them on exit.
+# It never opens originals or RAWs. Images come from Lightroom's own
+# (already edited) previews, or from a folder of JPEGs you exported.
+#
+# Usage:
+#   bin/lr-roll --suggest --album "Tegernsee Film"
+#   bin/lr-roll --album "Tegernsee Film" --from P9250830 --to P9250867 \
+#       --title Tegernsee --film "Ilford HP5+" --camera "Leica M7" \
+#       --format 35mm --shot 2026-09 [--slug 2026-09-tegernsee-1] \
+#       [--export-dir ~/Desktop/tegernsee-export] [--include-rejected] \
+#       [--dry-run] [--force] [--out DIR (default src/photos/rolls)] \
+#       [--max 1280 (long side of the main image; thumbs are 640)]
+#
+# Album names repeat ("Film", "Digital", "Ilford HP5+"). If a name matches
+# more than one album, the matches are listed and you pass --album-id.
+#
+# Requires: sqlite3, jq, magick (ImageMagick).
+
+set -euo pipefail
+
+REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+LIB="${LR_LIBRARY:-$HOME/Pictures/Lightroom Library.lrlibrary}"
+
+die() { echo "lr-roll: $*" >&2; exit 1; }
+
+usage() { sed -n '3,24p' "$0" | sed 's/^# \{0,1\}//'; exit "${1:-0}"; }
+
+SUGGEST=false DRY_RUN=false FORCE=false INCLUDE_REJECTED=false
+ALBUM="" ALBUM_ID="" FROM="" TO="" SLUG="" TITLE="" FILM="" CAMERA=""
+FORMAT="35mm" SHOT="" NOTES="" EXPORT_DIR="" GAP=90 MAX=1280
+OUT_ROOT="$REPO_ROOT/src/photos/rolls"
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --suggest) SUGGEST=true ;;
+    --album) ALBUM="$2"; shift ;;
+    --album-id) ALBUM_ID="$2"; shift ;;
+    --from) FROM="$2"; shift ;;
+    --to) TO="$2"; shift ;;
+    --slug) SLUG="$2"; shift ;;
+    --title) TITLE="$2"; shift ;;
+    --film) FILM="$2"; shift ;;
+    --camera) CAMERA="$2"; shift ;;
+    --format) FORMAT="$2"; shift ;;
+    --shot) SHOT="$2"; shift ;;
+    --notes) NOTES="$2"; shift ;;
+    --export-dir) EXPORT_DIR="$2"; shift ;;
+    --gap) GAP="$2"; shift ;;
+    --out) OUT_ROOT="$2"; shift ;;
+    --max) MAX="$2"; shift ;;
+    --include-rejected) INCLUDE_REJECTED=true ;;
+    --dry-run) DRY_RUN=true ;;
+    --force) FORCE=true ;;
+    -h|--help) usage 0 ;;
+    *) echo "lr-roll: unknown option $1" >&2; usage 1 ;;
+  esac
+  shift
+done
+
+for t in sqlite3 jq magick; do command -v "$t" >/dev/null || die "missing $t"; done
+[ -n "$ALBUM" ] || [ -n "$ALBUM_ID" ] || die "need --album or --album-id"
+[ -z "$EXPORT_DIR" ] || [ -d "$EXPORT_DIR" ] || die "no such export dir: $EXPORT_DIR"
+[[ "$MAX" =~ ^[0-9]+$ ]] && [ "$MAX" -ge 640 ] || die "--max must be a number >= 640"
+
+# --- Find the active catalog (the one with the newest index) -----------------
+
+CAT=""
+for d in "$LIB"/*/; do
+  f="$d/Managed Catalog.wfindex"
+  [ -f "$f" ] || continue
+  if [ -z "$CAT" ] || [ "$f" -nt "$CAT/Managed Catalog.wfindex" ]; then CAT="${d%/}"; fi
+done
+[ -n "$CAT" ] || die "no catalog found in $LIB"
+
+# --- Temp copies, always removed ---------------------------------------------
+
+TMP="$(mktemp -d "${TMPDIR:-/tmp}/lr-roll.XXXXXX")"
+trap 'rm -rf "$TMP"' EXIT
+
+copy_db() { # src dest: copy a SQLite file with its WAL/SHM so the copy is current
+  local x
+  for x in "" -wal -shm; do
+    if [ -f "$1$x" ]; then cp "$1$x" "$2$x"; fi
+  done
+}
+copy_db "$CAT/Managed Catalog.wfindex" "$TMP/index.db"
+copy_db "$CAT/previews.db" "$TMP/previews.db"
+
+q() { sqlite3 -readonly "$TMP/index.db" "$@"; }
+sql_str() { printf "'%s'" "${1//\'/\'\'}"; }
+
+# --- Resolve the album ---------------------------------------------------------
+
+if [ -z "$ALBUM_ID" ]; then
+  matches="$(q -separator $'\t' "
+    select al.albumId, al.createdTimestamp, count(aa.assetId)
+    from albums al left join album_asset_v2 aa on aa.albumId = al.albumId
+    where al.name = $(sql_str "$ALBUM") and coalesce(al.subtype,'') <> 'collection_set'
+    group by al.albumId order by al.createdTimestamp;")"
+  n="$(printf '%s' "$matches" | grep -c . || true)"
+  [ "$n" -gt 0 ] || die "no album named \"$ALBUM\""
+  if [ "$n" -gt 1 ]; then
+    echo "lr-roll: \"$ALBUM\" matches $n albums, pass one with --album-id:" >&2
+    printf '%s\n' "$matches" | awk -F'\t' '{printf "  %s  created %s  %s frames\n", $1, substr($2,1,10), $3}' >&2
+    exit 1
+  fi
+  ALBUM_ID="$(printf '%s' "$matches" | cut -f1)"
+fi
+[ -n "$ALBUM" ] || ALBUM="$(q "select name from albums where albumId = $(sql_str "$ALBUM_ID");")"
+[ -n "$ALBUM" ] || die "no album with id $ALBUM_ID"
+
+# Frames of the album, in filename order (the order they were scanned / shot).
+# base = filename without extension, used for --from/--to.
+frames_sql() {
+  local where="aa.albumId = $(sql_str "$ALBUM_ID")"
+  local base="upper(rtrim(a.filename, replace(a.filename, '.', '')))"
+  base="rtrim($base, '.')"
+  [ -z "$FROM" ] || where="$where and $base >= upper($(sql_str "$FROM"))"
+  [ -z "$TO" ] || where="$where and $base <= upper($(sql_str "$TO"))"
+  $INCLUDE_REJECTED || where="$where and coalesce(a.flag, 0) <> -1"
+  cat <<SQL
+    attach '$TMP/previews.db' as p;
+    select a.docId, a.assetId, a.filename, a.captureDate,
+           coalesce(a.rating, 0) as rating, coalesce(a.flag, 0) as flag,
+           a.width, a.height, a.orientation,
+           (select max(longSide) from p.RenditionPath r where r.localAssetId = a.docId) as previewLongSide,
+           cast(strftime('%s', a.captureDate) as integer) as epoch
+    from album_asset_v2 aa join assets a on a.assetId = aa.assetId
+    where $where
+    order by a.filenameLC;
+SQL
+}
+
+# --- Suggest mode: print likely roll boundaries, write nothing -----------------
+
+if $SUGGEST; then
+  rows="$(q -separator $'\t' "$(frames_sql)" | cut -f3,11)"
+  total="$(printf '%s\n' "$rows" | grep -c . || true)"
+  [ "$total" -gt 0 ] || die "no frames in \"$ALBUM\""
+  echo "$ALBUM: $total frames"
+  echo
+  # Split at time gaps > GAP seconds, then split long segments into
+  # roughly equal rolls of ~36-38 frames.
+  printf '%s\n' "$rows" | awk -F'\t' -v gap="$GAP" '
+    { name[NR] = $1; t[NR] = $2 + 0; sub(/\.[^.]*$/, "", name[NR]) }
+    END {
+      s = 1; nseg = 0
+      for (i = 2; i <= NR + 1; i++) {
+        if (i > NR || t[i] - t[i-1] > gap) {
+          nseg++; segS[nseg] = s; segE[nseg] = i - 1
+          if (i <= NR) gaps = gaps sprintf("  gap of %ds before #%d %s\n", t[i] - t[i-1], i, name[i])
+          s = i
+        }
+      }
+      print "Time gaps over " gap "s:"; printf "%s", (gaps ? gaps : "  none\n"); print ""
+      print "Suggested rolls:"
+      r = 0
+      for (k = 1; k <= nseg; k++) {
+        len = segE[k] - segS[k] + 1
+        rolls = int(len / 37 + 0.5); if (rolls < 1) rolls = 1
+        size = len / rolls
+        for (j = 0; j < rolls; j++) {
+          a = segS[k] + int(j * size + 0.5); b = segS[k] + int((j + 1) * size + 0.5) - 1
+          r++
+          printf "  roll %d: --from %s --to %s  (%d frames, #%d-#%d)\n", r, name[a], name[b], b - a + 1, a, b
+        }
+      }
+    }'
+  echo
+  echo "Check these against the scans (blank frames, rebates) before using them."
+  exit 0
+fi
+
+# --- Build the roll --------------------------------------------------------------
+
+FRAMES_JSON="$(q -json "$(frames_sql)")"
+[ -n "$FRAMES_JSON" ] || FRAMES_JSON="[]"
+COUNT="$(jq length <<<"$FRAMES_JSON")"
+[ "$COUNT" -gt 0 ] || die "no frames matched"
+
+[ -n "$TITLE" ] || TITLE="$ALBUM"
+SCANNED="$(jq -r '.[0].captureDate[0:10]' <<<"$FRAMES_JSON")"
+if [ -z "$SLUG" ]; then
+  SLUG="${SCANNED:0:7}-$(printf '%s' "$TITLE" | iconv -f utf-8 -t ascii//TRANSLIT 2>/dev/null \
+    | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9]+/-/g; s/^-+|-+$//g')"
+fi
+[[ "$SLUG" =~ ^[a-z0-9][a-z0-9-]*$ ]] || die "bad slug: $SLUG"
+
+OUT="$OUT_ROOT/$SLUG"
+PAD=${#COUNT}; [ "$PAD" -ge 2 ] || PAD=2
+
+echo "📷 $ALBUM → $SLUG ($COUNT frames)"
+
+if $DRY_RUN; then
+  jq -r '.[] | "  \(.filename)  \(.captureDate)  ★\(.rating)  flag \(.flag)  preview \(.previewLongSide // "none")"' <<<"$FRAMES_JSON"
+  echo "(dry run, nothing written to $OUT)"
+  exit 0
+fi
+
+if [ -e "$OUT" ]; then
+  $FORCE || die "$OUT exists (use --force to replace its roll.json and images)"
+  find "$OUT" -maxdepth 1 -type f \( -name 'roll.json' -o -name '[0-9]*.jpg' \) -delete
+fi
+mkdir -p "$OUT"
+
+preview_path() { # docId longSide -> path of that rendition, or the largest if longSide is empty
+  local order="longSide desc"
+  if [ -n "$2" ]; then order="(longSide = $2) desc, longSide desc"; fi
+  sqlite3 -readonly "$TMP/previews.db" \
+    "select path from RenditionPath where localAssetId = $1 order by $order limit 1;"
+}
+
+web_jpeg() { # src dest longSide: baseline sRGB JPEG, metadata stripped, never upscaled
+  magick "$1" -auto-orient -colorspace sRGB -resize "${3}x${3}>" \
+    -strip -interlace none -quality 80 "$2"
+}
+
+long_side() { magick identify -format '%[fx:max(w,h)]' "$1"; }
+
+FRAME_OBJS="$TMP/frames.jsonl"
+: > "$FRAME_OBJS"
+i=0
+while IFS= read -r row; do
+  i=$((i + 1))
+  num="$(printf "%0${PAD}d" "$i")"
+  docId="$(jq -r .docId <<<"$row")"
+  filename="$(jq -r .filename <<<"$row")"
+  base="${filename%.*}"
+
+  src=""
+  if [ -n "$EXPORT_DIR" ]; then
+    src="$(find "$EXPORT_DIR" -maxdepth 1 -type f -iname "$base.jp*g" | head -1)"
+    [ -n "$src" ] || echo "  ⚠️  $filename not in export dir, using preview" >&2
+  fi
+  [ -n "$src" ] || src="$(preview_path "$docId" "")"
+  if [ -z "$src" ] || [ ! -f "$src" ]; then
+    echo "  ⚠️  $filename has no preview, skipping image (open the album in Lightroom to render one)" >&2
+    image=null thumb=null longest=null
+  else
+    web_jpeg "$src" "$OUT/$num.jpg" "$MAX"
+    thumb_src="$(preview_path "$docId" 640)"
+    [ -f "$thumb_src" ] || thumb_src="$src"
+    web_jpeg "$thumb_src" "$OUT/$num.thumb.jpg" 640
+    image="\"$num.jpg\"" thumb="\"$num.thumb.jpg\"" longest="$(long_side "$OUT/$num.jpg")"
+  fi
+
+  # Lightroom's width/height are already post-crop and oriented (portrait
+  # frames come out taller than wide), so they are used as is.
+  jq -c --argjson n "$i" --argjson image "$image" --argjson thumb "$thumb" \
+    --argjson longest "$longest" '{
+      n: $n, assetId, filename, rating, flag, width, height,
+      thumb: $thumb, image: $image, imageLongSide: $longest
+    }' <<<"$row" >> "$FRAME_OBJS"
+  printf '  %s %s\n' "$num" "$filename"
+done < <(jq -c '.[]' <<<"$FRAMES_JSON")
+
+nullable() { if [ -n "$1" ]; then jq -Rn --arg v "$1" '$v'; else echo null; fi; }
+
+jq -s \
+  --arg slug "$SLUG" --arg title "$TITLE" --arg format "$FORMAT" \
+  --arg scanned "$SCANNED" --arg album "$ALBUM" \
+  --argjson film "$(nullable "$FILM")" --argjson camera "$(nullable "$CAMERA")" \
+  --argjson shot "$(nullable "$SHOT")" --argjson notes "$(nullable "$NOTES")" \
+  --argjson from "$(nullable "$FROM")" --argjson to "$(nullable "$TO")" \
+  '{
+    slug: $slug, title: $title, film: $film, format: $format, camera: $camera,
+    shot: $shot, scanned: $scanned, notes: $notes,
+    source: { album: $album, from: $from, to: $to },
+    frames: .
+  }' "$FRAME_OBJS" > "$OUT/roll.json"
+
+echo "✅ Wrote $OUT/roll.json and $(find "$OUT" -name '*.jpg' | wc -l | tr -d ' ') images ($(du -sh "$OUT" | cut -f1))"
