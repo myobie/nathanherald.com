@@ -51,7 +51,7 @@ SUGGEST=false DRY_RUN=false FORCE=false INCLUDE_REJECTED=false
 ALBUM="" ALBUM_ID="" FROM="" TO="" SLUG="" TITLE="" FILM="" CAMERA=""
 FORMAT="35mm" SHOT="" NOTES="" EXPORT_DIR="" GAP=90 MAX=1280
 OUT_ROOT="$REPO_ROOT/src/photos/rolls"
-LOCAL=false FORMAT_SET=false CHECK=""
+LOCAL=false FORMAT_SET=false CHECK="" FOLDER=""
 BUCKET="${LR_BUCKET:-nathanherald-photos}"
 BASE_URL="${LR_BASE_URL:-https://photos.nathanherald.com}"
 
@@ -75,6 +75,7 @@ while [ $# -gt 0 ]; do
     --max) MAX="$2"; shift ;;
     --local) LOCAL=true ;;
     --check) CHECK="$2"; shift ;;
+    --folder) FOLDER="$2"; shift ;;
     --include-rejected) INCLUDE_REJECTED=true ;;
     --dry-run) DRY_RUN=true ;;
     --force) FORCE=true ;;
@@ -87,7 +88,8 @@ done
 for t in sqlite3 jq magick; do command -v "$t" >/dev/null || die "missing $t"; done
 $LOCAL || $SUGGEST || command -v npx >/dev/null || die "missing npx (needed to upload with wrangler, or pass --local)"
 BASE_URL="${BASE_URL%/}"
-[ -n "$CHECK" ] || [ -n "$ALBUM" ] || [ -n "$ALBUM_ID" ] || die "need --album, --album-id or --check"
+[ -n "$CHECK" ] || [ -n "$ALBUM" ] || [ -n "$ALBUM_ID" ] || { $SUGGEST && [ -n "$FOLDER" ]; } \
+  || die "need --album, --album-id, --check, or --suggest --folder"
 [ -z "$EXPORT_DIR" ] || [ -d "$EXPORT_DIR" ] || die "no such export dir: $EXPORT_DIR"
 [[ "$MAX" =~ ^[0-9]+$ ]] && [ "$MAX" -ge 640 ] || die "--max must be a number >= 640"
 
@@ -170,19 +172,72 @@ if [ -n "$CHECK" ]; then
   exit 0
 fi
 
-# --- Resolve the album ---------------------------------------------------------
+# --- Resolve the folder and album ------------------------------------------------
+# Albums can sit in Lightroom folders (collection_set). Folders are never
+# albums, so a folder and an old album may share a name. --folder limits the
+# album lookup to the albums directly in that folder.
+
+FOLDER_ID=""
+if [ -n "$FOLDER" ]; then
+  fmatches="$(q -separator $'\t' "
+    select f.albumId, f.createdTimestamp, (select count(*) from albums c where c.parentId = f.albumId)
+    from albums f where f.name = $(sql_str "$FOLDER") and f.subtype = 'collection_set'
+    order by f.createdTimestamp;")"
+  n="$(printf '%s' "$fmatches" | grep -c . || true)"
+  [ "$n" -gt 0 ] || die "no Lightroom folder named \"$FOLDER\" (has it synced? open Lightroom, then quit it)"
+  [ "$n" -eq 1 ] || die "\"$FOLDER\" matches $n folders; rename one in Lightroom"
+  FOLDER_ID="$(cut -f1 <<<"$fmatches")"
+fi
+folder_where() { if [ -n "$FOLDER_ID" ]; then echo "and al.parentId = $(sql_str "$FOLDER_ID")"; fi; }
+
+# --- Folder audit: are the albums in a folder sorted into whole lab rolls? ------
+
+if $SUGGEST && [ -n "$FOLDER" ] && [ -z "$ALBUM" ] && [ -z "$ALBUM_ID" ]; then
+  rows="$(q -separator $'\t' "
+    select al.name, a.filename, coalesce(a.rating, 0)
+    from albums al join album_asset_v2 aa on aa.albumId = al.albumId join assets a on a.assetId = aa.assetId
+    where coalesce(al.subtype, '') <> 'collection_set' $(folder_where)
+    order by al.name, a.filenameLC;")"
+  [ -n "$rows" ] || die "no albums with photos in folder \"$FOLDER\""
+  awk -F'\t' -v folder="$FOLDER" '
+    { b = $2; sub(/\.[^.]*$/, "", b)
+      p = (b ~ /^[0-9][0-9-]{3,}[0-9]{4}$/) ? substr(b, 1, length(b) - 4) : "(not lab-named)"
+      if (!($1 in seen)) { seen[$1] = 1; albums[++na] = $1 }
+      cnt[$1]++; if ($3 < 1) un[$1]++
+      if (!(($1, p) in ap)) { ap[$1, p] = 1; np[$1]++; plist[$1] = plist[$1] (plist[$1] ? ", " : "") p }
+      ac[$1, p]++
+      if (!((p, $1) in pa)) { pa[p, $1] = 1; na_p[p]++; alist[p] = alist[p] (alist[p] ? ", " : "") "\"" $1 "\"" }
+      if (!(p in ps)) { ps[p] = 1; prefixes[++npx] = p } }
+    END {
+      printf "Folder \"%s\": %d albums\n", folder, na
+      for (i = 1; i <= na; i++) {
+        a = albums[i]
+        printf "  %s %s: %d frames, lab roll %s%s\n", (np[a] > 1 ? "⚠️ " : "✅"), a, cnt[a], plist[a], (un[a] ? sprintf(", ⛔ %d unrated", un[a]) : "")
+      }
+      bad = 0
+      for (i = 1; i <= npx; i++) if (na_p[prefixes[i]] > 1 && prefixes[i] != "(not lab-named)") {
+        if (!bad++) print "Lab rolls split across albums:"
+        printf "  ⚠️  %s is in %s\n", prefixes[i], alist[prefixes[i]]
+      }
+      for (i = 1; i <= na; i++) if (np[albums[i]] > 1) bad++
+      if (bad) print "Mixed albums usually mean a frame was sorted into the wrong roll."
+      else print "Every album is exactly one lab roll."
+    }' <<<"$rows"
+  exit 0
+fi
 
 if [ -z "$ALBUM_ID" ]; then
   matches="$(q -separator $'\t' "
-    select al.albumId, al.createdTimestamp, count(aa.assetId)
+    select al.albumId, al.createdTimestamp, count(aa.assetId),
+           coalesce((select f.name from albums f where f.albumId = al.parentId), '(no folder)')
     from albums al left join album_asset_v2 aa on aa.albumId = al.albumId
-    where al.name = $(sql_str "$ALBUM") and coalesce(al.subtype,'') <> 'collection_set'
+    where al.name = $(sql_str "$ALBUM") and coalesce(al.subtype,'') <> 'collection_set' $(folder_where)
     group by al.albumId order by al.createdTimestamp;")"
   n="$(printf '%s' "$matches" | grep -c . || true)"
-  [ "$n" -gt 0 ] || die "no album named \"$ALBUM\""
+  [ "$n" -gt 0 ] || die "no album named \"$ALBUM\"${FOLDER:+ in folder \"$FOLDER\"}"
   if [ "$n" -gt 1 ]; then
-    echo "lr-roll: \"$ALBUM\" matches $n albums, pass one with --album-id:" >&2
-    printf '%s\n' "$matches" | awk -F'\t' '{printf "  %s  created %s  %s frames\n", $1, substr($2,1,10), $3}' >&2
+    echo "lr-roll: \"$ALBUM\" matches $n albums; pass --folder or --album-id:" >&2
+    printf '%s\n' "$matches" | awk -F'\t' '{printf "  %s  in %s  created %s  %s frames\n", $1, $4, substr($2,1,10), $3}' >&2
     exit 1
   fi
   ALBUM_ID="$(printf '%s' "$matches" | cut -f1)"
@@ -223,6 +278,32 @@ if $SUGGEST; then
   echo "$ALBUM: $total frames"
   unrated="$(awk -F'\t' '$5 < 1' <<<"$all" | grep -c . || true)"
   [ "$unrated" -eq 0 ] || echo "⛔ NOT READY: $unrated of $total frames unrated"
+
+  # Lab scans are often named <order/roll number><4 digit frame>.tif (e.g.
+  # 000464210001.tif). When most of the album looks like that, each number
+  # prefix is one roll, which beats guessing from scan times.
+  lab="$(awk -F'\t' '{ b = $3; sub(/\.[^.]*$/, "", b) } b ~ /^[0-9][0-9-]{3,}[0-9]{4}$/ { n++ } END { print (NR > 0 && n / NR >= 0.8) ? 1 : 0 }' <<<"$all")"
+  if [ "$lab" = 1 ]; then
+    echo
+    echo "Lab-style filenames, one roll per number prefix:"
+    awk -F'\t' -v album="$ALBUM" '
+      { b = $3; sub(/\.[^.]*$/, "", b)
+        if (b !~ /^[0-9][0-9-]{3,}[0-9]{4}$/) { other++; next }
+        p = substr(b, 1, length(b) - 4)
+        if (!(p in n)) { order[++k] = p; lo[p] = b; hi[p] = b }
+        n[p]++; if ($5 < 1) u[p]++
+        if (b < lo[p]) lo[p] = b; if (b > hi[p]) hi[p] = b }
+      END {
+        for (i = 1; i <= k; i++) {
+          p = order[i]
+          printf "  %s: %d frames%s\n    bin/lr-roll --album \"%s\" --from %s --to %s\n", p, n[p], (u[p] ? sprintf(", ⛔ %d unrated", u[p]) : ""), album, lo[p], hi[p]
+        }
+        if (other) printf "  (%d frames with other names are not in any of these)\n", other
+      }' <<<"$all"
+    echo
+    echo "Add --title, --film, --camera and --shot for each roll."
+    exit 0
+  fi
   echo
   # Split at time gaps > GAP seconds, then split long segments into
   # roughly equal rolls of ~36-38 frames.
@@ -262,6 +343,11 @@ FRAMES_JSON="$(q -json "$(frames_sql)")"
 [ -n "$FRAMES_JSON" ] || FRAMES_JSON="[]"
 COUNT="$(jq length <<<"$FRAMES_JSON")"
 [ "$COUNT" -gt 0 ] || die "no frames matched"
+
+# A roll album holding lab scans from more than one lab roll usually means a
+# frame was sorted into the wrong album. Warn, since it's a photo question.
+lab_rolls="$(jq -r '[.[] | .filename | sub("\\.[^.]*$"; "") | select(test("^[0-9][0-9-]{3,}[0-9]{4}$")) | .[0:-4]] | unique | join(", ")' <<<"$FRAMES_JSON")"
+case "$lab_rolls" in *,*) echo "⚠️  these frames come from more than one lab roll ($lab_rolls); check the album's sorting" >&2 ;; esac
 
 # Nathan rates every frame when he's done going through a roll, so an
 # unrated (0 star) frame means the roll isn't finished. No override.

@@ -226,6 +226,7 @@ bin/lr-roll --album "Tegernsee Film" --from P9250830 --to P9250867 \
 - The build turns every `src/photos/rolls/**/roll.json` into an `index.html` beside it, using `src/roll.html` and `<nh-contact-sheet>`. Styles live in `public/contact-sheet.css`.
 - `bin/gen-sample-roll [frames] [format]` writes a fake roll to `src/photos/rolls/sample/` (gitignored) for checking the layout. Unit tests for the element: `deno task test:unit`.
 - `--suggest` guesses are rough. Confirm roll boundaries with Nathan (that's a photo question, not a code one).
+- **Lab-named scans:** labs name files `<roll number><4 digit frame>.tif` (e.g. `000464210001.tif`, or `40048-004004810012.tif`), so the number prefix identifies the roll. `--suggest --album X` prints one ready `--from/--to` line per prefix instead of guessing from scan times. Nathan sorts rolls into one Lightroom album per roll inside a folder: `--folder "<folder>"` scopes the album lookup (folders and albums may share names; folders are never albums), and `--suggest --folder "<folder>"` audits the folder, flagging an album that mixes lab rolls or a lab roll split across albums. A real export also warns when its frames span several lab rolls.
 - Album names repeat. If a name matches several albums the script lists them and you pass `--album-id`.
 
 ## YouTube Embeds
