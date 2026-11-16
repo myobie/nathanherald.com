@@ -27,8 +27,12 @@
 #   - keyword "Redact": the frame keeps its place on the strip but nothing
 #     about it is published (no image, rating, filename or caption)
 #   - caption lines starting with ">": a comment on that frame (markdown)
+#   - keywords "film: …", "camera: …", "lens: …", "lab: …|home": roll facts
+#     (CLI flags --film/--camera/--lens/--lab win; then keywords; then captions)
 #   - the caption's "Film stock • format • lab" convention: prefills --film,
 #     and --format for "Half frame" / "35mm", when all frames agree
+#   - capture times: the shot month, when they were set in Lightroom (well
+#     before the import, or spread over more than a scan session)
 # With --force, uploads the old roll.json used that the new one doesn't are
 # deleted from the bucket. A notes.md beside roll.json is never touched.
 #
@@ -51,7 +55,7 @@ SUGGEST=false DRY_RUN=false FORCE=false INCLUDE_REJECTED=false
 ALBUM="" ALBUM_ID="" FROM="" TO="" SLUG="" TITLE="" FILM="" CAMERA=""
 FORMAT="35mm" SHOT="" NOTES="" EXPORT_DIR="" GAP=90 MAX=1280
 OUT_ROOT="$REPO_ROOT/src/photos/rolls"
-LOCAL=false FORMAT_SET=false CHECK="" FOLDER=""
+LOCAL=false FORMAT_SET=false CHECK="" FOLDER="" LAB="" LENS=""
 BUCKET="${LR_BUCKET:-nathanherald-photos}"
 BASE_URL="${LR_BASE_URL:-https://photos.nathanherald.com}"
 
@@ -76,6 +80,8 @@ while [ $# -gt 0 ]; do
     --local) LOCAL=true ;;
     --check) CHECK="$2"; shift ;;
     --folder) FOLDER="$2"; shift ;;
+    --lab) LAB="$2"; shift ;;
+    --lens) LENS="$2"; shift ;;
     --include-rejected) INCLUDE_REJECTED=true ;;
     --dry-run) DRY_RUN=true ;;
     --force) FORCE=true ;;
@@ -148,8 +154,20 @@ if [ -n "$CHECK" ]; then
     ids="$(jq -r '[.frames[] | select(.redacted != true and .assetId != null) | "'"'"'" + .assetId + "'"'"'"] | join(",")' "$f")"
     [ -n "$ids" ] || { echo "✅ $slug: no published frames"; continue; }
     now="$(q -json "select a.assetId, coalesce(a.rating, 0) as rating,
-        exists(select 1 from keywords k where k.docId = a.docId and lower(trim(k.keyword)) = 'redact') as redact
+        exists(select 1 from keywords k where k.docId = a.docId and lower(trim(k.keyword)) = 'redact') as redact,
+        (select json_group_array(k.keyword) from keywords k where k.docId = a.docId) as keywords
       from assets a where a.assetId in ($ids);")"
+    # Roll facts set by keywords that no longer match what was published.
+    drift="$(jq -nr --argjson now "${now:-[]}" --slurpfile r "$f" '
+      $r[0] as $roll
+      | [ $now[] | (.keywords // "[]") | fromjson[]
+          | capture("^\\s*(?<k>film|camera|lens|lab)\\s*:\\s*(?<v>.*?)\\s*$"; "i") | select(.v != "")
+          | { k: (.k | ascii_downcase), v } ]
+      | group_by(.k) | map({ k: .[0].k, vals: (map(.v) | unique) })[]
+      # lens may vary per frame, so only a single agreed lens is compared
+      | select(.k != "lens" or (.vals | length) == 1)
+      | select((.vals | length) > 1 or (.vals[0] != $roll[.k]))
+      | "  \(.k): published \($roll[.k] // "nothing" | tojson), Lightroom keywords say \(.vals | join(" / "))"')"
     report="$(jq -r --argjson now "${now:-[]}" '
       ($now | map({(.assetId): .}) | add // {}) as $m
       | .frames[] | select(.redacted != true and .assetId != null)
@@ -158,6 +176,7 @@ if [ -n "$CHECK" ]; then
         elif $c.redact == 1 then "  #\(.n) \(.filename): now marked Redact, but its image is public"
         elif $c.rating < 1 then "  #\(.n) \(.filename): now unrated"
         else empty end' "$f")"
+    report="$report${drift:+${report:+$'\n'}$drift}"
     if [ -n "$report" ]; then
       problems=1
       echo "⚠️  $slug:"; printf '%s\n' "$report"
@@ -261,7 +280,9 @@ frames_sql() {
            a.width, a.height, a.orientation,
            (select max(longSide) from p.RenditionPath r where r.localAssetId = a.docId) as previewLongSide,
            cast(strftime('%s', a.captureDate) as integer) as epoch,
-           exists(select 1 from keywords k where k.docId = a.docId and lower(trim(k.keyword)) = 'redact') as redact
+           exists(select 1 from keywords k where k.docId = a.docId and lower(trim(k.keyword)) = 'redact') as redact,
+           (select json_group_array(k.keyword) from keywords k where k.docId = a.docId) as keywords,
+           (select cast(it.completeTime as integer) from importTime it where it.docId = a.docId) as imported
     from album_asset_v2 aa join assets a on a.assetId = aa.assetId
     where $where
     order by a.filenameLC;
@@ -357,6 +378,71 @@ if [ "$N_UNRATED" -gt 0 ]; then
   echo "⛔ NOT READY: $N_UNRATED of $COUNT frames unrated" >&2
   printf '%s\n' "$UNRATED" >&2
   $DRY_RUN || die "rate every frame (1–5 stars, redacted ones too) in Lightroom before exporting"
+fi
+
+# Roll facts from keywords: Nathan selects a roll's frames and adds
+# "film: <stock>", "camera: <body>", "lens: <lens>", "lab: <lab>|home".
+# FRAMES_JSON gets .kw = { film, camera, lens, lab } per frame.
+FRAMES_JSON="$(jq '
+  map(. + { kw: ((.keywords // "[]") | fromjson | map(capture("^\\s*(?<k>film|camera|lens|lab)\\s*:\\s*(?<v>.*?)\\s*$"; "i"))
+               | map(select(.v != "")) | map({ (.k | ascii_downcase): .v }) | add // {}) })' <<<"$FRAMES_JSON")"
+
+# kw_fact key -> prints the agreed value (empty if none or conflicting) and
+# warns on stderr about frames missing it or disagreeing.
+kw_fact() {
+  local key="$1" res
+  res="$(jq -r --arg k "$key" '
+    . as $f
+    | [ $f[] | .kw[$k] | select(. != null) ] as $vals
+    | ($vals | group_by(.) | map({ v: .[0], n: length }) | sort_by(-.n)) as $groups
+    | if ($vals | length) == 0 then "none"
+      elif ($groups | length) > 1 then "conflict\t" + ($groups | map("\(.v) ×\(.n)") | join(", "))
+      else
+        [ $f | to_entries[] | select(.value.kw[$k] == null) | "#\(.key + 1) \(.value.filename)" ] as $missing
+        | "ok\t" + $groups[0].v + "\t" + ($missing | join(", "))
+      end' <<<"$FRAMES_JSON")"
+  case "$res" in
+    none) ;;
+    conflict*) echo "⚠️  frames disagree on \"$key:\" (${res#conflict	}); leaving it empty, pass --$key to set it" >&2 ;;
+    ok*)
+      IFS=$'\t' read -r _ v missing <<<"$res"
+      [ -z "$missing" ] || echo "⚠️  \"$key: $v\" is missing on $missing (missed in the selection?)" >&2
+      echo "$v" ;;
+  esac
+}
+if [ -z "$FILM" ]; then FILM="$(kw_fact film)"; [ -z "$FILM" ] || echo "🎞  film from keywords: $FILM"; fi
+if [ -z "$CAMERA" ]; then CAMERA="$(kw_fact camera)"; [ -z "$CAMERA" ] || echo "📷 camera from keywords: $CAMERA"; fi
+if [ -z "$LAB" ]; then LAB="$(kw_fact lab)"; [ -z "$LAB" ] || echo "🧪 lab from keywords: $LAB"; fi
+# Lens may vary per frame: the roll gets one only when every frame that has
+# a lens agrees and at least half the frames have one.
+if [ -z "$LENS" ]; then
+  LENS="$(jq -r '[ .[] | .kw.lens | select(. != null) ] as $v
+    | if ($v | length) > 0 and ($v | unique | length) == 1 and ($v | length) * 2 >= length then $v[0] else "" end' <<<"$FRAMES_JSON")"
+  [ -z "$LENS" ] || echo "🔭 lens from keywords: $LENS"
+fi
+
+# Shot date. For scans, captureDate is the scan time, close to the import.
+# If Nathan set the capture time in Lightroom, it ends well before the import
+# or spreads over more than a scan session; then use its newest month.
+if [ -z "$SHOT" ]; then
+  read -r SHOT shot_why < <(jq -r '
+    def epoch: sub("\\.[0-9]+"; "") | sub("(Z|[+-][0-9:]+)$"; "") | strptime("%Y-%m-%dT%H:%M:%S") | mktime;
+    def imp: tostring | strptime("%Y%m%d%H%M%S") | mktime;
+    [ .[] | .captureDate | select(. != null) ] as $c
+    | [ .[] | .imported | select(. != null) ] as $i
+    | if ($c | length) == 0 then "- no_capture_dates"
+      else ($c | map(epoch)) as $e
+        | (($e | max) - ($e | min)) as $span
+        | (if ($i | length) > 0 then (($i | map(imp) | min) - ($e | max)) else 0 end) as $before
+        | if $before > 172800 or $span > 43200
+          then (($c | max)[0:7]) + " capture_times_(" + (if $before > 172800 then "\($before / 86400 | floor)_days_before_import" else "spread_over_\($span / 3600 | floor)h" end) + ")"
+          else "- looks_like_the_scan_session" end
+      end' <<<"$FRAMES_JSON")
+  if [ "$SHOT" = "-" ]; then
+    SHOT=""; echo "🗓  shot date unknown (${shot_why//_/ }): pass --shot YYYY-MM or set the capture time in Lightroom" >&2
+  else
+    echo "🗓  shot $SHOT from ${shot_why//_/ }"
+  fi
 fi
 
 # Lightroom captions (xmp.dc.description) from the catalog, keyed by assetId.
@@ -511,7 +597,8 @@ while IFS= read -r row; do
     else
       { n: $n, assetId, filename, rating, flag, width, height,
         thumb: $thumb, image: $image, imageLongSide: $longest,
-        caption: (if $caption == "" then null else $caption end) }
+        caption: (if $caption == "" then null else $caption end),
+        lens: (.kw.lens // null) }
     end' <<<"$row" >> "$FRAME_OBJS"
   printf '  %s %s%s\n' "$num" "$filename" "$($redacted && echo '  (redacted)')"
 done < <(jq -c '.[]' <<<"$FRAMES_JSON")
@@ -524,9 +611,10 @@ jq -s \
   --argjson film "$(nullable "$FILM")" --argjson camera "$(nullable "$CAMERA")" \
   --argjson shot "$(nullable "$SHOT")" --argjson notes "$(nullable "$NOTES")" \
   --argjson from "$(nullable "$FROM")" --argjson to "$(nullable "$TO")" \
+  --argjson lens "$(nullable "$LENS")" --argjson lab "$(nullable "$LAB")" \
   '{
     slug: $slug, title: $title, film: $film, format: $format, camera: $camera,
-    shot: $shot, scanned: $scanned, notes: $notes,
+    lens: $lens, lab: $lab, shot: $shot, scanned: $scanned, notes: $notes,
     source: { album: $album, from: $from, to: $to },
     frames: .
   }' "$FRAME_OBJS" > "$OUT/roll.json"
