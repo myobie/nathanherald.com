@@ -289,7 +289,7 @@ DESC_JSON="$(sqlite3 -readonly -json "$TMP/catalog.db" "
 # captioned frame agrees and the value wasn't given on the command line.
 roll_fact() { # jq filter over the list of caption segment arrays -> unique value or empty
   jq -r --argjson d "$DESC_JSON" '
-    [ $d[] | split("\n") | map(select(test("^\\s*>") | not)) | join(" ")
+    [ $d[] | .desc | split("\n") | map(select(test("^\\s*>") | not)) | join(" ")
       | select(test("^\\s*$|^OLYMPUS DIGITAL CAMERA$") | not)
       | split("•") | map(gsub("^\\s+|\\s+$"; "")) ]
     | '"$1"' | unique | if length == 1 then .[0] else "" end' <<<"{}"
@@ -319,7 +319,7 @@ echo "📷 $ALBUM → $SLUG ($COUNT frames)"
 if $DRY_RUN; then
   jq -r --argjson d "$DESC_JSON" '.[] | "  \(.filename)  \(.captureDate)  ★\(.rating)  flag \(.flag)  preview \(.previewLongSide // "none")"
     + (if .redact == 1 then "  REDACTED" else "" end)
-    + (($d[.assetId] // "") | split("\n") | map(select(test("^\\s*>"))) | if length > 0 then "  💬 " + (join(" ") | .[0:60]) else "" end)' <<<"$FRAMES_JSON"
+    + (($d[.assetId].text // "") | split("\n") | map(select(test("^\\s*>"))) | if length > 0 then "  💬 " + (join(" ") | .[0:60]) else "" end)' <<<"$FRAMES_JSON"
   echo "(dry run, nothing written to $OUT)"
   exit 0
 fi
@@ -388,7 +388,7 @@ while IFS= read -r row; do
   [ "$(jq -r .redact <<<"$row")" = 1 ] && redacted=true
   # The ">" lines of the caption, without the marker, as markdown.
   caption="$(jq -r --argjson d "$DESC_JSON" --arg id "$assetId" \
-    '($d[$id] // "") | split("\n") | map(select(test("^\\s*>")) | sub("^\\s*>\\s?"; "")) | join("\n")' <<<"{}")"
+    '($d[$id].text // "") | split("\n") | map(select(test("^\\s*>")) | sub("^\\s*>\\s?"; "")) | join("\n")' <<<"{}")"
 
   src=""
   if $redacted; then
