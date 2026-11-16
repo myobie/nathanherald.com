@@ -37,32 +37,39 @@ function polyline(points) {
 export function circleStrokes(r, aspect) {
   const w = 100 * aspect;
   const h = 100;
-  const cx = w / 2 + between(r, -0.05, 0.05) * w;
-  const cy = h / 2 + between(r, -0.05, 0.05) * h;
-  const rx = w / 2 * between(r, 0.9, 1.06);
-  const ry = h / 2 * between(r, 0.88, 1.06);
-  const tilt = between(r, -0.14, 0.14);
-  // low frequency wobble, a few harmonics
+  // Keepers should stay visible, so the loop goes around the frame rather
+  // than across it: a squarish superellipse that hugs the edges (instead of
+  // an ellipse that cuts into the corners), a bit wider than the frame, and
+  // taller still, so it runs over the film edge above and below.
+  const cx = w / 2 + between(r, -0.02, 0.02) * w;
+  const cy = h / 2 + between(r, -0.025, 0.025) * h;
+  const rx = w / 2 * between(r, 1.0, 1.07);
+  const ry = h / 2 * between(r, 1.1, 1.2);
+  const squareness = between(r, 2.8, 3.6);
+  const tilt = between(r, -0.05, 0.05);
+  // low frequency wobble, a few harmonics, kept small so it doesn't dip into the photo
   const harmonics = [
     1,
     2,
     3
   ].map((k)=>({
       k,
-      amp: between(r, 0.012, 0.05) / k,
+      amp: between(r, 0.008, 0.03) / k,
       phase: between(r, 0, Math.PI * 2)
     }));
   const wobble = (a)=>harmonics.reduce((sum, { k, amp, phase })=>sum + amp * Math.sin(k * a + phase), 0);
+  const superCos = (a)=>Math.sign(Math.cos(a)) * Math.abs(Math.cos(a)) ** (2 / squareness);
+  const superSin = (a)=>Math.sign(Math.sin(a)) * Math.abs(Math.sin(a)) ** (2 / squareness);
   const loop = (start, sweep, scale, drift, dx, dy)=>{
-    const steps = Math.max(12, Math.round(Math.abs(sweep) / (Math.PI * 2) * 64));
+    const steps = Math.max(16, Math.round(Math.abs(sweep) / (Math.PI * 2) * 96));
     const pts = [];
     for(let i = 0; i <= steps; i++){
       const t = i / steps;
       const a = start + sweep * t;
       // the hand drifts outward as it comes round, so the ends don't meet
       const m = scale * (1 + wobble(a) + drift * t);
-      const x = Math.cos(a) * rx * m;
-      const y = Math.sin(a) * ry * m;
+      const x = superCos(a) * rx * m;
+      const y = superSin(a) * ry * m;
       pts.push([
         cx + dx + x * Math.cos(tilt) - y * Math.sin(tilt),
         cy + dy + x * Math.sin(tilt) + y * Math.cos(tilt)
@@ -195,4 +202,4 @@ export function markFor(frame) {
   return null;
 }
 
-// denoCacheMetadata=7393148004325005321,5097895791842949696
+// denoCacheMetadata=10212570715195253748,10790501555834808802
