@@ -15,6 +15,8 @@ export interface Frame {
   imageLongSide: number | null
   // marked "Redact" in Lightroom: keeps its slot on the strip, never its pixels
   redacted?: boolean
+  // Nathan's comment on this frame (markdown), from Lightroom caption lines starting with ">"
+  caption?: string | null
 }
 
 export interface Roll {

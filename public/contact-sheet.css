@@ -182,6 +182,61 @@ main.roll-page {
   transform: translate(-50%, -50%) rotate(-90deg);
 }
 
+/* Roll notes (notes.md) and notes on individual frames */
+.roll-notes {
+  max-width: 40em;
+}
+
+.frame-notes-section {
+  margin: 0 0 2rem;
+  max-width: 40em;
+}
+
+.frame-notes {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.frame-notes li {
+  display: grid;
+  grid-template-columns: 2.4em 1fr;
+  gap: 0.6em;
+  margin: 0 0 0.8em;
+  scroll-margin-top: 2rem;
+}
+
+.frame-notes li:target {
+  outline: 2px solid var(--grease-pencil);
+  outline-offset: 4px;
+}
+
+.frame-note-number {
+  font-family: var(--monospace-font);
+  font-size: 0.85rem;
+  padding-top: 0.15em;
+}
+
+.frame-note-body > :first-child { margin-top: 0; }
+.frame-note-body > :last-child { margin-bottom: 0; }
+
+.rebate-bottom .note-ref {
+  position: absolute;
+  top: 0.05rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--monospace-font);
+  font-size: 0.5rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #f2d27a;
+}
+
+.frame:target {
+  outline: 2px solid var(--grease-pencil);
+  outline-offset: 2px;
+}
+
 /* Redacted frames: a strip of masking tape over an empty frame */
 .redacted-tape {
   position: absolute;

@@ -1,4 +1,5 @@
 import { HTMLElement } from 'dom'
+import MarkdownIt from 'npm:markdown-it'
 import { hashSeed, markElement, markFor, pencilFilterElement, REDRAW_SCRIPT } from 'grease-pencil'
 import { elFactory, factsLine, formatDay, formatSpec, frameElement, sheetElement, type Frame, type Roll } from 'film'
 
@@ -9,6 +10,8 @@ import { elFactory, factsLine, formatDay, formatSpec, frameElement, sheetElement
 // Data comes from a roll.json written by bin/lr-roll (see src/photos/rolls/).
 
 export { markFor }
+
+const md = new MarkdownIt({ html: false, typographer: true, linkify: true })
 
 export class NhContactSheetElement extends HTMLElement {
   static defaultName = 'nh-contact-sheet'
@@ -38,9 +41,11 @@ export class NhContactSheetElement extends HTMLElement {
 
       const resp = await fetch(src)
       const roll: Roll = await resp.json()
+      // Longer prose about the roll lives in notes.md beside roll.json (lr-roll never touches it)
+      const notes = await this.#fetchText(new URL('notes.md', src).href)
 
       this.textContent = ''
-      this.append(this.#render(roll))
+      this.append(this.#render(roll, notes))
       if (this.hasAttribute('page')) this.#applyToPage(roll)
       this.setAttribute('data-rendered', '')
     } finally {
@@ -64,7 +69,7 @@ export class NhContactSheetElement extends HTMLElement {
   // https://photos.nathanherald.com/rolls/<slug>/01.jpg) or paths relative to
   // roll.json. The built page lives in the same folder as roll.json, so
   // relative paths can stay relative in the output.
-  #render(roll: Roll) {
+  #render(roll: Roll, notesMarkdown: string | null) {
     const doc = this.ownerDocument
     const el = elFactory(doc)
     const spec = formatSpec(roll.format)
@@ -75,10 +80,11 @@ export class NhContactSheetElement extends HTMLElement {
       el('p', { class: 'roll-facts' }, factsLine(roll)),
     ))
 
-    if (roll.notes) {
-      for (const para of roll.notes.split(/\n{2,}/)) {
-        article.append(el('p', { class: 'roll-notes' }, para.trim()))
-      }
+    const notes = notesMarkdown?.trim() || roll.notes?.trim()
+    if (notes) {
+      const div = el('div', { class: 'roll-notes' })
+      div.innerHTML = md.render(notes)
+      article.append(div)
     }
 
     const sheet = sheetElement(el, roll.format)
@@ -91,6 +97,21 @@ export class NhContactSheetElement extends HTMLElement {
       sheet.append(strip)
     }
     article.append(sheet, pencilFilterElement(doc))
+
+    // Comments on individual frames, numbered like the strip
+    const captioned = roll.frames.filter((f) => !f.redacted && f.caption?.trim())
+    if (captioned.length) {
+      const list = el('ol', { class: 'frame-notes' })
+      for (const frame of captioned) {
+        const body = el('div', { class: 'frame-note-body' })
+        body.innerHTML = md.render(frame.caption!.trim())
+        list.append(el('li', { id: `note-${frame.n}` },
+          el('a', { href: `#frame-${frame.n}`, class: 'frame-note-number' }, String(frame.n)),
+          body,
+        ))
+      }
+      article.append(el('section', { class: 'frame-notes-section', 'aria-label': 'Notes on frames' }, list))
+    }
 
     article.append(el('dl', { class: 'contact-sheet-legend' },
       el('dt', {}, markElement(doc, 'circle', 7, 1.5, 'legend-mark')), el('dd', {}, 'five stars, a keeper'),
@@ -118,12 +139,28 @@ export class NhContactSheetElement extends HTMLElement {
       id: `frame-${frame.n}`,
       className: mark ? `marked-${mark}` : '',
     })
+    if (!frame.redacted && frame.caption?.trim()) {
+      fig.querySelector('.rebate-bottom')?.append(
+        elFactory(this.ownerDocument)('a', { href: `#note-${frame.n}`, class: 'note-ref never-underline', title: 'Read the note on this frame' }, 'note'),
+      )
+      fig.querySelector('.rebate-bottom')?.removeAttribute('aria-hidden')
+    }
     if (mark) {
       // Seed from the photo, so each photo keeps its own mark across rolls and builds
       const seed = hashSeed(frame.assetId ?? frame.filename ?? `${roll.slug}-${frame.n}`)
       exposure.append(markElement(this.ownerDocument, mark, seed, cellAspect))
     }
     return fig
+  }
+
+  async #fetchText(url: string): Promise<string | null> {
+    try {
+      const resp = await fetch(url)
+      return resp.ok ? await resp.text() : null
+    } catch {
+      // file:// fetches throw when the file doesn't exist
+      return null
+    }
   }
 
   #applyToPage(roll: Roll) {

@@ -21,11 +21,12 @@ function frame(n: number, extra: Record<string, unknown> = {}) {
   }
 }
 
-async function render(roll: Record<string, unknown>) {
+async function render(roll: Record<string, unknown>, notesMd?: string) {
   const dir = await Deno.makeTempDir()
   try {
     const rollPath = join(dir, 'roll.json')
     await Deno.writeTextFile(rollPath, JSON.stringify(roll))
+    if (notesMd !== undefined) await Deno.writeTextFile(join(dir, 'notes.md'), notesMd)
     const pageUrl = new URL(`file://${dir}/index.html`)
     pageUrl.searchParams.set('roll', `file://${rollPath}`)
     const linkie = parseHTML(template)
@@ -178,4 +179,41 @@ Deno.test('unratedFrames: a roll is only finished when every frame has 1 to 5 st
   assertEquals(unratedFrames({ frames: [frame(1, { rating: 3 }), frame(2, { rating: 1 })] }), [])
   const unrated = unratedFrames({ frames: [frame(1, { rating: 0 }), frame(2, { rating: 5, redacted: true }), frame(3, { rating: 0, redacted: true })] })
   assertEquals(unrated.map((f) => f.n), [1, 3])
+})
+
+Deno.test('frame captions become numbered notes linked to their frames', async () => {
+  const doc = await render({
+    ...base,
+    frames: [
+      frame(1, { rating: 1, caption: 'Missed *focus*, again.' }),
+      frame(2, { rating: 3 }),
+      frame(3, { rating: 5, redacted: true, caption: 'should never show' }),
+    ],
+  })
+  const items = doc.querySelectorAll('.frame-notes li')
+  assertEquals(items.length, 1)
+  assertEquals(items[0].getAttribute('id'), 'note-1')
+  assertEquals(items[0].querySelector('a')?.getAttribute('href'), '#frame-1')
+  assertEquals(items[0].querySelector('em')?.textContent, 'focus')
+  assertEquals(doc.querySelector('#frame-1 .note-ref')?.getAttribute('href'), '#note-1')
+  assert(!doc.querySelector('#frame-2 .note-ref'))
+  assert(!doc.body.innerHTML.includes('should never show'))
+})
+
+Deno.test('notes.md beside roll.json renders as markdown above the sheet', async () => {
+  const doc = await render({ ...base, notes: 'short note', frames: [frame(1)] }, 'First roll through the **P30t**.\n\nSecond paragraph.')
+  const notes = doc.querySelector('.roll-notes')!
+  assertEquals(notes.querySelectorAll('p').length, 2)
+  assertEquals(notes.querySelector('strong')?.textContent, 'P30t')
+  assert(!notes.textContent?.includes('short note'), 'notes.md wins over roll.json notes')
+  const order = [...doc.querySelector('article.roll')!.children].map((c) => c.className || c.tagName.toLowerCase())
+  assert(order.indexOf('roll-notes') < order.findIndex((c) => c.startsWith('contact-sheet')))
+})
+
+Deno.test('roll.json notes still work without notes.md, and no notes means no block', async () => {
+  const a = await render({ ...base, notes: 'A short note.', frames: [frame(1)] })
+  assertEquals(a.querySelector('.roll-notes p')?.textContent, 'A short note.')
+  const b = await render({ ...base, frames: [frame(1)] })
+  assert(!b.querySelector('.roll-notes'))
+  assert(!b.querySelector('.frame-notes'))
 })
