@@ -45,6 +45,13 @@ export const FORMATS = {
     label: '110'
   }
 };
+/**
+ * Frames without a star rating. Nathan rates every frame when he's done
+ * going through a roll, so a roll with any of these isn't finished and must
+ * not be published.
+ */ export function unratedFrames(roll) {
+  return roll.frames.filter((f)=>!(f.rating >= 1));
+}
 export function formatSpec(format) {
   return FORMATS[format] ?? FORMATS['35mm'];
 }
@@ -105,8 +112,9 @@ export function elFactory(doc) {
   // real contact sheet.
   const rotated = opts.cellAspect !== 1 && portrait === opts.cellAspect > 1;
   const label = `Frame ${frame.n}` + (frame.rating ? `, ${frame.rating} star${frame.rating === 1 ? '' : 's'}` : '');
+  const redacted = frame.redacted === true;
   const attrs = {
-    class: 'frame' + (portrait ? ' portrait' : '') + (rotated ? ' rotated' : '') + (opts.className ? ` ${opts.className}` : ''),
+    class: 'frame' + (redacted ? ' redacted' : '') + (portrait && !redacted ? ' portrait' : '') + (rotated && !redacted ? ' rotated' : '') + (opts.className ? ` ${opts.className}` : ''),
     'data-rating': String(frame.rating)
   };
   if (opts.id) attrs.id = opts.id;
@@ -123,7 +131,14 @@ export function elFactory(doc) {
   });
   const thumb = frame.thumb ?? frame.image;
   const href = opts.href === undefined ? frame.image : opts.href;
-  if (thumb) {
+  if (redacted) {
+    // Never render the image of a redacted frame, even if roll.json still has one
+    exposure.append(el('span', {
+      class: 'redacted-tape',
+      role: 'img',
+      'aria-label': `Frame ${frame.n}, redacted`
+    }, 'redacted'));
+  } else if (thumb) {
     const img = el('img', {
       src: thumb,
       alt: label,
@@ -156,4 +171,4 @@ export function elFactory(doc) {
   };
 }
 
-// denoCacheMetadata=8442855257639435812,9451898068082365957
+// denoCacheMetadata=18200601258074530429,15701790614950417760

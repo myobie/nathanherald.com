@@ -111,7 +111,7 @@ export class NhContactSheetElement extends HTMLElement {
   }
 
   #frame(roll: Roll, frame: Frame, edge: string, cellAspect: number) {
-    const mark = markFor(frame)
+    const mark = frame.redacted ? null : markFor(frame)
     const { fig, exposure } = frameElement(elFactory(this.ownerDocument), frame, {
       edge,
       cellAspect,

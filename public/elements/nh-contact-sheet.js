@@ -101,7 +101,7 @@ export class NhContactSheetElement extends HTMLElement {
     return article;
   }
   #frame(roll, frame, edge, cellAspect) {
-    const mark = markFor(frame);
+    const mark = frame.redacted ? null : markFor(frame);
     const { fig, exposure } = frameElement(elFactory(this.ownerDocument), frame, {
       edge,
       cellAspect,
@@ -149,4 +149,4 @@ export class NhContactSheetElement extends HTMLElement {
   }
 }
 
-// denoCacheMetadata=16080146427319203465,8338157394026537587
+// denoCacheMetadata=13455007026610084497,7344711553235535969

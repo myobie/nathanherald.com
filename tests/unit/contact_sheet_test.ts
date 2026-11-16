@@ -5,6 +5,7 @@ import { parseHTML } from 'npm:linkedom'
 import { join } from 'jsr:@std/path'
 import { serializeAsync } from '../../src/serialize.ts'
 import { NhContactSheetElement, markFor } from '../../src/elements/nh-contact-sheet.ts'
+import { unratedFrames } from '../../src/elements/film.ts'
 import { circleStrokes, crossStrokes, hashSeed, seeded } from '../../src/elements/grease-pencil.ts'
 import { NhHeadElement } from '../../src/elements/nh-head.ts'
 import { NhHeaderElement } from '../../src/elements/nh-header.ts'
@@ -155,4 +156,26 @@ Deno.test('grease pencil: deterministic per seed, varied across seeds', () => {
     for (const s of x) assert(s.weight >= 0.85 && s.weight <= 1.2)
   }
   assert(seen.has(1) && seen.has(2), 'some circles get a second pass')
+})
+
+Deno.test('redacted frames keep their slot but never their image or mark', async () => {
+  const doc = await render({
+    ...base,
+    frames: [frame(1, { rating: 5 }), frame(2, { rating: 5, redacted: true }), frame(3, { rating: 1, redacted: true, thumb: null, image: null })],
+  })
+  const f2 = doc.querySelector('#frame-2')!
+  assert(f2.classList.contains('redacted'))
+  assert(!f2.querySelector('img') && !f2.querySelector('a'), 'no image even though roll.json had one')
+  assert(!f2.querySelector('svg.mark'))
+  assertEquals(f2.querySelector('.redacted-tape')?.textContent, 'redacted')
+  assertEquals(f2.querySelector('.frame-number')?.textContent, '2')
+  assert(!doc.querySelector('#frame-3 svg.mark'))
+  assert(doc.querySelector('#frame-1 svg.mark-circle'))
+  assert(!doc.body.innerHTML.includes('02.jpg'), 'redacted image URL never appears in the page')
+})
+
+Deno.test('unratedFrames: a roll is only finished when every frame has 1 to 5 stars', () => {
+  assertEquals(unratedFrames({ frames: [frame(1, { rating: 3 }), frame(2, { rating: 1 })] }), [])
+  const unrated = unratedFrames({ frames: [frame(1, { rating: 0 }), frame(2, { rating: 5, redacted: true }), frame(3, { rating: 0, redacted: true })] })
+  assertEquals(unrated.map((f) => f.n), [1, 3])
 })

@@ -182,6 +182,32 @@ main.roll-page {
   transform: translate(-50%, -50%) rotate(-90deg);
 }
 
+/* Redacted frames: a strip of masking tape over an empty frame */
+.redacted-tape {
+  position: absolute;
+  left: -2%;
+  right: -2%;
+  top: 34%;
+  height: 32%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #e6dcbc;
+  background-image: linear-gradient(90deg, rgba(0, 0, 0, 0.05), transparent 12%, transparent 88%, rgba(0, 0, 0, 0.06));
+  color: #5b4f36;
+  font-family: var(--monospace-font);
+  font-size: 0.65rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  transform: rotate(-3deg);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+  z-index: 1;
+}
+
+.frame.redacted:nth-child(even) .redacted-tape {
+  transform: rotate(2deg);
+}
+
 .no-scan {
   display: flex;
   align-items: center;

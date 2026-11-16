@@ -14,7 +14,7 @@ import { NhArchiveListElement } from './elements/nh-archive-list.ts'
 import { NhLatestPostsElement } from './elements/nh-latest-posts.ts'
 import { NhContactSheetElement } from './elements/nh-contact-sheet.ts'
 import { NhRollListElement } from './elements/nh-roll-list.ts'
-import { formatSpec, type Roll, type RollSummary } from './elements/film.ts'
+import { formatSpec, unratedFrames, type Roll, type RollSummary } from './elements/film.ts'
 
 const srcDir = new URL('.', import.meta.url).pathname
 const projectRoot = join(srcDir, '..')
@@ -105,9 +105,19 @@ await Deno.copyFile(join(publicDir, 'posts.json'), join(srcDir, 'posts.json'))
   try {
     for await (const entry of walk(rollsDir, { match: [/\/roll\.json$/] })) {
       const roll: Roll = JSON.parse(await Deno.readTextFile(entry.path))
+      // Nathan rates every frame when he's done going through a roll. Any
+      // unrated frame means it isn't finished, so it must not be published.
+      const unrated = unratedFrames(roll)
+      if (unrated.length) {
+        throw new Error(
+          `${relative(srcDir, entry.path)}: ${unrated.length} of ${roll.frames.length} frames are unrated, ` +
+            `so this roll isn't finished and can't be published. Unrated: ` +
+            unrated.map((f) => `${f.n}${f.filename ? ` (${f.filename})` : ''}`).join(', '),
+        )
+      }
       const perStrip = formatSpec(roll.format).perStrip
       const preview = [...roll.frames]
-        .filter((f) => f.thumb ?? f.image)
+        .filter((f) => !f.redacted && (f.thumb ?? f.image))
         .sort((a, b) => b.rating - a.rating || a.n - b.n)
         .slice(0, perStrip)
         .sort((a, b) => a.n - b.n)
@@ -120,7 +130,7 @@ await Deno.copyFile(join(publicDir, 'posts.json'), join(srcDir, 'posts.json'))
         ...rest,
         url,
         frameCount: frames.length,
-        keepers: frames.filter((f) => f.rating >= 5).length,
+        keepers: frames.filter((f) => f.rating >= 5 && !f.redacted).length,
         preview: preview.map((f) => ({ ...f, thumb: fromIndex(f.thumb), image: fromIndex(f.image) })),
       })
     }

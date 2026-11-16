@@ -13,6 +13,8 @@ export interface Frame {
   thumb: string | null
   image: string | null
   imageLongSide: number | null
+  // marked "Redact" in Lightroom: keeps its slot on the strip, never its pixels
+  redacted?: boolean
 }
 
 export interface Roll {
@@ -53,6 +55,15 @@ export const FORMATS: Record<string, FormatSpec> = {
   '120-6x4.5': { perStrip: 4, perStripNarrow: 2, aspect: 3 / 4, perfs: 0, label: '120, 6×4.5' },
   '120-6x7': { perStrip: 3, perStripNarrow: 2, aspect: 7 / 6, perfs: 0, label: '120, 6×7' },
   '110': { perStrip: 6, perStripNarrow: 3, aspect: 17 / 13, perfs: 1, label: '110' },
+}
+
+/**
+ * Frames without a star rating. Nathan rates every frame when he's done
+ * going through a roll, so a roll with any of these isn't finished and must
+ * not be published.
+ */
+export function unratedFrames(roll: Pick<Roll, 'frames'>): Frame[] {
+  return roll.frames.filter((f) => !(f.rating >= 1))
 }
 
 export function formatSpec(format: string): FormatSpec {
@@ -125,9 +136,10 @@ export function frameElement(el: El, frame: Frame, opts: FrameOptions) {
   // real contact sheet.
   const rotated = opts.cellAspect !== 1 && portrait === (opts.cellAspect > 1)
   const label = `Frame ${frame.n}` + (frame.rating ? `, ${frame.rating} star${frame.rating === 1 ? '' : 's'}` : '')
+  const redacted = frame.redacted === true
 
   const attrs: Record<string, string> = {
-    class: 'frame' + (portrait ? ' portrait' : '') + (rotated ? ' rotated' : '') + (opts.className ? ` ${opts.className}` : ''),
+    class: 'frame' + (redacted ? ' redacted' : '') + (portrait && !redacted ? ' portrait' : '') + (rotated && !redacted ? ' rotated' : '') + (opts.className ? ` ${opts.className}` : ''),
     'data-rating': String(frame.rating),
   }
   if (opts.id) attrs.id = opts.id
@@ -139,7 +151,10 @@ export function frameElement(el: El, frame: Frame, opts: FrameOptions) {
   const exposure = el('div', { class: 'exposure' })
   const thumb = frame.thumb ?? frame.image
   const href = opts.href === undefined ? frame.image : opts.href
-  if (thumb) {
+  if (redacted) {
+    // Never render the image of a redacted frame, even if roll.json still has one
+    exposure.append(el('span', { class: 'redacted-tape', role: 'img', 'aria-label': `Frame ${frame.n}, redacted` }, 'redacted'))
+  } else if (thumb) {
     const img = el('img', {
       src: thumb,
       alt: label,

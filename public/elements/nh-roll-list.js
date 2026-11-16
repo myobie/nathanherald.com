@@ -63,7 +63,7 @@ export class NhRollListElement extends HTMLElement {
         class: 'strip'
       });
       for (const frame of roll.preview){
-        const mark = markFor(frame);
+        const mark = frame.redacted ? null : markFor(frame);
         const { fig, exposure } = frameElement(el, frame, {
           edge,
           cellAspect: spec.aspect,
@@ -112,4 +112,4 @@ export class NhRollListElement extends HTMLElement {
   }
 }
 
-// denoCacheMetadata=15472735247509569448,2861871423824575918
+// denoCacheMetadata=5556996458280093169,2611875629275942795

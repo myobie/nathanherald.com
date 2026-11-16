@@ -68,7 +68,7 @@ export class NhRollListElement extends HTMLElement {
       const sheet = sheetElement(el, roll.format, 'roll-preview')
       const strip = el('div', { class: 'strip' })
       for (const frame of roll.preview) {
-        const mark = markFor(frame)
+        const mark = frame.redacted ? null : markFor(frame)
         const { fig, exposure } = frameElement(el, frame, {
           edge,
           cellAspect: spec.aspect,
