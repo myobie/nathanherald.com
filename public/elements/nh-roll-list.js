@@ -67,7 +67,8 @@ export class NhRollListElement extends HTMLElement {
         const { fig, exposure } = frameElement(el, frame, {
           edge,
           cellAspect: spec.aspect,
-          href: `${roll.url}#frame-${frame.n}`
+          href: `${roll.url}#frame-${frame.n}`,
+          rollLens: roll.lens
         });
         if (mark) {
           const seed = hashSeed(frame.assetId ?? frame.filename ?? `${roll.slug}-${frame.n}`);
@@ -112,4 +113,4 @@ export class NhRollListElement extends HTMLElement {
   }
 }
 
-// denoCacheMetadata=5556996458280093169,2611875629275942795
+// denoCacheMetadata=17316090271079832567,17986613539879431859

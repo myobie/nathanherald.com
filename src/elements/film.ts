@@ -17,6 +17,8 @@ export interface Frame {
   redacted?: boolean
   // Nathan's comment on this frame (markdown), from Lightroom caption lines starting with ">"
   caption?: string | null
+  // lens for this frame, when known (from a `lens:` keyword)
+  lens?: string | null
 }
 
 export interface Roll {
@@ -25,6 +27,10 @@ export interface Roll {
   film: string | null
   format: string
   camera: string | null
+  // the lens, when every frame that has one agrees
+  lens?: string | null
+  // who developed it: a lab name, or "home"
+  lab?: string | null
   shot: string | null
   scanned: string | null
   notes: string | null
@@ -87,13 +93,21 @@ export function formatDay(value: string) {
 }
 
 /** "Ilford Delta 400 · Pentax P30t · 35mm · December 2025" */
-export function factsLine(roll: Pick<Roll, 'film' | 'camera' | 'format' | 'shot'>) {
+export function factsLine(roll: Pick<Roll, 'film' | 'camera' | 'format' | 'shot' | 'lens'>) {
   const facts: string[] = []
   if (roll.film) facts.push(roll.film)
-  if (roll.camera) facts.push(roll.camera)
+  if (roll.camera) facts.push(roll.lens ? `${roll.camera} + ${roll.lens}` : roll.camera)
+  else if (roll.lens) facts.push(roll.lens)
   facts.push(formatSpec(roll.format).label)
   if (roll.shot) facts.push(formatMonth(roll.shot))
-  return facts.join(' · ')
+  return facts.join(' \u00b7 ')
+}
+
+/** "developed at home" or "developed by Film Speed Lab" */
+export function developedBy(lab: string | null | undefined) {
+  const v = lab?.trim()
+  if (!v) return null
+  return v.toLowerCase() === 'home' ? 'developed at home' : `developed by ${v}`
 }
 
 export type El = (tag: string, attrs?: Record<string, string>, ...kids: (Node | string)[]) => HTMLElement
@@ -125,6 +139,8 @@ export interface FrameOptions {
   // extra classes for the figure
   className?: string
   id?: string
+  // the roll's lens; a frame's own lens is only called out when it differs
+  rollLens?: string | null
 }
 
 /**
@@ -137,7 +153,8 @@ export function frameElement(el: El, frame: Frame, opts: FrameOptions) {
   // sideways on the film, so it's drawn rotated to fill the frame, like a
   // real contact sheet.
   const rotated = opts.cellAspect !== 1 && portrait === (opts.cellAspect > 1)
-  const label = `Frame ${frame.n}` + (frame.rating ? `, ${frame.rating} star${frame.rating === 1 ? '' : 's'}` : '')
+  const label = `Frame ${frame.n}` + (frame.rating ? `, ${frame.rating} star${frame.rating === 1 ? '' : 's'}` : '') +
+    (frame.lens && frame.lens !== opts.rollLens ? `, ${frame.lens}` : '')
   const redacted = frame.redacted === true
 
   const attrs: Record<string, string> = {
@@ -165,6 +182,7 @@ export function frameElement(el: El, frame: Frame, opts: FrameOptions) {
       width: String(portrait ? Math.round(640 * frame.width / frame.height) : 640),
       height: String(portrait ? 640 : Math.round(640 * frame.height / frame.width)),
     })
+    if (frame.lens) img.setAttribute('title', frame.lens)
     exposure.append(href ? el('a', { href, class: 'never-underline' }, img) : img)
   } else {
     exposure.append(el('span', { class: 'no-scan' }, 'no scan'))

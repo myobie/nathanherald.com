@@ -217,3 +217,19 @@ Deno.test('roll.json notes still work without notes.md, and no notes means no bl
   assert(!b.querySelector('.roll-notes'))
   assert(!b.querySelector('.frame-notes'))
 })
+
+Deno.test('lens and lab: roll facts, developed line, per-frame lens only when it differs', async () => {
+  const doc = await render({
+    ...base, lens: '50mm f/1.7', lab: 'home',
+    frames: [frame(1, { lens: '50mm f/1.7' }), frame(2, { lens: '28mm f/2.8' }), frame(3)],
+  })
+  assertEquals(doc.querySelector('.roll-facts')?.textContent, 'Kodak Portra 400 \u00b7 Leica M7 + 50mm f/1.7 \u00b7 35mm \u00b7 September 2026')
+  assert(doc.querySelector('.roll-meta')?.textContent?.includes('developed at home'))
+  assertEquals(doc.querySelector('#frame-1 img')?.getAttribute('alt'), 'Frame 1')
+  assertEquals(doc.querySelector('#frame-2 img')?.getAttribute('alt'), 'Frame 2, 28mm f/2.8')
+  assertEquals(doc.querySelector('#frame-2 img')?.getAttribute('title'), '28mm f/2.8')
+  const lab = await render({ ...base, lab: 'Film Speed Lab', frames: [frame(1)] })
+  assert(lab.querySelector('.roll-meta')?.textContent?.includes('developed by Film Speed Lab'))
+  const none = await render({ ...base, frames: [frame(1)] })
+  assert(!none.querySelector('.roll-meta')?.textContent?.includes('developed'))
+})

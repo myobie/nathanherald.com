@@ -1,7 +1,7 @@
 import { HTMLElement } from 'dom'
 import MarkdownIt from 'npm:markdown-it'
 import { hashSeed, markElement, markFor, pencilFilterElement, REDRAW_SCRIPT } from 'grease-pencil'
-import { elFactory, factsLine, formatDay, formatSpec, frameElement, sheetElement, type Frame, type Roll } from 'film'
+import { developedBy, elFactory, factsLine, formatDay, formatSpec, frameElement, sheetElement, type Frame, type Roll } from 'film'
 
 // Renders a roll of film as a contact sheet: cut strips of frames with
 // sprocket holes and edge numbers, plus grease pencil marks from the
@@ -119,6 +119,8 @@ export class NhContactSheetElement extends HTMLElement {
     ))
 
     const meta = [`${roll.frames.length} frames`]
+    const developed = developedBy(roll.lab)
+    if (developed) meta.push(developed)
     if (roll.scanned) meta.push(`scanned ${formatDay(roll.scanned)}`)
     article.append(el('p', { class: 'roll-meta' }, meta.join(', ')))
 
@@ -138,6 +140,7 @@ export class NhContactSheetElement extends HTMLElement {
       cellAspect,
       id: `frame-${frame.n}`,
       className: mark ? `marked-${mark}` : '',
+      rollLens: roll.lens,
     })
     if (!frame.redacted && frame.caption?.trim()) {
       fig.querySelector('.rebate-bottom')?.append(

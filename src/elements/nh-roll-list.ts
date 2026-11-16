@@ -73,6 +73,7 @@ export class NhRollListElement extends HTMLElement {
           edge,
           cellAspect: spec.aspect,
           href: `${roll.url}#frame-${frame.n}`,
+          rollLens: roll.lens,
         })
         if (mark) {
           const seed = hashSeed(frame.assetId ?? frame.filename ?? `${roll.slug}-${frame.n}`)

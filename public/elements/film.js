@@ -81,10 +81,16 @@ export function formatDay(value) {
 /** "Ilford Delta 400 · Pentax P30t · 35mm · December 2025" */ export function factsLine(roll) {
   const facts = [];
   if (roll.film) facts.push(roll.film);
-  if (roll.camera) facts.push(roll.camera);
+  if (roll.camera) facts.push(roll.lens ? `${roll.camera} + ${roll.lens}` : roll.camera);
+  else if (roll.lens) facts.push(roll.lens);
   facts.push(formatSpec(roll.format).label);
   if (roll.shot) facts.push(formatMonth(roll.shot));
-  return facts.join(' · ');
+  return facts.join(' \u00b7 ');
+}
+/** "developed at home" or "developed by Film Speed Lab" */ export function developedBy(lab) {
+  const v = lab?.trim();
+  if (!v) return null;
+  return v.toLowerCase() === 'home' ? 'developed at home' : `developed by ${v}`;
 }
 export function elFactory(doc) {
   return (tag, attrs = {}, ...kids)=>{
@@ -111,7 +117,7 @@ export function elFactory(doc) {
   // sideways on the film, so it's drawn rotated to fill the frame, like a
   // real contact sheet.
   const rotated = opts.cellAspect !== 1 && portrait === opts.cellAspect > 1;
-  const label = `Frame ${frame.n}` + (frame.rating ? `, ${frame.rating} star${frame.rating === 1 ? '' : 's'}` : '');
+  const label = `Frame ${frame.n}` + (frame.rating ? `, ${frame.rating} star${frame.rating === 1 ? '' : 's'}` : '') + (frame.lens && frame.lens !== opts.rollLens ? `, ${frame.lens}` : '');
   const redacted = frame.redacted === true;
   const attrs = {
     class: 'frame' + (redacted ? ' redacted' : '') + (portrait && !redacted ? ' portrait' : '') + (rotated && !redacted ? ' rotated' : '') + (opts.className ? ` ${opts.className}` : ''),
@@ -147,6 +153,7 @@ export function elFactory(doc) {
       width: String(portrait ? Math.round(640 * frame.width / frame.height) : 640),
       height: String(portrait ? 640 : Math.round(640 * frame.height / frame.width))
     });
+    if (frame.lens) img.setAttribute('title', frame.lens);
     exposure.append(href ? el('a', {
       href,
       class: 'never-underline'
@@ -171,4 +178,4 @@ export function elFactory(doc) {
   };
 }
 
-// denoCacheMetadata=18145422970680094140,153513161267021967
+// denoCacheMetadata=5998460090798249360,2624100003468438697

@@ -1,7 +1,7 @@
 import { HTMLElement } from 'dom';
 import MarkdownIt from 'npm:markdown-it';
 import { hashSeed, markElement, markFor, pencilFilterElement, REDRAW_SCRIPT } from 'grease-pencil';
-import { elFactory, factsLine, formatDay, formatSpec, frameElement, sheetElement } from 'film';
+import { developedBy, elFactory, factsLine, formatDay, formatSpec, frameElement, sheetElement } from 'film';
 // Renders a roll of film as a contact sheet: cut strips of frames with
 // sprocket holes and edge numbers, plus grease pencil marks from the
 // Lightroom star ratings (X for 1–2 stars, circle for 5 stars).
@@ -119,6 +119,8 @@ export class NhContactSheetElement extends HTMLElement {
     const meta = [
       `${roll.frames.length} frames`
     ];
+    const developed = developedBy(roll.lab);
+    if (developed) meta.push(developed);
     if (roll.scanned) meta.push(`scanned ${formatDay(roll.scanned)}`);
     article.append(el('p', {
       class: 'roll-meta'
@@ -138,7 +140,8 @@ export class NhContactSheetElement extends HTMLElement {
       edge,
       cellAspect,
       id: `frame-${frame.n}`,
-      className: mark ? `marked-${mark}` : ''
+      className: mark ? `marked-${mark}` : '',
+      rollLens: roll.lens
     });
     if (!frame.redacted && frame.caption?.trim()) {
       fig.querySelector('.rebate-bottom')?.append(elFactory(this.ownerDocument)('a', {
@@ -198,4 +201,4 @@ export class NhContactSheetElement extends HTMLElement {
   }
 }
 
-// denoCacheMetadata=8800576686450321772,8664267121137836428
+// denoCacheMetadata=12268562663099994899,13241711160108144188
