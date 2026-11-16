@@ -23,11 +23,20 @@
 # can be cached forever, and roll.json gets absolute URLs under $LR_BASE_URL
 # (https://photos.nathanherald.com). Only roll.json lands in the repo.
 #
+# From Lightroom it also reads, per frame:
+#   - keyword "Redact": the frame keeps its place on the strip but nothing
+#     about it is published (no image, rating, filename or caption)
+#   - caption lines starting with ">": a comment on that frame (markdown)
+#   - the caption's "Film stock • format • lab" convention: prefills --film,
+#     and --format for "Half frame" / "35mm", when all frames agree
+# With --force, uploads the old roll.json used that the new one doesn't are
+# deleted from the bucket. A notes.md beside roll.json is never touched.
+#
 # Album names repeat ("Film", "Digital", "Ilford HP5+"). If a name matches
 # more than one album, the matches are listed and you pass --album-id.
 #
-# Requires: sqlite3, jq, magick (ImageMagick), and for uploads npx with a
-# logged in wrangler (npx wrangler@latest login).
+# Requires: sqlite3, jq, magick (ImageMagick), deno, and for uploads npx with
+# a logged in wrangler (npx wrangler@latest login).
 
 set -euo pipefail
 
@@ -36,13 +45,13 @@ LIB="${LR_LIBRARY:-$HOME/Pictures/Lightroom Library.lrlibrary}"
 
 die() { echo "lr-roll: $*" >&2; exit 1; }
 
-usage() { sed -n '3,31p' "$0" | sed 's/^# \{0,1\}//'; exit "${1:-0}"; }
+usage() { sed -n '3,40p' "$0" | sed 's/^# \{0,1\}//'; exit "${1:-0}"; }
 
 SUGGEST=false DRY_RUN=false FORCE=false INCLUDE_REJECTED=false
 ALBUM="" ALBUM_ID="" FROM="" TO="" SLUG="" TITLE="" FILM="" CAMERA=""
 FORMAT="35mm" SHOT="" NOTES="" EXPORT_DIR="" GAP=90 MAX=1280
 OUT_ROOT="$REPO_ROOT/src/photos/rolls"
-LOCAL=false
+LOCAL=false FORMAT_SET=false CHECK=""
 BUCKET="${LR_BUCKET:-nathanherald-photos}"
 BASE_URL="${LR_BASE_URL:-https://photos.nathanherald.com}"
 
@@ -57,7 +66,7 @@ while [ $# -gt 0 ]; do
     --title) TITLE="$2"; shift ;;
     --film) FILM="$2"; shift ;;
     --camera) CAMERA="$2"; shift ;;
-    --format) FORMAT="$2"; shift ;;
+    --format) FORMAT="$2"; FORMAT_SET=true; shift ;;
     --shot) SHOT="$2"; shift ;;
     --notes) NOTES="$2"; shift ;;
     --export-dir) EXPORT_DIR="$2"; shift ;;
@@ -65,6 +74,7 @@ while [ $# -gt 0 ]; do
     --out) OUT_ROOT="$2"; shift ;;
     --max) MAX="$2"; shift ;;
     --local) LOCAL=true ;;
+    --check) CHECK="$2"; shift ;;
     --include-rejected) INCLUDE_REJECTED=true ;;
     --dry-run) DRY_RUN=true ;;
     --force) FORCE=true ;;
@@ -77,7 +87,7 @@ done
 for t in sqlite3 jq magick; do command -v "$t" >/dev/null || die "missing $t"; done
 $LOCAL || $SUGGEST || command -v npx >/dev/null || die "missing npx (needed to upload with wrangler, or pass --local)"
 BASE_URL="${BASE_URL%/}"
-[ -n "$ALBUM" ] || [ -n "$ALBUM_ID" ] || die "need --album or --album-id"
+[ -n "$CHECK" ] || [ -n "$ALBUM" ] || [ -n "$ALBUM_ID" ] || die "need --album, --album-id or --check"
 [ -z "$EXPORT_DIR" ] || [ -d "$EXPORT_DIR" ] || die "no such export dir: $EXPORT_DIR"
 [[ "$MAX" =~ ^[0-9]+$ ]] && [ "$MAX" -ge 640 ] || die "--max must be a number >= 640"
 
@@ -103,10 +113,62 @@ copy_db() { # src dest: copy a SQLite file with its WAL/SHM so the copy is curre
   done
 }
 copy_db "$CAT/Managed Catalog.wfindex" "$TMP/index.db"
-copy_db "$CAT/previews.db" "$TMP/previews.db"
+if [ -f "$CAT/previews.db" ]; then
+  copy_db "$CAT/previews.db" "$TMP/previews.db"
+else
+  # Lightroom deletes its preview index while it runs and rebuilds it later,
+  # so without it there is no way to match preview files to photos.
+  echo "⚠️  Lightroom's preview index (previews.db) is missing; it usually comes back when Lightroom quits." >&2
+  echo "   Until then frames have no preview: quit Lightroom, or pass --export-dir with a Lightroom export." >&2
+  sqlite3 "$TMP/previews.db" "create table RenditionPath(localAssetId, longSide, path);"
+  NO_PREVIEWS=true
+fi
+$SUGGEST || [ -n "$CHECK" ] || copy_db "$CAT/Managed Catalog.mcat" "$TMP/catalog.db"   # captions live here
 
 q() { sqlite3 -readonly "$TMP/index.db" "$@"; }
 sql_str() { printf "'%s'" "${1//\'/\'\'}"; }
+
+# --- Check mode: compare published rolls with Lightroom right now -------------
+# Reports published frames that are now marked "Redact" (their images are
+# public and must come down: re-export with --force) or are unrated, or
+# whose photo is gone from the catalog. Exits 1 if anything needs action.
+
+if [ -n "$CHECK" ]; then
+  if [ "$CHECK" = all ]; then
+    files="$(find "$OUT_ROOT" -mindepth 2 -maxdepth 2 -name roll.json | sort)"
+  elif [ -f "$CHECK" ]; then files="$CHECK"
+  else files="$OUT_ROOT/$CHECK/roll.json"; [ -f "$files" ] || die "no roll.json for $CHECK"
+  fi
+  [ -n "$files" ] || die "no rolls under $OUT_ROOT"
+  problems=0
+  while IFS= read -r f; do
+    slug="$(jq -r .slug "$f")"
+    ids="$(jq -r '[.frames[] | select(.redacted != true and .assetId != null) | "'"'"'" + .assetId + "'"'"'"] | join(",")' "$f")"
+    [ -n "$ids" ] || { echo "✅ $slug: no published frames"; continue; }
+    now="$(q -json "select a.assetId, coalesce(a.rating, 0) as rating,
+        exists(select 1 from keywords k where k.docId = a.docId and lower(trim(k.keyword)) = 'redact') as redact
+      from assets a where a.assetId in ($ids);")"
+    report="$(jq -r --argjson now "${now:-[]}" '
+      ($now | map({(.assetId): .}) | add // {}) as $m
+      | .frames[] | select(.redacted != true and .assetId != null)
+      | ($m[.assetId]) as $c
+      | if $c == null then "  #\(.n) \(.filename): not in the Lightroom catalog anymore"
+        elif $c.redact == 1 then "  #\(.n) \(.filename): now marked Redact, but its image is public"
+        elif $c.rating < 1 then "  #\(.n) \(.filename): now unrated"
+        else empty end' "$f")"
+    if [ -n "$report" ]; then
+      problems=1
+      echo "⚠️  $slug:"; printf '%s\n' "$report"
+    else
+      echo "✅ $slug: matches Lightroom"
+    fi
+  done <<<"$files"
+  if [ "$problems" = 1 ]; then
+    echo "Fix with: bin/lr-roll --album ... --slug <slug> --force (redacted frames are removed from the bucket)" >&2
+    exit 1
+  fi
+  exit 0
+fi
 
 # --- Resolve the album ---------------------------------------------------------
 
@@ -143,7 +205,8 @@ frames_sql() {
            coalesce(a.rating, 0) as rating, coalesce(a.flag, 0) as flag,
            a.width, a.height, a.orientation,
            (select max(longSide) from p.RenditionPath r where r.localAssetId = a.docId) as previewLongSide,
-           cast(strftime('%s', a.captureDate) as integer) as epoch
+           cast(strftime('%s', a.captureDate) as integer) as epoch,
+           exists(select 1 from keywords k where k.docId = a.docId and lower(trim(k.keyword)) = 'redact') as redact
     from album_asset_v2 aa join assets a on a.assetId = aa.assetId
     where $where
     order by a.filenameLC;
@@ -153,10 +216,13 @@ SQL
 # --- Suggest mode: print likely roll boundaries, write nothing -----------------
 
 if $SUGGEST; then
-  rows="$(q -separator $'\t' "$(frames_sql)" | cut -f3,11)"
+  all="$(q -separator $'\t' "$(frames_sql)")"
+  rows="$(cut -f3,11 <<<"$all")"
   total="$(printf '%s\n' "$rows" | grep -c . || true)"
   [ "$total" -gt 0 ] || die "no frames in \"$ALBUM\""
   echo "$ALBUM: $total frames"
+  unrated="$(awk -F'\t' '$5 < 1' <<<"$all" | grep -c . || true)"
+  [ "$unrated" -eq 0 ] || echo "⛔ NOT READY: $unrated of $total frames unrated"
   echo
   # Split at time gaps > GAP seconds, then split long segments into
   # roughly equal rolls of ~36-38 frames.
@@ -197,6 +263,46 @@ FRAMES_JSON="$(q -json "$(frames_sql)")"
 COUNT="$(jq length <<<"$FRAMES_JSON")"
 [ "$COUNT" -gt 0 ] || die "no frames matched"
 
+# Nathan rates every frame when he's done going through a roll, so an
+# unrated (0 star) frame means the roll isn't finished. No override.
+UNRATED="$(jq -r 'to_entries | map(select(.value.rating < 1)) | map("  #\(.key + 1) \(.value.filename)") | .[]' <<<"$FRAMES_JSON")"
+N_UNRATED="$(printf '%s' "$UNRATED" | grep -c . || true)"
+if [ "$N_UNRATED" -gt 0 ]; then
+  echo "⛔ NOT READY: $N_UNRATED of $COUNT frames unrated" >&2
+  printf '%s\n' "$UNRATED" >&2
+  $DRY_RUN || die "rate every frame (1–5 stars, redacted ones too) in Lightroom before exporting"
+fi
+
+# Lightroom captions (xmp.dc.description) from the catalog, keyed by assetId.
+# Nathan writes "Film stock • format • lab" there, and lines starting with
+# ">" are a comment on that frame.
+command -v deno >/dev/null || die "missing deno (needed to read captions)"
+ids="$(jq -r 'map("'"'"'" + .assetId + "'"'"'") | join(",")' <<<"$FRAMES_JSON")"
+DESC_JSON="$(sqlite3 -readonly -json "$TMP/catalog.db" "
+  select d.fullDocId as id, hex(cast(r.content as blob)) as h
+  from docs d join revs r on r.sequence = d.winningRevSequence
+  where d.fullDocId in ($ids);" | deno run -q "$REPO_ROOT/bin/lr-meta.ts")"
+[ -n "$DESC_JSON" ] || DESC_JSON="{}"
+
+# Roll facts from the captions: the first "•" segment is the film stock,
+# and a "Half frame" / "35mm" segment sets the format. Only used when every
+# captioned frame agrees and the value wasn't given on the command line.
+roll_fact() { # jq filter over the list of caption segment arrays -> unique value or empty
+  jq -r --argjson d "$DESC_JSON" '
+    [ $d[] | split("\n") | map(select(test("^\\s*>") | not)) | join(" ")
+      | select(test("^\\s*$|^OLYMPUS DIGITAL CAMERA$") | not)
+      | split("•") | map(gsub("^\\s+|\\s+$"; "")) ]
+    | '"$1"' | unique | if length == 1 then .[0] else "" end' <<<"{}"
+}
+if [ -z "$FILM" ]; then
+  FILM="$(roll_fact 'map(.[0])')"
+  [ -z "$FILM" ] || echo "🎞  film from Lightroom captions: $FILM"
+fi
+if ! $FORMAT_SET; then
+  f="$(roll_fact 'map(if any(.[]; test("^half.?frame$"; "i")) then "half-frame" elif any(.[]; . == "35mm") then "35mm" else "" end)')"
+  if [ -n "$f" ]; then FORMAT="$f"; echo "🎞  format from Lightroom captions: $FORMAT"; fi
+fi
+
 [ -n "$TITLE" ] || TITLE="$ALBUM"
 SCANNED="$(jq -r '.[0].captureDate[0:10]' <<<"$FRAMES_JSON")"
 if [ -z "$SLUG" ]; then
@@ -211,13 +317,25 @@ PAD=${#COUNT}; [ "$PAD" -ge 2 ] || PAD=2
 echo "📷 $ALBUM → $SLUG ($COUNT frames)"
 
 if $DRY_RUN; then
-  jq -r '.[] | "  \(.filename)  \(.captureDate)  ★\(.rating)  flag \(.flag)  preview \(.previewLongSide // "none")"' <<<"$FRAMES_JSON"
+  jq -r --argjson d "$DESC_JSON" '.[] | "  \(.filename)  \(.captureDate)  ★\(.rating)  flag \(.flag)  preview \(.previewLongSide // "none")"
+    + (if .redact == 1 then "  REDACTED" else "" end)
+    + (($d[.assetId] // "") | split("\n") | map(select(test("^\\s*>"))) | if length > 0 then "  💬 " + (join(" ") | .[0:60]) else "" end)' <<<"$FRAMES_JSON"
   echo "(dry run, nothing written to $OUT)"
   exit 0
 fi
 
+OLD_URLS=""
+if ${NO_PREVIEWS:-false} && [ -z "$EXPORT_DIR" ]; then
+  die "no preview index and no --export-dir, so there are no images to export (quit Lightroom and retry)"
+fi
+
 if [ -e "$OUT" ]; then
   $FORCE || die "$OUT exists (use --force to replace its roll.json and images)"
+  # Remember what the old roll.json pointed at, so uploads it no longer uses
+  # (re-exports, newly redacted frames) can be deleted from the bucket.
+  if [ -f "$OUT/roll.json" ]; then
+    OLD_URLS="$(jq -r '.frames[] | .image, .thumb | select(. != null)' "$OUT/roll.json")"
+  fi
   find "$OUT" -maxdepth 1 -type f \( -name 'roll.json' -o -name '[0-9]*.jpg' \) -delete
 fi
 mkdir -p "$OUT"
@@ -265,13 +383,24 @@ while IFS= read -r row; do
   filename="$(jq -r .filename <<<"$row")"
   base="${filename%.*}"
 
+  assetId="$(jq -r .assetId <<<"$row")"
+  redacted=false
+  [ "$(jq -r .redact <<<"$row")" = 1 ] && redacted=true
+  # The ">" lines of the caption, without the marker, as markdown.
+  caption="$(jq -r --argjson d "$DESC_JSON" --arg id "$assetId" \
+    '($d[$id] // "") | split("\n") | map(select(test("^\\s*>")) | sub("^\\s*>\\s?"; "")) | join("\n")' <<<"{}")"
+
   src=""
-  if [ -n "$EXPORT_DIR" ]; then
+  if $redacted; then
+    : # keep the frame's place on the strip, but never render or upload it
+  elif [ -n "$EXPORT_DIR" ]; then
     src="$(find "$EXPORT_DIR" -maxdepth 1 -type f -iname "$base.jp*g" | head -1)"
     [ -n "$src" ] || echo "  ⚠️  $filename not in export dir, using preview" >&2
   fi
-  [ -n "$src" ] || src="$(preview_path "$docId" "")"
-  if [ -z "$src" ] || [ ! -f "$src" ]; then
+  $redacted || [ -n "$src" ] || src="$(preview_path "$docId" "")"
+  if $redacted; then
+    image=null thumb=null longest=null caption=""
+  elif [ -z "$src" ] || [ ! -f "$src" ]; then
     echo "  ⚠️  $filename has no preview, skipping image (open the album in Lightroom to render one)" >&2
     image=null thumb=null longest=null
   else
@@ -287,12 +416,18 @@ while IFS= read -r row; do
 
   # Lightroom's width/height are already post-crop and oriented (portrait
   # frames come out taller than wide), so they are used as is.
+  # A redacted frame keeps its position, shape, rating and flag, but no
+  # image, filename, assetId or caption, so nothing of the photo is published.
   jq -c --argjson n "$i" --argjson image "$image" --argjson thumb "$thumb" \
-    --argjson longest "$longest" '{
-      n: $n, assetId, filename, rating, flag, width, height,
-      thumb: $thumb, image: $image, imageLongSide: $longest
-    }' <<<"$row" >> "$FRAME_OBJS"
-  printf '  %s %s\n' "$num" "$filename"
+    --argjson longest "$longest" --arg caption "$caption" --argjson redacted "$redacted" '
+    if $redacted then
+      { n: $n, redacted: true, rating, flag, width, height, thumb: null, image: null, imageLongSide: null }
+    else
+      { n: $n, assetId, filename, rating, flag, width, height,
+        thumb: $thumb, image: $image, imageLongSide: $longest,
+        caption: (if $caption == "" then null else $caption end) }
+    end' <<<"$row" >> "$FRAME_OBJS"
+  printf '  %s %s%s\n' "$num" "$filename" "$($redacted && echo '  (redacted)')"
 done < <(jq -c '.[]' <<<"$FRAMES_JSON")
 
 nullable() { if [ -n "$1" ]; then jq -Rn --arg v "$1" '$v'; else echo null; fi; }
@@ -309,6 +444,49 @@ jq -s \
     source: { album: $album, from: $from, to: $to },
     frames: .
   }' "$FRAME_OBJS" > "$OUT/roll.json"
+
+# Delete uploads the previous roll.json used that this one doesn't (only our
+# own bucket URLs). Cloudflare may still serve cached copies for a while.
+if [ -n "$OLD_URLS" ] && ! $LOCAL; then
+  NEW_URLS="$(jq -r '.frames[] | .image, .thumb | select(. != null)' "$OUT/roll.json")"
+  while IFS= read -r url; do
+    case "$url" in "$BASE_URL"/*) ;; *) continue ;; esac
+    grep -qxF "$url" <<<"$NEW_URLS" && continue
+    key="${url#"$BASE_URL"/}"
+    if npx --yes wrangler@latest r2 object delete "$BUCKET/$key" --remote >"$TMP/delete.log" 2>&1; then
+      echo "  🗑  removed $key"
+      DELETED="${DELETED:-}$url"$'\n'
+    else
+      echo "  ⚠️  could not remove $key" >&2; cat "$TMP/delete.log" >&2
+    fi
+  done <<<"$OLD_URLS"
+fi
+
+# Deleted objects were served as immutable for a year, so Cloudflare's edge
+# may keep serving them. The wrangler login can't purge cache; a token with
+# Zone > Cache Purge for nathanherald.com in $CLOUDFLARE_PURGE_TOKEN can.
+ZONE_ID="${LR_ZONE_ID:-e9d322105e0e1219b246c7dc1c12fcbc}"
+if [ -n "${DELETED:-}" ]; then
+  if [ -n "${CLOUDFLARE_PURGE_TOKEN:-}" ]; then
+    printf '%s' "$DELETED" | grep . | split -l 30 - "$TMP/purge."
+    for part in "$TMP"/purge.*; do
+      body="$(jq -Rn '{files: [inputs]}' <"$part")"
+      if curl -fsS -X POST "https://api.cloudflare.com/client/v4/zones/$ZONE_ID/purge_cache" \
+          -H "Authorization: Bearer $CLOUDFLARE_PURGE_TOKEN" -H 'Content-Type: application/json' \
+          --data "$body" >/dev/null; then
+        echo "  🧹 purged $(grep -c . "$part") URLs from Cloudflare's cache"
+      else
+        echo "  ⚠️  cache purge failed; purge these by hand:" >&2; cat "$part" >&2
+      fi
+    done
+  else
+    echo "" >&2
+    echo "⚠️  These deleted images may still be served from Cloudflare's cache for up to a year:" >&2
+    printf '%s' "$DELETED" | sed 's/^/    /' >&2
+    echo "   Purge them in the dashboard (nathanherald.com › Caching › Purge Cache › Custom Purge)," >&2
+    echo "   or set CLOUDFLARE_PURGE_TOKEN (an API token with Zone › Cache Purge for zone $ZONE_ID) and rerun." >&2
+  fi
+fi
 
 n_img="$(find "$IMG_DIR" -name '*.jpg' | wc -l | tr -d ' ')"
 if $LOCAL; then
