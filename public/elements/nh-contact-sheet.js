@@ -122,8 +122,9 @@ export class NhContactSheetElement extends HTMLElement {
     }
     if (legend.children.length) article.append(legend);
     const meta = [
-      `${roll.frames.length} frames`
+      `${roll.frames.length} frame${roll.frames.length === 1 ? '' : 's'}`
     ];
+    if (roll.loaded) meta.push(`loaded ${formatDay(roll.loaded)}`);
     const developed = developedBy(roll.lab);
     if (developed) meta.push(developed);
     if (roll.scanned) meta.push(`scanned ${formatDay(roll.scanned)}`);
@@ -221,4 +222,4 @@ export class NhContactSheetElement extends HTMLElement {
   }
 }
 
-// denoCacheMetadata=9992390433922478990,10790833258909881226
+// denoCacheMetadata=2745770547861376633,6365024612104594321

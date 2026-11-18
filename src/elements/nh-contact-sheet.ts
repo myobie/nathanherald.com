@@ -112,7 +112,8 @@ export class NhContactSheetElement extends HTMLElement {
     }
     if (legend.children.length) article.append(legend)
 
-    const meta = [`${roll.frames.length} frames`]
+    const meta = [`${roll.frames.length} frame${roll.frames.length === 1 ? '' : 's'}`]
+    if (roll.loaded) meta.push(`loaded ${formatDay(roll.loaded)}`)
     const developed = developedBy(roll.lab)
     if (developed) meta.push(developed)
     if (roll.scanned) meta.push(`scanned ${formatDay(roll.scanned)}`)

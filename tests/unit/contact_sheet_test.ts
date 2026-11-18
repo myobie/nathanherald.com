@@ -247,3 +247,8 @@ Deno.test('lens and lab: roll facts, developed line, per-frame lens only when it
   const none = await render({ ...base, frames: [frame(1)] })
   assert(!none.querySelector('.roll-meta')?.textContent?.includes('developed'))
 })
+
+Deno.test('loaded date shows in the meta line', async () => {
+  const doc = await render({ ...base, loaded: '2026-11-03', lab: 'Underdog Film Lab', frames: [frame(1)] })
+  assertEquals(doc.querySelector('.roll-meta')?.textContent, '1 frame, loaded 3 November, 2026, developed by Underdog Film Lab, scanned 25 September, 2026')
+})

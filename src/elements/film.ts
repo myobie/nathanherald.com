@@ -33,6 +33,8 @@ export interface Roll {
   lens?: string | null
   // who developed it: a lab name, or "home"
   lab?: string | null
+  // when the roll's album was made in Lightroom, i.e. when the film was loaded (YYYY-MM-DD)
+  loaded?: string | null
   shot: string | null
   scanned: string | null
   notes: string | null
