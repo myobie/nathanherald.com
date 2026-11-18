@@ -2,7 +2,7 @@
 // build does. Run with: deno task test:unit
 import { assert, assertEquals } from 'jsr:@std/assert'
 import { parseHTML } from 'npm:linkedom'
-import { join } from 'jsr:@std/path'
+import { dirname, join } from 'jsr:@std/path'
 import { serializeAsync } from '../../src/serialize.ts'
 import { NhContactSheetElement, markFor } from '../../src/elements/nh-contact-sheet.ts'
 import { unratedFrames } from '../../src/elements/film.ts'
@@ -251,4 +251,28 @@ Deno.test('lens and lab: roll facts, developed line, per-frame lens only when it
 Deno.test('loaded date shows in the meta line', async () => {
   const doc = await render({ ...base, loaded: '2026-11-03', lab: 'Underdog Film Lab', frames: [frame(1)] })
   assertEquals(doc.querySelector('.roll-meta')?.textContent, '1 frame, loaded 3 November, 2026, developed by Underdog Film Lab, scanned 25 September, 2026')
+})
+
+Deno.test('roll page links back to its trip and to the previous and next roll', async () => {
+  const dir = await Deno.makeTempDir()
+  try {
+    const mk = (slug: string, title: string) => ({ ...base, slug, title, trip: 'SF Film Photos', url: `rolls/${slug}/`, frameCount: 1, keepers: 0, preview: [] })
+    const index = [mk('2026-11-01-delta-400', 'Delta 400'), mk('2026-11-02-delta-400', 'Delta 400'), mk('2026-11-03-delta-400', 'Delta 400')]
+    await Deno.mkdir(join(dir, 'rolls', '2026-11-02-delta-400'), { recursive: true })
+    await Deno.writeTextFile(join(dir, 'rolls.json'), JSON.stringify(index))
+    const rollPath = join(dir, 'rolls', '2026-11-02-delta-400', 'roll.json')
+    await Deno.writeTextFile(rollPath, JSON.stringify({ ...base, slug: '2026-11-02-delta-400', title: 'Delta 400', trip: 'SF Film Photos', frames: [frame(1)] }))
+    const pageUrl = new URL(`file://${dirname(rollPath)}/index.html`)
+    pageUrl.searchParams.set('roll', `file://${rollPath}`)
+    const linkie = parseHTML(template)
+    linkie.location = pageUrl
+    linkie.customElements.define(NhContactSheetElement.defaultName, class extends NhContactSheetElement {})
+    const doc = parseHTML(await serializeAsync(linkie.document.documentElement)).document
+    assertEquals(doc.querySelector('.roll-trip')?.textContent, 'Roll 2 of 3 from SF Film Photos')
+    assertEquals(doc.querySelector('.roll-trip a')?.getAttribute('href'), '../../#trip-sf-film-photos')
+    assertEquals(doc.querySelector('a[rel=prev]')?.getAttribute('href'), '../../rolls/2026-11-01-delta-400/')
+    assertEquals(doc.querySelector('a[rel=next]')?.textContent, 'Roll 3: Delta 400 →')
+  } finally {
+    await Deno.remove(dir, { recursive: true })
+  }
 })

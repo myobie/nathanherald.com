@@ -7,7 +7,7 @@ import { NhRollListElement } from '../../src/elements/nh-roll-list.ts'
 import { NhHeadElement } from '../../src/elements/nh-head.ts'
 import { NhHeaderElement } from '../../src/elements/nh-header.ts'
 import { NhFooterElement } from '../../src/elements/nh-footer.ts'
-import type { RollSummary } from '../../src/elements/film.ts'
+import { groupRolls, type RollSummary } from '../../src/elements/film.ts'
 
 const template = await Deno.readTextFile(new URL('../../src/photos/index.html', import.meta.url))
 
@@ -62,4 +62,28 @@ Deno.test('page gets the stylesheet, redraw script, and no element scripts', asy
 Deno.test('empty index', async () => {
   const doc = await render([])
   assertEquals(doc.querySelector('.roll-list li')?.textContent, 'No rolls yet.')
+})
+
+Deno.test('groupRolls: trips together in album order, newest group first, loose rolls alone', () => {
+  const rolls = [
+    roll('2026-11-02-delta-400', { trip: 'SF Film Photos', shot: null, loaded: '2026-11-17', scanned: '2026-11-13' }),
+    roll('2025-12-pentax', { shot: '2025-12' }),
+    roll('2026-11-01-delta-400', { trip: 'SF Film Photos', shot: null, loaded: '2026-11-17', scanned: '2026-11-13' }),
+  ]
+  const groups = groupRolls(rolls)
+  assertEquals(groups.map((g) => g.id), ['trip-sf-film-photos', '2025-12-pentax'])
+  assertEquals(groups[0].rolls.map((r) => r.slug), ['2026-11-01-delta-400', '2026-11-02-delta-400'])
+})
+
+Deno.test('index shows a trip as a heading with its rolls under it', async () => {
+  const doc = await render([
+    roll('2026-11-01-delta-400', { trip: 'SF Film Photos', title: 'Delta 400', film: 'Ilford Delta 400' }),
+    roll('2026-11-05-ektacolor', { trip: 'SF Film Photos', title: 'Ektacolor Pro 400', film: 'Kodak Ektacolor Pro 400' }),
+    roll('2025-12-pentax', { title: 'Pentax P30t first roll', shot: '2025-11' }),
+  ])
+  const trip = doc.querySelector('#trip-sf-film-photos')!
+  assertEquals(trip.querySelector('h2')?.textContent, 'SF Film Photos')
+  assertEquals(trip.querySelector('.roll-facts')?.textContent, '2 rolls · Ilford Delta 400 · Kodak Ektacolor Pro 400')
+  assertEquals([...trip.querySelectorAll('.roll-summary h3')].map((h) => h.textContent), ['Delta 400', 'Ektacolor Pro 400'])
+  assertEquals(doc.querySelector('#\\32 025-12-pentax h2, [id="2025-12-pentax"] h2')?.textContent, 'Pentax P30t first roll')
 })

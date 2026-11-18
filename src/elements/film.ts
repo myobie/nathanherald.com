@@ -35,6 +35,10 @@ export interface Roll {
   lab?: string | null
   // when the roll's album was made in Lightroom, i.e. when the film was loaded (YYYY-MM-DD)
   loaded?: string | null
+  // the trip or series it belongs to (the Lightroom folder holding its album)
+  trip?: string | null
+  // the Lightroom folder path, for reference
+  folders?: string[]
   shot: string | null
   scanned: string | null
   notes: string | null
@@ -76,6 +80,39 @@ export const FORMATS: Record<string, FormatSpec> = {
  */
 export function unratedFrames(roll: Pick<Roll, 'frames'>): Frame[] {
   return roll.frames.filter((f) => !(f.rating >= 1))
+}
+
+export function slugify(value: string) {
+  return value.toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
+}
+
+/** The best date we have for a roll, for sorting: shot, then loaded, then scanned. */
+export function rollDate(r: Pick<Roll, 'shot' | 'scanned'> & { loaded?: string | null }) {
+  return r.shot ?? r.loaded ?? r.scanned ?? ''
+}
+
+export interface RollGroup {
+  trip: string | null
+  id: string
+  rolls: RollSummary[]
+}
+
+/**
+ * Rolls grouped by trip, newest group first. Rolls in a trip keep their
+ * album order (their slugs carry the album number); rolls without a trip
+ * stand alone.
+ */
+export function groupRolls(rolls: RollSummary[]): RollGroup[] {
+  const groups = new Map<string, RollGroup>()
+  for (const roll of rolls) {
+    const trip = roll.trip?.trim() || null
+    const key = trip ? `trip:${trip}` : `roll:${roll.slug}`
+    if (!groups.has(key)) groups.set(key, { trip, id: trip ? `trip-${slugify(trip)}` : roll.slug, rolls: [] })
+    groups.get(key)!.rolls.push(roll)
+  }
+  const newest = (g: RollGroup) => g.rolls.map(rollDate).sort().at(-1) ?? ''
+  for (const g of groups.values()) g.rolls.sort((a, b) => a.slug.localeCompare(b.slug))
+  return [...groups.values()].sort((a, b) => newest(b).localeCompare(newest(a)) || (a.trip ?? a.id).localeCompare(b.trip ?? b.id))
 }
 
 export function formatSpec(format: string): FormatSpec {

@@ -412,3 +412,37 @@ main.roll-page > header h1 {
 .roll-summary .roll-meta {
   margin: 0;
 }
+
+/* Trips: a heading with their rolls under it, and links between rolls */
+.trip-group {
+  margin: 0 0 3.5rem;
+}
+
+.trip-group > h2 {
+  margin: 0 0 0.2em;
+}
+
+.trip-rolls {
+  margin: 1.5rem 0 0;
+}
+
+.trip-rolls .roll-summary h3 {
+  margin: 0 0 0.2em;
+}
+
+.roll-trip {
+  margin-top: 0;
+  font-size: 0.95rem;
+}
+
+.roll-nav {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 1.5rem 0;
+  flex-wrap: wrap;
+}
+
+.roll-nav-next {
+  margin-left: auto;
+}

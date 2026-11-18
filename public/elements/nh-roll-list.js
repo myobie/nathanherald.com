@@ -1,6 +1,6 @@
 import { HTMLElement } from 'dom';
 import { hashSeed, markElement, markFor, pencilFilterElement, REDRAW_SCRIPT } from 'grease-pencil';
-import { elFactory, factsLine, formatSpec, frameElement, sheetElement } from 'film';
+import { elFactory, factsLine, formatSpec, frameElement, groupRolls, sheetElement } from 'film';
 // The photos index: every roll of film as a title, a facts line, and one
 // short strip of its best frames, linking to the roll's contact sheet.
 // Data comes from rolls.json, which the build generates from every roll.json.
@@ -45,43 +45,30 @@ export class NhRollListElement extends HTMLElement {
       list.append(el('li', {}, 'No rolls yet.'));
       return list;
     }
-    for (const roll of rolls){
-      const spec = formatSpec(roll.format);
-      const edge = (roll.film ?? '').toUpperCase();
-      const li = el('li', {
-        class: 'roll-summary',
-        id: roll.slug
-      });
-      const count = `${roll.frameCount} frames` + (roll.keepers ? `, ${roll.keepers} keeper${roll.keepers === 1 ? '' : 's'}` : '');
-      li.append(el('h2', {}, el('a', {
-        href: roll.url
-      }, roll.title)), el('p', {
-        class: 'roll-facts'
-      }, factsLine(roll)));
-      const sheet = sheetElement(el, roll.format, 'roll-preview');
-      const strip = el('div', {
-        class: 'strip'
-      });
-      for (const frame of roll.preview){
-        const mark = markFor(frame);
-        const { fig, exposure } = frameElement(el, frame, {
-          edge,
-          cellAspect: spec.aspect,
-          href: `${roll.url}#frame-${frame.n}`,
-          rollLens: roll.lens
-        });
-        if (mark) {
-          const seed = hashSeed(frame.assetId ?? frame.filename ?? `${roll.slug}-${frame.n}`);
-          exposure.append(markElement(doc, mark, seed, spec.aspect));
-        }
-        strip.append(fig);
+    for (const group of groupRolls(rolls)){
+      if (!group.trip) {
+        list.append(this.#summary(el, group.rolls[0], 'h2'));
+        continue;
       }
-      sheet.append(strip);
-      li.append(sheet, el('p', {
-        class: 'roll-meta'
-      }, el('a', {
-        href: roll.url
-      }, `See the whole roll`), `, ${count}`));
+      // A trip: its name, a line of what's in it, then its rolls in album order
+      const films = [
+        ...new Set(group.rolls.map((r)=>r.film).filter(Boolean))
+      ];
+      const n = group.rolls.length;
+      const li = el('li', {
+        class: 'trip-group',
+        id: group.id
+      }, el('h2', {}, group.trip), el('p', {
+        class: 'roll-facts'
+      }, [
+        `${n} roll${n === 1 ? '' : 's'}`,
+        ...films
+      ].join(' \u00b7 ')));
+      const inner = el('ol', {
+        class: 'roll-list trip-rolls'
+      });
+      for (const roll of group.rolls)inner.append(this.#summary(el, roll, 'h3'));
+      li.append(inner);
       list.append(li);
     }
     const wrap = doc.createDocumentFragment();
@@ -92,6 +79,46 @@ export class NhRollListElement extends HTMLElement {
     redraw.textContent = REDRAW_SCRIPT;
     wrap.append(redraw);
     return wrap;
+  }
+  #summary(el, roll, heading) {
+    const doc = this.ownerDocument;
+    const spec = formatSpec(roll.format);
+    const edge = (roll.film ?? '').toUpperCase();
+    const li = el('li', {
+      class: 'roll-summary',
+      id: roll.slug
+    });
+    const count = `${roll.frameCount} frames` + (roll.keepers ? `, ${roll.keepers} keeper${roll.keepers === 1 ? '' : 's'}` : '');
+    li.append(el(heading, {}, el('a', {
+      href: roll.url
+    }, roll.title)), el('p', {
+      class: 'roll-facts'
+    }, factsLine(roll)));
+    const sheet = sheetElement(el, roll.format, 'roll-preview');
+    const strip = el('div', {
+      class: 'strip'
+    });
+    for (const frame of roll.preview){
+      const mark = markFor(frame);
+      const { fig, exposure } = frameElement(el, frame, {
+        edge,
+        cellAspect: spec.aspect,
+        href: `${roll.url}#frame-${frame.n}`,
+        rollLens: roll.lens
+      });
+      if (mark) {
+        const seed = hashSeed(frame.assetId ?? frame.filename ?? `${roll.slug}-${frame.n}`);
+        exposure.append(markElement(doc, mark, seed, spec.aspect));
+      }
+      strip.append(fig);
+    }
+    sheet.append(strip);
+    li.append(sheet, el('p', {
+      class: 'roll-meta'
+    }, el('a', {
+      href: roll.url
+    }, `See the whole roll`), `, ${count}`));
+    return li;
   }
   #addStylesheet() {
     const doc = this.ownerDocument;
@@ -113,4 +140,4 @@ export class NhRollListElement extends HTMLElement {
   }
 }
 
-// denoCacheMetadata=16877885016487418341,13875529847812688001
+// denoCacheMetadata=11303253094250893018,15706077118969129263
