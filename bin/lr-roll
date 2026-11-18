@@ -595,6 +595,20 @@ if ${NO_PREVIEWS:-false} && [ -z "$EXPORT_DIR" ]; then
   die "no preview index and no --export-dir, so there are no images to export (quit Lightroom and retry)"
 fi
 
+# Every frame that will be shown needs an image: a JPEG in --export-dir, or a
+# preview Lightroom rendered on this Mac. Photos edited on another machine
+# often have no local preview, so refuse before uploading anything.
+missing="$(jq -r '.[] | select(.redact != 1) | "\(.filename)\t\(.previewLongSide // "")"' <<<"$FRAMES_JSON" \
+  | while IFS=$'\t' read -r fn pv; do
+      if [ -n "$EXPORT_DIR" ] && find "$EXPORT_DIR" -maxdepth 1 -type f -iname "${fn%.*}.jp*g" | grep -q .; then continue; fi
+      [ -n "$pv" ] || echo "$fn"
+    done)"
+if [ -n "$missing" ]; then
+  echo "⛔ $(grep -c . <<<"$missing") of $COUNT frames have no image to publish:" >&2
+  head -5 <<<"$missing" | sed 's/^/  /' >&2
+  die "export the album as JPEGs from Lightroom (long edge 2048, sRGB, original filenames) and pass --export-dir, or open the album in Lightroom on this Mac so it renders previews"
+fi
+
 if [ -e "$OUT" ]; then
   $FORCE || die "$OUT exists (use --force to replace its roll.json and images)"
   # Remember what the old roll.json pointed at, so uploads it no longer uses
