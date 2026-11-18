@@ -20,8 +20,8 @@ bakeoff/
 .pi-session-path
 
 # sample roll from bin/gen-sample-roll
-src/photos/rolls/sample/
-public/photos/rolls/sample/
+src/photos/sample/
+public/photos/sample/
 
 # wrangler local cache (account id)
 .wrangler/

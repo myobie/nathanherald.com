@@ -39,6 +39,8 @@ export interface Roll {
   trip?: string | null
   // the Lightroom folder path, for reference
   folders?: string[]
+  // where the roll lives under /photos/, following the folders (e.g. "2026-10/sf-film-photos/01-delta-400")
+  path?: string
   shot: string | null
   scanned: string | null
   notes: string | null

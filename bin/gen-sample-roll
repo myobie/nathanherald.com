@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Generate a fake roll of film in src/photos/rolls/sample/ so the contact sheet
+# Generate a fake roll of film in src/photos/sample/ so the contact sheet
 # page can be built and looked at without real scans. Output is gitignored.
 #
 # Usage: bin/gen-sample-roll [frames] [format]
@@ -11,7 +11,7 @@ set -euo pipefail
 FRAMES="${1:-37}"
 FORMAT="${2:-35mm}"
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-OUT="$ROOT/src/photos/rolls/sample"
+OUT="$ROOT/src/photos/sample"
 
 if command -v magick >/dev/null; then IM=(magick); else IM=(convert); fi
 
@@ -44,6 +44,7 @@ done
 cat > "$OUT/roll.json" <<JSON
 {
   "slug": "sample",
+  "path": "sample",
   "title": "Sample roll",
   "film": "Ilford HP5+",
   "format": "$FORMAT",

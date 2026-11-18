@@ -269,9 +269,31 @@ Deno.test('roll page links back to its trip and to the previous and next roll', 
     linkie.customElements.define(NhContactSheetElement.defaultName, class extends NhContactSheetElement {})
     const doc = parseHTML(await serializeAsync(linkie.document.documentElement)).document
     assertEquals(doc.querySelector('.roll-trip')?.textContent, 'Roll 2 of 3 from SF Film Photos')
-    assertEquals(doc.querySelector('.roll-trip a')?.getAttribute('href'), '../../#trip-sf-film-photos')
-    assertEquals(doc.querySelector('a[rel=prev]')?.getAttribute('href'), '../../rolls/2026-11-01-delta-400/')
+    assertEquals(doc.querySelector('.roll-trip a')?.getAttribute('href'), '/photos/#trip-sf-film-photos')
+    assertEquals(doc.querySelector('a[rel=prev]')?.getAttribute('href'), '/photos/rolls/2026-11-01-delta-400/')
     assertEquals(doc.querySelector('a[rel=next]')?.textContent, 'Roll 3: Delta 400 →')
+  } finally {
+    await Deno.remove(dir, { recursive: true })
+  }
+})
+
+Deno.test('rolls nested in folders find rolls.json at the top of /photos/', async () => {
+  const dir = await Deno.makeTempDir()
+  try {
+    const path = '2026-10/sf-film-photos/02-delta-400'
+    const mk = (p: string) => ({ ...base, slug: p.replaceAll('/', '-'), title: 'Delta 400', trip: 'SF Film Photos', url: `${p}/`, frameCount: 1, keepers: 0, preview: [] })
+    await Deno.mkdir(join(dir, path), { recursive: true })
+    await Deno.writeTextFile(join(dir, 'rolls.json'), JSON.stringify([mk('2026-10/sf-film-photos/01-delta-400'), mk(path)]))
+    const rollPath = join(dir, path, 'roll.json')
+    await Deno.writeTextFile(rollPath, JSON.stringify({ ...base, slug: path.replaceAll('/', '-'), path, title: 'Delta 400', trip: 'SF Film Photos', frames: [frame(1)] }))
+    const pageUrl = new URL(`file://${dirname(rollPath)}/index.html`)
+    pageUrl.searchParams.set('roll', `file://${rollPath}`)
+    const linkie = parseHTML(template)
+    linkie.location = pageUrl
+    linkie.customElements.define(NhContactSheetElement.defaultName, class extends NhContactSheetElement {})
+    const doc = parseHTML(await serializeAsync(linkie.document.documentElement)).document
+    assertEquals(doc.querySelector('.roll-trip')?.textContent, 'Roll 2 of 2 from SF Film Photos')
+    assertEquals(doc.querySelector('a[rel=prev]')?.getAttribute('href'), '/photos/2026-10/sf-film-photos/01-delta-400/')
   } finally {
     await Deno.remove(dir, { recursive: true })
   }

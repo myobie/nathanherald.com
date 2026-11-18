@@ -17,3 +17,14 @@ to = "/posts/"
 [[redirects]]
 from = "/writing"
 to = "/posts"
+
+# Film rolls moved to URLs that follow the Lightroom folders
+[[redirects]]
+from = "/photos/rolls/2025-12-pentax-p30t-first-roll"
+to = "/photos/2025-12/pentax-p30t-first-roll/"
+status = 301
+
+[[redirects]]
+from = "/photos/rolls/2025-12-pentax-p30t-first-roll/*"
+to = "/photos/2025-12/pentax-p30t-first-roll/:splat"
+status = 301

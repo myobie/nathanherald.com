@@ -100,7 +100,8 @@ await Deno.copyFile(join(publicDir, 'posts.json'), join(srcDir, 'posts.json'))
 // Generate src/photos/rolls.json, the index of all film rolls (photos page
 // depends on it). Newest first, each with a short preview strip of keepers.
 {
-  const rollsDir = join(srcDir, 'photos', 'rolls')
+  // Rolls live wherever Nathan's Lightroom folders put them: src/photos/<folders…>/<album>/roll.json
+  const rollsDir = join(srcDir, 'photos')
   const summaries: RollSummary[] = []
   try {
     for await (const entry of walk(rollsDir, { match: [/\/roll\.json$/] })) {
@@ -206,7 +207,7 @@ for await (const entry of walk(join(srcDir, 'posts'), { exts: ['.md'] })) {
 // Build film rolls (contact sheets) using the roll template
 const rollTemplatePath = join(srcDir, 'roll.html')
 const rollTemplateCode = await Deno.readTextFile(rollTemplatePath)
-const rollsDir = join(srcDir, 'photos', 'rolls')
+const rollsDir = join(srcDir, 'photos')
 
 try {
   for await (const entry of walk(rollsDir, { match: [/\/roll\.json$/] })) {
