@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
 # lr-roll: turn a roll of film in the local Lightroom (cloud) library into
-# src/photos/rolls/<slug>/roll.json plus web JPEGs.
+# src/photos/<folders>/<album>/roll.json plus web JPEGs.
 #
 # Read only. It copies the library's index (Managed Catalog.wfindex) and
 # previews.db into a temp dir, queries the copies, and deletes them on exit.
@@ -14,7 +14,7 @@
 #       --title Tegernsee --film "Ilford HP5+" --camera "Leica M7" \
 #       --format 35mm --shot 2026-09 [--slug 2026-09-tegernsee-1] \
 #       [--export-dir ~/Desktop/tegernsee-export] [--include-rejected] \
-#       [--dry-run] [--force] [--out DIR (default src/photos/rolls)] \
+#       [--dry-run] [--force] [--out DIR (default src/photos)] \
 #       [--max 1280 (long side of the main image; thumbs are 640)] \
 #       [--local (write JPEGs next to roll.json instead of uploading)]
 #
@@ -54,7 +54,7 @@ usage() { sed -n '3,40p' "$0" | sed 's/^# \{0,1\}//'; exit "${1:-0}"; }
 SUGGEST=false DRY_RUN=false FORCE=false INCLUDE_REJECTED=false
 ALBUM="" ALBUM_ID="" FROM="" TO="" SLUG="" TITLE="" FILM="" CAMERA=""
 FORMAT="35mm" SHOT="" NOTES="" EXPORT_DIR="" GAP=90 MAX=1280
-OUT_ROOT="$REPO_ROOT/src/photos/rolls"
+OUT_ROOT="$REPO_ROOT/src/photos"
 LOCAL=false FORMAT_SET=false CHECK="" FOLDER="" LAB="" LENS="" TRIP=""
 BUCKET="${LR_BUCKET:-nathanherald-photos}"
 BASE_URL="${LR_BASE_URL:-https://photos.nathanherald.com}"
@@ -144,9 +144,12 @@ sql_str() { printf "'%s'" "${1//\'/\'\'}"; }
 
 if [ -n "$CHECK" ]; then
   if [ "$CHECK" = all ]; then
-    files="$(find "$OUT_ROOT" -mindepth 2 -maxdepth 2 -name roll.json | sort)"
+    files="$(find "$OUT_ROOT" -name roll.json -not -path '*/sample/*' | sort)"
   elif [ -f "$CHECK" ]; then files="$CHECK"
-  else files="$OUT_ROOT/$CHECK/roll.json"; [ -f "$files" ] || die "no roll.json for $CHECK"
+  elif [ -f "$OUT_ROOT/$CHECK/roll.json" ]; then files="$OUT_ROOT/$CHECK/roll.json"   # a path like 2026-10/sf-film-photos/01-delta-400
+  else  # or a slug / id
+    files="$(find "$OUT_ROOT" -name roll.json -not -path '*/sample/*' -exec jq -r --arg s "$CHECK" 'select(.slug == $s) | input_filename' {} + 2>/dev/null)"
+    [ -n "$files" ] || die "no roll.json for $CHECK"
   fi
   [ -n "$files" ] || die "no rolls under $OUT_ROOT"
   problems=0
@@ -558,18 +561,26 @@ if [ -z "$TITLE" ]; then
 fi
 [ -n "$TITLE" ] || TITLE="$(printf '%s' "$ALBUM" | sed -E 's/^[0-9]+[[:space:]]*[-–—.][[:space:]]*//')"
 SCANNED="$(jq -r '.[0].captureDate[0:10]' <<<"$FRAMES_JSON")"
-if [ -z "$SLUG" ]; then
-  # From the album name, not the title: "01 - Delta 400" … "04 - Delta 400"
-  # share a title but each needs its own page.
-  SLUG="${SCANNED:0:7}-$(printf '%s' "$ALBUM" | iconv -f utf-8 -t ascii//TRANSLIT 2>/dev/null \
-    | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9]+/-/g; s/^-+|-+$//g')"
-fi
+# URLs follow Nathan's Lightroom folders, permanently: "2026 10" › "SF Film
+# Photos" › "01 - Delta 400" lives at /photos/2026-10/sf-film-photos/01-delta-400/.
+# The album keeps its number in the URL (unique, ordered); the title drops it.
+slugify() { printf '%s' "$1" | iconv -f utf-8 -t ascii//TRANSLIT 2>/dev/null \
+  | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9]+/-/g; s/^-+|-+$//g'; }
+ROLL_PATH=""
+while IFS= read -r part; do
+  [ -n "$part" ] || continue
+  s="$(slugify "$part")"; [ -n "$s" ] && ROLL_PATH="${ROLL_PATH:+$ROLL_PATH/}$s"
+done < <(jq -r '.[]' <<<"$FOLDERS_JSON")
+a="$(slugify "$ALBUM")"; [ -n "$a" ] || die "album name \"$ALBUM\" has nothing to make a URL from"
+ROLL_PATH="${ROLL_PATH:+$ROLL_PATH/}$a"
+# The slug is the path flattened: a unique id for the roll (and its R2 prefix).
+[ -n "$SLUG" ] || SLUG="${ROLL_PATH//\//-}"
 [[ "$SLUG" =~ ^[a-z0-9][a-z0-9-]*$ ]] || die "bad slug: $SLUG"
 
-OUT="$OUT_ROOT/$SLUG"
+OUT="$OUT_ROOT/$ROLL_PATH"
 PAD=${#COUNT}; [ "$PAD" -ge 2 ] || PAD=2
 
-echo "📷 $ALBUM → $SLUG ($COUNT frames)"
+echo "📷 $ALBUM → /photos/$ROLL_PATH/ ($COUNT frames, id $SLUG)"
 
 if $DRY_RUN; then
   jq -r --argjson d "$DESC_JSON" '.[] | "  \(.filename)  \(.captureDate)  ★\(.rating)  flag \(.flag)  preview \(.previewLongSide // "none")"
@@ -690,7 +701,7 @@ done < <(jq -c '.[]' <<<"$FRAMES_JSON")
 nullable() { if [ -n "$1" ]; then jq -Rn --arg v "$1" '$v'; else echo null; fi; }
 
 jq -s \
-  --arg slug "$SLUG" --arg title "$TITLE" --arg format "$FORMAT" \
+  --arg slug "$SLUG" --arg path "$ROLL_PATH" --arg title "$TITLE" --arg format "$FORMAT" \
   --arg scanned "$SCANNED" --arg album "$ALBUM" \
   --argjson film "$(nullable "$FILM")" --argjson camera "$(nullable "$CAMERA")" \
   --argjson shot "$(nullable "$SHOT")" --argjson notes "$(nullable "$NOTES")" \
@@ -699,7 +710,7 @@ jq -s \
   --argjson loaded "$(nullable "$LOADED")" \
   --argjson trip "$(nullable "$TRIP")" --argjson folders "$FOLDERS_JSON" \
   '{
-    slug: $slug, title: $title, film: $film, format: $format, camera: $camera,
+    slug: $slug, path: $path, title: $title, film: $film, format: $format, camera: $camera,
     lens: $lens, lab: $lab, trip: $trip, folders: $folders,
     loaded: $loaded, shot: $shot, scanned: $scanned, notes: $notes,
     source: { album: $album, from: $from, to: $to },

@@ -207,7 +207,9 @@ Tools: `brew install pngquant oxipng` (ImageMagick already installed via `brew i
 
 Nathan writes posts and takes photos; agents own the code in this repo and don't need his code review.
 
-`bin/lr-roll` (runs on Silber, where the Lightroom cloud library lives) turns a roll of film into `src/photos/rolls/<slug>/roll.json` plus web JPEGs (`NN.jpg` at `--max`, default 1280px, and `NN.thumb.jpg` at 640px). It is read only: it copies the library's index and `previews.db` to a temp dir, deletes them on exit, and never touches originals or RAWs. Images come from Lightroom's already edited previews, or from a folder of JPEGs exported from Lightroom (`--export-dir`).
+**URLs follow Nathan's Lightroom folders, permanently.** A roll album "01 - Delta 400" in folders "2026 10" › "SF Film Photos" lives at `src/photos/2026-10/sf-film-photos/01-delta-400/roll.json` and `/photos/2026-10/sf-film-photos/01-delta-400/`. Each folder and the album name are slugified (lowercase, ASCII-folded, non-alphanumerics → `-`); the album keeps its leading number in the URL (the title drops it). An album in no folder goes to `src/photos/<album>/`. roll.json has `path` (relative to `/photos/`) and `slug` = the path with `/` → `-`, a unique id that is also the R2 prefix (`rolls/<slug>/`). `--out` overrides the `src/photos` root.
+
+`bin/lr-roll` (runs on Silber, where the Lightroom cloud library lives) turns a roll of film into `src/photos/<folders>/<album>/roll.json` plus web JPEGs (`NN.jpg` at `--max`, default 1280px, and `NN.thumb.jpg` at 640px). It is read only: it copies the library's index and `previews.db` to a temp dir, deletes them on exit, and never touches originals or RAWs. Images come from Lightroom's already edited previews, or from a folder of JPEGs exported from Lightroom (`--export-dir`).
 
 ```bash
 bin/lr-roll --suggest --album "Tegernsee Film"     # propose roll splits, writes nothing
