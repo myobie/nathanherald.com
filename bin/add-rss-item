@@ -191,7 +191,8 @@ fi
 
 # Update lastBuildDate
 CURRENT_DATE=$(date "+%a, %d %b %Y %H:%M:%S %z")
-sed -i '' "s|<lastBuildDate>.*</lastBuildDate>|<lastBuildDate>$CURRENT_DATE</lastBuildDate>|" "$TEMP_FILE"
+# (portable: BSD sed on macOS and GNU sed on Linux disagree about -i)
+sed "s|<lastBuildDate>.*</lastBuildDate>|<lastBuildDate>$CURRENT_DATE</lastBuildDate>|" "$TEMP_FILE" > "$TEMP_FILE.date" && mv "$TEMP_FILE.date" "$TEMP_FILE"
 
 # Validate the XML before replacing
 if command -v xmllint &> /dev/null; then
