@@ -213,12 +213,13 @@ folder_where() { if [ -n "$FOLDER_ID" ]; then echo "and al.parentId = $(sql_str 
 
 if $SUGGEST && [ -n "$FOLDER" ] && [ -z "$ALBUM" ] && [ -z "$ALBUM_ID" ]; then
   rows="$(q -separator $'\t' "
-    select al.name, a.filename, coalesce(a.rating, 0)
-    from albums al join album_asset_v2 aa on aa.albumId = al.albumId join assets a on a.assetId = aa.assetId
+    select al.name, coalesce(a.filename, ''), coalesce(a.rating, 0)
+    from albums al left join album_asset_v2 aa on aa.albumId = al.albumId left join assets a on a.assetId = aa.assetId
     where coalesce(al.subtype, '') <> 'collection_set' $(folder_where)
     order by al.name, a.filenameLC;")"
-  [ -n "$rows" ] || die "no albums with photos in folder \"$FOLDER\""
+  [ -n "$rows" ] || die "no albums in folder \"$FOLDER\""
   awk -F'\t' -v folder="$FOLDER" '
+    $2 == "" { if (!($1 in seen)) { seen[$1] = 1; albums[++na] = $1 }; empty[$1] = 1; next }
     { b = $2; sub(/\.[^.]*$/, "", b)
       p = (b ~ /^[0-9][0-9-]{3,}[0-9]{4}$/) ? substr(b, 1, length(b) - 4) : "(not lab-named)"
       if (!($1 in seen)) { seen[$1] = 1; albums[++na] = $1 }
@@ -231,6 +232,7 @@ if $SUGGEST && [ -n "$FOLDER" ] && [ -z "$ALBUM" ] && [ -z "$ALBUM_ID" ]; then
       printf "Folder \"%s\": %d albums\n", folder, na
       for (i = 1; i <= na; i++) {
         a = albums[i]
+        if (empty[a] && !cnt[a]) { printf "  ·  %s: no frames yet\n", a; continue }
         printf "  %s %s: %d frames, lab roll %s%s\n", (np[a] > 1 ? "⚠️ " : "✅"), a, cnt[a], plist[a], (un[a] ? sprintf(", ⛔ %d unrated", un[a]) : "")
       }
       bad = 0
@@ -263,6 +265,10 @@ if [ -z "$ALBUM_ID" ]; then
 fi
 [ -n "$ALBUM" ] || ALBUM="$(q "select name from albums where albumId = $(sql_str "$ALBUM_ID");")"
 [ -n "$ALBUM" ] || die "no album with id $ALBUM_ID"
+# Nathan makes a roll's album when he loads the film, so its creation time is
+# when the roll was loaded (and a bound on when it was shot).
+ALBUM_CREATED="$(q "select createdTimestamp from albums where albumId = $(sql_str "$ALBUM_ID");")"
+LOADED="${ALBUM_CREATED:0:10}"
 
 # Frames of the album, in filename order (the order they were scanned / shot).
 # base = filename without extension, used for --from/--to.
@@ -282,6 +288,7 @@ frames_sql() {
            cast(strftime('%s', a.captureDate) as integer) as epoch,
            exists(select 1 from keywords k where k.docId = a.docId and lower(trim(k.keyword)) = 'redact') as redact,
            (select json_group_array(k.keyword) from keywords k where k.docId = a.docId) as keywords,
+           exists(select 1 from keywords k where k.docId = a.docId and lower(trim(k.keyword)) = 'portfolio') as portfolio,
            (select cast(it.completeTime as integer) from importTime it where it.docId = a.docId) as imported
     from album_asset_v2 aa join assets a on a.assetId = aa.assetId
     where $where
@@ -384,7 +391,7 @@ fi
 # "film: <stock>", "camera: <body>", "lens: <lens>", "lab: <lab>|home".
 # FRAMES_JSON gets .kw = { film, camera, lens, lab } per frame.
 FRAMES_JSON="$(jq '
-  map(. + { kw: ((.keywords // "[]") | fromjson | map(capture("^\\s*(?<k>film|camera|lens|lab)\\s*:\\s*(?<v>.*?)\\s*$"; "i"))
+  map(. + { kw: ((.keywords // "[]") | fromjson | map(capture("^\\s*(?<k>film|camera|lens|lab|title)\\s*:\\s*(?<v>.*?)\\s*$"; "i"))
                | map(select(.v != "")) | map({ (.k | ascii_downcase): .v }) | add // {}) })' <<<"$FRAMES_JSON")"
 
 # kw_fact key -> prints the agreed value (empty if none or conflicting) and
@@ -438,8 +445,20 @@ if [ -z "$SHOT" ]; then
           then (($c | max)[0:7]) + " capture_times_(" + (if $before > 172800 then "\($before / 86400 | floor)_days_before_import" else "spread_over_\($span / 3600 | floor)h" end) + ")"
           else "- looks_like_the_scan_session" end
       end' <<<"$FRAMES_JSON")
+  # Fallback: an album made more than 2 days before the scans were imported
+  # was made when the film was loaded, so its month is when the roll was shot.
+  if [ "$SHOT" = "-" ] && [ -n "$ALBUM_CREATED" ]; then
+    read -r s2 why2 < <(jq -r --arg created "$ALBUM_CREATED" '
+      def imp: tostring | strptime("%Y%m%d%H%M%S") | mktime;
+      ($created | sub("\\.[0-9]+"; "") | sub("Z$"; "") | strptime("%Y-%m-%dT%H:%M:%S") | mktime) as $c
+      | [ .[] | .imported | select(. != null) | imp ] as $i
+      | if ($i | length) > 0 and (($i | min) - $c) > 172800
+        then ($created[0:7]) + " album_created_\((($i | min) - $c) / 86400 | floor)_days_before_import"
+        else "- x" end' <<<"$FRAMES_JSON")
+    if [ "$s2" != "-" ]; then SHOT="$s2"; shot_why="$why2"; fi
+  fi
   if [ "$SHOT" = "-" ]; then
-    SHOT=""; echo "🗓  shot date unknown (${shot_why//_/ }): pass --shot YYYY-MM or set the capture time in Lightroom" >&2
+    SHOT=""; echo "🗓  shot date unknown (${shot_why//_/ }; album made after the scans): pass --shot YYYY-MM or set the capture time in Lightroom" >&2
   else
     echo "🗓  shot $SHOT from ${shot_why//_/ }"
   fi
@@ -475,10 +494,18 @@ if ! $FORMAT_SET; then
   if [ -n "$f" ]; then FORMAT="$f"; echo "🎞  format from Lightroom captions: $FORMAT"; fi
 fi
 
-[ -n "$TITLE" ] || TITLE="$ALBUM"
+# Title: --title, else a "title: …" keyword all frames share, else the album
+# name without a leading "NN - " (Nathan numbers his roll albums).
+if [ -z "$TITLE" ]; then
+  TITLE="$(kw_fact title)"
+  [ -z "$TITLE" ] || echo "🏷  title from keywords: $TITLE"
+fi
+[ -n "$TITLE" ] || TITLE="$(printf '%s' "$ALBUM" | sed -E 's/^[0-9]+[[:space:]]*[-–—.][[:space:]]*//')"
 SCANNED="$(jq -r '.[0].captureDate[0:10]' <<<"$FRAMES_JSON")"
 if [ -z "$SLUG" ]; then
-  SLUG="${SCANNED:0:7}-$(printf '%s' "$TITLE" | iconv -f utf-8 -t ascii//TRANSLIT 2>/dev/null \
+  # From the album name, not the title: "01 - Delta 400" … "04 - Delta 400"
+  # share a title but each needs its own page.
+  SLUG="${SCANNED:0:7}-$(printf '%s' "$ALBUM" | iconv -f utf-8 -t ascii//TRANSLIT 2>/dev/null \
     | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9]+/-/g; s/^-+|-+$//g')"
 fi
 [[ "$SLUG" =~ ^[a-z0-9][a-z0-9-]*$ ]] || die "bad slug: $SLUG"
@@ -598,6 +625,7 @@ while IFS= read -r row; do
       { n: $n, assetId, filename, rating, flag, width, height,
         thumb: $thumb, image: $image, imageLongSide: $longest,
         caption: (if $caption == "" then null else $caption end),
+        portfolio: (.portfolio == 1),
         lens: (.kw.lens // null) }
     end' <<<"$row" >> "$FRAME_OBJS"
   printf '  %s %s%s\n' "$num" "$filename" "$($redacted && echo '  (redacted)')"
@@ -612,9 +640,10 @@ jq -s \
   --argjson shot "$(nullable "$SHOT")" --argjson notes "$(nullable "$NOTES")" \
   --argjson from "$(nullable "$FROM")" --argjson to "$(nullable "$TO")" \
   --argjson lens "$(nullable "$LENS")" --argjson lab "$(nullable "$LAB")" \
+  --argjson loaded "$(nullable "$LOADED")" \
   '{
     slug: $slug, title: $title, film: $film, format: $format, camera: $camera,
-    lens: $lens, lab: $lab, shot: $shot, scanned: $scanned, notes: $notes,
+    lens: $lens, lab: $lab, loaded: $loaded, shot: $shot, scanned: $scanned, notes: $notes,
     source: { album: $album, from: $from, to: $to },
     frames: .
   }' "$FRAME_OBJS" > "$OUT/roll.json"
