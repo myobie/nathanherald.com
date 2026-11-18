@@ -118,7 +118,7 @@ await Deno.copyFile(join(publicDir, 'posts.json'), join(srcDir, 'posts.json'))
       const perStrip = formatSpec(roll.format).perStrip
       const preview = [...roll.frames]
         .filter((f) => !f.redacted && (f.thumb ?? f.image))
-        .sort((a, b) => b.rating - a.rating || a.n - b.n)
+        .sort((a, b) => Number(!!b.portfolio) - Number(!!a.portfolio) || b.rating - a.rating || a.n - b.n)
         .slice(0, perStrip)
         .sort((a, b) => a.n - b.n)
       const { frames, notes: _notes, ...rest } = roll
@@ -130,7 +130,7 @@ await Deno.copyFile(join(publicDir, 'posts.json'), join(srcDir, 'posts.json'))
         ...rest,
         url,
         frameCount: frames.length,
-        keepers: frames.filter((f) => f.rating >= 5 && !f.redacted).length,
+        keepers: frames.filter((f) => !f.redacted && (f.rating >= 5 || f.portfolio)).length,
         preview: preview.map((f) => ({ ...f, thumb: fromIndex(f.thumb), image: fromIndex(f.image) })),
       })
     }

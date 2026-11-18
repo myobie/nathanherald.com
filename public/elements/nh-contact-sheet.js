@@ -84,38 +84,43 @@ export class NhContactSheetElement extends HTMLElement {
       const strip = el('div', {
         class: 'strip'
       });
-      for (const frame of roll.frames.slice(i, i + spec.perStrip)){
-        strip.append(this.#frame(roll, frame, edge, spec.aspect));
-      }
+      roll.frames.slice(i, i + spec.perStrip).forEach((frame, idx)=>{
+        strip.append(this.#frame(roll, frame, edge, spec.aspect, idx, spec.perStrip, spec.perStripNarrow));
+      });
       sheet.append(strip);
     }
     article.append(sheet, pencilFilterElement(doc));
-    // Comments on individual frames, numbered like the strip
-    const captioned = roll.frames.filter((f)=>!f.redacted && f.caption?.trim());
-    if (captioned.length) {
-      const list = el('ol', {
-        class: 'frame-notes'
-      });
-      for (const frame of captioned){
-        const body = el('div', {
-          class: 'frame-note-body'
-        });
-        body.innerHTML = md.render(frame.caption.trim());
-        list.append(el('li', {
-          id: `note-${frame.n}`
-        }, el('a', {
-          href: `#frame-${frame.n}`,
-          class: 'frame-note-number'
-        }, String(frame.n)), body));
-      }
-      article.append(el('section', {
-        class: 'frame-notes-section',
-        'aria-label': 'Notes on frames'
-      }, list));
-    }
-    article.append(el('dl', {
+    // Only explain the marks that appear on this roll
+    const used = new Set(roll.frames.map((f)=>markFor(f)));
+    const legend = el('dl', {
       class: 'contact-sheet-legend'
-    }, el('dt', {}, markElement(doc, 'circle', 7, 1.5, 'legend-mark')), el('dd', {}, 'five stars, a keeper'), el('dt', {}, markElement(doc, 'cross', 11, 1.5, 'legend-mark')), el('dd', {}, 'one or two stars, a miss')));
+    });
+    const entries = [
+      [
+        'portfolio',
+        5,
+        'might go in the portfolio'
+      ],
+      [
+        'circle',
+        7,
+        'five stars, a keeper'
+      ],
+      [
+        'check',
+        3,
+        'four stars, a good one'
+      ],
+      [
+        'cross',
+        11,
+        'one or two stars, a miss'
+      ]
+    ];
+    for (const [kind, seed, text] of entries){
+      if (used.has(kind)) legend.append(el('dt', {}, markElement(doc, kind, seed, 1.5, 'legend-mark')), el('dd', {}, text));
+    }
+    if (legend.children.length) article.append(legend);
     const meta = [
       `${roll.frames.length} frames`
     ];
@@ -134,9 +139,11 @@ export class NhContactSheetElement extends HTMLElement {
     article.append(redraw);
     return article;
   }
-  #frame(roll, frame, edge, cellAspect) {
-    const mark = frame.redacted ? null : markFor(frame);
-    const { fig, exposure } = frameElement(elFactory(this.ownerDocument), frame, {
+  #frame(roll, frame, edge, cellAspect, idx, perStrip, perStripNarrow) {
+    const doc = this.ownerDocument;
+    const el = elFactory(doc);
+    const mark = markFor(frame);
+    const { fig, exposure } = frameElement(el, frame, {
       edge,
       cellAspect,
       id: `frame-${frame.n}`,
@@ -144,17 +151,30 @@ export class NhContactSheetElement extends HTMLElement {
       rollLens: roll.lens
     });
     if (!frame.redacted && frame.caption?.trim()) {
-      fig.querySelector('.rebate-bottom')?.append(elFactory(this.ownerDocument)('a', {
-        href: `#note-${frame.n}`,
-        class: 'note-ref never-underline',
-        title: 'Read the note on this frame'
-      }, 'note'));
-      fig.querySelector('.rebate-bottom')?.removeAttribute('aria-hidden');
+      // A sticky page flag on the frame with the start of the comment. Tap
+      // (or hover) to read the whole thing. Notes on the right half of a strip
+      // open to the left so they stay on screen.
+      const html = md.render(frame.caption.trim());
+      const scratch = el('div');
+      scratch.innerHTML = html;
+      const preview = (scratch.textContent ?? '').replace(/\s+/g, ' ').trim();
+      const side = (idx >= perStrip / 2 ? ' flag-right' : '') + (idx % perStripNarrow >= perStripNarrow / 2 ? ' flag-right-narrow' : '');
+      const note = el('div', {
+        class: 'flag-note',
+        id: `note-${frame.n}`
+      });
+      note.innerHTML = html;
+      fig.append(el('div', {
+        class: `flag${side}`
+      }, el('details', {}, el('summary', {
+        class: 'flag-tab',
+        title: preview
+      }, preview)), note));
     }
     if (mark) {
       // Seed from the photo, so each photo keeps its own mark across rolls and builds
       const seed = hashSeed(frame.assetId ?? frame.filename ?? `${roll.slug}-${frame.n}`);
-      exposure.append(markElement(this.ownerDocument, mark, seed, cellAspect));
+      exposure.append(markElement(doc, mark, seed, cellAspect));
     }
     return fig;
   }
@@ -201,4 +221,4 @@ export class NhContactSheetElement extends HTMLElement {
   }
 }
 
-// denoCacheMetadata=12268562663099994899,13241711160108144188
+// denoCacheMetadata=9992390433922478990,10790833258909881226

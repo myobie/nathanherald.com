@@ -52,7 +52,7 @@ export class NhRollListElement extends HTMLElement {
         class: 'roll-summary',
         id: roll.slug
       });
-      const count = `${roll.frameCount} frames` + (roll.keepers ? `, ${roll.keepers} circled` : '');
+      const count = `${roll.frameCount} frames` + (roll.keepers ? `, ${roll.keepers} keeper${roll.keepers === 1 ? '' : 's'}` : '');
       li.append(el('h2', {}, el('a', {
         href: roll.url
       }, roll.title)), el('p', {
@@ -63,7 +63,7 @@ export class NhRollListElement extends HTMLElement {
         class: 'strip'
       });
       for (const frame of roll.preview){
-        const mark = frame.redacted ? null : markFor(frame);
+        const mark = markFor(frame);
         const { fig, exposure } = frameElement(el, frame, {
           edge,
           cellAspect: spec.aspect,
@@ -113,4 +113,4 @@ export class NhRollListElement extends HTMLElement {
   }
 }
 
-// denoCacheMetadata=17316090271079832567,17986613539879431859
+// denoCacheMetadata=16877885016487418341,13875529847812688001

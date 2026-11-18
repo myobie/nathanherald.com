@@ -187,49 +187,95 @@ main.roll-page {
   max-width: 40em;
 }
 
-.frame-notes-section {
-  margin: 0 0 2rem;
-  max-width: 40em;
+/* Comments: a sticky page flag stuck over the top edge of the frame, with
+   the start of the comment. Hover, or tap (it's a <details>), for the rest. */
+.frame {
+  position: relative;
 }
 
-.frame-notes {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.frame-notes li {
-  display: grid;
-  grid-template-columns: 2.4em 1fr;
-  gap: 0.6em;
-  margin: 0 0 0.8em;
-  scroll-margin-top: 2rem;
-}
-
-.frame-notes li:target {
-  outline: 2px solid var(--grease-pencil);
-  outline-offset: 4px;
-}
-
-.frame-note-number {
-  font-family: var(--monospace-font);
-  font-size: 0.85rem;
-  padding-top: 0.15em;
-}
-
-.frame-note-body > :first-child { margin-top: 0; }
-.frame-note-body > :last-child { margin-bottom: 0; }
-
-.rebate-bottom .note-ref {
+.flag {
   position: absolute;
-  top: 0.05rem;
-  left: 50%;
-  transform: translateX(-50%);
-  font-family: var(--monospace-font);
-  font-size: 0.5rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: #f2d27a;
+  top: -0.4rem;
+  left: 7%;
+  max-width: 82%;
+  z-index: 4;
+  --flag: rgba(255, 214, 90, 0.92);
+}
+
+.flag details {
+  display: block;
+}
+
+.flag-tab {
+  display: block;
+  list-style: none;
+  cursor: pointer;
+  background: var(--flag);
+  color: #3d3320;
+  font-size: 0.62rem;
+  line-height: 1.15rem;
+  height: 1.15rem;
+  padding: 0 0.85rem 0 0.4rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  clip-path: polygon(0 0, calc(100% - 0.55rem) 0, 100% 50%, calc(100% - 0.55rem) 100%, 0 100%);
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+  transform: rotate(-1.5deg);
+}
+
+.flag-tab::-webkit-details-marker {
+  display: none;
+}
+
+.flag-tab:focus-visible {
+  outline: 2px solid var(--link-color);
+  outline-offset: 2px;
+}
+
+.flag-note {
+  display: none;
+  position: absolute;
+  top: calc(100% + 0.2rem);
+  left: 0;
+  width: min(18rem, 80vw);
+  padding: 0.6rem 0.75rem;
+  background: #fff4cc;
+  color: #2b2414;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+  z-index: 20;
+}
+
+.flag-note > :first-child { margin-top: 0; }
+.flag-note > :last-child { margin-bottom: 0; }
+
+.flag:hover .flag-note,
+.flag:has(details[open]) .flag-note {
+  display: block;
+}
+
+.flag:hover,
+.flag:has(details[open]) {
+  z-index: 21;
+}
+
+.flag-right .flag-note {
+  left: auto;
+  right: 0;
+}
+
+@media (max-width: 700px) {
+  .flag-right .flag-note {
+    left: 0;
+    right: auto;
+  }
+
+  .flag-right-narrow .flag-note {
+    left: auto;
+    right: 0;
+  }
 }
 
 .frame:target {

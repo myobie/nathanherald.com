@@ -47,8 +47,11 @@ const base = {
   camera: 'Leica M7', shot: '2026-09', scanned: '2026-09-25', notes: null,
 }
 
-Deno.test('markFor: circle for 5, cross for 1 and 2, nothing otherwise', () => {
-  assertEquals([0, 1, 2, 3, 4, 5].map((rating) => markFor({ rating })), [null, 'cross', 'cross', null, null, 'circle'])
+Deno.test('markFor: P for portfolio, circle for 5, check for 4, cross for 1 and 2, nothing for 3', () => {
+  assertEquals([0, 1, 2, 3, 4, 5].map((rating) => markFor({ rating })), [null, 'cross', 'cross', null, 'check', 'circle'])
+  assertEquals(markFor({ rating: 5, portfolio: true }), 'portfolio')
+  assertEquals(markFor({ rating: 3, portfolio: true }), 'portfolio')
+  assertEquals(markFor({ rating: 5, portfolio: true, redacted: true }), null)
 })
 
 Deno.test('renders strips of six with marks and edge numbers', async () => {
@@ -59,6 +62,7 @@ Deno.test('renders strips of six with marks and edge numbers', async () => {
   assertEquals(doc.querySelectorAll('figure.frame').length, 13)
   assertEquals(doc.querySelectorAll('.mark-circle').length, 2)
   assertEquals(doc.querySelectorAll('.mark-cross').length, 4)
+  assertEquals(doc.querySelectorAll('.mark-check').length, 2)
   assertEquals(doc.querySelector('#frame-7 .frame-number')?.textContent, '7')
   assertEquals(doc.querySelector('#frame-7 .frame-number-a')?.textContent, '7A')
   assert(doc.querySelector('.edge-text')?.textContent === 'KODAK PORTRA 400')
@@ -181,23 +185,33 @@ Deno.test('unratedFrames: a roll is only finished when every frame has 1 to 5 st
   assertEquals(unrated.map((f) => f.n), [1, 3])
 })
 
-Deno.test('frame captions become numbered notes linked to their frames', async () => {
+Deno.test('frame captions become sticky flags on their frames', async () => {
   const doc = await render({
     ...base,
     frames: [
       frame(1, { rating: 1, caption: 'Missed *focus*, again.' }),
       frame(2, { rating: 3 }),
       frame(3, { rating: 5, redacted: true, caption: 'should never show' }),
+      frame(5, { rating: 3, caption: 'Right side of the strip' }),
     ],
   })
-  const items = doc.querySelectorAll('.frame-notes li')
-  assertEquals(items.length, 1)
-  assertEquals(items[0].getAttribute('id'), 'note-1')
-  assertEquals(items[0].querySelector('a')?.getAttribute('href'), '#frame-1')
-  assertEquals(items[0].querySelector('em')?.textContent, 'focus')
-  assertEquals(doc.querySelector('#frame-1 .note-ref')?.getAttribute('href'), '#note-1')
-  assert(!doc.querySelector('#frame-2 .note-ref'))
+  const flag = doc.querySelector('#frame-1 .flag')!
+  assertEquals(flag.querySelector('summary.flag-tab')?.textContent, 'Missed focus, again.')
+  assertEquals(flag.querySelector('.flag-note em')?.textContent, 'focus')
+  assert(!flag.classList.contains('flag-right'))
+  assert(doc.querySelector('#frame-5 .flag')?.classList.contains('flag-right'), 'flags on the right half open to the left')
+  assert(!doc.querySelector('#frame-2 .flag'))
+  assert(!doc.querySelector('.frame-notes'), 'no list at the bottom anymore')
   assert(!doc.body.innerHTML.includes('should never show'))
+})
+
+Deno.test('legend only explains marks used on the roll, including P and check', async () => {
+  const doc = await render({ ...base, frames: [frame(1, { rating: 4 }), frame(2, { rating: 5, portfolio: true }), frame(3, { rating: 3 })] })
+  const terms = [...doc.querySelectorAll('.contact-sheet-legend dd')].map((d) => d.textContent)
+  assertEquals(terms, ['might go in the portfolio', 'four stars, a good one'])
+  assert(doc.querySelector('#frame-2 svg.mark-portfolio'))
+  assert(doc.querySelector('#frame-1 svg.mark-check'))
+  assert(!doc.querySelector('#frame-3 svg.mark'))
 })
 
 Deno.test('notes.md beside roll.json renders as markdown above the sheet', async () => {

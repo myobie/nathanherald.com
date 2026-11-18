@@ -59,7 +59,7 @@ export class NhRollListElement extends HTMLElement {
       const edge = (roll.film ?? '').toUpperCase()
       const li = el('li', { class: 'roll-summary', id: roll.slug })
 
-      const count = `${roll.frameCount} frames` + (roll.keepers ? `, ${roll.keepers} circled` : '')
+      const count = `${roll.frameCount} frames` + (roll.keepers ? `, ${roll.keepers} keeper${roll.keepers === 1 ? '' : 's'}` : '')
       li.append(
         el('h2', {}, el('a', { href: roll.url }, roll.title)),
         el('p', { class: 'roll-facts' }, factsLine(roll)),
@@ -68,7 +68,7 @@ export class NhRollListElement extends HTMLElement {
       const sheet = sheetElement(el, roll.format, 'roll-preview')
       const strip = el('div', { class: 'strip' })
       for (const frame of roll.preview) {
-        const mark = frame.redacted ? null : markFor(frame)
+        const mark = markFor(frame)
         const { fig, exposure } = frameElement(el, frame, {
           edge,
           cellAspect: spec.aspect,

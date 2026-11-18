@@ -17,6 +17,8 @@ export interface Frame {
   redacted?: boolean
   // Nathan's comment on this frame (markdown), from Lightroom caption lines starting with ">"
   caption?: string | null
+  // marked Portfolio in Lightroom: might go in the portfolio
+  portfolio?: boolean
   // lens for this frame, when known (from a `lens:` keyword)
   lens?: string | null
 }

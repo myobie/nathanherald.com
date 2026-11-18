@@ -124,8 +124,63 @@ export function crossStrokes(r, aspect) {
     stroke(between(r, 0.78, 0.96) * w, between(r, 0.04, 0.22) * h, (1 - past()) * w, between(r, 0.8, 1.0) * h)
   ];
 }
+// A quick tick in the bottom right corner, for a good frame. Kept small and
+// in the corner so it covers as little of the photo as possible.
+export function checkStrokes(r, aspect) {
+  const w = 100 * aspect;
+  const h = 100;
+  const size = between(r, 26, 34);
+  // the bottom of the tick sits near the corner, spilling onto the film edge
+  const bx = w - size * between(r, 0.7, 0.85);
+  const by = h - between(r, -2, 6);
+  const sx = bx - size * between(r, 0.32, 0.45);
+  const sy = by - size * between(r, 0.3, 0.42);
+  const ex = bx + size * between(r, 0.5, 0.7);
+  const ey = by - size * between(r, 0.95, 1.15);
+  const bow = between(r, -4, 3);
+  const d = `M${fmt(sx)} ${fmt(sy)} Q${fmt((sx + bx) / 2 - 1)} ${fmt((sy + by) / 2 + 1)} ${fmt(bx)} ${fmt(by)} ` + `Q${fmt((bx + ex) / 2 + bow)} ${fmt((by + ey) / 2 + bow)} ${fmt(ex)} ${fmt(ey)}`;
+  return [
+    {
+      d,
+      weight: between(r, 0.9, 1.15)
+    }
+  ];
+}
+// A hand written P in the top right corner, for a portfolio frame: a stem,
+// then a bowl that loops back to (or a little past) the stem.
+export function portfolioStrokes(r, aspect) {
+  const w = 100 * aspect;
+  const hgt = between(r, 30, 38);
+  const x0 = w - hgt * between(r, 0.62, 0.78);
+  const y0 = between(r, -12, -4);
+  const lean = between(r, -3, 4);
+  const stem = `M${fmt(x0 - lean)} ${fmt(y0 + hgt)} Q${fmt(x0 + between(r, -1.5, 1.5))} ${fmt(y0 + hgt / 2)} ${fmt(x0)} ${fmt(y0)}`;
+  const bw = hgt * between(r, 0.42, 0.55);
+  const mid = y0 + hgt * between(r, 0.45, 0.56);
+  const back = x0 - between(r, -1, 4);
+  const bowl = `M${fmt(x0 + between(r, -1, 1))} ${fmt(y0 + between(r, -1, 1.5))} ` + `C${fmt(x0 + bw * 1.35)} ${fmt(y0 - hgt * 0.06)} ${fmt(x0 + bw * 1.4)} ${fmt(mid + hgt * 0.04)} ${fmt(back)} ${fmt(mid)}`;
+  return [
+    {
+      d: stem,
+      weight: between(r, 0.95, 1.2)
+    },
+    {
+      d: bowl,
+      weight: between(r, 0.85, 1.1)
+    }
+  ];
+}
 export function strokesFor(kind, r, aspect) {
-  return kind === 'circle' ? circleStrokes(r, aspect) : crossStrokes(r, aspect);
+  switch(kind){
+    case 'circle':
+      return circleStrokes(r, aspect);
+    case 'cross':
+      return crossStrokes(r, aspect);
+    case 'check':
+      return checkStrokes(r, aspect);
+    case 'portfolio':
+      return portfolioStrokes(r, aspect);
+  }
 }
 const SVG_NS = 'http://www.w3.org/2000/svg';
 /** Replace the paths in a mark <svg> with freshly drawn strokes. */ export function drawInto(svg, kind, r, aspect) {
@@ -196,10 +251,16 @@ const SVG = 'http://www.w3.org/2000/svg';
   return svg;
 }
 /** The inline module that redraws marks in the browser. */ export const REDRAW_SCRIPT = "import { redrawMarks } from 'grease-pencil'; redrawMarks()";
-export function markFor(frame) {
+/**
+ * The mark for a frame: P for portfolio, a circle for 5 stars, a check for
+ * 4, an X for 1 or 2, nothing for 3 (and nothing for redacted frames).
+ */ export function markFor(frame) {
+  if (frame.redacted) return null;
+  if (frame.portfolio) return 'portfolio';
   if (frame.rating >= 5) return 'circle';
+  if (frame.rating === 4) return 'check';
   if (frame.rating >= 1 && frame.rating <= 2) return 'cross';
   return null;
 }
 
-// denoCacheMetadata=10212570715195253748,10790501555834808802
+// denoCacheMetadata=11831002660271866479,13269438599796829798

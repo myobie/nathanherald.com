@@ -47,7 +47,7 @@ Deno.test('lists rolls with a preview strip linking into the contact sheet', asy
   assertEquals(items[0].querySelectorAll('.roll-preview .frame').length, 3)
   assertEquals(items[0].querySelector('#a .frame a')?.getAttribute('href'), 'rolls/a/#frame-3')
   assertEquals(items[0].querySelectorAll('.mark-circle').length, 2)
-  assert(items[0].querySelector('.roll-meta')?.textContent?.includes('36 frames, 2 circled'))
+  assert(items[0].querySelector('.roll-meta')?.textContent?.includes('36 frames, 2 keepers'))
   assertEquals(items[1].querySelector('.roll-meta')?.textContent?.trim(), 'See the whole roll, 36 frames')
 })
 
