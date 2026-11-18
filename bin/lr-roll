@@ -55,7 +55,7 @@ SUGGEST=false DRY_RUN=false FORCE=false INCLUDE_REJECTED=false
 ALBUM="" ALBUM_ID="" FROM="" TO="" SLUG="" TITLE="" FILM="" CAMERA=""
 FORMAT="35mm" SHOT="" NOTES="" EXPORT_DIR="" GAP=90 MAX=1280
 OUT_ROOT="$REPO_ROOT/src/photos/rolls"
-LOCAL=false FORMAT_SET=false CHECK="" FOLDER="" LAB="" LENS=""
+LOCAL=false FORMAT_SET=false CHECK="" FOLDER="" LAB="" LENS="" TRIP=""
 BUCKET="${LR_BUCKET:-nathanherald-photos}"
 BASE_URL="${LR_BASE_URL:-https://photos.nathanherald.com}"
 
@@ -82,6 +82,7 @@ while [ $# -gt 0 ]; do
     --folder) FOLDER="$2"; shift ;;
     --lab) LAB="$2"; shift ;;
     --lens) LENS="$2"; shift ;;
+    --trip) TRIP="$2"; shift ;;
     --include-rejected) INCLUDE_REJECTED=true ;;
     --dry-run) DRY_RUN=true ;;
     --force) FORCE=true ;;
@@ -244,6 +245,34 @@ if $SUGGEST && [ -n "$FOLDER" ] && [ -z "$ALBUM" ] && [ -z "$ALBUM_ID" ]; then
       if (bad) print "Mixed albums usually mean a frame was sorted into the wrong roll."
       else print "Every album is exactly one lab roll."
     }' <<<"$rows"
+  # Roll facts per album: keyword values (with how many frames carry them)
+  # and how many frames are marked Portfolio or Redact.
+  facts="$(q -separator $'\t' "
+    select al.name, lower(trim(substr(k.keyword, 1, instr(k.keyword, ':') - 1))) as key,
+           trim(substr(k.keyword, instr(k.keyword, ':') + 1)) as val, count(distinct a.docId),
+           (select count(*) from album_asset_v2 x where x.albumId = al.albumId)
+    from albums al join album_asset_v2 aa on aa.albumId = al.albumId join assets a on a.assetId = aa.assetId
+         join keywords k on k.docId = a.docId
+    where coalesce(al.subtype, '') <> 'collection_set' $(folder_where)
+      and lower(trim(substr(k.keyword, 1, instr(k.keyword, ':') - 1))) in ('film','camera','lens','lab','title','trip')
+    group by al.name, key, val
+    union all
+    select al.name, lower(trim(k.keyword)), '', count(distinct a.docId),
+           (select count(*) from album_asset_v2 x where x.albumId = al.albumId)
+    from albums al join album_asset_v2 aa on aa.albumId = al.albumId join assets a on a.assetId = aa.assetId
+         join keywords k on k.docId = a.docId
+    where coalesce(al.subtype, '') <> 'collection_set' $(folder_where)
+      and lower(trim(k.keyword)) in ('portfolio','redact')
+    group by al.name, lower(trim(k.keyword))
+    order by 1, 2;")"
+  if [ -n "$facts" ]; then
+    echo; echo "Keywords per album (frames carrying each):"
+    awk -F'\t' '
+      $1 != last { if (last != "") print ""; printf "  %s:", $1; last = $1 }
+      { if ($3 == "") printf "  %s %d", $2, $4
+        else printf "  %s: %s%s", $2, $3, ($4 < $5 ? sprintf(" (%d of %d)", $4, $5) : "") }
+      END { print "" }' <<<"$facts"
+  fi
   exit 0
 fi
 
@@ -269,6 +298,16 @@ fi
 # when the roll was loaded (and a bound on when it was shot).
 ALBUM_CREATED="$(q "select createdTimestamp from albums where albumId = $(sql_str "$ALBUM_ID");")"
 LOADED="${ALBUM_CREATED:0:10}"
+# The folders the album sits in, from the top (e.g. ["2026 10", "SF Trip"]).
+FOLDERS_JSON="$(q -json "
+  with recursive up(id, name, depth) as (
+    select parentId, null, 0 from albums where albumId = $(sql_str "$ALBUM_ID")
+    union all
+    select f.parentId, f.name, up.depth + 1 from albums f join up on f.albumId = up.id
+    where up.id is not null and up.depth < 20)
+  select name from up where name is not null order by depth desc;" | jq -c 'map(.name)')"
+[ -n "$FOLDERS_JSON" ] || FOLDERS_JSON="[]"
+[ "$FOLDERS_JSON" = "[]" ] || echo "📁 in $(jq -r 'join(" › ")' <<<"$FOLDERS_JSON") (album made $LOADED)"
 
 # Frames of the album, in filename order (the order they were scanned / shot).
 # base = filename without extension, used for --from/--to.
@@ -391,7 +430,7 @@ fi
 # "film: <stock>", "camera: <body>", "lens: <lens>", "lab: <lab>|home".
 # FRAMES_JSON gets .kw = { film, camera, lens, lab } per frame.
 FRAMES_JSON="$(jq '
-  map(. + { kw: ((.keywords // "[]") | fromjson | map(capture("^\\s*(?<k>film|camera|lens|lab|title)\\s*:\\s*(?<v>.*?)\\s*$"; "i"))
+  map(. + { kw: ((.keywords // "[]") | fromjson | map(capture("^\\s*(?<k>film|camera|lens|lab|title|trip)\\s*:\\s*(?<v>.*?)\\s*$"; "i"))
                | map(select(.v != "")) | map({ (.k | ascii_downcase): .v }) | add // {}) })' <<<"$FRAMES_JSON")"
 
 # kw_fact key -> prints the agreed value (empty if none or conflicting) and
@@ -420,6 +459,17 @@ kw_fact() {
 if [ -z "$FILM" ]; then FILM="$(kw_fact film)"; [ -z "$FILM" ] || echo "🎞  film from keywords: $FILM"; fi
 if [ -z "$CAMERA" ]; then CAMERA="$(kw_fact camera)"; [ -z "$CAMERA" ] || echo "📷 camera from keywords: $CAMERA"; fi
 if [ -z "$LAB" ]; then LAB="$(kw_fact lab)"; [ -z "$LAB" ] || echo "🧪 lab from keywords: $LAB"; fi
+# Trip: --trip, else a shared "trip: …" keyword, else the album's folder
+# unless that folder is a date folder like "2026 10" or "2026".
+if [ -z "$TRIP" ]; then
+  TRIP="$(kw_fact trip)"
+  if [ -n "$TRIP" ]; then echo "🧳 trip from keywords: $TRIP"
+  else
+    parent="$(jq -r '.[-1] // ""' <<<"$FOLDERS_JSON")"
+    if [ -n "$parent" ] && ! [[ "$parent" =~ ^[0-9]{4}(\ [0-9]{2})?$ ]]; then TRIP="$parent"; echo "🧳 trip from folder: $TRIP"; fi
+  fi
+fi
+
 # Lens may vary per frame: the roll gets one only when every frame that has
 # a lens agrees and at least half the frames have one.
 if [ -z "$LENS" ]; then
@@ -641,9 +691,11 @@ jq -s \
   --argjson from "$(nullable "$FROM")" --argjson to "$(nullable "$TO")" \
   --argjson lens "$(nullable "$LENS")" --argjson lab "$(nullable "$LAB")" \
   --argjson loaded "$(nullable "$LOADED")" \
+  --argjson trip "$(nullable "$TRIP")" --argjson folders "$FOLDERS_JSON" \
   '{
     slug: $slug, title: $title, film: $film, format: $format, camera: $camera,
-    lens: $lens, lab: $lab, loaded: $loaded, shot: $shot, scanned: $scanned, notes: $notes,
+    lens: $lens, lab: $lab, trip: $trip, folders: $folders,
+    loaded: $loaded, shot: $shot, scanned: $scanned, notes: $notes,
     source: { album: $album, from: $from, to: $to },
     frames: .
   }' "$FRAME_OBJS" > "$OUT/roll.json"
