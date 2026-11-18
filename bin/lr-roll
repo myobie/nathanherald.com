@@ -495,6 +495,12 @@ if [ -z "$SHOT" ]; then
           then (($c | max)[0:7]) + " capture_times_(" + (if $before > 172800 then "\($before / 86400 | floor)_days_before_import" else "spread_over_\($span / 3600 | floor)h" end) + ")"
           else "- looks_like_the_scan_session" end
       end' <<<"$FRAMES_JSON")
+  # Next: Nathan files rolls under month folders ("2026 10" › "SF Film
+  # Photos" › "01 - Delta 400"), so the nearest such folder is the shot month.
+  if [ "$SHOT" = "-" ]; then
+    f="$(jq -r '[ .[] | select(test("^[0-9]{4}[ -][0-9]{2}$")) ] | last // ""' <<<"$FOLDERS_JSON")"
+    if [ -n "$f" ]; then SHOT="${f:0:4}-${f:5:2}"; shot_why="folder_${f// /_}"; fi
+  fi
   # Fallback: an album made more than 2 days before the scans were imported
   # was made when the film was loaded, so its month is when the roll was shot.
   if [ "$SHOT" = "-" ] && [ -n "$ALBUM_CREATED" ]; then
