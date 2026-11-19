@@ -582,19 +582,6 @@ PAD=${#COUNT}; [ "$PAD" -ge 2 ] || PAD=2
 
 echo "📷 $ALBUM → /photos/$ROLL_PATH/ ($COUNT frames, id $SLUG)"
 
-if $DRY_RUN; then
-  jq -r --argjson d "$DESC_JSON" '.[] | "  \(.filename)  \(.captureDate)  ★\(.rating)  flag \(.flag)  preview \(.previewLongSide // "none")"
-    + (if .redact == 1 then "  REDACTED" else "" end)
-    + (($d[.assetId].text // "") | split("\n") | map(select(test("^\\s*>"))) | if length > 0 then "  💬 " + (join(" ") | .[0:60]) else "" end)' <<<"$FRAMES_JSON"
-  echo "(dry run, nothing written to $OUT)"
-  exit 0
-fi
-
-OLD_URLS=""
-if ${NO_PREVIEWS:-false} && [ -z "$EXPORT_DIR" ]; then
-  die "no preview index and no --export-dir, so there are no images to export (quit Lightroom and retry)"
-fi
-
 # Every frame that will be shown needs an image: a JPEG in --export-dir, or a
 # preview Lightroom rendered on this Mac. Photos edited on another machine
 # often have no local preview, so refuse before uploading anything.
@@ -603,10 +590,29 @@ missing="$(jq -r '.[] | select(.redact != 1) | "\(.filename)\t\(.previewLongSide
       if [ -n "$EXPORT_DIR" ] && find "$EXPORT_DIR" -maxdepth 1 -type f -iname "${fn%.*}.jp*g" | grep -q .; then continue; fi
       [ -n "$pv" ] || echo "$fn"
     done)"
+
+if $DRY_RUN; then
+  jq -r --argjson d "$DESC_JSON" '.[] | "  \(.filename)  \(.captureDate)  ★\(.rating)  flag \(.flag)  preview \(.previewLongSide // "none")"
+    + (if .redact == 1 then "  REDACTED" else "" end)
+    + (($d[.assetId].text // "") | split("\n") | map(select(test("^\\s*>"))) | if length > 0 then "  💬 " + (join(" ") | .[0:60]) else "" end)' <<<"$FRAMES_JSON"
+  if [ -n "$missing" ]; then
+    echo "⛔ $(grep -c . <<<"$missing") of $COUNT frames have no image to publish (preview none and no JPEG in --export-dir)" >&2
+  else
+    echo "✅ every shown frame has an image${EXPORT_DIR:+ (from --export-dir)}"
+  fi
+  echo "(dry run, nothing written to $OUT)"
+  [ -z "$missing" ]; exit $?
+fi
+
 if [ -n "$missing" ]; then
   echo "⛔ $(grep -c . <<<"$missing") of $COUNT frames have no image to publish:" >&2
   head -5 <<<"$missing" | sed 's/^/  /' >&2
   die "export the album as JPEGs from Lightroom (long edge 2048, sRGB, original filenames) and pass --export-dir, or open the album in Lightroom on this Mac so it renders previews"
+fi
+
+OLD_URLS=""
+if ${NO_PREVIEWS:-false} && [ -z "$EXPORT_DIR" ]; then
+  die "no preview index and no --export-dir, so there are no images to export (quit Lightroom and retry)"
 fi
 
 if [ -e "$OUT" ]; then
@@ -646,9 +652,9 @@ preview_path() { # docId longSide -> path of that rendition, or the largest if l
     "select path from RenditionPath where localAssetId = $1 order by $order limit 1;"
 }
 
-web_jpeg() { # src dest longSide: baseline sRGB JPEG, metadata stripped, never upscaled
+web_jpeg() { # src dest longSide: progressive sRGB JPEG, 4:2:0, metadata stripped, never upscaled
   magick "$1" -auto-orient -colorspace sRGB -resize "${3}x${3}>" \
-    -strip -interlace none -quality 80 "$2"
+    -strip -interlace JPEG -sampling-factor 4:2:0 -quality 80 "$2"
 }
 
 long_side() { magick identify -format '%[fx:max(w,h)]' "$1"; }
@@ -685,8 +691,13 @@ while IFS= read -r row; do
     image=null thumb=null longest=null
   else
     web_jpeg "$src" "$IMG_DIR/$num.jpg" "$MAX"
-    thumb_src="$(preview_path "$docId" 640)"
-    [ -f "$thumb_src" ] || thumb_src="$src"
+    # An exported JPEG is the best source for both sizes; otherwise prefer
+    # Lightroom's own 640 rendition for the thumb.
+    thumb_src="$src"
+    if [ -z "$EXPORT_DIR" ]; then
+      thumb_src="$(preview_path "$docId" 640)"
+      [ -f "$thumb_src" ] || thumb_src="$src"
+    fi
     web_jpeg "$thumb_src" "$IMG_DIR/$num.thumb.jpg" 640
     longest="$(long_side "$IMG_DIR/$num.jpg")"
     image_ref="$(finish_image "$IMG_DIR/$num.jpg")" || exit 1
