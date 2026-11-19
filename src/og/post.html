@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <!-- Link preview card for a post (1200x630), rendered by bin/gen-og.
-     Matches the hand made /og.png: pink Whitney on near white. -->
+     Matches the hand made /og.png: pink Whitney on near white.
+     Text stays within the middle ~920px: iMessage and others crop the sides
+     of wide images in narrow bubbles. -->
 <html>
 <head>
 <meta charset="utf-8">
@@ -9,17 +11,17 @@
   html, body { margin: 0; }
   body {
     width: 1200px; height: 630px; box-sizing: border-box;
-    padding: 0 52px; background: #FAFAFA;
+    padding: 0 140px; background: #FAFAFA;
     display: flex; flex-direction: column; justify-content: center;
     font-family: 'Whitney SSm A', 'Whitney SSm B', 'Helvetica Neue', sans-serif;
   }
   #title {
     margin: 0; color: #FF347F; font-weight: 800; line-height: 1.12;
-    font-size: 112px; max-height: 440px; overflow: hidden;
+    font-size: 96px; max-height: 400px; overflow: hidden;
     overflow-wrap: break-word; text-wrap: balance;
   }
   #site {
-    margin-top: 40px; font-size: 46px; color: #C9366C;
+    margin-top: 36px; font-size: 42px; color: #C9366C;
     text-decoration: underline; text-decoration-color: #001F3F;
     text-decoration-thickness: 3px; text-underline-offset: 8px;
   }
@@ -34,8 +36,8 @@
     t.textContent = data.title
     // Shrink long titles until they fit
     window.fit = () => {
-      let size = 112
-      while (size > 48 && t.scrollHeight > 440) { size -= 4; t.style.fontSize = size + 'px' }
+      let size = 96
+      while (size > 44 && t.scrollHeight > 400) { size -= 4; t.style.fontSize = size + 'px' }
     }
   </script>
 </body>
