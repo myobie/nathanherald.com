@@ -10,6 +10,7 @@
     "jsr:@std/encoding@^1.0.5": "1.0.10",
     "jsr:@std/fmt@^1.0.9": "1.0.9",
     "jsr:@std/fs@*": "1.0.23",
+    "jsr:@std/fs@1": "1.0.23",
     "jsr:@std/fs@^1.0.23": "1.0.23",
     "jsr:@std/html@^1.0.5": "1.0.5",
     "jsr:@std/http@*": "1.0.25",
@@ -19,6 +20,7 @@
     "jsr:@std/msgpack@1": "1.0.3",
     "jsr:@std/net@^1.0.6": "1.0.6",
     "jsr:@std/path@*": "1.1.4",
+    "jsr:@std/path@1": "1.1.4",
     "jsr:@std/path@^1.0.6": "1.1.4",
     "jsr:@std/path@^1.1.4": "1.1.4",
     "jsr:@std/streams@^1.0.17": "1.0.17",
@@ -30,7 +32,9 @@
     "npm:marked@*": "17.0.4",
     "npm:micromark-extension-gfm@*": "3.0.0",
     "npm:micromark@*": "4.0.2",
-    "npm:playwright@*": "1.58.2"
+    "npm:playwright@*": "1.59.1",
+    "npm:playwright@1.58": "1.58.2",
+    "npm:playwright@1.59.1": "1.59.1"
   },
   "jsr": {
     "@luca/esbuild-deno-loader@0.11.1": {
@@ -241,7 +245,7 @@
     "@playwright/test@1.58.2": {
       "integrity": "sha512-akea+6bHYBBfA9uQqSYmlJXn61cTa+jbO87xVLCWbTqbWadRVmhxlXATaOjOgcBaWU4ePo0wB41KMFv3o35IXA==",
       "dependencies": [
-        "playwright"
+        "playwright@1.58.2"
       ],
       "bin": true
     },
@@ -664,10 +668,24 @@
       "integrity": "sha512-yZkEtftgwS8CsfYo7nm0KE8jsvm6i/PTgVtB8DL726wNf6H2IMsDuxCpJj59KDaxCtSnrWan2AeDqM7JBaultg==",
       "bin": true
     },
+    "playwright-core@1.59.1": {
+      "integrity": "sha512-HBV/RJg81z5BiiZ9yPzIiClYV/QMsDCKUyogwH9p3MCP6IYjUFu/MActgYAvK0oWyV9NlwM3GLBjADyWgydVyg==",
+      "bin": true
+    },
     "playwright@1.58.2": {
       "integrity": "sha512-vA30H8Nvkq/cPBnNw4Q8TWz1EJyqgpuinBcHET0YVJVFldr8JDNiU9LaWAE1KqSkRYazuaBhTpB5ZzShOezQ6A==",
       "dependencies": [
-        "playwright-core"
+        "playwright-core@1.58.2"
+      ],
+      "optionalDependencies": [
+        "fsevents"
+      ],
+      "bin": true
+    },
+    "playwright@1.59.1": {
+      "integrity": "sha512-C8oWjPR3F81yljW9o5OxcWzfh6avkVwDD2VYdwIGqTkl+OGFISgypqzfu7dOe4QNLL2aqcWBmI3PMtLIK233lw==",
+      "dependencies": [
+        "playwright-core@1.59.1"
       ],
       "optionalDependencies": [
         "fsevents"

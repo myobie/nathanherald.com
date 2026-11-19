@@ -14,6 +14,7 @@ import { NhArchiveListElement } from './elements/nh-archive-list.ts'
 import { NhLatestPostsElement } from './elements/nh-latest-posts.ts'
 import { NhContactSheetElement } from './elements/nh-contact-sheet.ts'
 import { NhRollListElement } from './elements/nh-roll-list.ts'
+import { applyOgCard, readManifest } from './og-cards.ts'
 import { formatSpec, unratedFrames, type Roll, type RollSummary } from './elements/film.ts'
 
 const srcDir = new URL('.', import.meta.url).pathname
@@ -172,6 +173,10 @@ for await (const entry of walk(srcDir, { exts: ['.html'] })) {
   count++
 }
 
+// Link preview cards made by bin/gen-og: keep pages pointing at them on rebuild
+const ogCards = await readManifest(projectRoot)
+const withOgCard = (html: string, outPath: string) => applyOgCard(html, relative(publicDir, dirname(outPath)), ogCards)
+
 // Build markdown posts using the post template
 const templatePath = join(srcDir, 'post.html')
 const templateCode = await Deno.readTextFile(templatePath)
@@ -197,7 +202,7 @@ for await (const entry of walk(join(srcDir, 'posts'), { exts: ['.md'] })) {
   const html = `<!DOCTYPE html>\n${result}`
 
   await ensureDir(outDir)
-  await Deno.writeTextFile(outPath, html)
+  await Deno.writeTextFile(outPath, withOgCard(html, outPath))
 
   await tidy(outPath)
 
@@ -229,7 +234,7 @@ try {
 
     const result = await serializeAsync(linkie.document.documentElement)
     await ensureDir(outDir)
-    await Deno.writeTextFile(outPath, `<!DOCTYPE html>\n${result}`)
+    await Deno.writeTextFile(outPath, withOgCard(`<!DOCTYPE html>\n${result}`, outPath))
     await tidy(outPath)
 
     count++

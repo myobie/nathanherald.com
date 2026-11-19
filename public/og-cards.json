@@ -1,0 +1,958 @@
+{
+  "photos/2025-12/pentax-p30t-first-roll": {
+    "file": "og-card.jpg",
+    "hash": "07b58f15e7f4af7d6a72155044fe5f394a571e7d"
+  },
+  "photos/2026-10/sf-film-photos/01-delta-400": {
+    "file": "og-card.jpg",
+    "hash": "7edcc55e48925d0afc435f47f54f749889a60c23"
+  },
+  "photos/2026-10/sf-film-photos/02-delta-400": {
+    "file": "og-card.jpg",
+    "hash": "76da4d2dee08b5854d76be40bd210f28961746bd"
+  },
+  "photos/2026-10/sf-film-photos/03-delta-400": {
+    "file": "og-card.jpg",
+    "hash": "3fc4016144aa34d5c228341b2a96747b105388cf"
+  },
+  "photos/2026-10/sf-film-photos/04-delta-400": {
+    "file": "og-card.jpg",
+    "hash": "9332e79a063eba6d9de15c1c1dd17d1634fb09a8"
+  },
+  "photos/2026-10/sf-film-photos/05-ektacolor-pro-400": {
+    "file": "og-card.jpg",
+    "hash": "f40bb8dd200d7f7daf5c00c1b1090f8a60b20ea2"
+  },
+  "photos/2026-10/sf-film-photos/06-ektacolor-pro-400": {
+    "file": "og-card.jpg",
+    "hash": "461e9570534b6ae90f532b9d403e0e27d9e6c505"
+  },
+  "photos/2026-10/sf-film-photos/07-ektacolor-pro-400": {
+    "file": "og-card.jpg",
+    "hash": "84d5f21d86b347fda64a289c30993de7d8acc0a4"
+  },
+  "photos/2026-10/sf-film-photos/08-ektacolor-pro-400": {
+    "file": "og-card.jpg",
+    "hash": "98c29a365e32ea14ef1777510b19869673b3cb4b"
+  },
+  "posts/3-out-of-3": {
+    "file": "og-card.png",
+    "hash": "9dc78c077b977717d44c9882ba0265cb7b760d48"
+  },
+  "posts/a-ryokan": {
+    "file": "og-card.png",
+    "hash": "1e24a139f81da9cfe78ae642b37afd5fa90324c3"
+  },
+  "posts/backup-your-photos": {
+    "file": "og-card.png",
+    "hash": "0062267d687fc9d9ca82c22d9886258464534a6f"
+  },
+  "posts/before-the-bf-there-was-the-t": {
+    "file": "og-card.png",
+    "hash": "7c91d1a3172caf0a366fe3d23d581fe822eee56c"
+  },
+  "posts/building-templates": {
+    "file": "og-card.png",
+    "hash": "c27277417d37c86c4dc6de3f2bc03adc413c7b3e"
+  },
+  "posts/capability-gradient": {
+    "file": "og-card.png",
+    "hash": "c9b7e165dc610b82b73cafb896772d49e2cfda16"
+  },
+  "posts/coding-agents-and-agency": {
+    "file": "og-card.png",
+    "hash": "fc11b245a295f00c58eaefae9b8ca782c72d42b8"
+  },
+  "posts/configure-app-with-markdown": {
+    "file": "og-card.png",
+    "hash": "ff035738e45cd802f1bde9eb6f0839ec0af217a6"
+  },
+  "posts/csesh": {
+    "file": "og-card.png",
+    "hash": "9c9342fc8d7e0b86eeacfc08cb5bd9a8ef7698f1"
+  },
+  "posts/digital-card-catalog": {
+    "file": "og-card.png",
+    "hash": "cebe1bd989a78c02647496af9e671c9dcc8d5764"
+  },
+  "posts/disharmony-between-components": {
+    "file": "og-card.png",
+    "hash": "76f967229015397f132d529255675f357a23b8ce"
+  },
+  "posts/edgar-allen-poe-quote": {
+    "file": "og-card.png",
+    "hash": "8209545d65c74978a96f65943dd03dffb99ae88d"
+  },
+  "posts/eurorack-stereo-mute": {
+    "file": "og-card.png",
+    "hash": "48c842fee30eb48478aa77d85277b06a251dfbeb"
+  },
+  "posts/gartenstraße": {
+    "file": "og-card.png",
+    "hash": "84aaa265ce37cc1ef922f405b42413893a2adc1c"
+  },
+  "posts/github-profile-readme": {
+    "file": "og-card.png",
+    "hash": "1648015c3223e06820bd17ab3702f5f0ac24cbae"
+  },
+  "posts/going-public": {
+    "file": "og-card.png",
+    "hash": "75e04aeb6fc4ab219416c27f04b3d573b1b19d2d"
+  },
+  "posts/how-to-build-custom-elements-that-work-no-matter-what-order-things-are-loaded": {
+    "file": "og-card.png",
+    "hash": "cf2a8cd6183847cb471209140282a2ac8992cdf0"
+  },
+  "posts/ipod-shuffle": {
+    "file": "og-card.png",
+    "hash": "c57a6ea1527515f1ef9292ccfff9ebff2ce5e264"
+  },
+  "posts/john-gannam": {
+    "file": "og-card.png",
+    "hash": "9d76cbe07c507bb92abb16a77c432b9a372a3bc9"
+  },
+  "posts/legacy/a-newsletter": {
+    "file": "og-card.png",
+    "hash": "a4be0a2c518841f46586a1ff72000b556e9fb4a3"
+  },
+  "posts/legacy/a-quick-tip-to-help-remember-where-you-left-off": {
+    "file": "og-card.png",
+    "hash": "722446857b4f90a9de3b9adddabcdb14db2164ca"
+  },
+  "posts/legacy/a-way-to-procrastinate": {
+    "file": "og-card.png",
+    "hash": "6c1f6be803172f393c57650580fc5e33c5f7b538"
+  },
+  "posts/legacy/be": {
+    "file": "og-card.png",
+    "hash": "b7c3cd0900ae72f985a5bb964ad9efb2bf52783c"
+  },
+  "posts/legacy/be-a-good-programmer": {
+    "file": "og-card.png",
+    "hash": "1b6407af34eb1e8d5725972facece3cbd9fd1e43"
+  },
+  "posts/legacy/build-your-mvp-today-b31192e1c920": {
+    "file": "og-card.png",
+    "hash": "85f59bb32a7be6daeb1832e40125437de9237148"
+  },
+  "posts/legacy/change-as-little-as-possible-to-fix-a-problem": {
+    "file": "og-card.png",
+    "hash": "a31e867d5535fca99ac04ab0dad9200f8be52e19"
+  },
+  "posts/legacy/cloudkit": {
+    "file": "og-card.png",
+    "hash": "3910c0c9a94e0d5cbec8345bf19f72752de2ecc5"
+  },
+  "posts/legacy/design-a-minimal-roadmap-instead-of-building-an-mvp": {
+    "file": "og-card.png",
+    "hash": "a1c50bf920ef3df04af134cccd657bfe2a01175c"
+  },
+  "posts/legacy/document-semi-wacky-wacky-things": {
+    "file": "og-card.png",
+    "hash": "64be7acbccf6a65606134ef9b258faf91000c88c"
+  },
+  "posts/legacy/elixirconf-eu-2017-in-barcelona": {
+    "file": "og-card.png",
+    "hash": "0ad74cac8d5cdc7d3a2f5a8bf50cd9d5d29e9824"
+  },
+  "posts/legacy/how-to-install-the-macos-catalina-beta-alongside-mojave": {
+    "file": "og-card.png",
+    "hash": "fd6e3dbdec03c50f0b7526af2a44ba087868330c"
+  },
+  "posts/legacy/how-we-allow-any-request-to-be-safely-repeated-at-anytime-for-wunderlist": {
+    "file": "og-card.png",
+    "hash": "47d38d39f7eb628ecfdb4d6439f05076e65c16c2"
+  },
+  "posts/legacy/i-still-dont-know-how-to-use-a-debugger": {
+    "file": "og-card.png",
+    "hash": "39db03e15cccac69bd917dcbf2905d8df65ce0dc"
+  },
+  "posts/legacy/im-getting-engagement": {
+    "file": "og-card.png",
+    "hash": "765291e982143b9c13e884a111085e4a5964ff8c"
+  },
+  "posts/legacy/karhu-synchron-classic": {
+    "file": "og-card.png",
+    "hash": "f2778040e398d7322ab0f10f3cea351b88795a85"
+  },
+  "posts/legacy/make-workflows-for-complicated-tasks": {
+    "file": "og-card.png",
+    "hash": "7bd7192e4e3d8dfcc024b707f33a9d589bc0781e"
+  },
+  "posts/legacy/morning": {
+    "file": "og-card.png",
+    "hash": "3e43d808de8df4528e38a3b09d167903eb8d41de"
+  },
+  "posts/legacy/my-core-values": {
+    "file": "og-card.png",
+    "hash": "70f6ef9dfc35fc8c0cb739c220a8ecfa5a64db84"
+  },
+  "posts/legacy/notes-on-contentment": {
+    "file": "og-card.png",
+    "hash": "8771ed0bd3d57bfddc7fd45b943b418b870f9fc5"
+  },
+  "posts/legacy/object-oriented-server-architecture": {
+    "file": "og-card.png",
+    "hash": "8419bb1d6cbe2cc515aab9831983a385b9fc0d48"
+  },
+  "posts/legacy/on-queueing": {
+    "file": "og-card.png",
+    "hash": "499f8204ef8c7cf9bb45ea05219f6a35454eda61"
+  },
+  "posts/legacy/one-week-with-the-atom-text-editor": {
+    "file": "og-card.png",
+    "hash": "bc2261760997f08a749163c1295e8c060d8ee90b"
+  },
+  "posts/legacy/puma-rs-0": {
+    "file": "og-card.png",
+    "hash": "6b8abea0d8dd0dc9ee990b905f6a516a5ccf0bc4"
+  },
+  "posts/legacy/refactor-only-when-you-have-some-sort-of-tests": {
+    "file": "og-card.png",
+    "hash": "bad3124ab4f5fe6e5942000c005e12a9ec38090c"
+  },
+  "posts/legacy/swift-already-has-a-result-type": {
+    "file": "og-card.png",
+    "hash": "0cfd4bb93c73e1a981215d28369cd9f49dd3fa52"
+  },
+  "posts/legacy/the-cost-of-education": {
+    "file": "og-card.png",
+    "hash": "ea87ba78d8b0dc78ac01e66e67a99a2b9b89068a"
+  },
+  "posts/legacy/the-network-is-never-there-for-you": {
+    "file": "og-card.png",
+    "hash": "93d7bae2680432aec2ac7393784d6c391eb35f59"
+  },
+  "posts/legacy/twenty-second-postmortem": {
+    "file": "og-card.png",
+    "hash": "dc7e254be9fbd7f22f454b276f29c98a79604c9f"
+  },
+  "posts/legacy/two-years-in-berlin": {
+    "file": "og-card.png",
+    "hash": "f92ef2c0bb0d3e4f4afb2710faafd38368fdd94f"
+  },
+  "posts/legacy/use-a-cdn-for-every-site-you-build": {
+    "file": "og-card.png",
+    "hash": "196900e112db0af5fafbde4bc85b5401c2851567"
+  },
+  "posts/legacy/use-technologies-the-rest-of-your-team-is-motivated-to-use": {
+    "file": "og-card.png",
+    "hash": "f9263681e9a45e313cb1307abde697a40c3dcc7f"
+  },
+  "posts/legacy/why-make-a-mash": {
+    "file": "og-card.png",
+    "hash": "35a226b206e0501350652c1b40f3dd754dcc72de"
+  },
+  "posts/legacy/winter-and-small-coffee": {
+    "file": "og-card.png",
+    "hash": "a5d4e82d0002d65ef000fadb6515670cd97d36e8"
+  },
+  "posts/libraries-have-staff": {
+    "file": "og-card.png",
+    "hash": "b59657c68e2430518fe4273468d93b968041f014"
+  },
+  "posts/links/1984": {
+    "file": "og-card.png",
+    "hash": "efd45c2ab14c4a0fc5bcf11f058585fd518d93be"
+  },
+  "posts/links/29-automata": {
+    "file": "og-card.png",
+    "hash": "83d170bcd853babc1be6cd7808cfc2315b79a4ea"
+  },
+  "posts/links/50-short-rules-for-a-better-life": {
+    "file": "og-card.png",
+    "hash": "7d0b7e9394b3386d4c2b44bce7563c63a01ed2d4"
+  },
+  "posts/links/89-pistons-outro": {
+    "file": "og-card.png",
+    "hash": "8aca9e0384257da8cc32a8df96d4ff2773d88b50"
+  },
+  "posts/links/a-richer-canvas": {
+    "file": "og-card.png",
+    "hash": "b01be2a8671dd7985842615da4dbdeb87c8c50b4"
+  },
+  "posts/links/a-winged-victory-for-the-sullen": {
+    "file": "og-card.png",
+    "hash": "0aeed27858a0383443b10c4811b8e68785a0dc68"
+  },
+  "posts/links/abortcontroller": {
+    "file": "og-card.png",
+    "hash": "62e25104ceabbd9c3b7cdc86d72a301cb6d27b3c"
+  },
+  "posts/links/affordable-car-is-dead": {
+    "file": "og-card.png",
+    "hash": "d24bda105b44a01eacf709fdd4207b288da279c1"
+  },
+  "posts/links/aint-no-sunshine": {
+    "file": "og-card.png",
+    "hash": "38450553f98e1b04d591de64a1caee9fedc5533a"
+  },
+  "posts/links/akiko-takakura": {
+    "file": "og-card.png",
+    "hash": "1cc92523455263fa407ec9ff2664e77ae0a33b63"
+  },
+  "posts/links/ana-vidović-classical-guitar": {
+    "file": "og-card.png",
+    "hash": "6dc288b296291cb68d974049140db48effd95fbb"
+  },
+  "posts/links/asipai-hibicoffee-kyoto": {
+    "file": "og-card.png",
+    "hash": "b40b962981c06cadf5ca7170bd5a1fd9589df085"
+  },
+  "posts/links/backwater-blues": {
+    "file": "og-card.png",
+    "hash": "97f0dc47c3ce280841c0c25ba139f419f8aeb791"
+  },
+  "posts/links/beogram-4000c": {
+    "file": "og-card.png",
+    "hash": "ddbc28e5297b8ab0bd237869567d1aca96011c2f"
+  },
+  "posts/links/blackwater-holylight-kexp": {
+    "file": "og-card.png",
+    "hash": "d40f3681c94ef54b71883b9d0a4545adbf00c78c"
+  },
+  "posts/links/cameras-of-the-future-1990": {
+    "file": "og-card.png",
+    "hash": "21d164e25411eb5f7c180340434842b5e5e6ea12"
+  },
+  "posts/links/cargobox": {
+    "file": "og-card.png",
+    "hash": "10cab6072bc2fdd845914154eca6ba8a83fb9d7b"
+  },
+  "posts/links/casio-s100x": {
+    "file": "og-card.png",
+    "hash": "6e282db3fc2d059870642fef61ef5283781750df"
+  },
+  "posts/links/casio-sxc-1": {
+    "file": "og-card.png",
+    "hash": "210a1050bcd24b2f36d2fa0e53ac8cac9f052554"
+  },
+  "posts/links/casiopea-mint-jams": {
+    "file": "og-card.png",
+    "hash": "b1bd286677d2e0a0979d1ad702f56d44c8eb3b2e"
+  },
+  "posts/links/cassette-mixing": {
+    "file": "og-card.png",
+    "hash": "976764759663b800888f8d72b85ee30da92b8e19"
+  },
+  "posts/links/cherimoya-jordan-ward": {
+    "file": "og-card.png",
+    "hash": "50bb21ec5df8a8c65c908d4ef9511dec0dc68ba6"
+  },
+  "posts/links/chompi": {
+    "file": "og-card.png",
+    "hash": "bc9035b78f20acf31163fcb63dbec0dc96b7e4e7"
+  },
+  "posts/links/christies-rostrum": {
+    "file": "og-card.png",
+    "hash": "932e547eec99b2de5d7f874bea7eb8e5f8bba35d"
+  },
+  "posts/links/claude-code-remote-control": {
+    "file": "og-card.png",
+    "hash": "742ae56d6118df09f5c93669aa3b79339cb4bb29"
+  },
+  "posts/links/cli-qrcode": {
+    "file": "og-card.png",
+    "hash": "2264be2c173e169df97d50a9a0b8c2d57322e827"
+  },
+  "posts/links/connect-no-matter": {
+    "file": "og-card.png",
+    "hash": "67e2d500f1af050b8393a6fca4d49c79ccdae706"
+  },
+  "posts/links/content-authenticity": {
+    "file": "og-card.png",
+    "hash": "720dc9215f66c70f0cadbbadd092a49332182a6d"
+  },
+  "posts/links/convenience-and-scams": {
+    "file": "og-card.png",
+    "hash": "fa396b98811bcd7eb2f430946bcfa54811419bf4"
+  },
+  "posts/links/crdt-filesync": {
+    "file": "og-card.png",
+    "hash": "25ddca2ebdbf3714b74e404031ca220aa45816b8"
+  },
+  "posts/links/dandelions-forever": {
+    "file": "og-card.png",
+    "hash": "bcf4fff35d7aa3e4fae71d44b4ecb9716f0ace92"
+  },
+  "posts/links/desalination-system": {
+    "file": "og-card.png",
+    "hash": "d06f8d78c407c53d823f593c90f33033cc34e84e"
+  },
+  "posts/links/dieter-rams-wallpapers": {
+    "file": "og-card.png",
+    "hash": "562a31114adcf044fe2511f353c67fb7a863d479"
+  },
+  "posts/links/dive-olivia-dean": {
+    "file": "og-card.png",
+    "hash": "1cfa2dcec72e4fe2f289c87196fef721d3dafe8c"
+  },
+  "posts/links/dont-be-a-sucker": {
+    "file": "og-card.png",
+    "hash": "f806b722e699391e8fd1724dd43f2fe2b28fe954"
+  },
+  "posts/links/dreamy-photography-settings": {
+    "file": "og-card.png",
+    "hash": "080295d2e437a46acdd13a11a0d827d7403ffdb0"
+  },
+  "posts/links/dublin-goth-new-wave-movement-1989": {
+    "file": "og-card.png",
+    "hash": "ae900c0fd1904760790b1106c3115e02314e6c98"
+  },
+  "posts/links/efap-ozu-in-color": {
+    "file": "og-card.png",
+    "hash": "67e4dfd5874de442f0649dbe641f984983fc3261"
+  },
+  "posts/links/electric-sql": {
+    "file": "og-card.png",
+    "hash": "2ba235bfa9634be8ffe1319fd70ca773bd21f8f7"
+  },
+  "posts/links/elements-of-ai": {
+    "file": "og-card.png",
+    "hash": "e9c471ffd711c71fd231108202c774aaf7e95f0b"
+  },
+  "posts/links/embrace-complexity": {
+    "file": "og-card.png",
+    "hash": "0ced65824dbf99366db3f03efdac734713cfb79f"
+  },
+  "posts/links/fazerdaze-bigger": {
+    "file": "og-card.png",
+    "hash": "d3d123a4f17a37f562d6486f83231b55cb90e60a"
+  },
+  "posts/links/feed-me-paper": {
+    "file": "og-card.png",
+    "hash": "19b59d01c039e26584b22422ac444a89257e3e16"
+  },
+  "posts/links/frods": {
+    "file": "og-card.png",
+    "hash": "f1550ced1752fc669e142954fdc7c1325d4b30b4"
+  },
+  "posts/links/gaea": {
+    "file": "og-card.png",
+    "hash": "8029e998c2d30c77dfcc760d834cb2733a38957d"
+  },
+  "posts/links/galileo-first-drawings-of-the-moon": {
+    "file": "og-card.png",
+    "hash": "1bf39d3bac4b8dbdf285b4f2ebde34e274c49a8f"
+  },
+  "posts/links/gawthornes-hut": {
+    "file": "og-card.png",
+    "hash": "12eb8fa3bbec5a7afd4de934510695539629d988"
+  },
+  "posts/links/generative-ai-vegetarianism": {
+    "file": "og-card.png",
+    "hash": "99606d19754063c2d720f940f05788861f895177"
+  },
+  "posts/links/getting-started-with-view-transitions": {
+    "file": "og-card.png",
+    "hash": "4dce5f2dffe3f8e44c14d19a6f0057dc8e9f2b25"
+  },
+  "posts/links/gods-country-trailer": {
+    "file": "og-card.png",
+    "hash": "1de50ad12e2f5df2a03f9f63cf703895b59514fa"
+  },
+  "posts/links/gpt4": {
+    "file": "og-card.png",
+    "hash": "27d92e3333e368dd89fb915ff27ff93bc49fe5fc"
+  },
+  "posts/links/graciela-iturbide-leica-hall-of-fame": {
+    "file": "og-card.png",
+    "hash": "feb15c7ebbbf79106614968d63ca0bbd66d7bd2d"
+  },
+  "posts/links/gugusse-et-lautomate": {
+    "file": "og-card.png",
+    "hash": "216839857f9c4fdc41407c463d86257c9b2f16e5"
+  },
+  "posts/links/hazel-dickens-theyll-never-keep-us-down": {
+    "file": "og-card.png",
+    "hash": "c0930065088e66b565310d665ba77e60bd6cfbfc"
+  },
+  "posts/links/hitohira-en": {
+    "file": "og-card.png",
+    "hash": "42af4ae1f15710c30d1048c9abfc21fa4ffa8c82"
+  },
+  "posts/links/hydraulic-press-interpretive-dance": {
+    "file": "og-card.png",
+    "hash": "487236c987a05400521ad9f5f1b3ddb87591c44e"
+  },
+  "posts/links/iex-control-backslash": {
+    "file": "og-card.png",
+    "hash": "cb6a68d4f0adaf6036b7aa639fa13877c6a26380"
+  },
+  "posts/links/im-tired-of-talking-to-ai": {
+    "file": "og-card.png",
+    "hash": "0d133fffcd3a47ea7314030cb5a4aefd507422dd"
+  },
+  "posts/links/indie-kit": {
+    "file": "og-card.png",
+    "hash": "384f25c860857f0dcf2a245cfcb9021df836fa5f"
+  },
+  "posts/links/inside-out-furniture-making": {
+    "file": "og-card.png",
+    "hash": "94071c0e5a65827acfe5a8e18d92070b7e09fd12"
+  },
+  "posts/links/interview-with-massimo-vitali": {
+    "file": "og-card.png",
+    "hash": "7540d3e979b9bc8fd1db705f4c534845b3c0e7f3"
+  },
+  "posts/links/james-web-space-telescope": {
+    "file": "og-card.png",
+    "hash": "ab6066fe403ecdda9c97da3b25d53642aadbb731"
+  },
+  "posts/links/jargalant-altai": {
+    "file": "og-card.png",
+    "hash": "572f733b33d513d25ae25c2b18d38703c741854e"
+  },
+  "posts/links/john-thomsons-china": {
+    "file": "og-card.png",
+    "hash": "4ecd9ebd7603bc22cca92866d1789046be1ed66d"
+  },
+  "posts/links/jordan-ward-tiny-desk": {
+    "file": "og-card.png",
+    "hash": "fb5d1aa5d819a11db2dc0bb2fbb0a7b8ef6f6e63"
+  },
+  "posts/links/kavachi-volcano": {
+    "file": "og-card.png",
+    "hash": "2bb145c27354b7b3123eebd243152488dbc3852e"
+  },
+  "posts/links/klim-type-foundry": {
+    "file": "og-card.png",
+    "hash": "bc931728ed1f33a147dbbfd7825bcc746970dd7f"
+  },
+  "posts/links/largest-known-prime-number": {
+    "file": "og-card.png",
+    "hash": "e85d305aada21589ebf9dd0086c985f0fc93112b"
+  },
+  "posts/links/leica-t-leather-holster": {
+    "file": "og-card.png",
+    "hash": "8f4434abdaafbac8bc7bc27d714b51a707661720"
+  },
+  "posts/links/little-sims-no-thank-you": {
+    "file": "og-card.png",
+    "hash": "f543c95a8c3a5027c1024cb3c39738d646c26fe7"
+  },
+  "posts/links/living-alone-in-siberian-forest-for-20-years": {
+    "file": "og-card.png",
+    "hash": "b42d561d1a3bad3fc6390aae56ee9420624bbaab"
+  },
+  "posts/links/math-gpt": {
+    "file": "og-card.png",
+    "hash": "57457368736221ca9b8e2f34d527985c94d6b089"
+  },
+  "posts/links/men-i-trust": {
+    "file": "og-card.png",
+    "hash": "a80aec044c654a05e4aa49ea4ea90e3372243670"
+  },
+  "posts/links/mighty-vibe": {
+    "file": "og-card.png",
+    "hash": "597e556f625def8726f4a2c6b467ba1c76c17569"
+  },
+  "posts/links/modular-office-unit": {
+    "file": "og-card.png",
+    "hash": "f3c96bb080e4b26c5196cd1019765d6125c20c14"
+  },
+  "posts/links/moving": {
+    "file": "og-card.png",
+    "hash": "5de5a276a7d0bae0f61bc46c96d707e544c7a3fc"
+  },
+  "posts/links/nasa-astronaut-back-on-earth-after-record-breaking-spaceflight": {
+    "file": "og-card.png",
+    "hash": "2ccef441166212d473ab28b4cdb6a21aefcf68b8"
+  },
+  "posts/links/nathan-walsh": {
+    "file": "og-card.png",
+    "hash": "b47a973ee73ac9a163cea8a40a3e38f17b62987b"
+  },
+  "posts/links/nation-of-language-live": {
+    "file": "og-card.png",
+    "hash": "9c30f9cb925048c26d4b5cbf81b246c94b3d3ff3"
+  },
+  "posts/links/new-async-function": {
+    "file": "og-card.png",
+    "hash": "43e75c6d190594053760d9b7653e28e9e6a1a15e"
+  },
+  "posts/links/nopia": {
+    "file": "og-card.png",
+    "hash": "7f02550857abca9c8b06f81ea3a929b614edc51a"
+  },
+  "posts/links/notes-art": {
+    "file": "og-card.png",
+    "hash": "6b953c38e128064e78ba03e728367951ace741ff"
+  },
+  "posts/links/ólafur-arnalds-hafursey": {
+    "file": "og-card.png",
+    "hash": "22654cf4108c5376df26a684c98289c9fad0fe39"
+  },
+  "posts/links/olamide-ogunade": {
+    "file": "og-card.png",
+    "hash": "57fe7b5f2bfb498f2554204f399fe432352dad15"
+  },
+  "posts/links/olmotrace": {
+    "file": "og-card.png",
+    "hash": "a6e74d7e0fc6dcb9f13f8c8a1de127bb76542e6a"
+  },
+  "posts/links/one-million-postgres-connections": {
+    "file": "og-card.png",
+    "hash": "2e3ded9c12168cca29f4f1b20805954404b1a92b"
+  },
+  "posts/links/open-house": {
+    "file": "og-card.png",
+    "hash": "8861a85a15395aca91e9b1f484e536ff6deb9444"
+  },
+  "posts/links/oslo-transit-diagram": {
+    "file": "og-card.png",
+    "hash": "3ee295e73c02afe9955cb8fe03da4c16eb324450"
+  },
+  "posts/links/otis-kwame-kye-quaicoe": {
+    "file": "og-card.png",
+    "hash": "64f3a84ca797e7919114e9539c07fbae23080df9"
+  },
+  "posts/links/patch-notes": {
+    "file": "og-card.png",
+    "hash": "6a43478c5a2893425650407a4809cdd614cf9fe7"
+  },
+  "posts/links/petrichor-by-jean-jullien": {
+    "file": "og-card.png",
+    "hash": "6d17a47b969f3fbb54bd0f2ee4b18ff277488406"
+  },
+  "posts/links/polaroid-lab": {
+    "file": "og-card.png",
+    "hash": "54c3fcbe88da87bef625572cc41c76ce3d080129"
+  },
+  "posts/links/possibly-maybe": {
+    "file": "og-card.png",
+    "hash": "6c293507e86af380681c1ed794fc1ce42090deb7"
+  },
+  "posts/links/q-today": {
+    "file": "og-card.png",
+    "hash": "72bce8790309ba8f3a7e92d98ede87852841c406"
+  },
+  "posts/links/realistic-pillows-sculpted-from-blocks-of-white-marble": {
+    "file": "og-card.png",
+    "hash": "36faf0a79ba9628f86026d1e21a32707a8c8f913"
+  },
+  "posts/links/reel-4-track-recorder": {
+    "file": "og-card.png",
+    "hash": "5c1df6c06da3e3b0f2e11684162b2f0ddc335574"
+  },
+  "posts/links/reflection-eternal-the-blast": {
+    "file": "og-card.png",
+    "hash": "f250503306d367395119fff762ddcbc5a2ca7e22"
+  },
+  "posts/links/research-notes": {
+    "file": "og-card.png",
+    "hash": "0357bc64241bf65fe6e4dc92e4bb35f6b3ad7295"
+  },
+  "posts/links/robocop-commentary": {
+    "file": "og-card.png",
+    "hash": "e4f6c60fd0759d7974911922f8c0d559c761758b"
+  },
+  "posts/links/robohands-green": {
+    "file": "og-card.png",
+    "hash": "b21bfe4b7786b89b3cb09b99031d171779f314f4"
+  },
+  "posts/links/s-dot-js": {
+    "file": "og-card.png",
+    "hash": "5d2ff8a9fdf9078657a210f114a778eb3c13c823"
+  },
+  "posts/links/scary-pockets-rich-girl": {
+    "file": "og-card.png",
+    "hash": "1f68f33156c141caba078fddffae18c79babd551"
+  },
+  "posts/links/slow-learning": {
+    "file": "og-card.png",
+    "hash": "fff90e51be9c7b826e1bc733553f23a9b4409eb1"
+  },
+  "posts/links/some-technologies-last": {
+    "file": "og-card.png",
+    "hash": "44de888421ad56e2bbb88f80664e44b4be549db0"
+  },
+  "posts/links/takako-mamiya-love-trip": {
+    "file": "og-card.png",
+    "hash": "2c4d98d7df4140e6d9b25410c1513a68f2de3de2"
+  },
+  "posts/links/taste-of-tea-trailer": {
+    "file": "og-card.png",
+    "hash": "af1c00f0602f5fe43e5332c156a4c563f6686c28"
+  },
+  "posts/links/the-circle": {
+    "file": "og-card.png",
+    "hash": "ee608cc27133c4f3a86c7a36765e633dfc9cbe5c"
+  },
+  "posts/links/the-copyist": {
+    "file": "og-card.png",
+    "hash": "f62518bb81a27d15bc2afdb5dda0f5cf05982436"
+  },
+  "posts/links/the-dark-forest": {
+    "file": "og-card.png",
+    "hash": "ffa3747d399628412d7ca8274407b5b42a2895c3"
+  },
+  "posts/links/the-feather-atlas": {
+    "file": "og-card.png",
+    "hash": "ea176411203b14f5cab55ea8d985cc734918e3d7"
+  },
+  "posts/links/the-great-wave": {
+    "file": "og-card.png",
+    "hash": "7b69b394c5d12e30c1820f1e9b80c84e2b14283b"
+  },
+  "posts/links/the-killer-trailer": {
+    "file": "og-card.png",
+    "hash": "495b8f1de5ee5b98d4d7656a6cbf7b9659b81da7"
+  },
+  "posts/links/the-shortcut": {
+    "file": "og-card.png",
+    "hash": "39dcbb53cf13b3151b1085aa34d46bd54e56b022"
+  },
+  "posts/links/the-worlds-most-remote-buildings": {
+    "file": "og-card.png",
+    "hash": "80d28b4c6afcd4380bb229ea28a1e37f5aadc628"
+  },
+  "posts/links/this-video-has-___-views": {
+    "file": "og-card.png",
+    "hash": "29933a7806d592be6c61ff53ed2f4bce26d7b86a"
+  },
+  "posts/links/til-hub-sync": {
+    "file": "og-card.png",
+    "hash": "aaecbbee379a9fc997b7fa114de6cada596efeda"
+  },
+  "posts/links/tiny-sculptures": {
+    "file": "og-card.png",
+    "hash": "cb490f08cc4943be010d2245dba4656f673746cf"
+  },
+  "posts/links/toe-distance-sessions-2020": {
+    "file": "og-card.png",
+    "hash": "7a5f25e22dfa18a7dc7323c63e45b1c2a3442efd"
+  },
+  "posts/links/toro": {
+    "file": "og-card.png",
+    "hash": "b2922aa81b3fd14ecf972bfc85a1e800d93b9b20"
+  },
+  "posts/links/unbundling-ai": {
+    "file": "og-card.png",
+    "hash": "f48646c1240af514ea61e30bcd5836223a513813"
+  },
+  "posts/links/urth-explorer-filter-kit": {
+    "file": "og-card.png",
+    "hash": "44ae82c577e2f396587a549fc77f02d0bdc2950e"
+  },
+  "posts/links/viking-trailer": {
+    "file": "og-card.png",
+    "hash": "e812247fd2a9f40b5a26eecef425256ad55a1843"
+  },
+  "posts/links/vintage-omega-apple-sneakers": {
+    "file": "og-card.png",
+    "hash": "ee78633ff0b6975460d8bcc8a25a70811cb16d43"
+  },
+  "posts/links/we-are-all-just-temporarily-abled": {
+    "file": "og-card.png",
+    "hash": "fa0659f63e2ffb8aa8aaa9f10496e67e167d81bd"
+  },
+  "posts/links/web-share-api": {
+    "file": "og-card.png",
+    "hash": "8e6224bbb08ff5877509aa2e403f920eb6ca6223"
+  },
+  "posts/links/where-is-webb": {
+    "file": "og-card.png",
+    "hash": "927cf1d18c5ccf0613871e1f356894c2a22a0e82"
+  },
+  "posts/links/who-invented-vector-clocks": {
+    "file": "og-card.png",
+    "hash": "552872bbd0150a40d33dc9f716f309a932498a20"
+  },
+  "posts/links/why-rappers-stopped-writing": {
+    "file": "og-card.png",
+    "hash": "2fdcadc432e79166cc705640a6834f0b618b54dc"
+  },
+  "posts/links/wilhelm-scream": {
+    "file": "og-card.png",
+    "hash": "c49f607df72417d15455eefbdd66719d7aaf87e3"
+  },
+  "posts/links/you-are-not-okay-and-tomorrow-will-come": {
+    "file": "og-card.png",
+    "hash": "14e9e87bd26cc2f72786911891b9515d9ae45aa5"
+  },
+  "posts/making-chrome-livable": {
+    "file": "og-card.png",
+    "hash": "717da1c66584d45666707162e59f416dad408dd0"
+  },
+  "posts/mastodon-kinda-hates-ai": {
+    "file": "og-card.png",
+    "hash": "e70bbb95935d9119c6bf5bc6e0d7539d16fcd7a1"
+  },
+  "posts/mid-day-sunny-photo": {
+    "file": "og-card.png",
+    "hash": "41820091e8085893509731e405fe1c7e6153e8f0"
+  },
+  "posts/moved-off-medium": {
+    "file": "og-card.png",
+    "hash": "b4707ae3f512157e086a0392f9f062f66999472c"
+  },
+  "posts/no-cms": {
+    "file": "og-card.png",
+    "hash": "37fcdfbd192002480ad62dac7901a0d83d75f554"
+  },
+  "posts/passkeys": {
+    "file": "og-card.png",
+    "hash": "9b63f5f4ee18ccca0a98024cbca6f3e4a206c584"
+  },
+  "posts/practical-rdf-example": {
+    "file": "og-card.png",
+    "hash": "2ad008b9cd382ca0b9a0ff2107163fafa13df349"
+  },
+  "posts/principles-driven-development": {
+    "file": "og-card.png",
+    "hash": "f94a53285685b68ca9808602886ca329866efad9"
+  },
+  "posts/reactive-dom-nodes-and-templates-for-custom-elements": {
+    "file": "og-card.png",
+    "hash": "fa2c310e15a0d3856cbd0d02cb10d35f49c35adf"
+  },
+  "posts/reactive-state-in-custom-elements": {
+    "file": "og-card.png",
+    "hash": "79e9a0345fb704f8fe60e2de09e7c535f29dcd33"
+  },
+  "posts/reminded-of-the-past": {
+    "file": "og-card.png",
+    "hash": "4199a3126cd0d96d5eb87e05da57762f722198d7"
+  },
+  "posts/removing-hugo": {
+    "file": "og-card.png",
+    "hash": "f71b6f4b1f0bf8683940f761782258a0bfae2a89"
+  },
+  "posts/same-beans-different-cups": {
+    "file": "og-card.png",
+    "hash": "f726f207a938c9a710e03944957719937d25107b"
+  },
+  "posts/scammer": {
+    "file": "og-card.png",
+    "hash": "5f2d11a97b5aee1d49866a1f18d3f147a72c5778"
+  },
+  "posts/server-side-dom-serialization-weather-app": {
+    "file": "og-card.png",
+    "hash": "aae296e92318f96d4b7cab79b8485edb87872061"
+  },
+  "posts/ship-the-wrong-thing": {
+    "file": "og-card.png",
+    "hash": "591b0d22ba7f5b5ac79418b763abfa8ae0d9687a"
+  },
+  "posts/swiftui-state-considered-harmful": {
+    "file": "og-card.png",
+    "hash": "6d9e829ffbc61fa5eb337edd3aee3ce1a9972944"
+  },
+  "posts/the-4-things-that-make-an-agent": {
+    "file": "og-card.png",
+    "hash": "e9482466f8b3eb1e364802b8625f664524bd2ec3"
+  },
+  "posts/the-man-from-laramie": {
+    "file": "og-card.png",
+    "hash": "6e54b86f8df05ef55d88d099b9219131c9f2b111"
+  },
+  "posts/til-about-solid-and-foaf": {
+    "file": "og-card.png",
+    "hash": "614596e75148c306b1e3ab7bdefac3b4cb29c903"
+  },
+  "posts/til/acorn-screenshot-layers": {
+    "file": "og-card.png",
+    "hash": "1a7332f7d620a21183113fc82e4aeb774a480a8a"
+  },
+  "posts/til/beamer": {
+    "file": "og-card.png",
+    "hash": "0afe4eca718bc28b710e4f7d84687e92774af259"
+  },
+  "posts/til/client-hints": {
+    "file": "og-card.png",
+    "hash": "47fe584fadc0c04d0dbc2a1a869f76ef5009fc17"
+  },
+  "posts/til/elixir-dry-run": {
+    "file": "og-card.png",
+    "hash": "c85e71affa3574e8613e8e04f6fcda712a34ec2b"
+  },
+  "posts/til/fix-brew-formula-conflict": {
+    "file": "og-card.png",
+    "hash": "35dd1f647d4cde22e530e0d655927b6427de982c"
+  },
+  "posts/til/gaia": {
+    "file": "og-card.png",
+    "hash": "c35c325f023aadfc3d2b42dd88dd4b27f08481aa"
+  },
+  "posts/til/git-notes": {
+    "file": "og-card.png",
+    "hash": "4373b630d45ceef58140ecc6699bac7f38697b0b"
+  },
+  "posts/til/how-to-allow-notifications-when-recording-the-screen": {
+    "file": "og-card.png",
+    "hash": "73b56d4e1e6e7b2a25a48cb14a1b9fa4550e95fc"
+  },
+  "posts/til/iex-control-backslash-2": {
+    "file": "og-card.png",
+    "hash": "c93fbfdf59a08021efa68190e3097b106df5ff16"
+  },
+  "posts/til/lcd-vim": {
+    "file": "og-card.png",
+    "hash": "750a84e182786f06d4f0d375783937041b99997d"
+  },
+  "posts/til/less-dash-s": {
+    "file": "og-card.png",
+    "hash": "e942b85d840916d0431767aa05610d61713ca555"
+  },
+  "posts/til/postgres-buffers": {
+    "file": "og-card.png",
+    "hash": "153866b951d2d6180881a0a8fe52427874d0df19"
+  },
+  "posts/til/promise-resolvers": {
+    "file": "og-card.png",
+    "hash": "2c74b0afca495a39234fda288f9a7b7c18507f91"
+  },
+  "posts/til/strudel": {
+    "file": "og-card.png",
+    "hash": "f567087d204fa4bd9e5de696bc57be0ec84012ce"
+  },
+  "posts/til/use-unknown-in-catch-variables": {
+    "file": "og-card.png",
+    "hash": "c06405095536f31f184806af81e3188a84cf2d67"
+  },
+  "posts/til/vim-spellcheck": {
+    "file": "og-card.png",
+    "hash": "0711137fd9e64be63ce35a42e1c2fd75a8001fbb"
+  },
+  "posts/til/vim-term-curwin": {
+    "file": "og-card.png",
+    "hash": "248f030cf66dc2878887b6c9ea523ec204ff99d4"
+  },
+  "posts/til/weltschmerz": {
+    "file": "og-card.png",
+    "hash": "391c6dcd42d108c4dce0eb11239e9f0b2b523d68"
+  },
+  "posts/travel-songs": {
+    "file": "og-card.png",
+    "hash": "df27fbbcc9bf9348bb908cd03c689ed5d77c1433"
+  },
+  "posts/two-interesting-ai-developments": {
+    "file": "og-card.png",
+    "hash": "d55609a5a9477c39153139e0585310ca9292f381"
+  },
+  "posts/updated-the-font": {
+    "file": "og-card.png",
+    "hash": "7f76b6e16e97054d6f58a9f18b65646d855754f1"
+  },
+  "posts/web-components-1": {
+    "file": "og-card.png",
+    "hash": "eae6ca83f9ba2fdc7c2c2e12c05322604a79ff67"
+  },
+  "posts/web-components-2": {
+    "file": "og-card.png",
+    "hash": "9ba6144515afe067c56964d3b7efd1d56c08fd1f"
+  },
+  "posts/web-components-3": {
+    "file": "og-card.png",
+    "hash": "a95577bcdde038e9439af668f94639866c92d17c"
+  },
+  "posts/web-components-4": {
+    "file": "og-card.png",
+    "hash": "9ac47ffd95f4b1a52f179a701b51bf61f44317da"
+  },
+  "posts/your-metrics-might-be-lying-to-you": {
+    "file": "og-card.png",
+    "hash": "bc3bd3569f1aa4a3e03edafdcfd8f0ecdc919f89"
+  }
+}

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<!-- Link preview card for a roll of film (1200x630), rendered by bin/gen-og:
+     a strip of the roll's best frames, then the title like /og.png. -->
+<html>
+<head>
+<meta charset="utf-8">
+<link href="https://cloud.typography.com/6836312/761366/css/fonts.css" rel="stylesheet">
+<style>
+  html, body { margin: 0; }
+  body {
+    width: 1200px; height: 630px; box-sizing: border-box; overflow: hidden;
+    background: #FAFAFA; padding: 0 52px;
+    display: flex; flex-direction: column; justify-content: center;
+    font-family: 'Whitney SSm A', 'Whitney SSm B', 'Helvetica Neue', sans-serif;
+  }
+  .strip {
+    --holes: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10' preserveAspectRatio='none'%3E%3Crect x='2.6' y='0' width='4.8' height='10' rx='1.4'/%3E%3C/svg%3E");
+    position: relative; margin: 0 -52px; padding: 30px 26px;
+    background: #141210; color: #8a8070;
+    font: 15px/1 SFMono-Regular, 'SF Mono', Menlo, monospace; letter-spacing: 0.08em;
+  }
+  .strip::before, .strip::after {
+    content: ''; position: absolute; left: 0; right: 0; height: 14px;
+    background: var(--holes) repeat-x; background-size: 26px 14px; filter: invert(1) brightness(0.98);
+  }
+  .strip::before { top: 8px; }
+  .strip::after { bottom: 8px; }
+  .frames { display: flex; gap: 14px; height: 300px; justify-content: center; }
+  .frames img { height: 100%; display: block; object-fit: cover; background: #222; flex: 0 1 auto; min-width: 0; }
+  h1 { margin: 40px 0 0; color: #FF347F; font-weight: 800; font-size: 76px; line-height: 1.05; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .meta { margin-top: 12px; display: flex; justify-content: space-between; align-items: baseline; font-size: 34px; color: #121435; }
+  .site { color: #C9366C; text-decoration: underline; text-decoration-color: #001F3F; text-decoration-thickness: 2px; text-underline-offset: 6px; }
+</style>
+</head>
+<body>
+  <div class="strip"><div class="frames" id="frames"></div></div>
+  <h1 id="title"></h1>
+  <div class="meta"><span id="sub"></span><span class="site">nathanherald.com</span></div>
+  <script>
+    const data = /*DATA*/{ "title": "Delta 400", "sub": "Roll 1 of 8 · SF Film Photos", "frames": [] }
+    document.getElementById('title').textContent = data.title
+    document.getElementById('sub').textContent = data.sub || ''
+    const box = document.getElementById('frames')
+    for (const f of data.frames) {
+      const img = new Image()
+      img.src = f.src
+      img.dataset.ratio = f.w / f.h
+      box.append(img)
+    }
+    // Keep as many frames as fill the strip, then let them shrink (cropping a
+    // little, object-fit: cover) so the strip is full edge to edge.
+    window.fit = () => {
+      const width = (img) => img.offsetHeight * Number(img.dataset.ratio)
+      const natural = () => [...box.children].reduce((sum, img) => sum + width(img) + 14, -14)
+      while (box.children.length > 1 && natural() > box.clientWidth * 1.4) box.lastChild.remove()
+      for (const img of box.children) img.style.width = width(img) + 'px'
+    }
+  </script>
+</body>
+</html>

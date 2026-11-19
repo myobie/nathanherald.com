@@ -1,0 +1,164 @@
+#!/usr/bin/env -S deno run -A
+// Render link preview cards (og:image) for posts and film rolls.
+//
+//   bin/gen-og                 every post and roll whose card is missing or stale
+//   bin/gen-og --force         re-render everything
+//   bin/gen-og posts/foo       only pages under these public/ paths
+//
+// Cards are HTML + CSS (src/og/post.html, src/og/roll.html) screenshotted with
+// Playwright's Chromium at 1200x630. They are loaded as if from nathanherald.com
+// so the Whitney web fonts (locked to the site's domain) load. Each card lands
+// beside its page (og-card.png for posts, og-card.jpg for rolls), is listed in
+// public/og-cards.json, and the page's og:image is pointed at it. Posts with an
+// `image:` in their frontmatter keep that image. Needs Chromium:
+//   (cd tests && npm ci && PLAYWRIGHT_BROWSERS_PATH=/tmp/pw-browsers npx playwright install chromium)
+// Keep the playwright version below equal to tests/package-lock.json so they share a browser.
+
+import { chromium } from 'npm:playwright@1.59.1'
+import { walk } from 'jsr:@std/fs@1/walk'
+import { dirname, join, relative } from 'jsr:@std/path@1'
+import { applyOgCard, MANIFEST, type OgManifest, readManifest } from '../src/og-cards.ts'
+
+const root = join(dirname(new URL(import.meta.url).pathname), '..')
+const pub = join(root, 'public')
+const force = Deno.args.includes('--force')
+const only = Deno.args.filter((a) => !a.startsWith('--')).map((a) => a.replace(/^\/|\/$/g, '').replace(/^public\//, ''))
+
+type Job = { dir: string; kind: 'post' | 'roll'; data: Record<string, unknown> }
+
+// --- posts -----------------------------------------------------------------
+
+function frontmatter(md: string): Record<string, string> {
+  const m = md.match(/^(---|\+\+\+)\n([\s\S]*?)\n\1/)
+  if (!m) return {}
+  const out: Record<string, string> = {}
+  for (const line of m[2].split('\n')) {
+    const kv = line.match(/^(\w+)\s*[:=]\s*(.*)$/)
+    if (!kv) continue
+    let v = kv[2].trim()
+    if (/^(['"]).*\1$/.test(v)) v = v.slice(1, -1).replace(/\\"/g, '"')
+    out[kv[1]] = v
+  }
+  return out
+}
+
+async function postJobs(): Promise<Job[]> {
+  const jobs: Job[] = []
+  for await (const e of walk(join(pub, 'posts'), { match: [/\/index\.md$/] })) {
+    const dir = relative(pub, dirname(e.path))
+    const fm = frontmatter(await Deno.readTextFile(e.path))
+    if (!fm.title || fm.image) continue
+    try { await Deno.stat(join(pub, dir, 'index.html')) } catch { continue }
+    jobs.push({ dir, kind: 'post', data: { title: fm.title } })
+  }
+  return jobs
+}
+
+// --- rolls -----------------------------------------------------------------
+
+type Frame = { n: number; image?: string; thumb?: string; width?: number; height?: number; rating?: number; portfolio?: boolean; redacted?: boolean }
+type Roll = { title: string; trip?: string | null; path?: string; film?: string | null; camera?: string | null; frames: Frame[] }
+
+async function rollJobs(): Promise<Job[]> {
+  const rolls: { roll: Roll; dir: string }[] = []
+  for await (const e of walk(join(root, 'src', 'photos'), { match: [/\/roll\.json$/] })) {
+    const rel = relative(join(root, 'src'), dirname(e.path))
+    if (rel.startsWith('photos/sample')) continue
+    rolls.push({ roll: JSON.parse(await Deno.readTextFile(e.path)), dir: rel })
+  }
+  return rolls.map(({ roll, dir }) => {
+    const trip = roll.trip ? rolls.filter((r) => r.roll.trip === roll.trip).map((r) => r.dir).sort() : []
+    const sub = trip.length > 1 ? `Roll ${trip.indexOf(dir) + 1} of ${trip.length} · ${roll.trip}` : (roll.trip ?? [roll.film, roll.camera].filter(Boolean).join(' · '))
+    const score = (f: Frame) => (f.portfolio ? 10 : 0) + (f.rating ?? 0)
+    const best = roll.frames
+      .filter((f) => !f.redacted && (f.thumb || f.image))
+      .sort((a, b) => score(b) - score(a) || a.n - b.n)
+      .slice(0, 6)
+      .sort((a, b) => a.n - b.n)
+      .map((f) => ({ src: absolute(f.thumb ?? f.image!, dir), w: f.width ?? 3, h: f.height ?? 2 }))
+    return { dir, kind: 'roll' as const, data: { title: roll.title, sub, frames: best } }
+  })
+}
+
+function absolute(src: string, dir: string): string {
+  return /^https?:/.test(src) ? src : `https://nathanherald.com/${dir}/${src}`
+}
+
+// --- render ----------------------------------------------------------------
+
+async function sha(s: string): Promise<string> {
+  const buf = await crypto.subtle.digest('SHA-1', new TextEncoder().encode(s))
+  return [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, '0')).join('')
+}
+
+const templates = {
+  post: await Deno.readTextFile(join(root, 'src/og/post.html')),
+  roll: await Deno.readTextFile(join(root, 'src/og/roll.html')),
+}
+
+const manifest: OgManifest = await readManifest(root)
+let jobs = [...await postJobs(), ...await rollJobs()]
+if (only.length) jobs = jobs.filter((j) => only.some((o) => j.dir === o || j.dir.startsWith(o + '/')))
+
+const todo: (Job & { hash: string; file: string; html: string })[] = []
+for (const j of jobs) {
+  const html = templates[j.kind].replace(/\/\*DATA\*\/[^\n]*/, `/*DATA*/${JSON.stringify(j.data)}`)
+  const hash = await sha(html)
+  const file = j.kind === 'roll' ? 'og-card.jpg' : 'og-card.png'
+  const have = manifest[j.dir]
+  let exists = true
+  try { await Deno.stat(join(pub, j.dir, file)) } catch { exists = false }
+  if (!force && exists && have?.hash === hash && have.file === file) continue
+  todo.push({ ...j, hash, file, html })
+}
+
+console.log(`${jobs.length} pages, ${todo.length} card(s) to render`)
+
+if (todo.length) {
+  const browser = await chromium.launch()
+  const page = await browser.newPage({ viewport: { width: 1200, height: 630 }, deviceScaleFactor: 1 })
+  let current = ''
+  // Serve the card from nathanherald.com so the domain locked web fonts load.
+  await page.route('https://nathanherald.com/__og-card', (route) => route.fulfill({ contentType: 'text/html', body: current }))
+  const pngquant = await hasCommand('pngquant')
+  for (const j of todo) {
+    current = j.html
+    await page.goto('https://nathanherald.com/__og-card', { waitUntil: 'networkidle' })
+    await page.evaluate(async () => {
+      await document.fonts.ready
+      await Promise.all([...document.images].map((img) => img.decode().catch(() => {})))
+      // deno-lint-ignore no-explicit-any
+      ;(window as any).fit?.()
+    })
+    const out = join(pub, j.dir, j.file)
+    await page.screenshot({ path: out, type: j.kind === 'roll' ? 'jpeg' : 'png', quality: j.kind === 'roll' ? 85 : undefined })
+    if (j.kind === 'post' && pngquant) {
+      await new Deno.Command('pngquant', { args: ['--quality=70-90', '--force', '--skip-if-larger', '--output', out, out] }).output()
+    }
+    manifest[j.dir] = { file: j.file, hash: j.hash }
+    console.log(`  ${j.dir}/${j.file}`)
+  }
+  await browser.close()
+}
+
+// Point each page's og:image at its card (also fixes pages rebuilt since).
+let patched = 0
+for (const [dir] of Object.entries(manifest)) {
+  const path = join(pub, dir, 'index.html')
+  let html: string
+  try { html = await Deno.readTextFile(path) } catch { continue }
+  const next = applyOgCard(html, dir, manifest)
+  if (next !== html) { await Deno.writeTextFile(path, next); patched++ }
+}
+
+const sorted = Object.fromEntries(Object.entries(manifest).sort(([a], [b]) => a.localeCompare(b)))
+await Deno.writeTextFile(join(root, MANIFEST), JSON.stringify(sorted, null, 2) + '\n')
+console.log(`updated og:image on ${patched} page(s)`)
+
+async function hasCommand(cmd: string): Promise<boolean> {
+  try {
+    return (await new Deno.Command('which', { args: [cmd], stdout: 'null', stderr: 'null' }).output()).success
+  } catch {
+    return false
+  }
+}

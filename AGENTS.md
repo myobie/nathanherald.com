@@ -244,6 +244,16 @@ bin/lr-roll --album "Tegernsee Film" --from P9250830 --to P9250867 \
 - **Lab-named scans:** labs name files `<roll number><4 digit frame>.tif` (e.g. `000464210001.tif`, or `40048-004004810012.tif`), so the number prefix identifies the roll. `--suggest --album X` prints one ready `--from/--to` line per prefix instead of guessing from scan times. Nathan sorts rolls into one Lightroom album per roll inside a folder: `--folder "<folder>"` scopes the album lookup (folders and albums may share names; folders are never albums), and `--suggest --folder "<folder>"` audits the folder, flagging an album that mixes lab rolls or a lab roll split across albums. A real export also warns when its frames span several lab rolls.
 - Album names repeat. If a name matches several albums the script lists them and you pass `--album-id`.
 
+## Link Preview Cards (og:image)
+
+Every post and film roll gets its own 1200x630 link preview card, rendered from HTML + CSS with Playwright:
+
+- `src/og/post.html`: the post title in pink Whitney on near white, matching the hand made `/og.png` (which the homepage and other pages keep).
+- `src/og/roll.html`: a film strip of the roll's best frames (Portfolio, then highest rated), the roll title, "Roll N of M · Trip" (or film · camera) and the site name.
+- `bin/gen-og` renders whatever is missing or stale (`--force` for all, or pass paths like `posts/foo` or `photos/2026-10`). Cards land beside the page as `og-card.png` (posts) or `og-card.jpg` (rolls), are listed in `public/og-cards.json`, and the page's og:image is pointed at them with a `?v=<hash>` so link previews refresh. `deno task build` keeps that og:image when it rebuilds a page. Posts with `image:` in their frontmatter keep their own image.
+- The card is loaded as if from `https://nathanherald.com/` so the domain locked web fonts load. Setup once: `(cd tests && npm ci && PLAYWRIGHT_BROWSERS_PATH=/tmp/pw-browsers npx playwright install chromium)`, and run with `PLAYWRIGHT_BROWSERS_PATH=/tmp/pw-browsers bin/gen-og`.
+- `bin/publish-post` renders the new post's card. After publishing a roll, run `bin/gen-og photos` and commit the `og-card.jpg` files, `public/og-cards.json` and the pages.
+
 ## YouTube Embeds
 
 Use the nocookie domain with plain HTML:

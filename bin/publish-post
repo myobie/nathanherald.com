@@ -35,11 +35,21 @@ case "$INPUT_FILE" in
     src/*|*/src/*) USE_SRC=true ;;
 esac
 
+# The page's folder under public/, for its link preview card
+PAGE_DIR="$(dirname "$INPUT_FILE" | sed -E 's#^(.*/)?(src|public)/##')"
+og_card() {
+    echo "🖼  Rendering the link preview card..."
+    PLAYWRIGHT_BROWSERS_PATH="${PLAYWRIGHT_BROWSERS_PATH:-/tmp/pw-browsers}" "$REPO_ROOT/bin/gen-og" "$PAGE_DIR" \
+        || echo "⚠️  No card rendered (needs Chromium, see bin/gen-og); the post keeps /og.png for now"
+    echo ""
+}
+
 if $USE_SRC; then
     # src/ path: build handles everything except RSS
     echo "🔨 Step 1: Building src/ to public/..."
     cd "$REPO_ROOT" && deno task build
     echo ""
+    og_card
 
     echo "📡 Step 2: Adding to RSS feed..."
     "$REPO_ROOT/bin/add-rss-item" "$INPUT_FILE"
@@ -49,6 +59,7 @@ else
     echo "📄 Step 1: Converting markdown to HTML..."
     "$REPO_ROOT/bin/md2html" "$INPUT_FILE"
     echo ""
+    og_card
 
     echo "📡 Step 2: Adding to RSS feed..."
     "$REPO_ROOT/bin/add-rss-item" "$INPUT_FILE"
