@@ -40,15 +40,17 @@ const roll = (slug: string, extra: Partial<RollSummary> = {}): RollSummary => ({
 
 Deno.test('lists rolls with a preview strip linking into the contact sheet', async () => {
   const doc = await render([roll('a'), roll('b', { keepers: 0, title: 'Second' })])
-  const items = doc.querySelectorAll('.roll-summary')
-  assertEquals(items.length, 2)
-  assertEquals(items[0].querySelector('h2 a')?.getAttribute('href'), 'rolls/a/')
-  assertEquals(items[0].querySelector('.roll-facts')?.textContent, 'Ilford Delta 400 · Pentax P30t · 35mm · December 2025')
-  assertEquals(items[0].querySelectorAll('.roll-preview .frame').length, 3)
-  assertEquals(items[0].querySelector('#a .frame a')?.getAttribute('href'), 'rolls/a/#frame-3')
-  assertEquals(items[0].querySelectorAll('.mark-circle').length, 2)
-  assert(items[0].querySelector('.roll-meta')?.textContent?.includes('36 frames, 2 keepers'))
-  assertEquals(items[1].querySelector('.roll-meta')?.textContent?.trim(), 'See the whole roll, 36 frames')
+  assertEquals(doc.querySelectorAll('.roll-summary').length, 2)
+  // Rolls not on a trip are grouped by month, newest first within it
+  assertEquals(doc.querySelector('#month-2025-12 h2')?.textContent, 'December 2025')
+  const a = doc.querySelector('#a')!, b = doc.querySelector('#b')!
+  assertEquals(a.querySelector('h3 a')?.getAttribute('href'), 'rolls/a/')
+  assertEquals(a.querySelector('.roll-facts')?.textContent, 'Ilford Delta 400 · Pentax P30t · 35mm · December 2025')
+  assertEquals(a.querySelectorAll('.roll-preview .frame').length, 3)
+  assertEquals(a.querySelector('.frame a')?.getAttribute('href'), 'rolls/a/#frame-3')
+  assertEquals(a.querySelectorAll('.mark-circle').length, 2)
+  assert(a.querySelector('.roll-meta')?.textContent?.includes('36 frames, 2 keepers'))
+  assertEquals(b.querySelector('.roll-meta')?.textContent?.trim(), 'See the whole roll, 36 frames')
 })
 
 Deno.test('page gets the stylesheet, redraw script, and no element scripts', async () => {
@@ -64,14 +66,15 @@ Deno.test('empty index', async () => {
   assertEquals(doc.querySelector('.roll-list li')?.textContent, 'No rolls yet.')
 })
 
-Deno.test('groupRolls: trips together in album order, newest group first, loose rolls alone', () => {
+Deno.test('groupRolls: trips together in album order, newest group first, other rolls by month', () => {
   const rolls = [
     roll('2026-11-02-delta-400', { trip: 'SF Film Photos', shot: null, loaded: '2026-11-17', scanned: '2026-11-13' }),
     roll('2025-12-pentax', { shot: '2025-12' }),
     roll('2026-11-01-delta-400', { trip: 'SF Film Photos', shot: null, loaded: '2026-11-17', scanned: '2026-11-13' }),
   ]
   const groups = groupRolls(rolls)
-  assertEquals(groups.map((g) => g.id), ['trip-sf-film-photos', '2025-12-pentax'])
+  assertEquals(groups.map((g) => g.id), ['trip-sf-film-photos', 'month-2025-12'])
+  assertEquals(groups.map((g) => g.title), ['SF Film Photos', 'December 2025'])
   assertEquals(groups[0].rolls.map((r) => r.slug), ['2026-11-01-delta-400', '2026-11-02-delta-400'])
 })
 
@@ -84,6 +87,8 @@ Deno.test('index shows a trip as a heading with its rolls under it, newest first
   const trip = doc.querySelector('#trip-sf-film-photos')!
   assertEquals(trip.querySelector('h2')?.textContent, 'SF Film Photos')
   assertEquals(trip.querySelector('.roll-facts')?.textContent, '2 rolls · Ilford Delta 400 · Kodak Ektacolor Pro 400')
-  assertEquals([...trip.querySelectorAll('.roll-summary h3')].map((h) => h.textContent), ['Ektacolor Pro 400', 'Delta 400'])
-  assertEquals(doc.querySelector('#\\32 025-12-pentax h2, [id="2025-12-pentax"] h2')?.textContent, 'Pentax P30t first roll')
+  assertEquals([...trip.querySelectorAll('.roll-summary h3')].map((h) => h.textContent), ['Roll 2 · Ektacolor Pro 400', 'Roll 1 · Delta 400'])
+  const month = doc.querySelector('#month-2025-11')!
+  assertEquals(month.querySelector('h2')?.textContent, 'November 2025')
+  assertEquals(month.querySelector('.roll-summary h3')?.textContent, 'Pentax P30t first roll')
 })

@@ -397,10 +397,6 @@ main.roll-page > header h1 {
   margin: 0 0 3rem;
 }
 
-.roll-summary h2 {
-  margin: 0 0 0.2em;
-}
-
 .roll-summary .roll-facts {
   margin: 0;
 }
@@ -413,21 +409,30 @@ main.roll-page > header h1 {
   margin: 0;
 }
 
-/* Trips: a heading with their rolls under it, and links between rolls */
-.trip-group {
+/* Groups (a trip, or a month): a heading with their rolls under it */
+.roll-group {
   margin: 0 0 3.5rem;
+  padding-top: 1.5rem;
+  border-top: 2px solid var(--line-color);
 }
 
-.trip-group > h2 {
+.roll-group:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.roll-group > h2 {
   margin: 0 0 0.2em;
+  font-size: 250%;
 }
 
-.trip-rolls {
+.group-rolls {
   margin: 1.5rem 0 0;
 }
 
-.trip-rolls .roll-summary h3 {
+.group-rolls .roll-summary h3 {
   margin: 0 0 0.2em;
+  font-size: 150%;
 }
 
 .roll-trip {

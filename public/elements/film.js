@@ -59,26 +59,35 @@ export function slugify(value) {
   return r.shot ?? r.loaded ?? r.scanned ?? '';
 }
 /**
- * Rolls grouped by trip, newest group first. Rolls in a trip keep their
- * album order (their slugs carry the album number); rolls without a trip
- * stand alone.
+ * Every roll in a group: its trip, or else the month it was shot. Newest
+ * group first. Rolls keep their album order inside a group (their slugs carry
+ * the album number), so "Roll N of M" counts from the first roll.
  */ export function groupRolls(rolls) {
   const groups = new Map();
   for (const roll of rolls){
     const trip = roll.trip?.trim() || null;
-    const key = trip ? `trip:${trip}` : `roll:${roll.slug}`;
-    if (!groups.has(key)) groups.set(key, {
-      trip,
-      id: trip ? `trip-${slugify(trip)}` : roll.slug,
-      rolls: []
-    });
+    const month = rollDate(roll).slice(0, 7);
+    const key = trip ? `trip:${trip}` : `month:${month}`;
+    if (!groups.has(key)) {
+      groups.set(key, trip ? {
+        trip,
+        title: trip,
+        id: `trip-${slugify(trip)}`,
+        rolls: []
+      } : {
+        trip: null,
+        title: month ? formatMonth(month) : 'Undated',
+        id: month ? `month-${month}` : 'undated',
+        rolls: []
+      });
+    }
     groups.get(key).rolls.push(roll);
   }
   const newest = (g)=>g.rolls.map(rollDate).sort().at(-1) ?? '';
   for (const g of groups.values())g.rolls.sort((a, b)=>a.slug.localeCompare(b.slug));
   return [
     ...groups.values()
-  ].sort((a, b)=>newest(b).localeCompare(newest(a)) || (a.trip ?? a.id).localeCompare(b.trip ?? b.id));
+  ].sort((a, b)=>newest(b).localeCompare(newest(a)) || a.title.localeCompare(b.title));
 }
 export function formatSpec(format) {
   return FORMATS[format] ?? FORMATS['35mm'];
@@ -206,4 +215,4 @@ export function elFactory(doc) {
   };
 }
 
-// denoCacheMetadata=14354028248657952043,8576607833385733049
+// denoCacheMetadata=13859367692477003712,14617414935675795708

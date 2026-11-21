@@ -54,21 +54,19 @@ export class NhRollListElement extends HTMLElement {
       return list
     }
 
+    // Every roll sits in a group: its trip, or the month it was shot. Groups
+    // are h2, rolls h3. Inside a group rolls go newest first; on a trip each
+    // keeps its number from album order ("Roll 4", as on its own page).
     for (const group of groupRolls(rolls)) {
-      if (!group.trip) {
-        list.append(this.#summary(el, group.rolls[0], 'h2'))
-        continue
-      }
-      // A trip: its name, a line of what's in it, then its rolls newest first
-      // (roll pages keep album order for "Roll N of M")
       const films = [...new Set(group.rolls.map((r) => r.film).filter(Boolean))]
       const n = group.rolls.length
-      const li = el('li', { class: 'trip-group', id: group.id },
-        el('h2', {}, group.trip),
+      const li = el('li', { class: group.trip ? 'roll-group trip-group' : 'roll-group', id: group.id },
+        el('h2', {}, group.title),
         el('p', { class: 'roll-facts' }, [`${n} roll${n === 1 ? '' : 's'}`, ...films].join(' \u00b7 ')),
       )
-      const inner = el('ol', { class: 'roll-list trip-rolls' })
-      for (const roll of [...group.rolls].reverse()) inner.append(this.#summary(el, roll, 'h3'))
+      const inner = el('ol', { class: 'roll-list group-rolls' })
+      const numbered = group.rolls.map((roll, i) => ({ roll, number: group.trip ? i + 1 : null }))
+      for (const { roll, number } of numbered.reverse()) inner.append(this.#summary(el, roll, number))
       li.append(inner)
       list.append(li)
     }
@@ -81,7 +79,7 @@ export class NhRollListElement extends HTMLElement {
     return wrap
   }
 
-  #summary(el: El, roll: RollSummary, heading: 'h2' | 'h3') {
+  #summary(el: El, roll: RollSummary, number: number | null) {
     const doc = this.ownerDocument
     const spec = formatSpec(roll.format)
     const edge = (roll.film ?? '').toUpperCase()
@@ -89,7 +87,7 @@ export class NhRollListElement extends HTMLElement {
 
     const count = `${roll.frameCount} frames` + (roll.keepers ? `, ${roll.keepers} keeper${roll.keepers === 1 ? '' : 's'}` : '')
     li.append(
-      el(heading, {}, el('a', { href: roll.url }, roll.title)),
+      el('h3', {}, el('a', { href: roll.url }, number ? `Roll ${number} \u00b7 ${roll.title}` : roll.title)),
       el('p', { class: 'roll-facts' }, factsLine(roll)),
     )
 

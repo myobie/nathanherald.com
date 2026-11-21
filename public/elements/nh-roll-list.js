@@ -45,32 +45,31 @@ export class NhRollListElement extends HTMLElement {
       list.append(el('li', {}, 'No rolls yet.'));
       return list;
     }
+    // Every roll sits in a group: its trip, or the month it was shot. Groups
+    // are h2, rolls h3. Inside a group rolls go newest first; on a trip each
+    // keeps its number from album order ("Roll 4", as on its own page).
     for (const group of groupRolls(rolls)){
-      if (!group.trip) {
-        list.append(this.#summary(el, group.rolls[0], 'h2'));
-        continue;
-      }
-      // A trip: its name, a line of what's in it, then its rolls newest first
-      // (roll pages keep album order for "Roll N of M")
       const films = [
         ...new Set(group.rolls.map((r)=>r.film).filter(Boolean))
       ];
       const n = group.rolls.length;
       const li = el('li', {
-        class: 'trip-group',
+        class: group.trip ? 'roll-group trip-group' : 'roll-group',
         id: group.id
-      }, el('h2', {}, group.trip), el('p', {
+      }, el('h2', {}, group.title), el('p', {
         class: 'roll-facts'
       }, [
         `${n} roll${n === 1 ? '' : 's'}`,
         ...films
       ].join(' \u00b7 ')));
       const inner = el('ol', {
-        class: 'roll-list trip-rolls'
+        class: 'roll-list group-rolls'
       });
-      for (const roll of [
-        ...group.rolls
-      ].reverse())inner.append(this.#summary(el, roll, 'h3'));
+      const numbered = group.rolls.map((roll, i)=>({
+          roll,
+          number: group.trip ? i + 1 : null
+        }));
+      for (const { roll, number } of numbered.reverse())inner.append(this.#summary(el, roll, number));
       li.append(inner);
       list.append(li);
     }
@@ -83,7 +82,7 @@ export class NhRollListElement extends HTMLElement {
     wrap.append(redraw);
     return wrap;
   }
-  #summary(el, roll, heading) {
+  #summary(el, roll, number) {
     const doc = this.ownerDocument;
     const spec = formatSpec(roll.format);
     const edge = (roll.film ?? '').toUpperCase();
@@ -92,9 +91,9 @@ export class NhRollListElement extends HTMLElement {
       id: roll.slug
     });
     const count = `${roll.frameCount} frames` + (roll.keepers ? `, ${roll.keepers} keeper${roll.keepers === 1 ? '' : 's'}` : '');
-    li.append(el(heading, {}, el('a', {
+    li.append(el('h3', {}, el('a', {
       href: roll.url
-    }, roll.title)), el('p', {
+    }, number ? `Roll ${number} \u00b7 ${roll.title}` : roll.title)), el('p', {
       class: 'roll-facts'
     }, factsLine(roll)));
     const sheet = sheetElement(el, roll.format, 'roll-preview');
@@ -143,4 +142,4 @@ export class NhRollListElement extends HTMLElement {
   }
 }
 
-// denoCacheMetadata=2369180874725709175,14962883937860466092
+// denoCacheMetadata=15872759327971355490,14998100020709133139

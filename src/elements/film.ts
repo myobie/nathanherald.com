@@ -94,27 +94,36 @@ export function rollDate(r: Pick<Roll, 'shot' | 'scanned'> & { loaded?: string |
 }
 
 export interface RollGroup {
+  /** The trip's name, or null for a month of rolls not on a trip */
   trip: string | null
+  /** Heading: the trip's name, or the month ("December 2025") */
+  title: string
   id: string
+  /** Album order (oldest first); roll N of a trip is rolls[N - 1] */
   rolls: RollSummary[]
 }
 
 /**
- * Rolls grouped by trip, newest group first. Rolls in a trip keep their
- * album order (their slugs carry the album number); rolls without a trip
- * stand alone.
+ * Every roll in a group: its trip, or else the month it was shot. Newest
+ * group first. Rolls keep their album order inside a group (their slugs carry
+ * the album number), so "Roll N of M" counts from the first roll.
  */
 export function groupRolls(rolls: RollSummary[]): RollGroup[] {
   const groups = new Map<string, RollGroup>()
   for (const roll of rolls) {
     const trip = roll.trip?.trim() || null
-    const key = trip ? `trip:${trip}` : `roll:${roll.slug}`
-    if (!groups.has(key)) groups.set(key, { trip, id: trip ? `trip-${slugify(trip)}` : roll.slug, rolls: [] })
+    const month = rollDate(roll).slice(0, 7)
+    const key = trip ? `trip:${trip}` : `month:${month}`
+    if (!groups.has(key)) {
+      groups.set(key, trip
+        ? { trip, title: trip, id: `trip-${slugify(trip)}`, rolls: [] }
+        : { trip: null, title: month ? formatMonth(month) : 'Undated', id: month ? `month-${month}` : 'undated', rolls: [] })
+    }
     groups.get(key)!.rolls.push(roll)
   }
   const newest = (g: RollGroup) => g.rolls.map(rollDate).sort().at(-1) ?? ''
   for (const g of groups.values()) g.rolls.sort((a, b) => a.slug.localeCompare(b.slug))
-  return [...groups.values()].sort((a, b) => newest(b).localeCompare(newest(a)) || (a.trip ?? a.id).localeCompare(b.trip ?? b.id))
+  return [...groups.values()].sort((a, b) => newest(b).localeCompare(newest(a)) || a.title.localeCompare(b.title))
 }
 
 export function formatSpec(format: string): FormatSpec {
