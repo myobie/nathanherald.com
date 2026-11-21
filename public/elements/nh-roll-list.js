@@ -50,7 +50,8 @@ export class NhRollListElement extends HTMLElement {
         list.append(this.#summary(el, group.rolls[0], 'h2'));
         continue;
       }
-      // A trip: its name, a line of what's in it, then its rolls in album order
+      // A trip: its name, a line of what's in it, then its rolls newest first
+      // (roll pages keep album order for "Roll N of M")
       const films = [
         ...new Set(group.rolls.map((r)=>r.film).filter(Boolean))
       ];
@@ -67,7 +68,9 @@ export class NhRollListElement extends HTMLElement {
       const inner = el('ol', {
         class: 'roll-list trip-rolls'
       });
-      for (const roll of group.rolls)inner.append(this.#summary(el, roll, 'h3'));
+      for (const roll of [
+        ...group.rolls
+      ].reverse())inner.append(this.#summary(el, roll, 'h3'));
       li.append(inner);
       list.append(li);
     }
@@ -140,4 +143,4 @@ export class NhRollListElement extends HTMLElement {
   }
 }
 
-// denoCacheMetadata=11303253094250893018,15706077118969129263
+// denoCacheMetadata=2369180874725709175,14962883937860466092

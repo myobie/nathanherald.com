@@ -59,7 +59,8 @@ export class NhRollListElement extends HTMLElement {
         list.append(this.#summary(el, group.rolls[0], 'h2'))
         continue
       }
-      // A trip: its name, a line of what's in it, then its rolls in album order
+      // A trip: its name, a line of what's in it, then its rolls newest first
+      // (roll pages keep album order for "Roll N of M")
       const films = [...new Set(group.rolls.map((r) => r.film).filter(Boolean))]
       const n = group.rolls.length
       const li = el('li', { class: 'trip-group', id: group.id },
@@ -67,7 +68,7 @@ export class NhRollListElement extends HTMLElement {
         el('p', { class: 'roll-facts' }, [`${n} roll${n === 1 ? '' : 's'}`, ...films].join(' \u00b7 ')),
       )
       const inner = el('ol', { class: 'roll-list trip-rolls' })
-      for (const roll of group.rolls) inner.append(this.#summary(el, roll, 'h3'))
+      for (const roll of [...group.rolls].reverse()) inner.append(this.#summary(el, roll, 'h3'))
       li.append(inner)
       list.append(li)
     }

@@ -75,7 +75,7 @@ Deno.test('groupRolls: trips together in album order, newest group first, loose 
   assertEquals(groups[0].rolls.map((r) => r.slug), ['2026-11-01-delta-400', '2026-11-02-delta-400'])
 })
 
-Deno.test('index shows a trip as a heading with its rolls under it', async () => {
+Deno.test('index shows a trip as a heading with its rolls under it, newest first', async () => {
   const doc = await render([
     roll('2026-11-01-delta-400', { trip: 'SF Film Photos', title: 'Delta 400', film: 'Ilford Delta 400' }),
     roll('2026-11-05-ektacolor', { trip: 'SF Film Photos', title: 'Ektacolor Pro 400', film: 'Kodak Ektacolor Pro 400' }),
@@ -84,6 +84,6 @@ Deno.test('index shows a trip as a heading with its rolls under it', async () =>
   const trip = doc.querySelector('#trip-sf-film-photos')!
   assertEquals(trip.querySelector('h2')?.textContent, 'SF Film Photos')
   assertEquals(trip.querySelector('.roll-facts')?.textContent, '2 rolls · Ilford Delta 400 · Kodak Ektacolor Pro 400')
-  assertEquals([...trip.querySelectorAll('.roll-summary h3')].map((h) => h.textContent), ['Delta 400', 'Ektacolor Pro 400'])
+  assertEquals([...trip.querySelectorAll('.roll-summary h3')].map((h) => h.textContent), ['Ektacolor Pro 400', 'Delta 400'])
   assertEquals(doc.querySelector('#\\32 025-12-pentax h2, [id="2025-12-pentax"] h2')?.textContent, 'Pentax P30t first roll')
 })
