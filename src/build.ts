@@ -145,6 +145,10 @@ await Deno.copyFile(join(publicDir, 'posts.json'), join(srcDir, 'posts.json'))
   await Deno.writeTextFile(join(srcDir, 'photos', 'rolls.json'), JSON.stringify(summaries, null, 2) + '\n')
 }
 
+// Link preview cards made by bin/gen-og: keep pages pointing at them on rebuild
+const ogCards = await readManifest(projectRoot)
+const withOgCard = (html: string, outPath: string) => applyOgCard(html, relative(publicDir, dirname(outPath)), ogCards)
+
 // Build standalone HTML files (homepage, archive, etc.)
 for await (const entry of walk(srcDir, { exts: ['.html'] })) {
   if (entry.path.includes('/elements/')) continue
@@ -166,16 +170,12 @@ for await (const entry of walk(srcDir, { exts: ['.html'] })) {
   const html = `<!DOCTYPE html>\n${result}`
 
   await ensureDir(dirname(outPath))
-  await Deno.writeTextFile(outPath, html)
+  await Deno.writeTextFile(outPath, withOgCard(html, outPath))
 
   await tidy(outPath)
 
   count++
 }
-
-// Link preview cards made by bin/gen-og: keep pages pointing at them on rebuild
-const ogCards = await readManifest(projectRoot)
-const withOgCard = (html: string, outPath: string) => applyOgCard(html, relative(publicDir, dirname(outPath)), ogCards)
 
 // Build markdown posts using the post template
 const templatePath = join(srcDir, 'post.html')

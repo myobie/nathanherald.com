@@ -24,7 +24,7 @@ const pub = join(root, 'public')
 const force = Deno.args.includes('--force')
 const only = Deno.args.filter((a) => !a.startsWith('--')).map((a) => a.replace(/^\/|\/$/g, '').replace(/^public\//, ''))
 
-type Job = { dir: string; kind: 'post' | 'roll'; data: Record<string, unknown> }
+type Job = { dir: string; kind: 'post' | 'roll' | 'photos'; data: Record<string, unknown> }
 
 // --- posts -----------------------------------------------------------------
 
@@ -66,7 +66,7 @@ async function rollJobs(): Promise<Job[]> {
     if (rel.startsWith('photos/sample')) continue
     rolls.push({ roll: JSON.parse(await Deno.readTextFile(e.path)), dir: rel })
   }
-  return rolls.map(({ roll, dir }) => {
+  const jobs = rolls.map(({ roll, dir }) => {
     const trip = roll.trip ? rolls.filter((r) => r.roll.trip === roll.trip).map((r) => r.dir).sort() : []
     const sub = trip.length > 1 ? `Roll ${trip.indexOf(dir) + 1} of ${trip.length} · ${roll.trip}` : (roll.trip ?? [roll.film, roll.camera].filter(Boolean).join(' · '))
     const score = (f: Frame) => (f.portfolio ? 10 : 0) + (f.rating ?? 0)
@@ -78,6 +78,24 @@ async function rollJobs(): Promise<Job[]> {
       .map((f) => ({ src: absolute(f.thumb ?? f.image!, dir), w: f.width ?? 3, h: f.height ?? 2 }))
     return { dir, kind: 'roll' as const, data: { title: roll.title, sub, frames: best } }
   })
+  return [...jobs, photosIndexJob(rolls)]
+}
+
+/** /photos: two strips of the best frames from every roll, newest rolls first
+ *  and one frame per roll per pass, so every roll shows up. */
+function photosIndexJob(rolls: { roll: Roll; dir: string }[]): Job {
+  const score = (f: Frame) => (f.portfolio ? 10 : 0) + (f.rating ?? 0)
+  const perRoll = [...rolls].sort((a, b) => b.dir.localeCompare(a.dir)).map(({ roll, dir }) =>
+    roll.frames
+      .filter((f) => !f.redacted && (f.thumb || f.image))
+      .sort((a, b) => score(b) - score(a) || a.n - b.n)
+      .map((f) => ({ src: absolute(f.thumb ?? f.image!, dir), w: f.width ?? 3, h: f.height ?? 2 })))
+  const picks: unknown[] = []
+  for (let pass = 0; picks.length < 18 && perRoll.some((fs) => fs.length > pass); pass++) {
+    for (const fs of perRoll) if (fs[pass] && picks.length < 18) picks.push(fs[pass])
+  }
+  const rows = [picks.filter((_, i) => i % 2 === 0), picks.filter((_, i) => i % 2 === 1)]
+  return { dir: 'photos', kind: 'photos', data: { title: 'Film', sub: 'Contact sheets from rolls I’ve shot', rows } }
 }
 
 function absolute(src: string, dir: string): string {
@@ -94,6 +112,7 @@ async function sha(s: string): Promise<string> {
 const templates = {
   post: await Deno.readTextFile(join(root, 'src/og/post.html')),
   roll: await Deno.readTextFile(join(root, 'src/og/roll.html')),
+  photos: await Deno.readTextFile(join(root, 'src/og/photos.html')),
 }
 
 const manifest: OgManifest = await readManifest(root)
@@ -104,7 +123,7 @@ const todo: (Job & { hash: string; file: string; html: string })[] = []
 for (const j of jobs) {
   const html = templates[j.kind].replace(/\/\*DATA\*\/[^\n]*/, `/*DATA*/${JSON.stringify(j.data)}`)
   const hash = await sha(html)
-  const file = j.kind === 'roll' ? 'og-card.jpg' : 'og-card.png'
+  const file = j.kind === 'post' ? 'og-card.png' : 'og-card.jpg'
   const have = manifest[j.dir]
   let exists = true
   try { await Deno.stat(join(pub, j.dir, file)) } catch { exists = false }
@@ -131,7 +150,7 @@ if (todo.length) {
       ;(window as any).fit?.()
     })
     const out = join(pub, j.dir, j.file)
-    await page.screenshot({ path: out, type: j.kind === 'roll' ? 'jpeg' : 'png', quality: j.kind === 'roll' ? 85 : undefined })
+    await page.screenshot({ path: out, type: j.kind === 'post' ? 'png' : 'jpeg', quality: j.kind === 'post' ? undefined : 85 })
     if (j.kind === 'post' && pngquant) {
       await new Deno.Command('pngquant', { args: ['--quality=70-90', '--force', '--skip-if-larger', '--output', out, out] }).output()
     }
