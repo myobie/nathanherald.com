@@ -74,7 +74,8 @@ let count = 0
 
 // Copy non-HTML, non-TS assets from src/ to public/ first
 // (posts.json generation needs .md files in public/)
-for await (const entry of walk(srcDir, { skip: [/\/elements\//] })) {
+// (src/og/ holds link preview card templates for bin/gen-og, not pages)
+for await (const entry of walk(srcDir, { skip: [/\/elements\//, /\/src\/og\//] })) {
   if (entry.isDirectory) continue
   if (entry.name === 'index.html' || entry.name === 'post.html' || entry.name === 'roll.html' || entry.path.endsWith('.ts')) continue
 
