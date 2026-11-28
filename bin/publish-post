@@ -39,7 +39,7 @@ esac
 PAGE_DIR="$(dirname "$INPUT_FILE" | sed -E 's#^(.*/)?(src|public)/##')"
 og_card() {
     echo "🖼  Rendering the link preview card..."
-    PLAYWRIGHT_BROWSERS_PATH="${PLAYWRIGHT_BROWSERS_PATH:-/tmp/pw-browsers}" "$REPO_ROOT/bin/gen-og" "$PAGE_DIR" \
+    "$REPO_ROOT/bin/gen-og" "$PAGE_DIR" \
         || echo "⚠️  No card rendered (needs Chromium, see bin/gen-og); the post keeps /og.png for now"
     echo ""
 }

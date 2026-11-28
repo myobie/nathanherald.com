@@ -11,7 +11,7 @@
 // beside its page (og-card.png for posts, og-card.jpg for rolls), is listed in
 // public/og-cards.json, and the page's og:image is pointed at it. Posts with an
 // `image:` in their frontmatter keep that image. Needs Chromium:
-//   (cd tests && npm ci && PLAYWRIGHT_BROWSERS_PATH=/tmp/pw-browsers npx playwright install chromium)
+//   (cd tests && npm ci && npx playwright install chromium)
 // Keep the playwright version below equal to tests/package-lock.json so they share a browser.
 
 import { chromium } from 'npm:playwright@1.59.1'

@@ -33,7 +33,7 @@ URL="http://localhost:8000/.system/og/?$PARAMS"
 PNG_PATH="$REPO_ROOT/${OUT%.jpg}.png"
 
 cd "$REPO_ROOT/tests"
-NODE_PATH="$REPO_ROOT/tests/node_modules" PLAYWRIGHT_BROWSERS_PATH=/tmp/pw-browsers node "$REPO_ROOT/bin/og-screenshot.js" "$URL" "$PNG_PATH"
+NODE_PATH="$REPO_ROOT/tests/node_modules" node "$REPO_ROOT/bin/og-screenshot.js" "$URL" "$PNG_PATH"
 
 magick "$PNG_PATH" -quality 85 "$REPO_ROOT/$OUT"
 rm -f "$PNG_PATH"
